@@ -1,10 +1,30 @@
-let foodValue = 2;
-const messageArray = ["one", "two", "three"];
+let food = 0;
+
+let corruption = 0;
+let size = 0;
+let prey = 0;
+let sustenance = 0;
+
+let swells = 0;
+let corruptionAdd = 1;
+
+
+function calcManualRes(res) {
+	if (res == "corruption") {
+		corruptionAdd = 1 + (0.1 * swells);
+		_PostMessage("Amount per fester is now " + corruptionAdd + " per click.");
+	}
+}
+
+
+
+const messageArray = ["You have awakened, and your dark powers have corrupted a small bog. Time to fester..."];
+
 let testText = messageArray.toString();
 
 let jsUpdateTime = "10-26 653pm";
 
-function updateJStime() {
+function updateJStime() { //runs at end of HTML load
 	document.getElementById('jsVersion').innerText = jsUpdateTime;
 	document.getElementById('messageCurrent').innerText = testText;
 }
@@ -66,14 +86,14 @@ function _PostMessage(messagetext) {
 
 
 
-function buttonClick(event, amount) {
+function buttonClick(event) {
 	const sourceButton = event.target.getAttribute('data-target');
 	const actionType = event.target.getAttribute('data-type');
 	
 	if (actionType == "gather" && sourceButton == "GatherFood") {
-		foodValue += 1;
+		food += 1;
 		postMessage(sourceButton,amount);
-		document.getElementById("foodCurrent").innerText = foodValue;
+		document.getElementById("foodCurrent").innerText = food;
 		/* document.getElementById("GatherFoodButton").innerHTML = "<div class=\"collapsible\" data-type=\"gather\" data-target=\"GatherFood\" id=\"GatherFoodButton\" onClick=\"buttonClick(event," + foodValue + ")\">Gather Food</div>"; */
 		
 	}
