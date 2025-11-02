@@ -21,7 +21,7 @@
 				<div class="resourceName"></div> <div class="resourceValue"> </div>
 			</div>
 			
-			<p>blah blah blah. blah blah blah. blah blah blah. blah blah blah. blah blah blah. blah blah blah. blah blah blah. blah blah blah. blah blah blah. blah blah blah. blah blah blah. blah blah blah. blah blah blah. blah blah blah. blah blah blah. blah blah blah. blah blah blah. blah blah blah. blah blah blah. blah blah blah. blah blah blah. blah blah blah. blah blah blah. blah blah blah. </p>
+
 	
 			<!-- NOTES: look at flexwrap for buttons  -->
 		</div>
@@ -50,13 +50,11 @@
 			<div class="collapsible" data-type="gather" data-target="GatherFood" id="GatherFoodButton" onClick="buttonClick(event,1)">Gather Food</div>
 				
 
-			<div class="collapsible" data-target="TestDiv" ID="TestDiv" onClick="expandButton(event)">test div collapsible</div>
-			<div class="content" id="TestDivContent">
-				<p>You clicked me, good job.</p>
-				<p>You clicked me, good job.</p>
-				<p>You clicked me, good job.</p>
-				<p>You clicked me, good job.</p>
-				<div class="button" data-target="Activated" onClick="postMessage(event)">ACTIVATE ME</div>
+			<div class="collapsible" data-target="BuildingFarm" ID="BuildingFarm" onClick="expandButton(event)">Farm</div>
+			<div class="content" id="BuildingFarmContent">
+				<p>Build a farm to generate food automatically.</p>
+				<p>Cost: 10 Food</p>
+				<div class="button" data-target="Activated" onClick="postMessage(event)">Buy Farm</div>
 			</div>
 
 			<div class="collapsible" data-target="TestDiv2" id="TestDiv2" onClick="expandButton(event)">test div collapsible</div>
@@ -67,6 +65,7 @@
 			<div class="collapsible" data-target="TestDiv3" id="TestDiv3" onClick="expandButton(event)">test div collapsible</div>
 			<div class="content" id="TestDiv3Content">
 				<p>You clicked me, good job.</p>
+				<div class="button" data-target="messagetest" onClick="_PostMessage('clicked')">Try the message</div>
 			</div>
 
 
@@ -79,6 +78,7 @@
 		<div id="rightblock" class="column">
 		<div id="devButtons">
 			<p>Dev buttons temp space</p>
+			<p>js version: <span id="jsVersion"></span></p>
 			<div class="button" data-target="bingo" onClick="toggleActive(event)">Bingo</div>
 			<div class="button" data-target="bongo"
 			onClick="toggleActive(event)">Bongo</div>
@@ -89,42 +89,9 @@
 			<p id="messageCurrent"></p>
 		</div>
 		
-		
-		
-		
-			<p> messages go here </p>
-			<p> messages go here </p>
-			<p> messages go here </p>
-			<p> messages go here </p>
-			<p> messages go here </p>
-			<p> messages go here </p>
-			<p> messages go here </p>
-			<p> messages go here </p>
-			<p> messages go here </p>
-			<p> messages go here </p>
-			<p> messages go here </p>
-			<p> messages go here </p>
-			<p> messages go here </p>
-			<p> messages go here </p>
-			<p> messages go here </p>
-			<p> messages go here </p>
-			<p> messages go here </p>
-			<p> messages go here </p>
-			<p> messages go here </p>
-			<p> messages go here </p>
-			<p> messages go here </p>
-			<p> messages go here </p>
-			<p> messages go here </p>
-			<p> messages go here </p>
-			<p> messages go here </p>
-			<p> messages go here </p>
-			<p> messages go here </p>
-			<p> messages go here </p>
-			<p> messages go here </p>
-			<p> messages go here </p>
-			<p> messages go here </p>
-			<p> messages go here </p>
 		</div>
 	</div>
+<script>updateJStime();</script>
+	
 </body>
 </html>

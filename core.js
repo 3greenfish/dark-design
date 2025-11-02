@@ -1,4 +1,14 @@
 let foodValue = 2;
+const messageArray = ["one", "two", "three"];
+let testText = messageArray.toString();
+
+let jsUpdateTime = "10-26 653pm";
+
+function updateJStime() {
+	document.getElementById('jsVersion').innerText = jsUpdateTime;
+	document.getElementById('messageCurrent').innerText = testText;
+}
+
 
 function toggleActive(e) {
 	const targetPanelId = e.target.getAttribute('data-target');
@@ -8,7 +18,6 @@ function toggleActive(e) {
 		activePanels[0].classList.toggle('active'); /* hides everything */
 	} 
 	targetPanel.classList.toggle('active')
-	// wait 1 second then show selected panel
 }
 
 
@@ -39,8 +48,23 @@ function postMessage(event, eventValue) {
 	} else {
 		messageText = "You did a thing?? Wow.";
 	}
-	document.getElementById("messageCurrent").innerText = messageText;
+	messageText = "from old postmessage:" + messageText;
+	_PostMessage(messageText);
 }
+
+function _PostMessage(messagetext) {
+	messageArray.unshift(messagetext);
+	if (messageArray.length > 5) {
+		messageArray.pop();
+	}
+	let finalArray = "";
+	for (let i = 0; i < messageArray.length; i++) {
+		finalArray += "<p>" + messageArray[i] + "</p>";
+	}
+	document.getElementById("messagebox").innerHTML = finalArray;
+}
+
+
 
 function buttonClick(event, amount) {
 	const sourceButton = event.target.getAttribute('data-target');

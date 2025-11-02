@@ -84,7 +84,9 @@ p {
 	
 }
 
-
+#messagebox p {
+	margin-bottom: 5px;
+}
 
 
 
