@@ -1,11 +1,58 @@
 let food = 0;
 
+const resourceStack = [
+	{ name: "Corruption",
+	  current: 0,
+	  limited: true,
+	  max: 50,
+	  perTick: 0,
+	},
+	{ name: "Size",
+	  current: 1,
+	  limited: false,
+	  perTick: 0
+	},
+	{ name: "Prey",
+	  current: 0,
+	  limited: true,
+	  max: 50,
+	  perTick: 0
+	},
+	{ name: "Sustenance",
+	  current: 0,
+	  limited: true,
+	  max: 50,
+	  perTick: 0
+	}]
+
+
+	
+
+		
+
+
+
+
+
+const myObj = {
+  name: "John",
+  age: 30,
+  cars: [
+    {name:"Ford", models:["Fiesta", "Focus", "Mustang"]},
+    {name:"BMW", models:["320", "X3", "X5"]},
+    {name:"Fiat", models:["500", "Panda"]}
+  ]
+}
+		
 let corruption = 0;
 let size = 0;
 let prey = 0;
 let sustenance = 0;
 
 let swells = 0;
+
+
+
 let corruptionAdd = 1;
 
 
