@@ -60,7 +60,7 @@ p {
 	padding: 2px;
 }
 
-.resourceName, .resourceValue {
+.resourceName, .resourceValue, .resourceMax {
 	display: inline-block;
 }
 
