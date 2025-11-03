@@ -17,6 +17,7 @@ const resourceStack = [
 	  max: 50,
 	  perTick: 0,
 	  gatherRate: 1,
+// -- updateGatherRate and updatePerTick are untested -- //
 	  updateGatherRate: function() {
 		  this.gatherRate = 1 + (0.1 * swells);
 		  _PostMessage("Amount per fester is now " + this.gatherRate + " per click.");
@@ -58,51 +59,44 @@ function calcManualRes(res) {
 // --- end --- //
 
 
-let testText = messageArray.toString();
-let jsUpdateTime = "10-26 653pm";
+
+let jsUpdateTime = "11-2 902pm";
 
 function updateJStime() { //runs at end of HTML load
 	document.getElementById('jsVersion').innerText = jsUpdateTime;
-	document.getElementById('messageCurrent').innerText = testText;
+	document.getElementById('messageCurrent').innerText = messageArray.toString();
 }
 
 
 function loadResourceTest(resource) {
 	let resName = resourceStack[resource].name;
-	_PostMessage(resName);
-	let resLabel = resourceStack[resource].label;
-	let findElement = resName + "Current";
-	_PostMessage(findElement);
-
-	document.getElementById(resName + 'Current').innerText = resourceStack[resource].current;
+	let resCurrent = resourceStack[resource].current;
+	if (resName == "size") {
+		resCurrent += "m&178;";
+	}
+	document.getElementById(resName + 'Current').innerText = resCurrent;
+	
 	if (resourceStack[resource].limited) {
-		_PostMessage ("is limited");
+		_PostMessage("is limited");
 		let resMax = "/" + resourceStack[resource].max;
-		if (resName == "size") {
-			resMax += " m2";
-		}
+		
 		document.getElementById(resName + 'Max').innerText = resMax;
 	} else { _PostMessage("Not limited"); }
+	_PostMessage("finished loading");
 }
-
-
 
 function loadResourcePanel() {
 	for (let i = 0; i < resourceStack.length; i++) {
 		let resName = resourceStack[i].name;
-		_PostMessage(resName);
-	//	let resLabel = resourceStack[i].label;
-	//	_PostMessage(resLabel);		
-		let specificStack = resourceStack[i];
-		_PostMessage("specific stack: " + specificStack.name + " " + specificStack.limited);
-		_PostMessage("resource stack: " + resourceStack[i].name + " " + resourceStack[i].limited);
+		let resCurrent = resourceStack[i].current;
+		if (resName == "size") {
+			resCurrent += "m&#178;";
+		}
+		document.getElementById(resName + 'Current').innerText = resCurrent;
 		
-		document.getElementById(resName + 'Current').innerText = resourceStack[i].current;
-		if (specificStack.limited == true) {
-			let resMax = "/" + specificStack.max;
-			if (resName == "size") {
-				resMax += " m2";
-			}
+		if (resourceStack[i].limited == true) {
+			let resMax = "/" + resourceStack[i].max;
+			
 			document.getElementById(resName + 'Max').innerText = resMax;
 		}
 	_PostMessage("Completed " + i + "loop.");
