@@ -1,13 +1,117 @@
-let foodValue = 2;
-const messageArray = ["one", "two", "three"];
-let testText = messageArray.toString();
+let food = 0;
+const messageArray = ["You have awakened in a new world, and your dark powers have corrupted a small bog. Time to fester..."];
 
-let jsUpdateTime = "10-26 653pm";
+// ---- phase 1 buildings, replace with object stack later ---- //
 
-function updateJStime() {
-	document.getElementById('jsVersion').innerText = jsUpdateTime;
-	document.getElementById('messageCurrent').innerText = testText;
+let swells = 0; 
+let pustules = 0;
+let traps = 0; 
+let sirens = 0;
+
+// ---- end phase 1 buildings ---- //
+
+const resourceStack = [
+	{ name: "corruption",
+	  label: "Corruption",
+	  current: 0,
+	  limited: true,
+	  max: 50,
+	  perTick: 0,
+	  gatherRate: 1,
+// -- updateGatherRate and updatePerTick are untested -- //
+	  updateGatherRate: function() {
+		  this.gatherRate = 1 + (0.1 * swells);
+		  _PostMessage("Amount per fester is now " + this.gatherRate + " per click.");
+	  },
+	  updatePerTick: function() {
+		  this.perTick = 1; // need to define logic.
+		  _PostMessage("Amount per tick is now " + this.perTick + " per click.");
+	  } 
+	},
+	{ name: "size",
+	  label: "Size",
+	  current: 1,
+	  limited: false,
+	  perTick: 0
+	},
+	{ name: "prey",
+	  label: "Prey",
+	  current: 0,
+	  limited: true,
+	  max: 25,
+	  perTick: 0
+	},
+	{ name: "sustenance",
+	  label: "Sustenance",
+	  current: 0,
+	  limited: true,
+	  max: 40,
+	  perTick: 0
+	}];
+
+// --- this is incorporated into the array for corruption, but consider if it's needed separately --- //
+let corruptionAdd = 1;
+function calcManualRes(res) {
+	if (res == "corruption") {
+		corruptionAdd = 1 + (0.1 * swells);
+		_PostMessage("Amount per fester is now " + corruptionAdd + " per click.");
+	}
 }
+// --- end --- //
+
+// -- start loading items here -- //
+
+let jsUpdateTime = "11-2 902pm";
+
+// -- end loading items -- //
+
+function updateJStime() { //runs at end of HTML load
+	document.getElementById('jsVersion').innerText = jsUpdateTime;
+	document.getElementById('messageCurrent').innerText = messageArray.toString();
+	loadResourcePanel();
+}
+
+
+
+function loadResourceTest(resource) {
+	let resName = resourceStack[resource].name;
+	let resCurrent = resourceStack[resource].current;
+	if (resName == "size") {
+		resCurrent += "m&178;";
+	}
+	document.getElementById(resName + 'Current').innerText = resCurrent;
+	
+	if (resourceStack[resource].limited) {
+		_PostMessage("is limited");
+		let resMax = "/" + resourceStack[resource].max;
+		
+		document.getElementById(resName + 'Max').innerText = resMax;
+	} else { _PostMessage("Not limited"); }
+	_PostMessage("finished loading");
+}
+
+function loadResourcePanel() {
+	for (let i = 0; i < resourceStack.length; i++) {
+		let resName = resourceStack[i].name;
+		let resCurrent = resourceStack[i].current;
+		if (resName == "size") {
+			resCurrent += "m&#178;";
+		}
+		document.getElementById(resName + 'Current').innerText = resCurrent;
+		
+		if (resourceStack[i].limited == true) {
+			let resMax = "/" + resourceStack[i].max;
+			
+			document.getElementById(resName + 'Max').innerText = resMax;
+		}
+	}
+}
+
+
+
+
+
+
 
 
 function toggleActive(e) {
@@ -54,7 +158,7 @@ function postMessage(event, eventValue) {
 
 function _PostMessage(messagetext) {
 	messageArray.unshift(messagetext);
-	if (messageArray.length > 5) {
+	if (messageArray.length > 25) {
 		messageArray.pop();
 	}
 	let finalArray = "";
@@ -66,14 +170,14 @@ function _PostMessage(messagetext) {
 
 
 
-function buttonClick(event, amount) {
+function buttonClick(event) {
 	const sourceButton = event.target.getAttribute('data-target');
 	const actionType = event.target.getAttribute('data-type');
 	
 	if (actionType == "gather" && sourceButton == "GatherFood") {
-		foodValue += 1;
+		food += 1;
 		postMessage(sourceButton,amount);
-		document.getElementById("foodCurrent").innerText = foodValue;
+		document.getElementById("foodCurrent").innerText = food;
 		/* document.getElementById("GatherFoodButton").innerHTML = "<div class=\"collapsible\" data-type=\"gather\" data-target=\"GatherFood\" id=\"GatherFoodButton\" onClick=\"buttonClick(event," + foodValue + ")\">Gather Food</div>"; */
 		
 	}
