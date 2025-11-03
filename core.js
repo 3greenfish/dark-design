@@ -69,9 +69,10 @@ function updateJStime() { //runs at end of HTML load
 
 function loadResourceTest(resource) {
 	let resName = resourceStack[resource].name;
+	_PostMessage(resName);
 	let resLabel = resourceStack[resource].label;
 
-	document.getElementById(resName + 'Current').innerText = resourceStack[resource].current;
+	document.getElementById("res" + resName + 'Current').innerText = resourceStack[resource].current;
 	if (resourceStack[resource].limited) {
 		let resMax = "/" + resourceStack[i].max;
 		document.getElementById(resName + 'Max').innerText = resMax;
