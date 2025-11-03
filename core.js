@@ -93,7 +93,7 @@ function loadResourcePanel() {
 		let resLabel = resourceStack[i].label;
 
 		document.getElementById(resName + 'Current').innerText = resourceStack[i].current;
-		if (resourceStack[i].limited) {
+		if (resourceStack[i].limited == true) {
 			let resMax = "/" + resourceStack[i].max;
 			if (resName = "size") {
 				resMax += " m2";
