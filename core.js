@@ -71,8 +71,10 @@ function loadResourceTest(resource) {
 	let resName = resourceStack[resource].name;
 	_PostMessage(resName);
 	let resLabel = resourceStack[resource].label;
+	let findElement = "res" + resName + "Current";
+	_PostMessage(findElement);
 
-	document.getElementById("res" + resName + 'Current').innerText = resourceStack[resource].current;
+	document.getElementById(findElement).innerText = resourceStack[resource].current;
 	if (resourceStack[resource].limited) {
 		let resMax = "/" + resourceStack[i].max;
 		document.getElementById(resName + 'Max').innerText = resMax;
