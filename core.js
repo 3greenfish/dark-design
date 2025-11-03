@@ -45,7 +45,7 @@ const resourceStack = [
 	  limited: true,
 	  max: 50,
 	  perTick: 0
-	}]
+	}];
 
 // --- this is incorporated into the array for corruption, but consider if it's needed separately --- //
 let corruptionAdd = 1;
@@ -75,7 +75,7 @@ function loadResourceTest(resource) {
 	if (resourceStack[resource].limited) {
 		let resMax = "/" + resourceStack[i].max;
 		document.getElementById(resName + 'Max').innerText = resMax;
-	} else { _PostMessage("Not limited");
+	} else { _PostMessage("Not limited"); }
 }
 
 
@@ -91,9 +91,6 @@ function loadResourcePanel() {
 			document.getElementById(resName + 'Max').innerText = resMax;
 		}
 	}
-
-		
-
 }
 
 
