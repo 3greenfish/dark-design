@@ -90,8 +90,11 @@ function loadResourceTest(resource) {
 function loadResourcePanel() {
 	for (let i = 0; i < resourceStack.length; i++) {
 		let resName = resourceStack[i].name;
+		_PostMessage(resName);
 		let resLabel = resourceStack[i].label;
+		_PostMessage(resLabel);		
 		let specificStack = resourceStack[i];
+		_PostMessage(specificStack);
 
 		document.getElementById(resName + 'Current').innerText = resourceStack[i].current;
 		if (specificStack.limited == true) {
