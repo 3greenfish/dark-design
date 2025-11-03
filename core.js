@@ -62,7 +62,6 @@ function calcManualRes(res) {
 // -- start loading items here -- //
 
 let jsUpdateTime = "11-2 902pm";
-loadResourceTest(0);
 
 // -- end loading items -- //
 
