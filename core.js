@@ -68,7 +68,18 @@ function updateJStime() { //runs at end of HTML load
 
 
 function loadResourcePanel() {
-	
+	for (let i = 0; i < resourceStack.length; i++) {
+		let resName = resourceStack[i].name;
+		let resLabel = resourceStack[i].label;
+
+		document.getElementById(resName + 'Current').innerText = resourceStack[i].current;
+		if (resourceStack[i].limited) {
+			let resMax = "/" + resourceStack[i].max;
+			document.getElementById(resName + 'Max').innerText = resMax;
+		}
+	}
+
+		
 
 }
 
