@@ -36,14 +36,14 @@ const resourceStack = [
 	  label: "Prey",
 	  current: 0,
 	  limited: true,
-	  max: 50,
+	  max: 25,
 	  perTick: 0
 	},
 	{ name: "sustenance",
 	  label: "Sustenance",
 	  current: 0,
 	  limited: true,
-	  max: 50,
+	  max: 40,
 	  perTick: 0
 	}];
 
@@ -91,10 +91,11 @@ function loadResourcePanel() {
 	for (let i = 0; i < resourceStack.length; i++) {
 		let resName = resourceStack[i].name;
 		let resLabel = resourceStack[i].label;
+		let specificStack = resourceStack[i];
 
 		document.getElementById(resName + 'Current').innerText = resourceStack[i].current;
-		if (resourceStack[i].limited == true) {
-			let resMax = "/" + resourceStack[i].max;
+		if (specificStack.limited == true) {
+			let resMax = "/" + specificStack.max;
 			if (resName = "size") {
 				resMax += " m2";
 			}
