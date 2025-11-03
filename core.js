@@ -1,80 +1,82 @@
 let food = 0;
+const messageArray = ["You have awakened in a new world, and your dark powers have corrupted a small bog. Time to fester..."];
+
+// ---- phase 1 buildings, replace with object stack later ---- //
+
+let swells = 0; 
+let pustules = 0;
+let traps = 0; 
+
+// ---- end phase 1 buildings ---- //
 
 const resourceStack = [
-	{ name: "Corruption",
+	{ name: "corruption",
+	  label: "Corruption",
 	  current: 0,
 	  limited: true,
 	  max: 50,
 	  perTick: 0,
+	  gatherRate: 1,
+	  updateGatherRate: function() {
+		  this.gatherRate = 1 + (0.1 * swells);
+		  _PostMessage("Amount per fester is now " + this.gatherRate + " per click.");
+	  },
+	  updatePerTick: function() {
+		  this.perTick = 1; // need to define logic.
+		  _PostMessage("Amount per tick is now " + this.perTick + " per click.");
+	  } 
 	},
-	{ name: "Size",
+	{ name: "size",
+	  label: "Size",
 	  current: 1,
 	  limited: false,
 	  perTick: 0
 	},
-	{ name: "Prey",
+	{ name: "prey",
+	  label: "Prey",
 	  current: 0,
 	  limited: true,
 	  max: 50,
 	  perTick: 0
 	},
-	{ name: "Sustenance",
+	{ name: "sustenance",
+	  label: "Sustenance",
 	  current: 0,
 	  limited: true,
 	  max: 50,
 	  perTick: 0
 	}]
 
-
-	
-
-		
-
-
-
-
-
-const myObj = {
-  name: "John",
-  age: 30,
-  cars: [
-    {name:"Ford", models:["Fiesta", "Focus", "Mustang"]},
-    {name:"BMW", models:["320", "X3", "X5"]},
-    {name:"Fiat", models:["500", "Panda"]}
-  ]
-}
-		
-let corruption = 0;
-let size = 0;
-let prey = 0;
-let sustenance = 0;
-
-let swells = 0;
-
-
-
+// --- this is incorporated into the array for corruption, but consider if it's needed separately --- //
 let corruptionAdd = 1;
-
-
 function calcManualRes(res) {
 	if (res == "corruption") {
 		corruptionAdd = 1 + (0.1 * swells);
 		_PostMessage("Amount per fester is now " + corruptionAdd + " per click.");
 	}
 }
+// --- end --- //
 
-
-
-const messageArray = ["You have awakened, and your dark powers have corrupted a small bog. Time to fester..."];
 
 let testText = messageArray.toString();
-
 let jsUpdateTime = "10-26 653pm";
 
 function updateJStime() { //runs at end of HTML load
 	document.getElementById('jsVersion').innerText = jsUpdateTime;
 	document.getElementById('messageCurrent').innerText = testText;
 }
+
+
+function loadResourcePanel() {
+	
+
+}
+
+
+
+
+
+
 
 
 function toggleActive(e) {
