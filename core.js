@@ -78,7 +78,7 @@ function loadResourceTest(resource) {
 	if (resourceStack[resource].limited) {
 		_PostMessage ("is limited");
 		let resMax = "/" + resourceStack[resource].max;
-		if (resName = "size") {
+		if (resName == "size") {
 			resMax += " m2";
 		}
 		document.getElementById(resName + 'Max').innerText = resMax;
@@ -100,7 +100,7 @@ function loadResourcePanel() {
 		document.getElementById(resName + 'Current').innerText = resourceStack[i].current;
 		if (specificStack.limited == true) {
 			let resMax = "/" + specificStack.max;
-			if (resName = "size") {
+			if (resName == "size") {
 				resMax += " m2";
 			}
 			document.getElementById(resName + 'Max').innerText = resMax;
