@@ -94,7 +94,7 @@ function loadResourcePanel() {
 		let resLabel = resourceStack[i].label;
 		_PostMessage(resLabel);		
 		let specificStack = resourceStack[i];
-		_PostMessage(specificStack);
+		_PostMessage(specificStack.name + " " + specificStack.limited);
 
 		document.getElementById(resName + 'Current').innerText = resourceStack[i].current;
 		if (specificStack.limited == true) {
@@ -159,7 +159,7 @@ function postMessage(event, eventValue) {
 
 function _PostMessage(messagetext) {
 	messageArray.unshift(messagetext);
-	if (messageArray.length > 5) {
+	if (messageArray.length > 25) {
 		messageArray.pop();
 	}
 	let finalArray = "";
