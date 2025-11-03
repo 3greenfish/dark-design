@@ -60,8 +60,13 @@ p {
 	padding: 2px;
 }
 
-.resourceName, .resourceValue, .resourceMax {
+.resourceName, .resourceValue {
 	display: inline-block;
+}
+
+.resourceMax {
+	display: inline-block;
+	color: 333333;
 }
 
 
