@@ -74,10 +74,13 @@ function loadResourceTest(resource) {
 	let findElement = resName + "Current";
 	_PostMessage(findElement);
 
-	document.getElementById(findElement).innerText = resourceStack[resource].current;
+	document.getElementById(resName + 'Current').innerText = resourceStack[resource].current;
 	if (resourceStack[resource].limited) {
 		_PostMessage ("is limited");
-		let resMax = "/" + resourceStack[i].max;
+		let resMax = "/" + resourceStack[resource].max;
+		if (resName = "size") {
+			resMax += " m2";
+		}
 		document.getElementById(resName + 'Max').innerText = resMax;
 	} else { _PostMessage("Not limited"); }
 }
@@ -92,8 +95,12 @@ function loadResourcePanel() {
 		document.getElementById(resName + 'Current').innerText = resourceStack[i].current;
 		if (resourceStack[i].limited) {
 			let resMax = "/" + resourceStack[i].max;
+			if (resName = "size") {
+				resMax += " m2";
+			}
 			document.getElementById(resName + 'Max').innerText = resMax;
 		}
+	_PostMessage("Completed " + i + "loop.");
 	}
 }
 
