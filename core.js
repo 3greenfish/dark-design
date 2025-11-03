@@ -67,6 +67,19 @@ function updateJStime() { //runs at end of HTML load
 }
 
 
+function loadResourceTest(resource) {
+	let resName = resourceStack[resource].name;
+	let resLabel = resourceStack[resource].label;
+
+	document.getElementById(resName + 'Current').innerText = resourceStack[resource].current;
+	if (resourceStack[resource].limited) {
+		let resMax = "/" + resourceStack[i].max;
+		document.getElementById(resName + 'Max').innerText = resMax;
+	} else { _PostMessage("Not limited");
+}
+
+
+
 function loadResourcePanel() {
 	for (let i = 0; i < resourceStack.length; i++) {
 		let resName = resourceStack[i].name;
