@@ -71,11 +71,12 @@ function loadResourceTest(resource) {
 	let resName = resourceStack[resource].name;
 	_PostMessage(resName);
 	let resLabel = resourceStack[resource].label;
-	let findElement = "res" + resName + "Current";
+	let findElement = resName + "Current";
 	_PostMessage(findElement);
 
 	document.getElementById(findElement).innerText = resourceStack[resource].current;
 	if (resourceStack[resource].limited) {
+		_PostMessage ("is limited");
 		let resMax = "/" + resourceStack[i].max;
 		document.getElementById(resName + 'Max').innerText = resMax;
 	} else { _PostMessage("Not limited"); }
