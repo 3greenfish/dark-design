@@ -6,6 +6,7 @@ const messageArray = ["You have awakened in a new world, and your dark powers ha
 let swells = 0; 
 let pustules = 0;
 let traps = 0; 
+let sirens = 0;
 
 // ---- end phase 1 buildings ---- //
 
@@ -58,14 +59,19 @@ function calcManualRes(res) {
 }
 // --- end --- //
 
-
+// -- start loading items here -- //
 
 let jsUpdateTime = "11-2 902pm";
+loadResourceTest(0);
+
+// -- end loading items -- //
 
 function updateJStime() { //runs at end of HTML load
 	document.getElementById('jsVersion').innerText = jsUpdateTime;
 	document.getElementById('messageCurrent').innerText = messageArray.toString();
+	loadResourcePanel();
 }
+
 
 
 function loadResourceTest(resource) {
@@ -99,7 +105,6 @@ function loadResourcePanel() {
 			
 			document.getElementById(resName + 'Max').innerText = resMax;
 		}
-	_PostMessage("Completed " + i + "loop.");
 	}
 }
 
