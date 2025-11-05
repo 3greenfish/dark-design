@@ -27,7 +27,7 @@ const resourceStack = [
 		  } else {
 			  this.current = totalRes;
 		  }
-		  loadResourceTest(0);
+		  loadResourceTest(0); // need to clean up this code
 	  },
 	  updateGatherRate: function() {
 		  this.gatherRate = 1 + (0.1 * swells);
@@ -92,12 +92,12 @@ function loadResourceTest(resource) {
 	document.getElementById(resName + 'Current').innerText = resCurrent;
 	
 	if (resourceStack[resource].limited) {
-		_postMessage("is limited");
+	//	_postMessage("is limited");
 		let resMax = "/" + resourceStack[resource].max;
 		
 		document.getElementById(resName + 'Max').innerText = resMax;
-	} else { _postMessage("Not limited"); }
-	_postMessage("finished loading");
+	} //else { _postMessage("Not limited"); }
+	// _postMessage("finished loading");
 }
 
 function loadResourcePanel() {
@@ -131,7 +131,7 @@ function buttonManager(event) {
 	if (actionCat == "gat") {
 		resourceStack[lvl2num].gather();
 	}
-	_postMessage("code finished");
+	// _postMessage("code finished");
 }
 
 
