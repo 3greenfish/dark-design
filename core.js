@@ -27,7 +27,7 @@ const resourceStack = [
 		  } else {
 			  this.current = totalRes;
 		  }
-		  loadResourceTest(this.name);
+		  loadResourceTest(0);
 	  },
 	  updateGatherRate: function() {
 		  this.gatherRate = 1 + (0.1 * swells);
@@ -124,16 +124,11 @@ function loadResourcePanel() {
 
 function buttonManager(event) {
 	let sourceButton = event.target.getAttribute('data-target');
-	_postMessage(sourceButton);
 	let actionCat = sourceButton.slice(0 , 3);
-	_postMessage(actionCat);
 	let lvl2 = sourceButton.slice(4);
 	let lvl2num = Number(lvl2);	
-	_postMessage(lvl2num);
-	_postMessage(typeof lvl2num);
 
 	if (actionCat == "gat") {
-		_postMessage("caregory is gat");
 		resourceStack[lvl2num].gather();
 	}
 	_postMessage("code finished");
