@@ -19,6 +19,16 @@ const resourceStack = [
 	  perTick: 0,
 	  gatherRate: 1,
 // -- updateGatherRate and updatePerTick are untested -- //
+	  gather: function() {
+		  let totalRes = this.current;
+		  totalRes += this.gatherRate;
+		  if (totalRes >= this.max) {
+			  this.current = this.max;
+		  } else {
+			  this.current = totalRes;
+		  }
+		  loadResourceTest(this.name);
+	  },
 	  updateGatherRate: function() {
 		  this.gatherRate = 1 + (0.1 * swells);
 		  _PostMessage("Amount per fester is now " + this.gatherRate + " per click.");
@@ -107,11 +117,20 @@ function loadResourcePanel() {
 	}
 }
 
+// -- button management and purchase code goes here -- //
 
 
 
 
 
+
+
+
+
+
+
+
+// -- end button management and purchase code --//
 
 
 function toggleActive(e) {
