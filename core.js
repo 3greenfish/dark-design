@@ -31,11 +31,11 @@ const resourceStack = [
 	  },
 	  updateGatherRate: function() {
 		  this.gatherRate = 1 + (0.1 * swells);
-		  _PostMessage("Amount per fester is now " + this.gatherRate + " per click.");
+		  _postMessage("Amount per fester is now " + this.gatherRate + " per click.");
 	  },
 	  updatePerTick: function() {
 		  this.perTick = 1; // need to define logic.
-		  _PostMessage("Amount per tick is now " + this.perTick + " per click.");
+		  _postMessage("Amount per tick is now " + this.perTick + " per click.");
 	  } 
 	},
 	{ name: "size",
@@ -64,7 +64,7 @@ let corruptionAdd = 1;
 function calcManualRes(res) {
 	if (res == "corruption") {
 		corruptionAdd = 1 + (0.1 * swells);
-		_PostMessage("Amount per fester is now " + corruptionAdd + " per click.");
+		_postMessage("Amount per fester is now " + corruptionAdd + " per click.");
 	}
 }
 // --- end --- //
@@ -92,12 +92,12 @@ function loadResourceTest(resource) {
 	document.getElementById(resName + 'Current').innerText = resCurrent;
 	
 	if (resourceStack[resource].limited) {
-		_PostMessage("is limited");
+		_postMessage("is limited");
 		let resMax = "/" + resourceStack[resource].max;
 		
 		document.getElementById(resName + 'Max').innerText = resMax;
-	} else { _PostMessage("Not limited"); }
-	_PostMessage("finished loading");
+	} else { _postMessage("Not limited"); }
+	_postMessage("finished loading");
 }
 
 function loadResourcePanel() {
@@ -124,7 +124,7 @@ function loadResourcePanel() {
 
 function buttonManager(event) {
 	const sourceButton = event.target.getAttribute('data-target');
-	_postMessagE(sourceButton);
+	_postMessage(sourceButton);
 	const actionCat = sourceButton.slice(0 , 2);
 	_postMessage(actionCat);
 	const lvl2 = sourceButton.slice(4);
@@ -182,10 +182,10 @@ function postMessage(event, eventValue) {
 		messageText = "You did a thing?? Wow.";
 	}
 	messageText = "from old postmessage:" + messageText;
-	_PostMessage(messageText);
+	_postMessage(messageText);
 }
 
-function _PostMessage(messagetext) {
+function _postMessage(messagetext) {
 	messageArray.unshift(messagetext);
 	if (messageArray.length > 25) {
 		messageArray.pop();
