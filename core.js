@@ -128,7 +128,7 @@ function buttonManager(event) {
 	let actionCat = sourceButton.slice(0 , 3);
 	_postMessage(actionCat);
 	let lvl2 = sourceButton.slice(4);
-	let lvl2num = number(lvl2);	
+	let lvl2num = Number(lvl2);	
 	_postMessage(lvl2num);
 	_postMessage(typeof lvl2num);
 
