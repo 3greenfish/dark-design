@@ -133,6 +133,7 @@ function buttonManager(event) {
 	_postMessage(typeof lvl2num);
 
 	if (actionCat == "gat") {
+		_postMessage("caregory is gat");
 		resourceStack[lvl2num].gather();
 	}
 	_postMessage("code finished");
