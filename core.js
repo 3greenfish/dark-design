@@ -125,7 +125,7 @@ function loadResourcePanel() {
 function buttonManager(event) {
 	const sourceButton = event.target.getAttribute('data-target');
 	_postMessage(sourceButton);
-	const actionCat = sourceButton.slice(0 , 2);
+	const actionCat = sourceButton.slice(0 , 3);
 	_postMessage(actionCat);
 	const lvl2 = sourceButton.slice(4);
 	_postMessage(lvl2);
