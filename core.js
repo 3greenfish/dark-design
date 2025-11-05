@@ -19,13 +19,23 @@ const resourceStack = [
 	  perTick: 0,
 	  gatherRate: 1,
 // -- updateGatherRate and updatePerTick are untested -- //
+	  gather: function() {
+		  let totalRes = this.current;
+		  totalRes += this.gatherRate;
+		  if (totalRes >= this.max) {
+			  this.current = this.max;
+		  } else {
+			  this.current = totalRes;
+		  }
+		  loadResourceTest(0); // need to clean up this code
+	  },
 	  updateGatherRate: function() {
 		  this.gatherRate = 1 + (0.1 * swells);
-		  _PostMessage("Amount per fester is now " + this.gatherRate + " per click.");
+		  _postMessage("Amount per fester is now " + this.gatherRate + " per click.");
 	  },
 	  updatePerTick: function() {
 		  this.perTick = 1; // need to define logic.
-		  _PostMessage("Amount per tick is now " + this.perTick + " per click.");
+		  _postMessage("Amount per tick is now " + this.perTick + " per click.");
 	  } 
 	},
 	{ name: "size",
@@ -54,7 +64,7 @@ let corruptionAdd = 1;
 function calcManualRes(res) {
 	if (res == "corruption") {
 		corruptionAdd = 1 + (0.1 * swells);
-		_PostMessage("Amount per fester is now " + corruptionAdd + " per click.");
+		_postMessage("Amount per fester is now " + corruptionAdd + " per click.");
 	}
 }
 // --- end --- //
@@ -82,12 +92,12 @@ function loadResourceTest(resource) {
 	document.getElementById(resName + 'Current').innerText = resCurrent;
 	
 	if (resourceStack[resource].limited) {
-		_PostMessage("is limited");
+	//	_postMessage("is limited");
 		let resMax = "/" + resourceStack[resource].max;
 		
 		document.getElementById(resName + 'Max').innerText = resMax;
-	} else { _PostMessage("Not limited"); }
-	_PostMessage("finished loading");
+	} //else { _postMessage("Not limited"); }
+	// _postMessage("finished loading");
 }
 
 function loadResourcePanel() {
@@ -107,11 +117,28 @@ function loadResourcePanel() {
 	}
 }
 
+// -- button management and purchase code goes here -- //
+/* buttons should be in the format XXX-0 or XXX-XXXXX:
+ * e.g., gat-0 (gather resource in 0 position in array)
+ * or buy-swell (activate purchase code for buying one swell) */
+
+function buttonManager(event) {
+	let sourceButton = event.target.getAttribute('data-target');
+	let actionCat = sourceButton.slice(0 , 3);
+	let lvl2 = sourceButton.slice(4);
+	let lvl2num = Number(lvl2);	
+
+	if (actionCat == "gat") {
+		resourceStack[lvl2num].gather();
+	}
+	// _postMessage("code finished");
+}
 
 
 
 
 
+// -- end button management and purchase code --//
 
 
 function toggleActive(e) {
@@ -153,10 +180,10 @@ function postMessage(event, eventValue) {
 		messageText = "You did a thing?? Wow.";
 	}
 	messageText = "from old postmessage:" + messageText;
-	_PostMessage(messageText);
+	_postMessage(messageText);
 }
 
-function _PostMessage(messagetext) {
+function _postMessage(messagetext) {
 	messageArray.unshift(messagetext);
 	if (messageArray.length > 25) {
 		messageArray.pop();
