@@ -118,11 +118,21 @@ function loadResourcePanel() {
 }
 
 // -- button management and purchase code goes here -- //
+/* buttons should be in the format XXX-0 or XXX-XXXXX:
+ * e.g., gat-0 (gather resource in 0 position in array)
+ * or buy-swell (activate purchase code for buying one swell) */
 
+function buttonManager(event) {
+	const sourceButton = event.target.getAttribute('data-target');
+	const actionCat = sourceButton.slice(0 , 2);
+	_postMessage(actionCat);
+	const lvl2 = sourceButton.slice(4);
 
-
-
-
+	if (actionCat == "gat") {
+		resourceStack[lvl2].gather();
+	}
+	_postMessage("code finished");
+}
 
 
 
