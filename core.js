@@ -124,9 +124,11 @@ function loadResourcePanel() {
 
 function buttonManager(event) {
 	const sourceButton = event.target.getAttribute('data-target');
+	_postMessagE(sourceButton);
 	const actionCat = sourceButton.slice(0 , 2);
 	_postMessage(actionCat);
 	const lvl2 = sourceButton.slice(4);
+	_postMessage(lvl2);
 
 	if (actionCat == "gat") {
 		resourceStack[lvl2].gather();
