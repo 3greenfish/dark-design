@@ -129,9 +129,10 @@ function buttonManager(event) {
 	_postMessage(actionCat);
 	const lvl2 = sourceButton.slice(4);
 	_postMessage(lvl2);
+	_postMessage(typeof lvl2);
 
 	if (actionCat == "gat") {
-		resourceStack[lvl2].gather();
+		resourceStack[number(lvl2)].gather();
 	}
 	_postMessage("code finished");
 }
