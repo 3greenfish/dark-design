@@ -138,8 +138,6 @@ function buttonManager(event) {
 
 
 
-
-
 // -- end button management and purchase code --//
 
 
