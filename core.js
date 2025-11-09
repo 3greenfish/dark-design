@@ -189,10 +189,10 @@ const calendar = {
 		}
 
 		if (NewSeason) {
-			onNewSeason();
+			this.onNewSeason();
 		}
 		if (newYear) {
-			onNewYear();
+			this.onNewYear();
 		}
 
 		let assembledCal = "Day " + this.day + " of " + this.seasons[this.season].name + ", Year " + this.year;
