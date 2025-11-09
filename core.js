@@ -31,11 +31,11 @@ const resourceStack = [
 	  },
 	  updateGatherRate: function() {
 		  this.gatherRate = 1 + (0.1 * swells);
-		  _postMessage("Amount per fester is now " + this.gatherRate + " per click.");
+		  msg("Amount per fester is now " + this.gatherRate + " per click.");
 	  },
 	  updatePerTick: function() {
 		  this.perTick = 1; // need to define logic.
-		  _postMessage("Amount per tick is now " + this.perTick + " per click.");
+		  msg("Amount per tick is now " + this.perTick + " per click.");
 	  } 
 	},
 	{ name: "size",
@@ -135,7 +135,6 @@ function buttonManager(event) {
 
 	if (actionCat == "cal") {
 		calendar.updateCal();
-		msg("calendar registered");
 	}
 
 	
@@ -152,6 +151,7 @@ function buttonManager(event) {
 
 const calendar = {
 	currentTime: 0,
+	runSpeed: 1000,
 	day: 0,
 	season: 0,
 	year: 0,
@@ -191,25 +191,13 @@ const calendar = {
 			this.year += 1;
 			newYear = true;
 		}
-
-// -- THIS IS BROKEN --//
-
 		if (newSeason == true) {
 			this.onNewSeason();
 		}
 		if (newYear == true) {
 			this.onNewYear();
 		} 
-		msg("newSeason and newYear triggers okay");
-
 		this.calDisplay();
-		
-/*		
-		let displayDay = this.day + 1;
-		let assembledCal = "Day " + displayDay + " of " + this.seasons[this.season].label + ", Year " + this.year;
-		// msg(assembledCal);
-		document.getElementById("calendarBlock").innerText = assembledCal; */
-
 	},
 	onNewSeason: function() {
 		msg("onNewSeason triggered");
@@ -218,13 +206,12 @@ const calendar = {
 		msg("onNewYear triggered");
 	},
 	updateCalDev: function() {
-		msg("updateCalDev triggered");
 		let devForceDay = this.daysPerSeason - 5;
+		msg("updateCalDev triggered, days set to " + devForceDay);
 		this.day = devForceDay;
 		this.calDisplay();
 	},
 	calDisplay: function() {
-		msg("day = " + this.day);
 		let displayDay = this.day + 1;
 		let assembledCal = "Day " + displayDay + " of " + this.seasons[this.season].label + ", Year " + this.year;
 		document.getElementById("calendarBlock").innerText = assembledCal;
@@ -233,8 +220,14 @@ const calendar = {
 
 //-- end calendar object --//
 
+//-- start interval timer --//
 
+setInterval(tick, calendar.runspeed);
 
+function tick() {
+	msg("tick");
+	calendar.updateCal;
+}
 
 function toggleActive(e) {
 	const targetPanelId = e.target.getAttribute('data-target');
