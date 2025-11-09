@@ -86,9 +86,9 @@ function updateJStime() { //runs at end of HTML load
 function loadResourceTest(resource) {
 	let resName = resourceStack[resource].name;
 	let resCurrent = resourceStack[resource].current;
-	if (resName == "size") {
+/*	if (resName == "size") {
 		resCurrent += "m&178;";
-	}
+	} */
 	document.getElementById(resName + 'Current').innerText = resCurrent;
 	
 	if (resourceStack[resource].limited) {
@@ -104,9 +104,9 @@ function loadResourcePanel() {
 	for (let i = 0; i < resourceStack.length; i++) {
 		let resName = resourceStack[i].name;
 		let resCurrent = resourceStack[i].current;
-		if (resName == "size") {
+	/*	if (resName == "size") {
 			resCurrent += "m&#178;";
-		}
+		} */
 		document.getElementById(resName + 'Current').innerText = resCurrent;
 		
 		if (resourceStack[i].limited == true) {
@@ -134,9 +134,12 @@ function buttonManager(event) {
 	}
 
 	if (actionCat == "cal") {
-		calendar.updateCal();
+		calendar.activateCal();
 	}
 
+	if (actionCat == "adj" {
+		calendar.adjustRunSpeed();
+	}
 	
 	// _postMessage("code finished");
 }
@@ -152,6 +155,7 @@ function buttonManager(event) {
 const calendar = {
 	currentTime: 0,
 	runSpeed: 2000,
+	showCal: false,
 	day: 0,
 	season: 0,
 	year: 0,
@@ -197,7 +201,9 @@ const calendar = {
 		if (newYear == true) {
 			this.onNewYear();
 		} 
-		this.calDisplay();
+		if (this.showCal == true) {
+			this.calDisplay();
+		}
 	},
 	onNewSeason: function() {
 		msg("onNewSeason triggered");
@@ -215,6 +221,18 @@ const calendar = {
 		let displayDay = this.day + 1;
 		let assembledCal = "Day " + displayDay + " of " + this.seasons[this.season].label + ", Year " + this.year;
 		document.getElementById("calendarBlock").innerText = assembledCal;
+	},
+	activateCal: function() {
+		this.showCal = true;
+		document.getElementById("calendarBlock").style.display = block;
+	},
+	adjustRunSpeed: function() {
+		if (this.runSpeed == 2000) {
+			this.runSpeed = 500;
+		} else {
+			this.runSpeed = 2000);
+		}
+		msg("this.runSpeed now set to " + this.runSpeed);
 	}
 } 
 
@@ -228,6 +246,8 @@ function tick() {
 	msg("tick");
 	calendar.updateCal();
 }
+
+//-- end interval timer --//
 
 function toggleActive(e) {
 	const targetPanelId = e.target.getAttribute('data-target');
