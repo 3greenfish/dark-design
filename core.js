@@ -140,6 +140,62 @@ function buttonManager(event) {
 
 // -- end button management and purchase code --//
 
+// -- calendar object --//
+
+const calendar = {
+
+	currentTime: 0,
+	day: 0,
+	season: 0,
+	year: 0,
+	daysPerSeason: 90,
+	seasons: [
+		{ name: spring,
+		  modifiers: null
+		},
+		{ name: summer,
+		  modifiers: null
+		},
+		{ name: fall,
+		  modifiers: null
+		},
+		{ name: winter,
+		  modifiers: null
+		}],
+	seasonsPerYear: 4,
+	updateCal: function() {
+		let newSeason = false;
+		let newYear = false;
+		
+		this.day += 1;
+
+		if (this.day >= this.daysPerSeason) {
+			this.day -= this.daysPerSeason;
+			this.season += 1;
+			newSeason = true;
+		}
+		if (this.season >= seasonsPerYear) {
+			this.season -= seasonsPerYear;
+			this.year =+ 1;
+			newYear = true;
+		}
+
+		//code to actually show the calendar here //
+
+		let assembledCal = this.seasons[season].name + " " + this.day + ", " + this.year;
+		_postMessage(assembledCal);
+
+	},
+	onNewSeason: function() {
+	},
+	onNewYear: function() {
+	}
+} 
+
+//-- end calendar object --//
+
+
+
 
 function toggleActive(e) {
 	const targetPanelId = e.target.getAttribute('data-target');
