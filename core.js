@@ -131,6 +131,13 @@ function buttonManager(event) {
 	if (actionCat == "gat") {
 		resourceStack[lvl2num].gather();
 	}
+
+	if (actionCat == "cal") {
+		calendar.updateCal();
+		_postMessage("calendar registered");
+	}
+
+	
 	// _postMessage("code finished");
 }
 
@@ -167,7 +174,8 @@ const calendar = {
 		let newYear = false;
 		
 		this.day += 1;
-
+		_postMessage(this.day);
+		
 		if (this.day >= this.daysPerSeason) {
 			this.day -= this.daysPerSeason;
 			this.season += 1;
@@ -236,6 +244,10 @@ function postMessage(event, eventValue) {
 	}
 	messageText = "from old postmessage:" + messageText;
 	_postMessage(messageText);
+}
+
+function msg(text) {
+	_postMessage(text);
 }
 
 function _postMessage(messagetext) {
