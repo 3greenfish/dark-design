@@ -160,16 +160,16 @@ const calendar = {
 	daysPerSeason: 90,
 	seasonsPerYear: 4,
 	seasons: [
-		{ name: spring,
+		{ name: "spring",
 		  modifiers: null
 		},
-		{ name: summer,
+		{ name: "summer",
 		  modifiers: null
 		},
-		{ name: fall,
+		{ name: "fall",
 		  modifiers: null
 		},
-		{ name: winter,
+		{ name: "winter",
 		  modifiers: null
 		}],
 	updateCal: function() {
