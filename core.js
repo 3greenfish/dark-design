@@ -143,12 +143,12 @@ function buttonManager(event) {
 // -- calendar object --//
 
 const calendar = {
-
 	currentTime: 0,
 	day: 0,
 	season: 0,
 	year: 0,
 	daysPerSeason: 90,
+	seasonsPerYear: 4,
 	seasons: [
 		{ name: spring,
 		  modifiers: null
@@ -162,7 +162,6 @@ const calendar = {
 		{ name: winter,
 		  modifiers: null
 		}],
-	seasonsPerYear: 4,
 	updateCal: function() {
 		let newSeason = false;
 		let newYear = false;
@@ -180,15 +179,15 @@ const calendar = {
 			newYear = true;
 		}
 
-		//code to actually show the calendar here //
-
 		let assembledCal = this.seasons[season].name + " " + this.day + ", " + this.year;
 		_postMessage(assembledCal);
 
 	},
 	onNewSeason: function() {
+		_postMessage("onNewSeason triggered");
 	},
 	onNewYear: function() {
+		_postMessage("onNewYear triggered");
 	}
 } 
 
