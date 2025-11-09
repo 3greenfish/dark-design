@@ -123,7 +123,7 @@ function loadResourcePanel() {
  * or buy-swell (activate purchase code for buying one swell) */
 
 function buttonManager(event) {
-	// msg("button pressed");
+	msg("button pressed");
 	let sourceButton = event.target.getAttribute('data-target');
 	let actionCat = sourceButton.slice(0 , 3);
 	let lvl2 = sourceButton.slice(4);
