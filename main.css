@@ -77,6 +77,11 @@ p {
 	color: #333333;
 }
 
+#calendarBlock {
+	border: 1px solid blue;
+	background-color: white;
+	color: black;
+}
 
 #devButtons {
 	border: 1px dashed red;
