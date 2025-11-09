@@ -188,12 +188,15 @@ const calendar = {
 			newYear = true;
 		}
 
-		if (NewSeason) {
+// -- THIS IS BROKEN --//
+
+/*		if (NewSeason) {
 			this.onNewSeason();
 		}
 		if (newYear) {
 			this.onNewYear();
-		}
+		} */ 
+		
 
 		let assembledCal = "Day " + this.day + " of " + this.seasons[this.season].name + ", Year " + this.year;
 		msg(assembledCal);
