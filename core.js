@@ -219,11 +219,13 @@ const calendar = {
 	},
 	updateCalDev: function() {
 		msg("updateCalDev triggered");
-		this.day = 95;
+		let devForceDay = this.daysPerSeason - 5;
+		this.day = devForceDay;
 		this.calDisplay();
 	},
 	calDisplay: function() {
-		let displayDay = this.day +1;
+		msg("day = " + this.day);
+		let displayDay = this.day + 1;
 		let assembledCal = "Day " + displayDay + " of " + this.seasons[this.season].label + ", Year " + this.year;
 		document.getElementById("calendarBlock").innerText = assembledCal;
 	}
