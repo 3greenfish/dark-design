@@ -222,7 +222,7 @@ const calendar = {
 
 //-- start interval timer --//
 
-setInterval(tick, calendar.runspeed);
+setInterval(tick, calendar.runSpeed);
 
 function tick() {
 	msg("tick");
