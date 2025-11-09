@@ -173,8 +173,10 @@ const calendar = {
 		  modifiers: null
 		}],
 	updateCal: function() {
+		msg("updateCal called");
 		let newSeason = false;
 		let newYear = false;
+		msg("this.day =" + this.day);
 		
 		this.day += 1;
 		_postMessage(this.day);
@@ -246,14 +248,14 @@ function postMessage(event, eventValue) {
 		messageText = "You did a thing?? Wow.";
 	}
 	messageText = "from old postmessage:" + messageText;
-	_postMessage(messageText);
+	msg(messageText);
 }
 
-function msg(text) {
-	_postMessage(text);
+function _postMessage(text) {
+	msg(text);
 }
 
-function _postMessage(messagetext) {
+function msg(messagetext) {
 	messageArray.unshift(messagetext);
 	if (messageArray.length > 25) {
 		messageArray.pop();
