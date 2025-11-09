@@ -151,7 +151,7 @@ function buttonManager(event) {
 
 const calendar = {
 	currentTime: 0,
-	runSpeed: 1000,
+	runSpeed: 2000,
 	day: 0,
 	season: 0,
 	year: 0,
@@ -226,7 +226,7 @@ setInterval(tick, calendar.runSpeed);
 
 function tick() {
 	msg("tick");
-	calendar.updateCal;
+	calendar.updateCal();
 }
 
 function toggleActive(e) {
