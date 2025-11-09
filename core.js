@@ -137,7 +137,7 @@ function buttonManager(event) {
 		calendar.activateCal();
 	}
 
-	if (actionCat == "adj" {
+	if (actionCat == "adj") {
 		calendar.adjustRunSpeed();
 	}
 	
