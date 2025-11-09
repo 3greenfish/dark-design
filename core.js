@@ -223,6 +223,7 @@ const calendar = {
 		document.getElementById("calendarBlock").innerText = assembledCal;
 	},
 	activateCal: function() {
+		this.calDisplay();
 		this.showCal = true;
 		document.getElementById("calendarBlock").style.display = "block";
 	},
@@ -232,17 +233,17 @@ const calendar = {
 		} else {
 			this.runSpeed = 2000;
 		}
-		msg("this.runSpeed now set to " + this.runSpeed);
 		clearInterval(gameTimer);
-		msg("gameTimer set to 0");
 		gameTimer = setInterval(tick, this.runSpeed);
-		msg("gameTimer should be at either 2 per second or once per 4 seconds");
+
 	}
 } 
 
 //-- end calendar object --//
 
 //-- start interval timer --//
+
+//-- this should probably be an object --//
 
 let gameTimer = setInterval(tick, calendar.runSpeed);
 
