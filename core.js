@@ -137,8 +137,8 @@ function buttonManager(event) {
 		calendar.activateCal();
 	}
 
-	if (actionCat == "adj") {
-		calendar.adjustRunSpeed();
+	if (actionCat == "dev") {
+		dev[lvl2num].run();
 	}
 	
 	// _postMessage("code finished");
@@ -211,12 +211,6 @@ const calendar = {
 	onNewYear: function() {
 		msg("onNewYear triggered");
 	},
-	updateCalDev: function() {
-		let devForceDay = this.daysPerSeason - 5;
-		msg("updateCalDev triggered, days set to " + devForceDay);
-		this.day = devForceDay;
-		this.calDisplay();
-	},
 	calDisplay: function() {
 		let displayDay = this.day + 1;
 		let assembledCal = "Day " + displayDay + " of " + this.seasons[this.season].label + ", Year " + this.year;
@@ -240,6 +234,29 @@ const calendar = {
 } 
 
 //-- end calendar object --//
+
+//-- start dev object --//
+
+const dev = [
+	{ name: "button0",
+	  run: function() {  
+		  calendar.activateCal();
+	  } 
+	},
+	{ name: "button1",
+	  run: function() {
+		let devForceDay = calendar.daysPerSeason - 5;
+		msg("updateCalDev triggered, days set to " + devForceDay);
+		calendar.day = devForceDay;
+		calendar.calDisplay();
+	  }
+	},
+	{ name: "button2",
+	  run: function() {
+		  msg("no function defined for devbutton 2");
+	  }
+	}
+]
 
 //-- start interval timer --//
 
