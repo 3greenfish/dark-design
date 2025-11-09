@@ -201,21 +201,31 @@ const calendar = {
 			this.onNewYear();
 		} 
 		msg("newSeason and newYear triggers okay");
+
+		this.calDisplay();
 		
+/*		
 		let displayDay = this.day + 1;
 		let assembledCal = "Day " + displayDay + " of " + this.seasons[this.season].label + ", Year " + this.year;
 		// msg(assembledCal);
-		document.getElementById("calendarBlock").innerText = assembledCal;
+		document.getElementById("calendarBlock").innerText = assembledCal; */
 
 	},
 	onNewSeason: function() {
-		_postMessage("onNewSeason triggered");
+		msg("onNewSeason triggered");
 	},
 	onNewYear: function() {
-		_postMessage("onNewYear triggered");
+		msg("onNewYear triggered");
 	},
 	updateCalDev: function() {
+		msg("updateCalDev triggered");
 		this.day = 95;
+		this.calDisplay();
+	},
+	calDisplay: function() {
+		let displayDay = this.day +1;
+		let assembledCal = "Day " + displayDay + " of " + this.seasons[this.season].label + ", Year " + this.year;
+		document.getElementById("calendarBlock").innerText = assembledCal;
 	}
 } 
 
