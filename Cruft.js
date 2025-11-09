@@ -18,3 +18,13 @@ for (i = 0; i < coll.length, i++) {
 		}
 	});
 }*/
+
+// --- this is incorporated into the array for corruption, but consider if it's needed separately --- //
+let corruptionAdd = 1;
+function calcManualRes(res) {
+	if (res == "corruption") {
+		corruptionAdd = 1 + (0.1 * swells);
+		msg("Amount per fester is now " + corruptionAdd + " per click.");
+	}
+}
+// --- end --- //
