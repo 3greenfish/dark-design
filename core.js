@@ -179,7 +179,7 @@ const calendar = {
 		msg("this.day updated, now " + this.day);
 		msg("this season value: " + this.season);
 		msg("this season name: " + this.seasons[this.season].name);
-		mst("this year: " + this.year);
+		msg("this year: " + this.year);
 		
 		if (this.day >= this.daysPerSeason) {
 			this.day -= this.daysPerSeason;
