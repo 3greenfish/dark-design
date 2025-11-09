@@ -31,11 +31,11 @@ const resourceStack = [
 	  },
 	  updateGatherRate: function() {
 		  this.gatherRate = 1 + (0.1 * swells);
-		  _postMessage("Amount per fester is now " + this.gatherRate + " per click.");
+		  msg("Amount per fester is now " + this.gatherRate + " per click.");
 	  },
 	  updatePerTick: function() {
 		  this.perTick = 1; // need to define logic.
-		  _postMessage("Amount per tick is now " + this.perTick + " per click.");
+		  msg("Amount per tick is now " + this.perTick + " per click.");
 	  } 
 	},
 	{ name: "size",
@@ -71,7 +71,7 @@ function calcManualRes(res) {
 
 // -- start loading items here -- //
 
-let jsUpdateTime = "11-2 902pm";
+let jsUpdateTime = "11-9 1103am";
 
 // -- end loading items -- //
 
@@ -86,9 +86,9 @@ function updateJStime() { //runs at end of HTML load
 function loadResourceTest(resource) {
 	let resName = resourceStack[resource].name;
 	let resCurrent = resourceStack[resource].current;
-	if (resName == "size") {
+/*	if (resName == "size") {
 		resCurrent += "m&178;";
-	}
+	} */
 	document.getElementById(resName + 'Current').innerText = resCurrent;
 	
 	if (resourceStack[resource].limited) {
@@ -104,9 +104,9 @@ function loadResourcePanel() {
 	for (let i = 0; i < resourceStack.length; i++) {
 		let resName = resourceStack[i].name;
 		let resCurrent = resourceStack[i].current;
-		if (resName == "size") {
+	/*	if (resName == "size") {
 			resCurrent += "m&#178;";
-		}
+		} */
 		document.getElementById(resName + 'Current').innerText = resCurrent;
 		
 		if (resourceStack[i].limited == true) {
@@ -123,6 +123,7 @@ function loadResourcePanel() {
  * or buy-swell (activate purchase code for buying one swell) */
 
 function buttonManager(event) {
+	msg("button pressed");
 	let sourceButton = event.target.getAttribute('data-target');
 	let actionCat = sourceButton.slice(0 , 3);
 	let lvl2 = sourceButton.slice(4);
@@ -131,6 +132,15 @@ function buttonManager(event) {
 	if (actionCat == "gat") {
 		resourceStack[lvl2num].gather();
 	}
+
+	if (actionCat == "cal") {
+		calendar.activateCal();
+	}
+
+	if (actionCat == "adj") {
+		calendar.adjustRunSpeed();
+	}
+	
 	// _postMessage("code finished");
 }
 
@@ -140,6 +150,109 @@ function buttonManager(event) {
 
 // -- end button management and purchase code --//
 
+// -- calendar object --//
+
+const calendar = {
+	currentTime: 0,
+	runSpeed: 2000,
+	showCal: false,
+	day: 0,
+	season: 0,
+	year: 0,
+	daysPerSeason: 90,
+	seasonsPerYear: 4,
+	seasons: [
+		{ name: "spring",
+		  label: "Spring",
+		  modifiers: null
+		},
+		{ name: "summer",
+		  label: "Summer",
+		  modifiers: null
+		},
+		{ name: "fall",
+		  label: "Fall",
+		  modifiers: null
+		},
+		{ name: "winter",
+		  label: "Winter",
+		  modifiers: null
+		}],
+	updateCal: function() {
+//		msg("updateCal called");
+		let newSeason = false;
+		let newYear = false;
+		
+		this.day += 1;
+		
+		if (this.day >= this.daysPerSeason) {
+			this.day -= this.daysPerSeason;
+			this.season += 1;
+			newSeason = true;
+		}
+		if (this.season >= this.seasonsPerYear) {
+			this.season -= this.seasonsPerYear;
+			this.year += 1;
+			newYear = true;
+		}
+		if (newSeason == true) {
+			this.onNewSeason();
+		}
+		if (newYear == true) {
+			this.onNewYear();
+		} 
+		if (this.showCal == true) {
+			this.calDisplay();
+		}
+	},
+	onNewSeason: function() {
+		msg("onNewSeason triggered");
+	},
+	onNewYear: function() {
+		msg("onNewYear triggered");
+	},
+	updateCalDev: function() {
+		let devForceDay = this.daysPerSeason - 5;
+		msg("updateCalDev triggered, days set to " + devForceDay);
+		this.day = devForceDay;
+		this.calDisplay();
+	},
+	calDisplay: function() {
+		let displayDay = this.day + 1;
+		let assembledCal = "Day " + displayDay + " of " + this.seasons[this.season].label + ", Year " + this.year;
+		document.getElementById("calendarBlock").innerText = assembledCal;
+	},
+	activateCal: function() {
+		this.calDisplay();
+		this.showCal = true;
+		document.getElementById("calendarBlock").style.display = "block";
+	},
+	adjustRunSpeed: function() {
+		if (this.runSpeed == 2000) {
+			this.runSpeed = 500;
+		} else {
+			this.runSpeed = 2000;
+		}
+		clearInterval(gameTimer);
+		gameTimer = setInterval(tick, this.runSpeed);
+
+	}
+} 
+
+//-- end calendar object --//
+
+//-- start interval timer --//
+
+//-- this should probably be an object --//
+
+let gameTimer = setInterval(tick, calendar.runSpeed);
+
+function tick() {
+	msg("tick");
+	calendar.updateCal();
+}
+
+//-- end interval timer --//
 
 function toggleActive(e) {
 	const targetPanelId = e.target.getAttribute('data-target');
@@ -180,10 +293,14 @@ function postMessage(event, eventValue) {
 		messageText = "You did a thing?? Wow.";
 	}
 	messageText = "from old postmessage:" + messageText;
-	_postMessage(messageText);
+	msg(messageText);
 }
 
-function _postMessage(messagetext) {
+function _postMessage(text) {
+	msg(text);
+}
+
+function msg(messagetext) {
 	messageArray.unshift(messagetext);
 	if (messageArray.length > 25) {
 		messageArray.pop();
