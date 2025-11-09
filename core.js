@@ -123,13 +123,11 @@ function loadResourcePanel() {
  * or buy-swell (activate purchase code for buying one swell) */
 
 function buttonManager(event) {
-	msg("button pressed");
+	// msg("button pressed");
 	let sourceButton = event.target.getAttribute('data-target');
 	let actionCat = sourceButton.slice(0 , 3);
 	let lvl2 = sourceButton.slice(4);
 	let lvl2num = Number(lvl2);	
-
-	msg(actionCat + " " + lvl2 + " " + lvl2num);
 
 	if (actionCat == "gat") {
 		resourceStack[lvl2num].gather();
@@ -137,7 +135,7 @@ function buttonManager(event) {
 
 	if (actionCat == "cal") {
 		calendar.updateCal();
-		_postMessage("calendar registered");
+		msg("calendar registered");
 	}
 
 	
@@ -173,13 +171,12 @@ const calendar = {
 		  modifiers: null
 		}],
 	updateCal: function() {
-		msg("updateCal called");
+//		msg("updateCal called");
 		let newSeason = false;
 		let newYear = false;
-		msg("this.day =" + this.day);
 		
 		this.day += 1;
-		_postMessage(this.day);
+		msg("this.day updated, now " + this.day);
 		
 		if (this.day >= this.daysPerSeason) {
 			this.day -= this.daysPerSeason;
@@ -188,12 +185,12 @@ const calendar = {
 		}
 		if (this.season >= seasonsPerYear) {
 			this.season -= seasonsPerYear;
-			this.year =+ 1;
+			this.year += 1;
 			newYear = true;
 		}
 
-		let assembledCal = this.seasons[season].name + " " + this.day + ", " + this.year;
-		_postMessage(assembledCal);
+		let assembledCal = this.seasons[this.season].name + " " + this.day + ", " + this.year;
+		msg(assembledCal);
 
 	},
 	onNewSeason: function() {
