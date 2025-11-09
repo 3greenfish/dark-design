@@ -233,6 +233,7 @@ const calendar = {
 			this.runSpeed = 2000;
 		}
 		msg("this.runSpeed now set to " + this.runSpeed);
+		gameTimer = setInterval(tick, this.runSpeed);
 	}
 } 
 
@@ -240,7 +241,7 @@ const calendar = {
 
 //-- start interval timer --//
 
-setInterval(tick, calendar.runSpeed);
+let gameTimer = setInterval(tick, calendar.runSpeed);
 
 function tick() {
 	msg("tick");
