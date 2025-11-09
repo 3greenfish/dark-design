@@ -253,7 +253,12 @@ const dev = [
 	},
 	{ name: "button2",
 	  run: function() {
-		  msg("no function defined for devbutton 2");
+		  calendar.adjustRunSpeed();
+	  }
+	},
+	{ name: "button3",
+	  run: function() {
+		  msg("no function defined for devbutton 3");
 	  }
 	}
 ]
