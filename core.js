@@ -159,15 +159,19 @@ const calendar = {
 	seasonsPerYear: 4,
 	seasons: [
 		{ name: "spring",
+		  label: "Spring",
 		  modifiers: null
 		},
 		{ name: "summer",
+		  label: "Summer",
 		  modifiers: null
 		},
 		{ name: "fall",
+		  label: "Fall",
 		  modifiers: null
 		},
 		{ name: "winter",
+		  label: "Winter",
 		  modifiers: null
 		}],
 	updateCal: function() {
@@ -190,16 +194,17 @@ const calendar = {
 
 // -- THIS IS BROKEN --//
 
-/*		if (NewSeason) {
+		if (newSeason) {
 			this.onNewSeason();
 		}
 		if (newYear) {
 			this.onNewYear();
-		} */ 
+		} 
+		msg("newSeason and newYear triggers okay");
 		
-
-		let assembledCal = "Day " + this.day + " of " + this.seasons[this.season].name + ", Year " + this.year;
-		msg(assembledCal);
+		let displayDay = this.day + 1;
+		let assembledCal = "Day " + displayDay + " of " + this.seasons[this.season].label + ", Year " + this.year;
+		// msg(assembledCal);
 		document.getElementById("calendarBlock").innerText = assembledCal;
 
 	},
