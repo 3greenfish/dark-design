@@ -233,7 +233,10 @@ const calendar = {
 			this.runSpeed = 2000;
 		}
 		msg("this.runSpeed now set to " + this.runSpeed);
+		clearInterval(gameTimer);
+		msg("gameTimer set to 0");
 		gameTimer = setInterval(tick, this.runSpeed);
+		msg("gameTimer should be at either 2 per second or once per 4 seconds");
 	}
 } 
 
