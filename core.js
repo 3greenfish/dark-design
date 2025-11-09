@@ -123,10 +123,13 @@ function loadResourcePanel() {
  * or buy-swell (activate purchase code for buying one swell) */
 
 function buttonManager(event) {
+	msg("button pressed");
 	let sourceButton = event.target.getAttribute('data-target');
 	let actionCat = sourceButton.slice(0 , 3);
 	let lvl2 = sourceButton.slice(4);
 	let lvl2num = Number(lvl2);	
+
+	msg(actionCat + " " + lvl2 + " " + lvl2num);
 
 	if (actionCat == "gat") {
 		resourceStack[lvl2num].gather();
