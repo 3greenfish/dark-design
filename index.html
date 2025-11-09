@@ -21,7 +21,7 @@
 			</div>
 			
 			<div class="resource">
-				<div class="resourceName" id="resSize">Size:</div> <div class="resourceValue" id="sizeCurrent"></div><div class="resourceMax" id="sizeMax">m2</div>
+				<div class="resourceName" id="resSize">Size:</div> <div class="resourceValue" id="sizeCurrent"></div><div class="resourceMax" id="sizeMax"> m^2</div>
 			</div>
 
 			<div class="resource">
@@ -66,7 +66,7 @@
 			<div class="content" id="BuildingSwampContent">
 				<p>Grow your corrupting influence and expand the swamp.</p>
 				<p>Cost: <span id="BuildingSwampCost">10</span> corruption</p>
-				<div class="button" data-target="buttonClick(event)">Swell by 1 m^2</div>
+				<div class="button" data-target="buy-swamp" onClick="buttonManager(event)">Swell by 1 m^2</div>
 			</div>
 
 			
@@ -110,6 +110,7 @@
 				<div class="button" data-target="dev-0" onClick="buttonManager(event)">Activate calendar</div>
 				<div class="button" data-target="dev-1" onClick="buttonManager(event)">Dev add days</div>
 				<div class="button" data-target="dev-2" onClick="buttonManager(event)">Adjust speed</div>
+				<div class="button" data-target="dev-3" onClick="buttonManager(event)">Dev 3</div>
 			</div>
 		
 			<div id="messagebox">
