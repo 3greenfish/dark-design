@@ -176,10 +176,6 @@ const calendar = {
 		let newYear = false;
 		
 		this.day += 1;
-		msg("this.day updated, now " + this.day);
-		msg("this season value: " + this.season);
-		msg("this season name: " + this.seasons[this.season].name);
-		msg("this year: " + this.year);
 		
 		if (this.day >= this.daysPerSeason) {
 			this.day -= this.daysPerSeason;
@@ -192,8 +188,16 @@ const calendar = {
 			newYear = true;
 		}
 
-		let assembledCal = this.seasons[this.season].name + " " + this.day + ", " + this.year;
+		if (NewSeason) {
+			onNewSeason();
+		}
+		if (newYear) {
+			onNewYear();
+		}
+
+		let assembledCal = "Day " + this.day + " of " + this.seasons[this.season].name + ", Year " + this.year;
 		msg(assembledCal);
+		document.getElementById("calendarBlock").innerText = assembledCal;
 
 	},
 	onNewSeason: function() {
@@ -201,6 +205,9 @@ const calendar = {
 	},
 	onNewYear: function() {
 		_postMessage("onNewYear triggered");
+	},
+	updateCalDev: function() {
+		this.day += 88;
 	}
 } 
 
