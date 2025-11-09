@@ -230,7 +230,7 @@ const calendar = {
 		if (this.runSpeed == 2000) {
 			this.runSpeed = 500;
 		} else {
-			this.runSpeed = 2000);
+			this.runSpeed = 2000;
 		}
 		msg("this.runSpeed now set to " + this.runSpeed);
 	}
