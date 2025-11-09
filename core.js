@@ -194,10 +194,10 @@ const calendar = {
 
 // -- THIS IS BROKEN --//
 
-		if (newSeason) {
+		if (newSeason == true) {
 			this.onNewSeason();
 		}
-		if (newYear) {
+		if (newYear == true) {
 			this.onNewYear();
 		} 
 		msg("newSeason and newYear triggers okay");
@@ -215,7 +215,7 @@ const calendar = {
 		_postMessage("onNewYear triggered");
 	},
 	updateCalDev: function() {
-		this.day += 88;
+		this.day = 95;
 	}
 } 
 
