@@ -71,7 +71,7 @@ function calcManualRes(res) {
 
 // -- start loading items here -- //
 
-let jsUpdateTime = "11-2 902pm";
+let jsUpdateTime = "11-9 1103am";
 
 // -- end loading items -- //
 
@@ -224,7 +224,7 @@ const calendar = {
 	},
 	activateCal: function() {
 		this.showCal = true;
-		document.getElementById("calendarBlock").style.display = block;
+		document.getElementById("calendarBlock").style.display = "block";
 	},
 	adjustRunSpeed: function() {
 		if (this.runSpeed == 2000) {
