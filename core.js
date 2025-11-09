@@ -27,7 +27,7 @@ const resourceStack = [
 		  } else {
 			  this.current = totalRes;
 		  }
-		  loadResourceTest(0); // need to clean up this code
+		  loadResource(0); // need to clean up this code
 	  },
 	  updateGatherRate: function() {
 		  this.gatherRate = 1 + (0.1 * swells);
@@ -64,7 +64,7 @@ let corruptionAdd = 1;
 function calcManualRes(res) {
 	if (res == "corruption") {
 		corruptionAdd = 1 + (0.1 * swells);
-		_postMessage("Amount per fester is now " + corruptionAdd + " per click.");
+		msg("Amount per fester is now " + corruptionAdd + " per click.");
 	}
 }
 // --- end --- //
@@ -83,21 +83,17 @@ function updateJStime() { //runs at end of HTML load
 
 
 
-function loadResourceTest(resource) {
+function loadResource(resource) {
 	let resName = resourceStack[resource].name;
 	let resCurrent = resourceStack[resource].current;
-/*	if (resName == "size") {
-		resCurrent += "m&178;";
-	} */
+
 	document.getElementById(resName + 'Current').innerText = resCurrent;
 	
 	if (resourceStack[resource].limited) {
-	//	_postMessage("is limited");
 		let resMax = "/" + resourceStack[resource].max;
 		
 		document.getElementById(resName + 'Max').innerText = resMax;
-	} //else { _postMessage("Not limited"); }
-	// _postMessage("finished loading");
+	}
 }
 
 function loadResourcePanel() {
@@ -133,15 +129,14 @@ function buttonManager(event) {
 		resourceStack[lvl2num].gather();
 	}
 
-	if (actionCat == "cal") {
+/*	if (actionCat == "cal") {
 		calendar.activateCal();
-	}
+	} 
+*/
 
-	if (actionCat == "dev") {
+	if (actionCat == "dev") {    //-- if dev button, run code from dev button object --//
 		dev[lvl2num].run();
-	}
-	
-	// _postMessage("code finished");
+	}	
 }
 
 
@@ -318,10 +313,6 @@ function postMessage(event, eventValue) {
 	msg(messageText);
 }
 
-function _postMessage(text) {
-	msg(text);
-}
-
 function msg(messagetext) {
 	messageArray.unshift(messagetext);
 	if (messageArray.length > 25) {
@@ -334,37 +325,4 @@ function msg(messagetext) {
 	document.getElementById("messagebox").innerHTML = finalArray;
 }
 
-
-
-function buttonClick(event) {
-	const sourceButton = event.target.getAttribute('data-target');
-	const actionType = event.target.getAttribute('data-type');
 	
-	if (actionType == "gather" && sourceButton == "GatherFood") {
-		food += 1;
-		postMessage(sourceButton,amount);
-		document.getElementById("foodCurrent").innerText = food;
-		/* document.getElementById("GatherFoodButton").innerHTML = "<div class=\"collapsible\" data-type=\"gather\" data-target=\"GatherFood\" id=\"GatherFoodButton\" onClick=\"buttonClick(event," + foodValue + ")\">Gather Food</div>"; */
-		
-	}
-	
-	
-	
-}
-
-
-/*
-var coll = document.getElementsByClassName("collapsible");
-var i;
-
-for (i = 0; i < coll.length, i++) {
-	coll[i].addEventListener("click", function() {
-		this.classList.toggle("active");
-		var content = this.nextElementSibling;
-		if (content.style.display === "block") {
-			content.style.display = "none";
-		} else {
-			content.style.display = "block";
-		}
-	});
-}*/
