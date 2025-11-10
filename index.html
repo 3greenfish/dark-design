@@ -60,7 +60,11 @@
 
 			
 
-			<div class="collapsible" data-target="gat-0" id="GatherFestButton" onClick="buttonManager(event)">Fester</div>
+			<div class="collapsible" data-target="gat-0" id="gatherFestButton" onClick="buttonManager(event)">Fester</div>
+			<div class="content" id="gatherFestButtonContent">
+				<p>Generate <span id="corruptionGatherRate">1</span> corruption</p>
+				<div class="button" data-target="gat-0" onClick="buttonManager(event)">Fester!</div>
+			</div>
 
 			<div class="collapsible" data-target="GrowSwamp" id="BuildingSwamp" onClick="buttonClick(event)">Swell</div>
 			<div class="content" id="BuildingSwampContent">
@@ -69,6 +73,15 @@
 				<div class="button" data-target="buy-swamp" onClick="buttonManager(event)">Swell by 1 m^2</div>
 			</div>
 
+			<div class="collapsible" data-target="gat-2" id="digest" onClick="buttonClick(event)">Digest Prey <span class="notch" data-target="gat-2" onClick="expandButton(event)">M</span></div>
+			<div class="content" id="gat-2Content">
+				<p>Digest <span id="digestCost">1</span> prey to generate <span id="digestGatherRate">1</span> sustenance</p>
+				<div class="button" data-target="buy-swamp" onClick="buttonManager(event)">Digest Prey</div>
+			</div>
+
+
+
+			
 			
 			<div class="collapsible" data-type="gather" data-target="GatherFood" id="GatherFoodButton" onClick="buttonClick(event,1)">Gather Food</div>
 				
