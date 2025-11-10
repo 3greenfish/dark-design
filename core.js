@@ -11,7 +11,7 @@ let sirens = 0;
 // ---- end phase 1 buildings ---- //
 
 const resourceStack = [
-	{ name: "corruption",
+	{ name: "corruption", // 0
 	  label: "Corruption",
 	  current: 0,
 	  limited: true,
@@ -27,7 +27,7 @@ const resourceStack = [
 		  } else {
 			  this.current = totalRes;
 		  }
-		  loadResourceTest(0); // need to clean up this code
+		  loadResource(0); // need to clean up this code
 	  },
 	  updateGatherRate: function() {
 		  this.gatherRate = 1 + (0.1 * swells);
@@ -38,36 +38,46 @@ const resourceStack = [
 		  msg("Amount per tick is now " + this.perTick + " per click.");
 	  } 
 	},
-	{ name: "size",
+	{ name: "size", // 1
 	  label: "Size",
 	  current: 1,
 	  limited: false,
 	  perTick: 0
 	},
-	{ name: "prey",
+	{ name: "prey", // 2
 	  label: "Prey",
 	  current: 0,
 	  limited: true,
 	  max: 25,
 	  perTick: 0
 	},
-	{ name: "sustenance",
+	{ name: "sustenance", //3
 	  label: "Sustenance",
 	  current: 0,
 	  limited: true,
 	  max: 40,
-	  perTick: 0
+	  perTick: 0,
+	  gatherRate: 1,
+	  gatherCost: 1, // replace with object with resource names, costs 
+	  gather: function() {
+		  let totalRes = this.current;
+		  totalRes += this.gatherRate;
+		  if (totalRes >= this.max) {
+			  this.current = this.max;
+		  } else {
+			  this.current = totalRes;
+		  }
+		  loadResource(3); // need to clean up this code
+	  },
+	  updateGatherRate: function() {
+		  this.gatherRate = 1 + (0.1 * swells);
+		  msg("Amount per fester is now " + this.gatherRate + " per click.");
+	  },
+	  updatePerTick: function() {
+		  this.perTick = 1; // need to define logic.
+		  msg("Amount per tick is now " + this.perTick + " per click.");
+	  } 	 
 	}];
-
-// --- this is incorporated into the array for corruption, but consider if it's needed separately --- //
-let corruptionAdd = 1;
-function calcManualRes(res) {
-	if (res == "corruption") {
-		corruptionAdd = 1 + (0.1 * swells);
-		_postMessage("Amount per fester is now " + corruptionAdd + " per click.");
-	}
-}
-// --- end --- //
 
 // -- start loading items here -- //
 
@@ -81,32 +91,23 @@ function updateJStime() { //runs at end of HTML load
 	loadResourcePanel();
 }
 
-
-
-function loadResourceTest(resource) {
+function loadResource(resource) {
 	let resName = resourceStack[resource].name;
 	let resCurrent = resourceStack[resource].current;
-/*	if (resName == "size") {
-		resCurrent += "m&178;";
-	} */
+
 	document.getElementById(resName + 'Current').innerText = resCurrent;
 	
 	if (resourceStack[resource].limited) {
-	//	_postMessage("is limited");
 		let resMax = "/" + resourceStack[resource].max;
 		
 		document.getElementById(resName + 'Max').innerText = resMax;
-	} //else { _postMessage("Not limited"); }
-	// _postMessage("finished loading");
+	}
 }
 
 function loadResourcePanel() {
 	for (let i = 0; i < resourceStack.length; i++) {
 		let resName = resourceStack[i].name;
 		let resCurrent = resourceStack[i].current;
-	/*	if (resName == "size") {
-			resCurrent += "m&#178;";
-		} */
 		document.getElementById(resName + 'Current').innerText = resCurrent;
 		
 		if (resourceStack[i].limited == true) {
@@ -120,7 +121,8 @@ function loadResourcePanel() {
 // -- button management and purchase code goes here -- //
 /* buttons should be in the format XXX-0 or XXX-XXXXX:
  * e.g., gat-0 (gather resource in 0 position in array)
- * or buy-swell (activate purchase code for buying one swell) */
+ * or buy-swell (activate purchase code for buying one swell)
+ * alternatively, maybe everything is a buy action but some don't have costs?? */
 
 function buttonManager(event) {
 	msg("button pressed");
@@ -133,15 +135,9 @@ function buttonManager(event) {
 		resourceStack[lvl2num].gather();
 	}
 
-	if (actionCat == "cal") {
-		calendar.activateCal();
-	}
-
-	if (actionCat == "adj") {
-		calendar.adjustRunSpeed();
-	}
-	
-	// _postMessage("code finished");
+	if (actionCat == "dev") {    //-- if dev button, run code from dev button object --//
+		dev[lvl2num].run();
+	}	
 }
 
 
@@ -211,12 +207,6 @@ const calendar = {
 	onNewYear: function() {
 		msg("onNewYear triggered");
 	},
-	updateCalDev: function() {
-		let devForceDay = this.daysPerSeason - 5;
-		msg("updateCalDev triggered, days set to " + devForceDay);
-		this.day = devForceDay;
-		this.calDisplay();
-	},
 	calDisplay: function() {
 		let displayDay = this.day + 1;
 		let assembledCal = "Day " + displayDay + " of " + this.seasons[this.season].label + ", Year " + this.year;
@@ -241,14 +231,41 @@ const calendar = {
 
 //-- end calendar object --//
 
-//-- start interval timer --//
+//-- start dev object --//
 
+const dev = [
+	{ name: "button0",
+	  run: function() {  
+		  calendar.activateCal();
+	  } 
+	},
+	{ name: "button1",
+	  run: function() {
+		let devForceDay = calendar.daysPerSeason - 5;
+		msg("updateCalDev triggered, days set to " + devForceDay);
+		calendar.day = devForceDay;
+		calendar.calDisplay();
+	  }
+	},
+	{ name: "button2",
+	  run: function() {
+		  calendar.adjustRunSpeed();
+	  }
+	},
+	{ name: "button3",
+	  run: function() {
+		  msg("no function defined for devbutton 3");
+	  }
+	}
+]
+
+//-- start interval timer --//
 //-- this should probably be an object --//
 
 let gameTimer = setInterval(tick, calendar.runSpeed);
 
 function tick() {
-	msg("tick");
+//	msg("tick");
 	calendar.updateCal();
 }
 
@@ -282,24 +299,6 @@ function expandButton(butt) {
 	}
 }
 
-function postMessage(event, eventValue) {
-	const sourceButton = event;
-	/* const messageCenter = ; */
-	let messageText;
-	
-	if (sourceButton == "GatherFood") {
-		messageText = "You have gathered " + eventValue + " food. You now have " + foodValue + " food.";
-	} else {
-		messageText = "You did a thing?? Wow.";
-	}
-	messageText = "from old postmessage:" + messageText;
-	msg(messageText);
-}
-
-function _postMessage(text) {
-	msg(text);
-}
-
 function msg(messagetext) {
 	messageArray.unshift(messagetext);
 	if (messageArray.length > 25) {
@@ -312,37 +311,4 @@ function msg(messagetext) {
 	document.getElementById("messagebox").innerHTML = finalArray;
 }
 
-
-
-function buttonClick(event) {
-	const sourceButton = event.target.getAttribute('data-target');
-	const actionType = event.target.getAttribute('data-type');
 	
-	if (actionType == "gather" && sourceButton == "GatherFood") {
-		food += 1;
-		postMessage(sourceButton,amount);
-		document.getElementById("foodCurrent").innerText = food;
-		/* document.getElementById("GatherFoodButton").innerHTML = "<div class=\"collapsible\" data-type=\"gather\" data-target=\"GatherFood\" id=\"GatherFoodButton\" onClick=\"buttonClick(event," + foodValue + ")\">Gather Food</div>"; */
-		
-	}
-	
-	
-	
-}
-
-
-/*
-var coll = document.getElementsByClassName("collapsible");
-var i;
-
-for (i = 0; i < coll.length, i++) {
-	coll[i].addEventListener("click", function() {
-		this.classList.toggle("active");
-		var content = this.nextElementSibling;
-		if (content.style.display === "block") {
-			content.style.display = "none";
-		} else {
-			content.style.display = "block";
-		}
-	});
-}*/

@@ -21,7 +21,7 @@
 			</div>
 			
 			<div class="resource">
-				<div class="resourceName" id="resSize">Size:</div> <div class="resourceValue" id="sizeCurrent"></div><div class="resourceMax" id="sizeMax">m2</div>
+				<div class="resourceName" id="resSize">Size:</div> <div class="resourceValue" id="sizeCurrent"></div><div class="resourceMax" id="sizeMax"> m^2</div>
 			</div>
 
 			<div class="resource">
@@ -60,15 +60,33 @@
 
 			
 
-			<div class="collapsible" data-target="gat-0" id="GatherFestButton" onClick="buttonManager(event)">Fester</div>
+			<div class="collapsible" data-target="gat-0" id="gatherFestButton" onClick="buttonManager(event)">Fester</div>
+			<div class="content" id="gatherFestButtonContent">
+				<p>Generate <span id="corruptionGatherRate">1</span> corruption</p>
+				<div class="button" data-target="gat-0" onClick="buttonManager(event)">Fester!</div>
+			</div>
 
 			<div class="collapsible" data-target="GrowSwamp" id="BuildingSwamp" onClick="buttonClick(event)">Swell</div>
 			<div class="content" id="BuildingSwampContent">
 				<p>Grow your corrupting influence and expand the swamp.</p>
 				<p>Cost: <span id="BuildingSwampCost">10</span> corruption</p>
-				<div class="button" data-target="buttonClick(event)">Swell by 1 m^2</div>
+				<div class="button" data-target="buy-swamp" onClick="buttonManager(event)">Swell by 1 m^2</div>
 			</div>
 
+<!-- TO DO: * define notch class -- change to div and try float right.
+			* once a "check prices" function is available, clicking on the non-notch part of the button should expand the collapsible for visibility on prices.
+			* add functionality to add count of buildings where appropriate
+			-->
+			
+			<div class="collapsible" data-target="gat-2" id="digest" onClick="buttonClick(event)">Digest Prey <span class="notch" data-target="gat-2" onClick="expandButton(event)">M</span></div>
+			<div class="content" id="gat-2Content">
+				<p>Digest <span id="digestCost">1</span> prey to generate <span id="digestGatherRate">1</span> sustenance</p>
+				<div class="button" data-target="buy-swamp" onClick="buttonManager(event)">Digest Prey</div>
+			</div>
+
+
+
+			
 			
 			<div class="collapsible" data-type="gather" data-target="GatherFood" id="GatherFoodButton" onClick="buttonClick(event,1)">Gather Food</div>
 				
@@ -107,10 +125,10 @@
 				<div class="button" onClick="loadResourcePanel()">Test Load Resource Panel</div>
 				<p><a href="main.css">load main.css</a></p>
 				<p><a href="core.js">load core.js</a></p>
-				<div class="button" data-target="cal-0" onClick="buttonManager(event)">Activate calendar</div>
-				<div class="button" onClick="calendar.updateCalDev()">Dev add days</div>
-				<div class="button" data-target="adj-0" onClick="buttonManager(event)">Adjust speed</div>
-				<div class="button" data-target="Steven" onClick="toggleActive(event)">Steven</div>
+				<div class="button" data-target="dev-0" onClick="buttonManager(event)">Activate calendar</div>
+				<div class="button" data-target="dev-1" onClick="buttonManager(event)">Dev add days</div>
+				<div class="button" data-target="dev-2" onClick="buttonManager(event)">Adjust speed</div>
+				<div class="button" data-target="dev-3" onClick="buttonManager(event)">Dev 3</div>
 			</div>
 		
 			<div id="messagebox">
