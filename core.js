@@ -11,7 +11,7 @@ let sirens = 0;
 // ---- end phase 1 buildings ---- //
 
 const resourceStack = [
-	{ name: "corruption",
+	{ name: "corruption", // 0
 	  label: "Corruption",
 	  current: 0,
 	  limited: true,
@@ -38,25 +38,45 @@ const resourceStack = [
 		  msg("Amount per tick is now " + this.perTick + " per click.");
 	  } 
 	},
-	{ name: "size",
+	{ name: "size", // 1
 	  label: "Size",
 	  current: 1,
 	  limited: false,
 	  perTick: 0
 	},
-	{ name: "prey",
+	{ name: "prey", // 2
 	  label: "Prey",
 	  current: 0,
 	  limited: true,
 	  max: 25,
 	  perTick: 0
 	},
-	{ name: "sustenance",
+	{ name: "sustenance", //3
 	  label: "Sustenance",
 	  current: 0,
 	  limited: true,
 	  max: 40,
-	  perTick: 0
+	  perTick: 0,
+	  gatherRate: 1,
+	  gatherCost: 1, // replace with object with resource names, costs 
+	  gather: function() {
+		  let totalRes = this.current;
+		  totalRes += this.gatherRate;
+		  if (totalRes >= this.max) {
+			  this.current = this.max;
+		  } else {
+			  this.current = totalRes;
+		  }
+		  loadResource(3); // need to clean up this code
+	  },
+	  updateGatherRate: function() {
+		  this.gatherRate = 1 + (0.1 * swells);
+		  msg("Amount per fester is now " + this.gatherRate + " per click.");
+	  },
+	  updatePerTick: function() {
+		  this.perTick = 1; // need to define logic.
+		  msg("Amount per tick is now " + this.perTick + " per click.");
+	  } 	 
 	}];
 
 // -- start loading items here -- //
