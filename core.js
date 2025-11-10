@@ -59,16 +59,6 @@ const resourceStack = [
 	  perTick: 0
 	}];
 
-// --- this is incorporated into the array for corruption, but consider if it's needed separately --- //
-let corruptionAdd = 1;
-function calcManualRes(res) {
-	if (res == "corruption") {
-		corruptionAdd = 1 + (0.1 * swells);
-		msg("Amount per fester is now " + corruptionAdd + " per click.");
-	}
-}
-// --- end --- //
-
 // -- start loading items here -- //
 
 let jsUpdateTime = "11-9 1103am";
@@ -80,8 +70,6 @@ function updateJStime() { //runs at end of HTML load
 	document.getElementById('messageCurrent').innerText = messageArray.toString();
 	loadResourcePanel();
 }
-
-
 
 function loadResource(resource) {
 	let resName = resourceStack[resource].name;
@@ -100,9 +88,6 @@ function loadResourcePanel() {
 	for (let i = 0; i < resourceStack.length; i++) {
 		let resName = resourceStack[i].name;
 		let resCurrent = resourceStack[i].current;
-	/*	if (resName == "size") {
-			resCurrent += "m&#178;";
-		} */
 		document.getElementById(resName + 'Current').innerText = resCurrent;
 		
 		if (resourceStack[i].limited == true) {
@@ -116,7 +101,8 @@ function loadResourcePanel() {
 // -- button management and purchase code goes here -- //
 /* buttons should be in the format XXX-0 or XXX-XXXXX:
  * e.g., gat-0 (gather resource in 0 position in array)
- * or buy-swell (activate purchase code for buying one swell) */
+ * or buy-swell (activate purchase code for buying one swell)
+ * alternatively, maybe everything is a buy action but some don't have costs?? */
 
 function buttonManager(event) {
 	msg("button pressed");
@@ -128,11 +114,6 @@ function buttonManager(event) {
 	if (actionCat == "gat") {
 		resourceStack[lvl2num].gather();
 	}
-
-/*	if (actionCat == "cal") {
-		calendar.activateCal();
-	} 
-*/
 
 	if (actionCat == "dev") {    //-- if dev button, run code from dev button object --//
 		dev[lvl2num].run();
@@ -259,13 +240,12 @@ const dev = [
 ]
 
 //-- start interval timer --//
-
 //-- this should probably be an object --//
 
 let gameTimer = setInterval(tick, calendar.runSpeed);
 
 function tick() {
-	msg("tick");
+//	msg("tick");
 	calendar.updateCal();
 }
 
