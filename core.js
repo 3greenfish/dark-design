@@ -279,20 +279,6 @@ function expandButton(butt) {
 	}
 }
 
-function postMessage(event, eventValue) {
-	const sourceButton = event;
-	/* const messageCenter = ; */
-	let messageText;
-	
-	if (sourceButton == "GatherFood") {
-		messageText = "You have gathered " + eventValue + " food. You now have " + foodValue + " food.";
-	} else {
-		messageText = "You did a thing?? Wow.";
-	}
-	messageText = "from old postmessage:" + messageText;
-	msg(messageText);
-}
-
 function msg(messagetext) {
 	messageArray.unshift(messagetext);
 	if (messageArray.length > 25) {
