@@ -21,7 +21,7 @@ const swampBuildings = [
 		  msg("updateButtonLabel called");
 		  let newLabel = this.label;
 		  if (this.count > 0) {
-			  newLabel = newLabel + " (" + this.count + ")";
+			  newLabel = newLabel + " " + this.count + " why no parens?";
 		  }
 		  document.getElementById(this.name + "Label").innerText = newLabel;
 	  },
