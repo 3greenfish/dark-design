@@ -144,7 +144,8 @@ const resourceStack = [
 		  this.perTick = 1; // need to define logic.
 		  msg("Amount per tick is now " + this.perTick + " per click.");
 	  } 	 
-	}];
+	}
+];
 
 // -- start loading items here -- //
 
@@ -337,7 +338,7 @@ const dev = [
 let gameTimer = setInterval(tick, calendar.runSpeed);
 
 function tick() {
-//	msg("tick");
+	msg("tick");
 	calendar.updateCal();
 }
 
