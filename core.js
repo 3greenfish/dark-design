@@ -15,7 +15,7 @@ const swampBuildings = [
 		  msg("onPurchase called");
 		  this.count += 1;
 		  msg("current count: " + this.count);
-		  this.updateButtonLabel;
+		  this.updateButtonLabel();
 		  this.updateRatio();
 	  },
 	  updateButtonLabel: function() {
