@@ -14,14 +14,15 @@ const swampBuildings = [
 	  onPurchase: function() {
 		  msg("onPurchase called");
 		  this.count += 1;
+		  msg("current count: " + this.count);
 		  this.updateButtonLabel;
 		  this.updateRatio();
 	  },
 	  updateButtonLabel: function() {
-		  msg("updateButtonLabel called");
+		  msg("updateButtonLabel called for swell");
 		  let newLabel = this.label;
 		  if (this.count > 0) {
-			  newLabel = newLabel + " " + this.count + " why no parens?";
+			  newLabel = newLabel + " (" + this.count + ")";
 		  }
 		  document.getElementById(this.name + "Label").innerText = newLabel;
 	  },
@@ -67,6 +68,7 @@ function findResInStack(name) {
 	msg("findResInStack called for " + name);
 	for (let i = 0; i < resourceStack.length; i++) {
 		if (resourceStack[i].name == findName) {
+			msg("found " + name + " in array index " + i")
 			return i;
 		}
 		msg("did not find " + name + " in array index " + i);
@@ -204,10 +206,50 @@ function buttonManager(event) {
 
 	if (actionCat == "dev") {    //-- if dev button, run code from dev button object --//
 		dev[lvl2num].run();
-	}	
+	}
+	if (actionCat == "buy") {
+		buyBuilding(lvl2num);
+	}
+
 }
 
+function buyBuilding(num) {
+	let validator = checkPrice(num); 
+	if (validator = "fail-insufficient") {  // should probably be a switch...
+		msg("insufficient resources");
+	}
+	if (validator = "pass-sufficient") {
+		payPrice(num);
+		swampBuildings[num].onPurchase();
+	}
+	msg("buyBuilding function complete");
+}
 
+function checkPrice(num) {
+	msg("checkPrice called with num " + num);
+	let prices = swampBuildings[num].costs;
+	for (let i = 0; i < prices.length; i++) {
+		let priceName = prices[i].name;
+		let priceCode = findResInStack(priceName);
+		let value = prices[i].amount;
+		if (value > resourceStack[priceCode].current) {
+			return "fail-insufficient";
+		}
+	}
+	return "pass-sufficient";
+}
+
+function payPrice(num) {
+	msg("payPrice called with num " + num);
+	let prices = swampBuildings[num].costs;
+	for (let i = 0; i < prices.length; i++) {
+		let priceName = prices[i].name;
+		let priceCode = findResInStack(priceName);
+		let value = prices[i].amount;
+		resourceStack[priceCode].current -= value;
+	}
+	msg("payPrice completed);
+}
 
 
 
@@ -321,7 +363,9 @@ const dev = [
 	},
 	{ name: "button3",
 	  run: function() {
-		  findResInStack("sustenance");
+		  let george = "prey";
+		  let bob = findResInStack(george);
+		  msg("found " + george + " in index " + bob);
 	  }
 	},
 	{ name: "button4",
@@ -337,7 +381,7 @@ const dev = [
 let gameTimer = setInterval(tick, calendar.runSpeed);
 
 function tick() {
-	msg("tick");
+//	msg("tick");
 	calendar.updateCal();
 }
 
