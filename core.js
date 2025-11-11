@@ -215,10 +215,10 @@ function buttonManager(event) {
 
 function buyBuilding(num) {
 	let validator = checkPrice(num); 
-	if (validator = "fail-insufficient") {  // should probably be a switch...
+	if (validator == "fail-insufficient") {  // should probably be a switch...
 		msg("insufficient resources");
 	}
-	if (validator = "pass-sufficient") {
+	if (validator == "pass-sufficient") {
 		payPrice(num);
 		swampBuildings[num].onPurchase();
 	}
