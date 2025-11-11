@@ -248,6 +248,7 @@ function payPrice(num) {
 		let value = prices[i].amount;
 		resourceStack[priceCode].current -= value;
 	}
+	loadResourcePanel();
 	msg("payPrice completed");
 }
 
@@ -382,6 +383,7 @@ let gameTimer = setInterval(tick, calendar.runSpeed);
 
 function tick() {
 //	msg("tick");
+	loadResourcePanel();
 	calendar.updateCal();
 }
 
