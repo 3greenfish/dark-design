@@ -57,7 +57,7 @@ const swampBuildings = [
 	  costs: [],
 	  ratio: 1.2
 	}
-]
+];
 
 
 // ---- end phase 1 buildings ---- //
@@ -100,7 +100,7 @@ const resourceStack = [
 	  updatePerTick: function() {
 		  this.perTick = 1; // need to define logic.
 		  msg("Amount per tick is now " + this.perTick + " per click.");
-	  } 
+	  }
 	},
 	{ name: "size", // 1
 	  label: "Size",
@@ -294,7 +294,7 @@ const calendar = {
 		gameTimer = setInterval(tick, this.runSpeed);
 
 	}
-} 
+}; 
 
 //-- end calendar object --//
 
@@ -329,7 +329,7 @@ const dev = [
 		  msg("no function defined for devbutton 4");
 	  }
 	}
-]
+];
 
 //-- start interval timer --//
 //-- this should probably be an object --//
