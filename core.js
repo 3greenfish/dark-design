@@ -3,13 +3,77 @@ const messageArray = ["You have awakened in a new world, and your dark powers ha
 
 // ---- phase 1 buildings, replace with object stack later ---- //
 
-let swells = 0; 
-let pustules = 0;
-let traps = 0; 
-let sirens = 0;
+const swampBuildings = [
+	{ name: "swell",
+	  label: "Swell",
+	  count: 0,
+	  costs: [
+		  { name: "corruption", amount: 10 }
+		  ],
+	  ratio: 1.2,
+	  onPurchase: function() {
+		  msg("onPurchase called");
+		  this.count += 1;
+		  this.updateButtonLabel;
+		  this.updateRatio();
+	  },
+	  updateButtonLabel: function() {
+		  msg("updateButtonLabel called");
+		  let newLabel = this.label;
+		  if (this.count > 0) {
+			  newLabel = newLabel + " (" + this.count + ")";
+		  }
+		  document.getElementById(this.name + "Label").innerText = newLabel;
+	  },
+	  updateRatio(): function() {
+		  msg("updateRatio called for Swell");
+		  for (let i = 0, i < this.costs.length, i++) {
+			  this.costs[i].amount *= this.costs.ratio;
+			  msg("new cost for Swell is " + this.costs[i].amount + " " + this.costs[i].name);
+		  }
+	  }
+	},
+	{ name: "pustule",
+	  label: "Pustule",
+	  count: 0,
+	  costs: [],
+	  ratio: 1.2
+	},
+	{ name: "digestor",
+	  label: "Digestor",
+	  count: 0,
+	  costs: [],
+	  ratio: 1.2
+	},
+	{ name: "trap",
+	  label: "Trap",
+	  count: 0,
+	  costs: [],
+	  ratio: 1.2
+	},
+	{ name: "siren",
+	  label: "Siren",
+	  count: 0,
+	  costs: [],
+	  ratio: 1.2
+	}
+]
+
 
 // ---- end phase 1 buildings ---- //
 
+function findResInStack(name) {
+	let findName = name;
+	msg("findResInStack called for " + name);
+	for (let i = 0, i < resourceStack.length, i++) {
+		if (resourceStack[i].name == findName) {
+			return i;
+			break;
+		}
+		msg("did not find " + name + " in array index " + i);
+	}
+}
+	
 const resourceStack = [
 	{ name: "corruption", // 0
 	  label: "Corruption",
@@ -18,7 +82,6 @@ const resourceStack = [
 	  max: 50,
 	  perTick: 0,
 	  gatherRate: 1,
-// -- updateGatherRate and updatePerTick are untested -- //
 	  gather: function() {
 		  let totalRes = this.current;
 		  totalRes += this.gatherRate;
@@ -29,8 +92,9 @@ const resourceStack = [
 		  }
 		  loadResource(0); // need to clean up this code
 	  },
+// -- updateGatherRate and updatePerTick are untested -- //	 
 	  updateGatherRate: function() {
-		  this.gatherRate = 1 + (0.1 * swells);
+		  this.gatherRate = 1 + (0.1 * swampBuildings[0].count);
 		  msg("Amount per fester is now " + this.gatherRate + " per click.");
 	  },
 	  updatePerTick: function() {
@@ -42,7 +106,11 @@ const resourceStack = [
 	  label: "Size",
 	  current: 1,
 	  limited: false,
-	  perTick: 0
+	  perTick: 0,
+	  gather: function() {
+		  this.current = 1 + swampBuildings[0].count;
+		  loadResource(1);
+	  }
 	},
 	{ name: "prey", // 2
 	  label: "Prey",
@@ -70,8 +138,7 @@ const resourceStack = [
 		  loadResource(3); // need to clean up this code
 	  },
 	  updateGatherRate: function() {
-		  this.gatherRate = 1 + (0.1 * swells);
-		  msg("Amount per fester is now " + this.gatherRate + " per click.");
+		  msg("sustanenance rate is " + this.gatherRate + " per click. Not yet defined.");
 	  },
 	  updatePerTick: function() {
 		  this.perTick = 1; // need to define logic.
@@ -254,7 +321,12 @@ const dev = [
 	},
 	{ name: "button3",
 	  run: function() {
-		  msg("no function defined for devbutton 3");
+		  findResInStack("sustenance");
+	  }
+	},
+	{ name: "button4",
+	  run: function() {
+		  msg("no function defined for devbutton 4");
 	  }
 	}
 ]
