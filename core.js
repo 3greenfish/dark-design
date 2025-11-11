@@ -30,7 +30,7 @@ const swampBuildings = [
 	  updateRatio: function() {
 		  msg("updateRatio called for Swell");
 		  for (let i = 0; i < this.costs.length; i++) {
-			  let newAmount = math.round(this.costs[i].amount * this.ratio * 1000)/1000;
+			  let newAmount = Math.round(this.costs[i].amount * this.ratio * 1000) / 1000;
 			  msg("rounded to " + newAmount);
 			  this.costs[i].amount = newAmount;
 			  msg("new cost for Swell is " + this.costs[i].amount + " " + this.costs[i].name);
