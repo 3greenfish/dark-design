@@ -17,6 +17,7 @@ const swampBuildings = [
 		  msg("current count: " + this.count);
 		  this.updateButtonLabel();
 		  this.updateRatio();
+		  resourceStack[0].updateGatherRate();
 	  },
 	  updateButtonLabel: function() {
 		  msg("updateButtonLabel called for swell");
@@ -29,7 +30,9 @@ const swampBuildings = [
 	  updateRatio: function() {
 		  msg("updateRatio called for Swell");
 		  for (let i = 0; i < this.costs.length; i++) {
-			  this.costs[i].amount *= this.ratio;
+			  let newAmount = math.round(this.costs[i].amount * this.ratio * 1000)/1000;
+			  msg("rounded to " + newAmount);
+			  this.costs[i].amount = newAmount;
 			  msg("new cost for Swell is " + this.costs[i].amount + " " + this.costs[i].name);
 		  }
 	  }
