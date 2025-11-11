@@ -18,6 +18,7 @@ const swampBuildings = [
 		  this.updateButtonLabel();
 		  this.updateRatio();
 		  resourceStack[0].updateGatherRate();
+		  resourceStack[1].gather();
 	  },
 	  updateButtonLabel: function() {
 		  msg("updateButtonLabel called for swell");
@@ -98,7 +99,7 @@ const resourceStack = [
 	  },
 // -- updateGatherRate and updatePerTick are untested -- //	 
 	  updateGatherRate: function() {
-		  this.gatherRate = 1 + (0.1 * swampBuildings[0].count);
+		  this.gatherRate = Math.round((1 + (0.1 * swampBuildings[0].count)) * 10)/10;
 		  msg("Amount per fester is now " + this.gatherRate + " per click.");
 	  },
 	  updatePerTick: function() {
