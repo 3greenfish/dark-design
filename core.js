@@ -25,7 +25,7 @@ const swampBuildings = [
 		  }
 		  document.getElementById(this.name + "Label").innerText = newLabel;
 	  },
-	  updateRatio(): function() {
+	  updateRatio: function() {
 		  msg("updateRatio called for Swell");
 		  for (let i = 0, i < this.costs.length, i++) {
 			  this.costs[i].amount *= this.ratio;
