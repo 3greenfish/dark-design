@@ -248,7 +248,7 @@ function payPrice(num) {
 		let value = prices[i].amount;
 		resourceStack[priceCode].current -= value;
 	}
-	msg("payPrice completed);
+	msg("payPrice completed");
 }
 
 
