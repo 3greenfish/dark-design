@@ -68,7 +68,6 @@ function findResInStack(name) {
 	for (let i = 0, i < resourceStack.length, i++) {
 		if (resourceStack[i].name == findName) {
 			return i;
-			break;
 		}
 		msg("did not find " + name + " in array index " + i);
 	}
