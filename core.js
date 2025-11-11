@@ -65,7 +65,7 @@ const swampBuildings = [
 function findResInStack(name) {
 	let findName = name;
 	msg("findResInStack called for " + name);
-	for (let i = 0, i < resourceStack.length, i++) {
+	for (let i = 0; i < resourceStack.length; i++) {
 		if (resourceStack[i].name == findName) {
 			return i;
 		}
