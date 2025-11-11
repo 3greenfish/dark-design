@@ -27,7 +27,7 @@ const swampBuildings = [
 	  },
 	  updateRatio: function() {
 		  msg("updateRatio called for Swell");
-		  for (let i = 0, i < this.costs.length, i++) {
+		  for (let i = 0; i < this.costs.length; i++) {
 			  this.costs[i].amount *= this.ratio;
 			  msg("new cost for Swell is " + this.costs[i].amount + " " + this.costs[i].name);
 		  }
