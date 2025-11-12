@@ -29,11 +29,11 @@ h1 {
 	-ms-user-select: none;
 }
 
-.collapsible:after {
+/* .collapsible:after {
 	content: "\2630";
 	margin-left: 5px;
 	float: right;
-}
+} */
 
 .collapsible:hover {
 	background-color: #ccccdd;
@@ -71,8 +71,13 @@ h1 {
 	border: 1px solid #dddddd;
 }
 
+.buttonLabel {
+	width: 180px;
+}
+
 .notch {
 	float: right;
+	width: 25px;
 }
 
 
