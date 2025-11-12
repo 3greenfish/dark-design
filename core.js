@@ -31,7 +31,7 @@ const swampBuildings = [
 	  updateRatio: function() {
 		  msg("updateRatio called for Swell");
 		  for (let i = 0; i < this.costs.length; i++) {
-			  let newAmount = Math.round(this.costs[i].amount * this.ratio * 1000) / 1000;
+			  let newAmount = rndPlusThree(this.costs[i].amount * this.ratio);
 			  msg("rounded to " + newAmount);
 			  this.costs[i].amount = newAmount;
 			  msg("new cost for Swell is " + this.costs[i].amount + " " + this.costs[i].name);
@@ -99,7 +99,7 @@ const resourceStack = [
 	  },
 // -- updateGatherRate and updatePerTick are untested -- //	 
 	  updateGatherRate: function() {
-		  this.gatherRate = Math.round((1 + (0.1 * swampBuildings[0].count)) * 10)/10;
+		  this.gatherRate = rndPlusThree((1 + (0.1 * swampBuildings[0].count));
 		  msg("Amount per fester is now " + this.gatherRate + " per click.");
 	  },
 	  updatePerTick: function() {
@@ -162,6 +162,11 @@ function updateJStime() { //runs at end of HTML load
 	document.getElementById('jsVersion').innerText = jsUpdateTime;
 	document.getElementById('messageCurrent').innerText = messageArray.toString();
 	loadResourcePanel();
+}
+
+function rndPlusThree(number) {
+	let numNum = Math.round(number * 1000) / 1000; 
+	return numNum;
 }
 
 function loadResource(resource) {
