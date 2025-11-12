@@ -17,7 +17,7 @@ h1 {
 	background-color: #eeeeee;
 	color: #444444;
 	cursor: pointer;
-	padding: 18px;
+	padding: 0px;
 	margin-top: 10px;
 	width: 250px;
 	border: 1px solid black;
@@ -74,6 +74,7 @@ h1 {
 .buttonLabel {
 	width: 180px;
 	border: 1px solid black;
+	margin-left: 18px;
 }
 
 .notch {
