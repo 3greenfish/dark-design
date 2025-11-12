@@ -100,7 +100,7 @@ const resourceStack = [
 	  },
 // -- updateGatherRate and updatePerTick are untested -- //	 
 	  updateGatherRate: function() {
-		  this.gatherRate = rndPlusThree((1 + (0.1 * swampBuildings[0].count));
+		  this.gatherRate = rndPlusThree(1 + (0.1 * swampBuildings[0].count));
 		  msg("Amount per fester is now " + this.gatherRate + " per click.");
 	  },
 	  updatePerTick: function() {
