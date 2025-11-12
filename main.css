@@ -68,6 +68,9 @@ h1 {
 	flex: 0 0 260px;
 }
 
+.notch {
+	float: right;
+}
 
 
 .button {
