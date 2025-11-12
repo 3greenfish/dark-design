@@ -166,7 +166,10 @@ function updateJStime() { //runs at end of HTML load
 }
 
 function rndPlusThree(number) {
-	let numNum = Math.round(number * 1000) / 1000; 
+	let numNum = Math.round(number * 1000);
+	msg("numNum after Math.round is " + numNum);
+	numNum = numNum / 1000;
+	msg("numNum after dividing is " + numNum);
 	return numNum;
 }
 
