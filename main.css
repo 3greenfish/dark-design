@@ -75,13 +75,16 @@ h1 {
 	width: 180px;
 	border: 1px solid black;
 	margin-left: 18px;
+	display: inline-block;
 }
 
 .notch {
 	float: right;
 	width: 25px;
 	border: 1px solid black;
+	display: inline-block;
 }
+
 
 
 .button {
