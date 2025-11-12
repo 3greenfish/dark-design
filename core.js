@@ -69,13 +69,13 @@ const swampBuildings = [
 
 function findResInStack(name) {
 	let findName = name;
-	msg("findResInStack called for " + name);
+//	msg("findResInStack called for " + name);
 	for (let i = 0; i < resourceStack.length; i++) {
 		if (resourceStack[i].name == findName) {
-			msg("found " + name + " in array index " + i);
+//			msg("found " + name + " in array index " + i);
 			return i;
 		}
-		msg("did not find " + name + " in array index " + i);
+//		msg("did not find " + name + " in array index " + i);
 	}
 }
 	
@@ -167,9 +167,7 @@ function updateJStime() { //runs at end of HTML load
 
 function rndPlusThree(number) {
 	let numNum = Math.round(number * 1000);
-	msg("numNum after Math.round is " + numNum);
 	numNum = numNum / 1000;
-	msg("numNum after dividing is " + numNum);
 	return numNum;
 }
 
@@ -207,7 +205,7 @@ function loadResourcePanel() {
  * alternatively, maybe everything is a buy action but some don't have costs?? */
 
 function buttonManager(event) {
-	msg("button pressed");
+//	msg("button pressed");
 	let sourceButton = event.target.getAttribute('data-target');
 	let actionCat = sourceButton.slice(0 , 3);
 	let lvl2 = sourceButton.slice(4);
@@ -253,7 +251,7 @@ function checkPrice(num) {
 }
 
 function payPrice(num) {
-	msg("payPrice called with num " + num);
+//	msg("payPrice called with num " + num);
 	let prices = swampBuildings[num].costs;
 	for (let i = 0; i < prices.length; i++) {
 		let priceName = prices[i].name;
