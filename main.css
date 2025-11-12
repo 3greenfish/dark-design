@@ -67,17 +67,19 @@ h1 {
 .buttonContainer {
 /*	width: 260px; */
 	flex: 0 0 260px;
-	margin: 30px;
+	margin: 15px;
 	border: 1px solid #dddddd;
 }
 
 .buttonLabel {
 	width: 180px;
+	border: 1px solid black;
 }
 
 .notch {
 	float: right;
 	width: 25px;
+	border: 1px solid black;
 }
 
 
