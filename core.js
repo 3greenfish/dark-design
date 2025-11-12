@@ -90,6 +90,7 @@ const resourceStack = [
 	  gather: function() {
 		  let totalRes = this.current;
 		  totalRes += this.gatherRate;
+		  totalRes = rndPlusThree(totalRes);
 		  if (totalRes >= this.max) {
 			  this.current = this.max;
 		  } else {
