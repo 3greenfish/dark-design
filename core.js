@@ -172,7 +172,7 @@ function rndPlusThree(number) {
 
 function loadResource(resource) {
 	let resName = resourceStack[resource].name;
-	let resCurrent = resourceStack[resource].current;
+	let resCurrent = rndPlusThree(resourceStack[resource].current);
 
 	document.getElementById(resName + 'Current').innerText = resCurrent;
 	
@@ -186,7 +186,7 @@ function loadResource(resource) {
 function loadResourcePanel() {
 	for (let i = 0; i < resourceStack.length; i++) {
 		let resName = resourceStack[i].name;
-		let resCurrent = resourceStack[i].current;
+		let resCurrent = rndPlusThree(resourceStack[i].current);
 		document.getElementById(resName + 'Current').innerText = resCurrent;
 		
 		if (resourceStack[i].limited == true) {
