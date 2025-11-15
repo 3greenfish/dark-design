@@ -412,19 +412,21 @@ function toggleActive(e) {
 
 
 function expandButton(butt) {
-	const buttonElement = butt.target.getAttribute('data-target');
-	const targetContent = document.getElementById(buttonElement + "Content");
+	const target = butt.target.getAttribute('data-target');
+	const targetContent = document.getElementById(target + "-content");
+	const targetButton = document.getElementById(target + "-collapsible");
+	
 	if (targetContent.style.display == "block") {
 		targetContent.style.display = "none"; /* hide content DIV */
-		document.getElementById(buttonElement).style.borderBottom = "1px solid black"; /* restore border */	
-		document.getElementById(buttonElement).style.borderRadius = "10px"; /* restore rounded corners */	
+		targetButton.style.borderBottom = "1px solid black"; /* restore border */	
+		targetButton.style.borderRadius = "10px"; /* restore rounded corners */	
 		targetContent.style.maxHeight = "0";
 
 	} else {
 		targetContent.style.display = "block";
 		targetContent.style.maxHeight = targetContent.scrollHeight + "px";
-		document.getElementById(buttonElement).style.borderBottom = "none";
-		document.getElementById(buttonElement).style.borderRadius = "10px 10px 0 0";	
+		targetButton.style.borderBottom = "none";
+		targetButton.style.borderRadius = "10px 10px 0 0";	
 	}
 }
 
