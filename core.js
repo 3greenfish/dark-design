@@ -427,8 +427,6 @@ function expandButton(butt) {
 		targetContent.style.maxHeight = targetContent.scrollHeight + "px";
 		targetButton.style.borderBottom = "none";
 		targetButton.style.borderRadius = "10px 10px 0 0";
-		const testWidth = document.getElementById(target + "-collapsible").style.width;
-		msg("button width is " + testWidth);
 	}
 }
 
