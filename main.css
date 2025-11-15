@@ -75,7 +75,8 @@ h1 {
 .buttonLabel {
 	width: 210px;
 	border: 1px solid black;
-	margin: 10px 0px 10px 15px;
+	margin: 0px;
+	padding: 10px 0px 10px 15px;
 	display: inline-block;
 }
 
@@ -83,7 +84,8 @@ h1 {
 	float: right;
 	width: 25px;
 	border: 1px solid black;
-	margin: 10px 0px;
+	margin: 0;
+	padding: 10px 0px;
 	display: inline-block;
 }
 
