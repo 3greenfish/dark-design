@@ -85,7 +85,8 @@ h1 {
 	width: 25px;
 	border: 1px solid black;
 	margin: 0;
-	padding: 10px 0px;
+	padding: 8px 0px; /* need to figure out how to limit size to size of parent block */
+	vertical-align: middle;
 	display: inline-block;
 }
 
