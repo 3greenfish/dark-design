@@ -429,7 +429,7 @@ const dev = [
 	  setLabel: function() {
 		//  document.getElementById("dev" + this.name).innerText = this.label;
 	  }
-
+	}
 ];
 
 function setDevButtons() {
