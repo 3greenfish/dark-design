@@ -402,11 +402,10 @@ const dev = [
 	  }
 	},
 	{ name: "button3",
-	  label: "find prey in stack",
+	  label: "add prey",
 	  run: function() {
-		  let george = "prey";
-		  let bob = findResInStack(george);
-		  msg("found " + george + " in index " + bob);
+		  resourceStack[2].current += 5;
+		  msg("added 5 prey");
 	  },
 	  setLabel: function() {
 		  document.getElementById("dev" + this.name).innerText = this.label;
