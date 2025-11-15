@@ -412,7 +412,7 @@ const dev = [
 	  }
 	},
 	{ name: "button4",
-	  label: "",
+	  label: "undefined",
 	  run: function() {
 		  msg("no function defined for devbutton 4");
 	  },
@@ -436,7 +436,7 @@ function setDevButtons() {
 	for (let i = 0; i < dev.length; i++) {
 		dev[i].setLabel();
 	}
-}
+};
 
 
 //-- start interval timer --//
