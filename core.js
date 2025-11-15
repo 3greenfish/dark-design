@@ -426,7 +426,8 @@ function expandButton(butt) {
 		targetContent.style.display = "block";
 		targetContent.style.maxHeight = targetContent.scrollHeight + "px";
 		targetButton.style.borderBottom = "none";
-		targetButton.style.borderRadius = "10px 10px 0 0";	
+		targetButton.style.borderRadius = "10px 10px 0 0";
+		msg("button width is " + targetButton.style.width);
 	}
 }
 
