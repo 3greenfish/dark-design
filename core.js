@@ -433,7 +433,7 @@ const dev = [
 ];
 
 function setDevButtons() {
-	for (i = 0; i < dev.length; i++) {
+	for (let i = 0; i < dev.length; i++) {
 		dev[i].setLabel();
 	}
 }
