@@ -1,4 +1,3 @@
-let food = 0;
 const messageArray = ["You have awakened in a new world, and your dark powers have corrupted a small bog. Time to fester..."];
 
 // ---- phase 1 buildings, replace with object stack later ---- //
@@ -41,19 +40,27 @@ const swampBuildings = [
 	{ name: "pustule",
 	  label: "Pustule",
 	  count: 0,
-	  costs: [],
+	  costs: [
+		  { name: "corruption", amount: 40 }
+	  ],
 	  ratio: 1.2
 	},
 	{ name: "digestor",
 	  label: "Digestor",
 	  count: 0,
-	  costs: [],
+	  costs: [
+		  { name: "corruption", amount: 20 },
+		  { name: "choler", amount: 50 }
+	  ],
 	  ratio: 1.2
 	},
 	{ name: "trap",
 	  label: "Trap",
 	  count: 0,
-	  costs: [],
+	  costs: [
+		  { name: "corruption", amount: 50 },
+		  { name: "choler", amount: 2- }
+	  ],
 	  ratio: 1.2
 	},
 	{ name: "siren",
@@ -150,6 +157,14 @@ const resourceStack = [
 		  this.perTick = 1; // need to define logic.
 		  msg("Amount per tick is now " + this.perTick + " per click.");
 	  } 	 
+	},
+	{ name: "choler", //4
+	  label: "Choler",
+	  current: 0,
+	  limited: true,
+	  max: 150,
+	  perTick: 0,
+	  gatherRate: 0
 	}
 ];
 
