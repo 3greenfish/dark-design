@@ -178,6 +178,7 @@ function updateJStime() { //runs at end of HTML load
 	document.getElementById('jsVersion').innerText = jsUpdateTime;
 	document.getElementById('messageCurrent').innerText = messageArray.toString();
 	loadResourcePanel();
+	setDevButtons();
 }
 
 function rndPlusThree(number) {
@@ -421,13 +422,12 @@ const dev = [
 	  }
 	},
 	{ name: "button5",
-	  label: "",
+	  label: "undefined",
 	  run: function() {
-		setDevButtons();
-		  //  msg("no function defined for devbutton");
+		    msg("no function defined for devbutton");
 	  },
 	  setLabel: function() {
-		//  document.getElementById("dev" + this.name).innerText = this.label;
+		  document.getElementById("dev" + this.name).innerText = this.label;
 	  }
 	}
 ];
