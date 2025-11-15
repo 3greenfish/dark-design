@@ -17,7 +17,7 @@ h1 {
 	background-color: #eeeeee;
 	color: #444444;
 	cursor: pointer;
-	padding: 10px 0px;
+	padding: 0px;
 	margin-top: 10px;
 	width: 258px;
 	border: 1px solid blue;
@@ -75,7 +75,7 @@ h1 {
 .buttonLabel {
 	width: 210px;
 	border: 1px solid black;
-	margin-left: 15px;
+	margin: 10px 0px 10px 15px;
 	display: inline-block;
 }
 
@@ -83,6 +83,7 @@ h1 {
 	float: right;
 	width: 25px;
 	border: 1px solid black;
+	margin: 10px 0px;
 	display: inline-block;
 }
 
