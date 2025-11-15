@@ -386,12 +386,18 @@ const dev = [
 		msg("updateCalDev triggered, days set to " + devForceDay);
 		calendar.day = devForceDay;
 		calendar.calDisplay();
+	  },
+	  setLabel: function() {
+		  document.getElementById("dev" + this.name).innerText = this.label;
 	  }
 	},
 	{ name: "button2",
 	  label: "adjust run speed",
 	  run: function() {
 		  calendar.adjustRunSpeed();
+	  },
+	  setLabel: function() {
+		  document.getElementById("dev" + this.name).innerText = this.label;
 	  }
 	},
 	{ name: "button3",
@@ -400,21 +406,38 @@ const dev = [
 		  let george = "prey";
 		  let bob = findResInStack(george);
 		  msg("found " + george + " in index " + bob);
+	  },
+	  setLabel: function() {
+		  document.getElementById("dev" + this.name).innerText = this.label;
 	  }
 	},
 	{ name: "button4",
 	  label: "",
 	  run: function() {
 		  msg("no function defined for devbutton 4");
+	  },
+	  setLabel: function() {
+		  document.getElementById("dev" + this.name).innerText = this.label;
 	  }
 	},
 	{ name: "button5",
 	  label: "",
 	  run: function() {
-		  msg("no function defined for devbutton");
+		setDevButtons();
+		  //  msg("no function defined for devbutton");
+	  },
+	  setLabel: function() {
+		//  document.getElementById("dev" + this.name).innerText = this.label;
 	  }
 
 ];
+
+function setDevButtons() {
+	for (i = 0; i < dev.length; i++) {
+		dev[i].setLabel();
+	}
+}
+
 
 //-- start interval timer --//
 //-- this should probably be an object --//
