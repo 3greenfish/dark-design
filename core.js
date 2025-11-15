@@ -59,7 +59,7 @@ const swampBuildings = [
 	  count: 0,
 	  costs: [
 		  { name: "corruption", amount: 50 },
-		  { name: "choler", amount: 2- }
+		  { name: "choler", amount: 20 }
 	  ],
 	  ratio: 1.2
 	},
@@ -371,11 +371,16 @@ const calendar = {
 
 const dev = [
 	{ name: "button0",
+	  label: "activate calendar",
 	  run: function() {  
 		  calendar.activateCal();
-	  } 
+	  },
+	  setLabel: function() {
+		  document.getElementById("dev" + this.name).innerText = this.label;
+	  }
 	},
 	{ name: "button1",
+	  label: "force calendar days",
 	  run: function() {
 		let devForceDay = calendar.daysPerSeason - 5;
 		msg("updateCalDev triggered, days set to " + devForceDay);
@@ -384,11 +389,13 @@ const dev = [
 	  }
 	},
 	{ name: "button2",
+	  label: "adjust run speed",
 	  run: function() {
 		  calendar.adjustRunSpeed();
 	  }
 	},
 	{ name: "button3",
+	  label: "find prey in stack",
 	  run: function() {
 		  let george = "prey";
 		  let bob = findResInStack(george);
@@ -396,10 +403,17 @@ const dev = [
 	  }
 	},
 	{ name: "button4",
+	  label: "",
 	  run: function() {
 		  msg("no function defined for devbutton 4");
 	  }
-	}
+	},
+	{ name: "button5",
+	  label: "",
+	  run: function() {
+		  msg("no function defined for devbutton");
+	  }
+
 ];
 
 //-- start interval timer --//
