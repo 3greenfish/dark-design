@@ -19,8 +19,8 @@ h1 {
 	cursor: pointer;
 	padding: 0px;
 	margin-top: 10px;
-	width: 250px;
-	border: 1px solid black;
+	width: 258px;
+	border: 1px solid blue;
 	text-align: left;
 	outline: none;
 	border-radius: 10px;
@@ -68,13 +68,14 @@ h1 {
 /*	width: 260px; */
 	flex: 0 0 260px;
 	margin: 15px;
+	padding: 5px;
 	border: 1px solid #dddddd;
 }
 
 .buttonLabel {
-	width: 180px;
+	width: 210px;
 	border: 1px solid black;
-	margin-left: 18px;
+	margin-left: 15px;
 	display: inline-block;
 }
 
