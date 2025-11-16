@@ -113,9 +113,17 @@ h1 {
 	width: 300px;
 }
 
-.resourceName, .resourceValue, .resourcePer {
+.resourceName {
 	display: inline-block;
-	width: 70px;
+	width: 40%;
+	margin: 0px;
+	padding: 2px;
+	border: 1px solid yellow;
+}
+	
+.resourceValue, .resourcePer {
+	display: inline-block;
+	width: 20%;
 	margin: 0px;
 	padding: 2px;
 	border: 1px solid yellow;
@@ -124,7 +132,7 @@ h1 {
 .resourceMax {
 	display: inline-block;
 	color: #666666;
-	width: 70px;
+	width: 20%;
 	margin: 0;
 	padding: 2px;
 	border: 1px solid yellow;
