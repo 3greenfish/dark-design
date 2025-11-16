@@ -139,16 +139,39 @@ const resourceStack = [
 	  max: 40,
 	  perTick: 0,
 	  gatherRate: 1,
-	  gatherCost: 1, // replace with object with resource names, costs 
+	  gatherCost: [
+		  { name: "prey", amount: 1 }
+		  ],
 	  gather: function() {
 		  let totalRes = this.current;
+		//make sure price is not at maximum
+		  if (totalRes >= this.max) { 
+			  msg("current resource is " + totalRes + ", which is the maximum for this resource.");		  
+			  return;
+		  }
+
+		//verify sufficient resources to perform action
+		  let priceCheck = this.checkCosts(); 
+		  if (priceCheck == "fail-insufficient") {
+			  msg("insufficient base resource to perform action");
+			  return;
+		  }
+		//pay the cost in each source resource
+		  let prices = this.gatherCost;
+		  for (let i = 0; i < prices.length; i++) {
+			  let priceName = prices[i].name;
+			  let priceCode = findResInStack(priceName);
+			  let value = prices[i].amount;
+			  resourceStack[priceCode].current -= value;
+		  }
+		//update target resource
 		  totalRes += this.gatherRate;
 		  if (totalRes >= this.max) {
 			  this.current = this.max;
 		  } else {
 			  this.current = totalRes;
 		  }
-		  loadResource(3); // need to clean up this code
+		  loadResourcePanel(); // need to clean up this code
 	  },
 	  updateGatherRate: function() {
 		  msg("sustanenance rate is " + this.gatherRate + " per click. Not yet defined.");
@@ -156,7 +179,19 @@ const resourceStack = [
 	  updatePerTick: function() {
 		  this.perTick = 1; // need to define logic.
 		  msg("Amount per tick is now " + this.perTick + " per click.");
-	  } 	 
+	  },
+	  checkCosts: function() {
+		  let prices = this.gatherCost;
+		  for (let i = 0; i < prices.length; i++) {
+			  let priceName = prices[i].name;
+			  let priceCode = findResInStack(priceName);
+			  let value = prices[i].amount;
+			  if (value > resourceStack[priceCode].current) {
+				  return "fail-insufficient";
+			  }
+			  return "pass-sufficient";
+		  }
+	  }  
 	},
 	{ name: "choler", //4
 	  label: "Choler",
@@ -405,6 +440,7 @@ const dev = [
 	  label: "add prey",
 	  run: function() {
 		  resourceStack[2].current += 5;
+		  loadResource(2);
 		  msg("added 5 prey");
 	  },
 	  setLabel: function() {
