@@ -110,32 +110,32 @@ h1 {
 	border: 1px solid #ffffff;
 	padding: 2px;
 	margin: 2px;
-	width: 100%;
+	min-width: 300px;
+	max-width: 100%;
+}
+
+.resource div {
+	display: inline-block;
+	margin: 0px;
+	padding: 2px;
+	border: 1px solid yellow;
 }
 
 .resourceName {
-	display: inline-block;
-	width: 40%;
-	margin: 0px;
-	padding: 2px;
-	border: 1px solid yellow;
+	width: 30%;
 }
 	
-.resourceValue, .resourcePer {
-	display: inline-block;
+.resourceValue {
 	width: 20%;
-	margin: 0px;
-	padding: 2px;
-	border: 1px solid yellow;
+}
+
+.resourcePer {
+	width: 20%;
 }
 
 .resourceMax {
-	display: inline-block;
-	color: #666666;
 	width: 20%;
-	margin: 0;
-	padding: 2px;
-	border: 1px solid yellow;
+	color: #666666;
 }
 
 #calendarBlock {
