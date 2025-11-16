@@ -60,7 +60,7 @@ h1 {
 
 .buttonMap {
 	display: flex;
-	flex-flow: row wrap;
+	flex-flow: column wrap;
 	border: 1px solid yellow;
 }
 
