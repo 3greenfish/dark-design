@@ -18,6 +18,7 @@ const swampBuildings = [
 		  this.updateRatio();
 		  resourceStack[0].updateGatherRate();
 		  resourceStack[1].gather();
+		  updateContentCosts(0);
 	  },
 	  updateButtonLabel: function() {
 		  msg("updateButtonLabel called for swell");
@@ -144,7 +145,7 @@ const resourceStack = [
 		  ],
 	  gather: function() {
 		  let totalRes = this.current;
-		//make sure price is not at maximum
+		//make sure current value is not at maximum
 		  if (totalRes >= this.max) { 
 			  msg("current resource is " + totalRes + ", which is the maximum for this resource.");		  
 			  return;
@@ -313,6 +314,20 @@ function payPrice(num) {
 	loadResourcePanel();
 	msg("payPrice completed");
 }
+
+function updateContentCosts(num) {
+	let prices = swampBuildings[num].costs;
+	let dispCost = "";
+	for (let i = 0; i < prices.length; i++) {
+		let priceName = prices[i].name;
+		let priceCode = findResInStack(priceName);
+		let label = resourceStack[priceCode].label;
+		let value = prices[i].amount;
+		dispCost += "<div class=\"bldgCostPriceName\">" + label + ":</div><div class=\"bldgCostRes\">" + value + "</div>";
+	}
+	document.getElementById("buy-" + num + "-costs").innerHTML = dispCost;
+}
+		
 
 
 
