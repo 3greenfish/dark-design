@@ -74,22 +74,22 @@
 				</div>
 
 				<div class="buttonContainer">
-					<div class="collapsible" data-target="gat-2" id="gatherPreyButton" onClick="buttonManager(event)">
-						<div class="buttonLabel" id="XXXXX2">Ensnare prey</div><div class="notch">M</div>
+					<div class="collapsible" id="gat-2-collapsible">
+						<div class="buttonLabel" id="gat-2-label" data-target="gat-2" onClick="buttonManager(event)">Ensnare prey</div><div class="notch" data-target="gat-3" onClick="expandButton(event)">&#9776;</div>
 					</div>
-					<div class="content" id="gatherPreyButtonContent">
+					<div class="content" id="gat-3-content">
 						<p>content goes here</p>
 						<div class="button" data-target="gat-2" onClick="buttonManager(event)">Fester</div>
 					</div>
 				</div>
 
 				<div class="buttonContainer">
-					<div class="collapsible" data-target="gat-3" id="gatherSustenanceButton" onClick="buttonManager(event)">
-						<div class="buttonLabel" id="XXXXX3">Digest prey</div><div class="notch">M</div>
+					<div class="collapsible" id="gat-3-collapsible">
+						<div class="buttonLabel" data-target="gat-3" id="gat-3-label" onClick="buttonManager(event)">Digest prey</div><div class="notch" data-target="gat-3" onClick="expandButton(event)">&#9776;</div>
 					</div>
-					<div class="content" id="gatherSustenanceButtonContent">
+					<div class="content" id="gat-0-content">
 						<p>content goes here</p>
-						<div class="button" data-target="gat-0" onClick="buttonManager(event)">Fester</div>
+						<div class="button" data-target="gat-3" onClick="buttonManager(event)">Fester</div>
 					</div>
 				</div>				
 			</div> <!-- end buttonMap -->
