@@ -104,6 +104,8 @@ h1 {
 	padding: 2px;
 }
 
+/* ----- controls for resource panel ---- */
+
 .resource {
 	background-color: #ffffff;
 	border-radius: 10px;
@@ -118,7 +120,7 @@ h1 {
 	display: inline-block;
 	margin: 0px;
 	padding: 2px;
-	border: 1px solid yellow;
+/*	border: 1px solid yellow; */
 }
 
 .resourceName {
@@ -127,6 +129,7 @@ h1 {
 	
 .resourceValue {
 	width: 20%;
+	text-align: right;
 }
 
 .resourcePer {
