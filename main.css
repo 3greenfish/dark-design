@@ -118,6 +118,7 @@ h1 {
 	width: 75px;
 	margin: 0;
 	padding: 2px;
+	border: 1px solid yellow;
 }
 
 .resourceMax {
@@ -126,6 +127,7 @@ h1 {
 	width: 75px;
 	margin: 0;
 	padding: 2px;
+	border: 1px solid yellow;
 }
 
 #calendarBlock {
