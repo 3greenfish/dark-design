@@ -1,5 +1,9 @@
+body {
+	color: #000000;
+}
+
 p { 
-	color: #000000; 
+/*	color: #000000; */
 	margin-top: 0;
 	margin-bottom: 0;
 }
@@ -106,15 +110,22 @@ h1 {
 	border: 1px solid #ffffff;
 	padding: 2px;
 	margin: 2px;
+	width: 300px;
 }
 
-.resourceName, .resourceValue {
+.resourceName, .resourceValue, .resourcePer {
 	display: inline-block;
+	width: 75px;
+	margin: 0;
+	padding: 2px;
 }
 
 .resourceMax {
 	display: inline-block;
 	color: #333333;
+	width: 75px;
+	margin: 0;
+	padding: 2px;
 }
 
 #calendarBlock {
@@ -205,7 +216,7 @@ nav {
 }
 
 #rightblock {
-	width: 95%;
+/*	width: 95%;  */
 	max-width: 320px;
 	min-width: 240px;
 	border: 1px dotted red;
