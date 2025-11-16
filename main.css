@@ -116,7 +116,7 @@ h1 {
 .resourceName, .resourceValue, .resourcePer {
 	display: inline-block;
 	width: 75px;
-	margin: 0;
+	margin: 0px;
 	padding: 2px;
 	border: 1px solid yellow;
 }
