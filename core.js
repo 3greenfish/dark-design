@@ -1,4 +1,3 @@
-let food = 0;
 const messageArray = ["You have awakened in a new world, and your dark powers have corrupted a small bog. Time to fester..."];
 
 // ---- phase 1 buildings, replace with object stack later ---- //
@@ -41,19 +40,27 @@ const swampBuildings = [
 	{ name: "pustule",
 	  label: "Pustule",
 	  count: 0,
-	  costs: [],
+	  costs: [
+		  { name: "corruption", amount: 40 }
+	  ],
 	  ratio: 1.2
 	},
 	{ name: "digestor",
 	  label: "Digestor",
 	  count: 0,
-	  costs: [],
+	  costs: [
+		  { name: "corruption", amount: 20 },
+		  { name: "choler", amount: 50 }
+	  ],
 	  ratio: 1.2
 	},
 	{ name: "trap",
 	  label: "Trap",
 	  count: 0,
-	  costs: [],
+	  costs: [
+		  { name: "corruption", amount: 50 },
+		  { name: "choler", amount: 20 }
+	  ],
 	  ratio: 1.2
 	},
 	{ name: "siren",
@@ -132,16 +139,39 @@ const resourceStack = [
 	  max: 40,
 	  perTick: 0,
 	  gatherRate: 1,
-	  gatherCost: 1, // replace with object with resource names, costs 
+	  gatherCost: [
+		  { name: "prey", amount: 1 }
+		  ],
 	  gather: function() {
 		  let totalRes = this.current;
+		//make sure price is not at maximum
+		  if (totalRes >= this.max) { 
+			  msg("current resource is " + totalRes + ", which is the maximum for this resource.");		  
+			  return;
+		  }
+
+		//verify sufficient resources to perform action
+		  let priceCheck = this.checkCosts(); 
+		  if (priceCheck == "fail-insufficient") {
+			  msg("insufficient base resource to perform action");
+			  return;
+		  }
+		//pay the cost in each source resource
+		  let prices = this.gatherCost;
+		  for (let i = 0; i < prices.length; i++) {
+			  let priceName = prices[i].name;
+			  let priceCode = findResInStack(priceName);
+			  let value = prices[i].amount;
+			  resourceStack[priceCode].current -= value;
+		  }
+		//update target resource
 		  totalRes += this.gatherRate;
 		  if (totalRes >= this.max) {
 			  this.current = this.max;
 		  } else {
 			  this.current = totalRes;
 		  }
-		  loadResource(3); // need to clean up this code
+		  loadResourcePanel(); // need to clean up this code
 	  },
 	  updateGatherRate: function() {
 		  msg("sustanenance rate is " + this.gatherRate + " per click. Not yet defined.");
@@ -149,7 +179,27 @@ const resourceStack = [
 	  updatePerTick: function() {
 		  this.perTick = 1; // need to define logic.
 		  msg("Amount per tick is now " + this.perTick + " per click.");
-	  } 	 
+	  },
+	  checkCosts: function() {
+		  let prices = this.gatherCost;
+		  for (let i = 0; i < prices.length; i++) {
+			  let priceName = prices[i].name;
+			  let priceCode = findResInStack(priceName);
+			  let value = prices[i].amount;
+			  if (value > resourceStack[priceCode].current) {
+				  return "fail-insufficient";
+			  }
+			  return "pass-sufficient";
+		  }
+	  }  
+	},
+	{ name: "choler", //4
+	  label: "Choler",
+	  current: 0,
+	  limited: true,
+	  max: 150,
+	  perTick: 0,
+	  gatherRate: 0
 	}
 ];
 
@@ -163,6 +213,7 @@ function updateJStime() { //runs at end of HTML load
 	document.getElementById('jsVersion').innerText = jsUpdateTime;
 	document.getElementById('messageCurrent').innerText = messageArray.toString();
 	loadResourcePanel();
+	setDevButtons();
 }
 
 function rndPlusThree(number) {
@@ -356,36 +407,72 @@ const calendar = {
 
 const dev = [
 	{ name: "button0",
+	  label: "activate calendar",
 	  run: function() {  
 		  calendar.activateCal();
-	  } 
+	  },
+	  setLabel: function() {
+		  document.getElementById("dev" + this.name).innerText = this.label;
+	  }
 	},
 	{ name: "button1",
+	  label: "force calendar days",
 	  run: function() {
 		let devForceDay = calendar.daysPerSeason - 5;
 		msg("updateCalDev triggered, days set to " + devForceDay);
 		calendar.day = devForceDay;
 		calendar.calDisplay();
+	  },
+	  setLabel: function() {
+		  document.getElementById("dev" + this.name).innerText = this.label;
 	  }
 	},
 	{ name: "button2",
+	  label: "adjust run speed",
 	  run: function() {
 		  calendar.adjustRunSpeed();
+	  },
+	  setLabel: function() {
+		  document.getElementById("dev" + this.name).innerText = this.label;
 	  }
 	},
 	{ name: "button3",
+	  label: "add prey",
 	  run: function() {
-		  let george = "prey";
-		  let bob = findResInStack(george);
-		  msg("found " + george + " in index " + bob);
+		  resourceStack[2].current += 5;
+		  loadResource(2);
+		  msg("added 5 prey");
+	  },
+	  setLabel: function() {
+		  document.getElementById("dev" + this.name).innerText = this.label;
 	  }
 	},
 	{ name: "button4",
+	  label: "undefined",
 	  run: function() {
 		  msg("no function defined for devbutton 4");
+	  },
+	  setLabel: function() {
+		  document.getElementById("dev" + this.name).innerText = this.label;
+	  }
+	},
+	{ name: "button5",
+	  label: "undefined",
+	  run: function() {
+		    msg("no function defined for devbutton");
+	  },
+	  setLabel: function() {
+		  document.getElementById("dev" + this.name).innerText = this.label;
 	  }
 	}
 ];
+
+function setDevButtons() {
+	for (let i = 0; i < dev.length; i++) {
+		dev[i].setLabel();
+	}
+};
+
 
 //-- start interval timer --//
 //-- this should probably be an object --//
@@ -412,19 +499,21 @@ function toggleActive(e) {
 
 
 function expandButton(butt) {
-	const buttonElement = butt.target.getAttribute('data-target');
-	const targetContent = document.getElementById(buttonElement + "Content");
+	const target = butt.target.getAttribute('data-target');
+	const targetContent = document.getElementById(target + "-content");
+	const targetButton = document.getElementById(target + "-collapsible");
+	
 	if (targetContent.style.display == "block") {
 		targetContent.style.display = "none"; /* hide content DIV */
-		document.getElementById(buttonElement).style.borderBottom = "1px solid black"; /* restore border */	
-		document.getElementById(buttonElement).style.borderRadius = "10px"; /* restore rounded corners */	
+		targetButton.style.borderBottom = "1px solid black"; /* restore border */	
+		targetButton.style.borderRadius = "10px"; /* restore rounded corners */	
 		targetContent.style.maxHeight = "0";
 
 	} else {
 		targetContent.style.display = "block";
 		targetContent.style.maxHeight = targetContent.scrollHeight + "px";
-		document.getElementById(buttonElement).style.borderBottom = "none";
-		document.getElementById(buttonElement).style.borderRadius = "10px 10px 0 0";	
+		targetButton.style.borderBottom = "none";
+		targetButton.style.borderRadius = "10px 10px 0 0";
 	}
 }
 

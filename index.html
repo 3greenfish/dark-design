@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en-us">
 <head>
-	<title>Test</title>
+	<title>Dark Design - Corrupt the World</title>
 	<link rel="stylesheet" type="text/css" href="main.css" />
 	<script src="core.js" type="text/javascript"></script>
 </head>
@@ -32,6 +32,11 @@
 				<div class="resourceName" id="resSustenance">Sustenance:</div> <div class="resourceValue" id="sustenanceCurrent"></div><div class="resourceMax" id="sustenanceMax"></div>
 			</div>
 
+			<div class="resource">
+				<div class="resourceName" id="resCholer">Choler:</div> <div class="resourceValue" id="cholerCurrent"></div><div class="resourceMax" id="cholerMax"></div>
+			</div>
+
+
 	
 			<!-- NOTES: look at flexwrap for buttons  -->
 		</div>
@@ -57,8 +62,39 @@
 				<p>You clicked me, good job.</p>
 			</div> -->
 
+			<div class="buttonMap">
+				<div class="buttonContainer">
+					<div class="collapsible" id="gat-0-collapsible">
+						<div class="buttonLabel" data-target="gat-0" id="gat-0-label" onClick="buttonManager(event)">Fester</div><div class="notch" data-target="gat-0" onClick="expandButton(event)">&#9776;</div>
+					</div>
+					<div class="content" id="gat-0-content">
+						<p>Fester to build your corruption.</p>
+						<div class="button" data-target="gat-0" onClick="buttonManager(event)">Fester</div>
+					</div>
+				</div>
 
-			
+				<div class="buttonContainer">
+					<div class="collapsible" id="gat-2-collapsible">
+						<div class="buttonLabel" id="gat-2-label" data-target="gat-2" onClick="buttonManager(event)">Ensnare prey</div><div class="notch" data-target="gat-2" onClick="expandButton(event)">&#9776;</div>
+					</div>
+					<div class="content" id="gat-2-content">
+						<p>content goes here</p>
+						<div class="button" data-target="gat-2" onClick="buttonManager(event)">Fester</div>
+					</div>
+				</div>
+
+				<div class="buttonContainer">
+					<div class="collapsible" id="gat-3-collapsible">
+						<div class="buttonLabel" data-target="gat-3" id="gat-3-label" onClick="buttonManager(event)">Digest prey</div><div class="notch" data-target="gat-3" onClick="expandButton(event)">&#9776;</div>
+					</div>
+					<div class="content" id="gat-3-content">
+						<p>content goes here</p>
+						<div class="button" data-target="gat-3" onClick="buttonManager(event)">Fester</div>
+					</div>
+				</div>				
+			</div> <!-- end buttonMap -->
+
+	<h1>legacy buttons follow</h1>		
 
 			<div class="collapsible" data-target="gat-0" id="gatherFestButton" onClick="buttonManager(event)">Fester</div>
 			<div class="content" id="gatherFestButtonContent">
@@ -125,10 +161,12 @@
 				<div class="button" onClick="loadResourcePanel()">Test Load Resource Panel</div>
 				<p><a href="main.css">load main.css</a></p>
 				<p><a href="core.js">load core.js</a></p>
-				<div class="button" data-target="dev-0" onClick="buttonManager(event)">Activate calendar</div>
-				<div class="button" data-target="dev-1" onClick="buttonManager(event)">Dev add days</div>
-				<div class="button" data-target="dev-2" onClick="buttonManager(event)">Adjust speed</div>
-				<div class="button" data-target="dev-3" onClick="buttonManager(event)">Find Sustenance in Stack</div>
+				<div class="button" data-target="dev-0" onClick="buttonManager(event)" id="devbutton0"></div>
+				<div class="button" data-target="dev-1" onClick="buttonManager(event)" id="devbutton1"></div>
+				<div class="button" data-target="dev-2" onClick="buttonManager(event)" id="devbutton2"></div>
+				<div class="button" data-target="dev-3" onClick="buttonManager(event)" id="devbutton3"></div>
+				<div class="button" data-target="dev-4" onClick="buttonManager(event)" id="devbutton4"></div>
+				<div class="button" data-target="dev-5" onClick="buttonManager(event)" id="devbutton5">set dev buttons</div>
 			</div>
 		
 			<div id="messagebox">

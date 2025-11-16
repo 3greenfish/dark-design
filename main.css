@@ -4,16 +4,23 @@ p {
 	margin-bottom: 0;
 }
 
+h1 {
+	margin-top: 0;
+	color: #00aa00;
+}
+
+/* padding is INSIDE, margin is OUTSIDE */
+
 /* test out button, replace with DIV later */
 
 .collapsible {
 	background-color: #eeeeee;
 	color: #444444;
 	cursor: pointer;
-	padding: 18px;
+	padding: 0px;
 	margin-top: 10px;
-	width: 250px;
-	border: 1px solid black;
+	width: 258px;
+	border: 1px solid blue;
 	text-align: left;
 	outline: none;
 	border-radius: 10px;
@@ -22,11 +29,11 @@ p {
 	-ms-user-select: none;
 }
 
-.collapsible:after {
+/* .collapsible:after {
 	content: "\2630";
 	margin-left: 5px;
 	float: right;
-}
+} */
 
 .collapsible:hover {
 	background-color: #ccccdd;
@@ -37,11 +44,11 @@ p {
 }
 
 .content {
-	padding: 5px 18px 5px 18px;
+	padding: 5px 15px 5px 15px;
 	display: none;
 	overflow: hidden;
 	background-color: #f1f1f1;
-	width: 250px;
+	width: 228px;
 	border-top: 1px dotted black;
 	border-bottom: 1px solid black;
 	border-left: 1px solid black;
@@ -50,7 +57,40 @@ p {
 	max-height: 0;
 	transition: max-height 0.2s ease-out;
 }
-	
+
+.buttonMap {
+	display: flex;
+	flex-flow: row wrap;
+	border: 1px solid yellow;
+}
+
+.buttonContainer {
+/*	width: 260px; */
+	flex: 0 0 268px;
+	margin: 10px;
+	padding: 0px;
+	border: 1px solid #dddddd;
+}
+
+.buttonLabel {
+	width: 210px;
+	border: 1px solid black;
+	margin: 0px;
+	padding: 10px 0px 10px 15px;
+	display: inline-block;
+}
+
+.notch {
+	float: right;
+	width: 25px;
+	border: 1px solid black;
+	margin: 0;
+	padding: 8px 0px; /* need to figure out how to limit size to size of parent block */
+	vertical-align: middle;
+	display: inline-block;
+}
+
+
 
 .button {
 	border-radius: 25px;
