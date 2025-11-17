@@ -62,6 +62,18 @@ h1 {
 	transition: max-height 0.2s ease-out;
 }
 
+.bldgCostPriceName {
+	display: inline-block;
+	max-width: 50%;
+}
+
+.bldgCostRes {
+	display: inline-block;
+	max-width: 30%;
+	text-align: right;
+}
+
+
 .buttonMap {
 	display: flex;
 	flex-flow: row wrap;
