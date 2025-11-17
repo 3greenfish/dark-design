@@ -240,6 +240,9 @@ function loadResourcePanel() {
 	for (let i = 0; i < resourceStack.length; i++) {
 		let resName = resourceStack[i].name;
 		let resCurrent = rndPlusThree(resourceStack[i].current);
+		if (resName == "size") {
+			resCurrent += "m^2";
+		}
 		document.getElementById(resName + 'Current').innerText = resCurrent;
 		
 		if (resourceStack[i].limited == true) {
