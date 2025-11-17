@@ -328,7 +328,7 @@ function updateContentCosts(num) {
 		dispCost += "<div class=\"bldgCostPriceName\">" + label + ":</div><div class=\"bldgCostRes\">" + value + "</div>";
 	}
 	msg("for loop complete, value of dispCost is " + dispCost);
-	document.getElementById("buy-" + num + "-costs").innerHTML = dispCost;
+	document.getElementById("buy-" + num + "-Costs").innerHTML = dispCost;
 }
 		
 
