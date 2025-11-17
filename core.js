@@ -316,8 +316,10 @@ function payPrice(num) {
 }
 
 function updateContentCosts(num) {
+	msg("updateContentCosts called");
 	let prices = swampBuildings[num].costs;
-	let dispCost = "";
+	let dispCost = "test";
+	msg("disCost initiated with value " + dispCost;
 	for (let i = 0; i < prices.length; i++) {
 		let priceName = prices[i].name;
 		let priceCode = findResInStack(priceName);
@@ -325,6 +327,7 @@ function updateContentCosts(num) {
 		let value = prices[i].amount;
 		dispCost += "<div class=\"bldgCostPriceName\">" + label + ":</div><div class=\"bldgCostRes\">" + value + "</div>";
 	}
+	msg("for loop complete, value of dispCost is " + dispCost);
 	document.getElementById("buy-" + num + "-costs").innerHTML = dispCost;
 }
 		
