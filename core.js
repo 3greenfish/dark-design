@@ -319,7 +319,7 @@ function updateContentCosts(num) {
 	msg("updateContentCosts called");
 	let prices = swampBuildings[num].costs;
 	let dispCost = "test";
-	msg("disCost initiated with value " + dispCost;
+	msg("disCost initiated with value " + dispCost);
 	for (let i = 0; i < prices.length; i++) {
 		let priceName = prices[i].name;
 		let priceCode = findResInStack(priceName);
