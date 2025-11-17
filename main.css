@@ -62,14 +62,18 @@ h1 {
 	transition: max-height 0.2s ease-out;
 }
 
+.costs {
+	padding-left: 5px;
+}
+
 .bldgCostPriceName {
 	display: inline-block;
-	max-width: 50%;
+	width: 50%;
 }
 
 .bldgCostRes {
 	display: inline-block;
-	max-width: 30%;
+	width: 30%;
 	text-align: right;
 }
 
@@ -174,12 +178,13 @@ h1 {
 	border: 1px solid green;
 	min-height: 1em;
 	padding: 5px;
+	overflow-y: auto;
 	
 }
 
 #messagebox p {
 	margin-bottom: 5px;
-	overflow-y: auto;
+	/* overflow-y: auto; */
 }
 
 
