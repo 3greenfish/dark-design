@@ -118,7 +118,8 @@ h1 {
 	padding: 2px;
 }
 
-/* ----- controls for resource panel ---- */
+/* ----- controls for resource panel ---- *
+ * ---- style for hidden class at end --- */
 
 .resource {
 	background-color: #ffffff;
@@ -259,4 +260,8 @@ nav {
 
 .panel.active {
 	display: block;
+}
+
+.hidden {
+	display: none;
 }
