@@ -247,16 +247,12 @@ function loadResourcePanel() {
 		let resCurrent = rndPlusThree(resourceStack[i].current);
 
 		if (resourceStack[i].isUnlocked == false) { // temp to test if identification of locked/unlocked is working
-			document.getElementById(resName + "Per").innerText = "locked";
 			if (resCurrent > 0) {
 				resourceStack[i].isUnlocked = true;
-				msg("unlocked activated for res " + i + ". Next try to remove hidden class.");
 				document.getElementById("res" + i + "row").classList.remove("hidden");   // unlock resource if user has any
 			} else { 
-				msg("hit continue on res " + i);
 				continue; } // otherwise, stop the iteration and move on to the next resource
 		}
-		msg("checked for unlocked on res " + i);
 		
 		if (resName == "size") {
 			resCurrent += "m^2";
@@ -464,7 +460,7 @@ const dev = [
 		  document.getElementById("dev" + this.name).innerText = this.label;
 	  }
 	},
-	{ name: "button2",
+/* 	{ name: "button2",
 	  label: "adjust run speed",
 	  run: function() {
 		  calendar.adjustRunSpeed();
@@ -472,7 +468,18 @@ const dev = [
 	  setLabel: function() {
 		  document.getElementById("dev" + this.name).innerText = this.label;
 	  }
+	}, */
+
+	{ name: "button2",
+	  label: "hide all resources",
+	  run: function() {
+		  document.getElementsByClassName("resource").classList.add("hidden");
+	  },
+	  setLabel: function() {
+		  document.getElementById("dev" + this.name).innerText = this.label;
+	  }
 	},
+	
 	{ name: "button3",
 	  label: "add prey",
 	  run: function() {
