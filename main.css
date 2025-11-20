@@ -94,7 +94,7 @@ h1 {
 
 .buttonLabel {
 	width: 210px;
-	border: 1px solid black;
+	border: none; /*1px solid black; */
 	margin: 0px;
 	padding: 10px 0px 10px 15px;
 	display: inline-block;
@@ -103,7 +103,7 @@ h1 {
 .notch {
 	float: right;
 	width: 25px;
-	border: 1px solid black;
+	border: none; /* 1px solid black; */
 	margin: 0;
 	padding: 8px 0px; /* need to figure out how to limit size to size of parent block */
 	vertical-align: middle;
@@ -230,7 +230,7 @@ nav {
 	max-width: 400px;
 	min-width: 300px;
 	height: 100%;
-	background-color: #efefef;
+	background-color: #006600;
 	color: black;
 	border: 1px dotted blue;
 	margin-right: 10px;	
