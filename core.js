@@ -92,6 +92,7 @@ const resourceStack = [
 	  label: "Corruption",
 	  current: 0,
 	  limited: true,
+	  isUnlocked: true,
 	  max: 50,
 	  perTick: 0,
 	  gatherRate: 1,
@@ -120,6 +121,7 @@ const resourceStack = [
 	  label: "Size",
 	  current: 1,
 	  limited: false,
+	  isUnlocked: true,
 	  perTick: 0,
 	  gather: function() {
 		  this.current = 1 + swampBuildings[0].count;
@@ -130,6 +132,7 @@ const resourceStack = [
 	  label: "Prey",
 	  current: 0,
 	  limited: true,
+	  isUnlocked: true,
 	  max: 25,
 	  perTick: 0
 	},
@@ -137,6 +140,7 @@ const resourceStack = [
 	  label: "Sustenance",
 	  current: 0,
 	  limited: true,
+	  isUnlocked: false,
 	  max: 40,
 	  perTick: 0,
 	  gatherRate: 1,
@@ -198,6 +202,7 @@ const resourceStack = [
 	  label: "Choler",
 	  current: 0,
 	  limited: true,
+	  isUnlocked: false,
 	  max: 150,
 	  perTick: 0,
 	  gatherRate: 0
@@ -240,6 +245,14 @@ function loadResourcePanel() {
 	for (let i = 0; i < resourceStack.length; i++) {
 		let resName = resourceStack[i].name;
 		let resCurrent = rndPlusThree(resourceStack[i].current);
+
+		if (resourceStack[resource].isUnlocked == false) { // temp to test if identification of locked/unlocked is working
+			document.getElementById(resName + "Max").innerText = "locked";
+			if (resCurrent > 0) {
+				resourceStack[resource].isUnlocked = true; // unlock resource if user has any
+			} else { continue; } // otherwise, stop the iteration and move on to the next resource
+		}
+
 		if (resName == "size") {
 			resCurrent += "m^2";
 		}
@@ -467,9 +480,11 @@ const dev = [
 	  }
 	},
 	{ name: "button4",
-	  label: "undefined",
+	  label: "add choler",
 	  run: function() {
-		  msg("no function defined for devbutton 4");
+		  resourceStack[4].current += 5;
+		  loadResourcePanel();
+		  msg("added 5 choler");
 	  },
 	  setLabel: function() {
 		  document.getElementById("dev" + this.name).innerText = this.label;
