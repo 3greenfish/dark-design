@@ -1,8 +1,19 @@
+body {
+	color: #000000;
+}
+
 p { 
-	color: #000000; 
+/*	color: #000000; */
 	margin-top: 0;
 	margin-bottom: 0;
 }
+
+h1 {
+	margin-top: 0;
+	color: #00aa00;
+}
+
+/* padding is INSIDE, margin is OUTSIDE */
 
 /* test out button, replace with DIV later */
 
@@ -10,10 +21,10 @@ p {
 	background-color: #eeeeee;
 	color: #444444;
 	cursor: pointer;
-	padding: 18px;
+	padding: 0px;
 	margin-top: 10px;
-	width: 250px;
-	border: 1px solid black;
+	width: 258px;
+	border: 1px solid blue;
 	text-align: left;
 	outline: none;
 	border-radius: 10px;
@@ -22,11 +33,11 @@ p {
 	-ms-user-select: none;
 }
 
-.collapsible:after {
+/* .collapsible:after {
 	content: "\2630";
 	margin-left: 5px;
 	float: right;
-}
+} */
 
 .collapsible:hover {
 	background-color: #ccccdd;
@@ -37,11 +48,11 @@ p {
 }
 
 .content {
-	padding: 5px 18px 5px 18px;
+	padding: 5px 15px 5px 15px;
 	display: none;
 	overflow: hidden;
 	background-color: #f1f1f1;
-	width: 250px;
+	width: 228px;
 	border-top: 1px dotted black;
 	border-bottom: 1px solid black;
 	border-left: 1px solid black;
@@ -50,15 +61,65 @@ p {
 	max-height: 0;
 	transition: max-height 0.2s ease-out;
 }
-	
+
+.costs {
+	padding-left: 5px;
+}
+
+.bldgCostPriceName {
+	display: inline-block;
+	width: 50%;
+}
+
+.bldgCostRes {
+	display: inline-block;
+	width: 30%;
+	text-align: right;
+}
+
+
+.buttonMap {
+	display: flex;
+	flex-flow: row wrap;
+	border: 1px solid yellow;
+}
+
+.buttonContainer {
+/*	width: 260px; */
+	flex: 0 0 268px;
+	margin: 10px;
+	padding: 0px;
+	border: 1px solid #dddddd;
+}
+
+.buttonLabel {
+	width: 210px;
+	border: none; /*1px solid black; */
+	margin: 0px;
+	padding: 10px 0px 10px 15px;
+	display: inline-block;
+}
+
+.notch {
+	float: right;
+	width: 25px;
+	border: none; /* 1px solid black; */
+	margin: 0;
+	padding: 8px 0px; /* need to figure out how to limit size to size of parent block */
+	vertical-align: middle;
+	display: inline-block;
+}
 
 .button {
-	border-radius: 25px;
+	border-radius: 5px;
 	border: 1px solid black;
 	background-color: #dddddd;
 	margin: 5px;
 	padding: 2px;
 }
+
+/* ----- controls for resource panel ---- *
+ * ---- style for hidden class at end --- */
 
 .resource {
 	background-color: #ffffff;
@@ -66,51 +127,34 @@ p {
 	border: 1px solid #ffffff;
 	padding: 2px;
 	margin: 2px;
+	min-width: 300px;
+	max-width: 100%;
 }
 
-.resourceName, .resourceValue {
+.resource div {
 	display: inline-block;
+	margin: 0px;
+	padding: 2px;
+/*	border: 1px solid yellow; */
+}
+
+.resourceName {
+	width: 30%;
+}
+	
+.resourceValue {
+	width: 20%;
+	text-align: right;
+}
+
+.resourcePer {
+	width: 20%;
 }
 
 .resourceMax {
-	display: inline-block;
-	color: #333333;
+	width: 20%;
+	color: #666666;
 }
-
-#calendarBlock {
-	border: 1px solid blue;
-	background-color: white;
-	color: black;
-	display: none;
-}
-
-#devButtons {
-	border: 1px dashed red;
-	background-color: #ddddff;
-	color: black;
-}
-
-#devButtons p {
-	text-align: center;
-	font-weight: bold;
-	color: black;
-}
-
-#messagebox {
-	border: 1px solid green;
-	min-height: 1em;
-	padding: 5px;
-	
-}
-
-#messagebox p {
-	margin-bottom: 5px;
-	overflow-y: auto;
-}
-
-
-
-
 
 nav {
 	background-color: black;
@@ -150,7 +194,7 @@ nav {
 	max-width: 400px;
 	min-width: 300px;
 	height: 100%;
-	background-color: #efefef;
+	background-color: #005500;
 	color: black;
 	border: 1px dotted blue;
 	margin-right: 10px;	
@@ -165,7 +209,7 @@ nav {
 }
 
 #rightblock {
-	width: 95%;
+/*	width: 95%;  */
 	max-width: 320px;
 	min-width: 240px;
 	border: 1px dotted red;
@@ -174,10 +218,49 @@ nav {
 	overflow-y: hidden;
 }	
 
+#calendarBlock {
+	border: 1px solid blue;
+	background-color: white;
+	color: black;
+	display: none;
+}
+
+#devButtons {
+	border: 1px dashed red;
+	background-color: #ddddff;
+	color: black;
+}
+
+#devButtons p {
+	text-align: center;
+	font-weight: bold;
+	color: black;
+}
+
+#messagebox {
+	border: 1px solid green;
+	min-height: 1em;
+	padding: 5px;
+	overflow-y: auto;
+	
+}
+
+#messagebox p {
+	margin-bottom: 5px;
+	/* overflow-y: auto; */
+}
+
+
+
+
 .panel {
 	display: none;
 }
 
 .panel.active {
 	display: block;
+}
+
+.hidden {
+	display: none;
 }
