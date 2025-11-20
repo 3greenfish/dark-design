@@ -423,10 +423,10 @@ const calendar = {
 		document.getElementById("calendarBlock").style.display = "block";
 	},
 	adjustRunSpeed: function() {
-		if (this.runSpeed == 2000) {
+		if (this.runSpeed == 4000) {
 			this.runSpeed = 500;
 		} else {
-			this.runSpeed = 2000;
+			this.runSpeed = 4000;
 		}
 		clearInterval(gameTimer);
 		gameTimer = setInterval(tick, this.runSpeed);
@@ -448,7 +448,7 @@ const dev = [
 		  document.getElementById("dev" + this.name).innerText = this.label;
 	  }
 	},
-	{ name: "button1",
+/*	{ name: "button1",
 	  label: "force calendar days",
 	  run: function() {
 		let devForceDay = calendar.daysPerSeason - 5;
@@ -459,8 +459,8 @@ const dev = [
 	  setLabel: function() {
 		  document.getElementById("dev" + this.name).innerText = this.label;
 	  }
-	},
-/* 	{ name: "button2",
+	}, */
+ 	{ name: "button1",
 	  label: "adjust run speed",
 	  run: function() {
 		  calendar.adjustRunSpeed();
@@ -468,8 +468,7 @@ const dev = [
 	  setLabel: function() {
 		  document.getElementById("dev" + this.name).innerText = this.label;
 	  }
-	}, */
-
+	},
 	{ name: "button2",
 	  label: "hide all resources",
 	  run: function() {
