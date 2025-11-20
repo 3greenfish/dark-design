@@ -250,10 +250,14 @@ function loadResourcePanel() {
 			document.getElementById(resName + "Per").innerText = "locked";
 			if (resCurrent > 0) {
 				resourceStack[i].isUnlocked = true;
+				msg("unlocked activated for res " + i + ". Next try to remove hidden class.");
 				document.getElementById("res" + i + "row").classList.remove("hidden");   // unlock resource if user has any
-			} else { continue; } // otherwise, stop the iteration and move on to the next resource
+			} else { 
+				msg("hit continue on res " + i);
+				continue; } // otherwise, stop the iteration and move on to the next resource
 		}
-
+		msg("checked for unlocked on res " + i);
+		
 		if (resName == "size") {
 			resCurrent += "m^2";
 		}
