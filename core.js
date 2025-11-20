@@ -247,9 +247,10 @@ function loadResourcePanel() {
 		let resCurrent = rndPlusThree(resourceStack[i].current);
 
 		if (resourceStack[i].isUnlocked == false) { // temp to test if identification of locked/unlocked is working
-			document.getElementById(resName + "Max").innerText = "locked";
+			document.getElementById(resName + "Per").innerText = "locked";
 			if (resCurrent > 0) {
-				resourceStack[i].isUnlocked = true; // unlock resource if user has any
+				resourceStack[i].isUnlocked = true;
+				document.getElementById("res" + i + "row").classList.remove("hidden");   // unlock resource if user has any
 			} else { continue; } // otherwise, stop the iteration and move on to the next resource
 		}
 
