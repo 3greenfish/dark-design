@@ -472,7 +472,7 @@ const dev = [
 	{ name: "button2",
 	  label: "hide all resources",
 	  run: function() {
-		  document.getElementsByClassName("resource").classList.add("hidden");
+		//  document.getElementsByClassName("resource").classList.add("hidden");
 	  },
 	  setLabel: function() {
 		  document.getElementById("dev" + this.name).innerText = this.label;
