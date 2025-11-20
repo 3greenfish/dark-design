@@ -156,42 +156,6 @@ h1 {
 	color: #666666;
 }
 
-#calendarBlock {
-	border: 1px solid blue;
-	background-color: white;
-	color: black;
-	display: none;
-}
-
-#devButtons {
-	border: 1px dashed red;
-	background-color: #ddddff;
-	color: black;
-}
-
-#devButtons p {
-	text-align: center;
-	font-weight: bold;
-	color: black;
-}
-
-#messagebox {
-	border: 1px solid green;
-	min-height: 1em;
-	padding: 5px;
-	overflow-y: auto;
-	
-}
-
-#messagebox p {
-	margin-bottom: 5px;
-	/* overflow-y: auto; */
-}
-
-
-
-
-
 nav {
 	background-color: black;
 	color: green;
@@ -230,7 +194,7 @@ nav {
 	max-width: 400px;
 	min-width: 300px;
 	height: 100%;
-	background-color: #006600;
+	background-color: #005500;
 	color: black;
 	border: 1px dotted blue;
 	margin-right: 10px;	
@@ -253,6 +217,41 @@ nav {
 	position: relative;
 	overflow-y: hidden;
 }	
+
+#calendarBlock {
+	border: 1px solid blue;
+	background-color: white;
+	color: black;
+	display: none;
+}
+
+#devButtons {
+	border: 1px dashed red;
+	background-color: #ddddff;
+	color: black;
+}
+
+#devButtons p {
+	text-align: center;
+	font-weight: bold;
+	color: black;
+}
+
+#messagebox {
+	border: 1px solid green;
+	min-height: 1em;
+	padding: 5px;
+	overflow-y: auto;
+	
+}
+
+#messagebox p {
+	margin-bottom: 5px;
+	/* overflow-y: auto; */
+}
+
+
+
 
 .panel {
 	display: none;
