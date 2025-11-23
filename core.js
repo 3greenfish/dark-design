@@ -478,13 +478,17 @@ const dev = [
 	  run: function() {
 		  let resRows = document.getElementsByClassName("resource");
 		  if (resStatus == "visible") {
+			  msg("resStatus is visible");
 			  for (let i = 0; i < resRows.length; i++) {
-			  	resRows[i].classList.add("hidden");
+				  resRows[i].classList.add("hidden");
+				  resStatus = "invisible";
 			  }
 		  } else {
+			  msg("resStatus is not visible");
 			  for (let i = 0; i < resourceStack.length; i++) {
 				  resourceStack[i].isUnlocked = false;
 				  // resRows[i].classList.add("hidden");
+				  resStatus = "visible";
 			  }
 		  }
 		  
