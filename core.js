@@ -475,7 +475,14 @@ const dev = [
 	{ name: "button2",
 	  label: "hide all resources",
 	  run: function() {
-		//  document.getElementsByClassName("resource").classList.add("hidden");
+		  let resRows = document.getElementsByClassName("resource");
+		  let type = typeof resRows;
+		  msg(type);
+		  for (let i = 0; i < resRows.length; i++) {
+			  resRows[i].classList.add("hidden");
+			  msg("attempted to hide row " + i);
+		  }
+		  msg("finished code to hide all resources")
 	  },
 	  setLabel: function() {
 		  document.getElementById("dev" + this.name).innerText = this.label;
