@@ -481,7 +481,7 @@ const dev = [
 			  for (let i = 0; i < resRows.length; i++) {
 			  	resRows[i].classList.add("hidden");
 		  } else {
-			  for (let i = 0; i < resRows.length; i++) {
+			  for (let i = 0; i < resourceStack.length; i++) {
 				  resourceStack[i].isUnlocked = false;
 				  // resRows[i].classList.add("hidden");
 			  }
