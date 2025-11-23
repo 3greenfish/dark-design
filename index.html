@@ -23,21 +23,21 @@
 				<div class="resourcePer" id="corruptionPer"></div>
 			</div>
 			
-			<div class="resource" id="res1row">
+<!--			<div class="resource" id="res1row">
 				<div class="resourceName" id="resSize">Size:</div>
 				<div class="resourceValue" id="sizeCurrent"></div>
 				<div class="resourceMax" id="sizeMax"></div>
 				<div class="resourcePer" id="sizePer"></div>
-			</div>
+			</div> -->
 
-			<div class="resource" id="res2row">
+			<div class="resource" id="res1row">
 				<div class="resourceName" id="resPrey">Prey:</div> 
 				<div class="resourceValue" id="preyCurrent"></div>
 				<div class="resourceMax" id="preyMax"></div>
 				<div class="resourcePer" id="preyPer"></div>
 			</div>
 			
-			<div class="resource hidden" id="res3row">
+			<div class="resource hidden" id="res2row">
 				<div class="resourceName" id="resSustenance">Sustenance:</div>
 				<div class="resourceValue" id="sustenanceCurrent"></div>
 				<div class="resourceMax" id="sustenanceMax"></div>
@@ -45,7 +45,7 @@
 
 			</div>
 
-			<div class="resource hidden" id="res4row">
+			<div class="resource hidden" id="res3row">
 				<div class="resourceName" id="resCholer">Choler:</div> 
 				<div class="resourceValue" id="cholerCurrent"></div>
 				<div class="resourceMax" id="cholerMax"></div>
@@ -109,19 +109,6 @@
 					</div>
 				</div>
 				
-				<div class="buttonContainer">
-					<div class="collapsible" id="buy-0-collapsible">
-						<div class="buttonLabel" data-target="buy-0" id="swellLabel" onClick="buttonManager(event)">Swell</div><div class="notch" data-target="buy-0" onClick="expandButton(event)">&#9776;</div>
-					</div>
-					<div class="content" id="buy-0-content">
-						<p>Grow your corrupting influence and expand the swamp.</p>
-						<hr>
-						<div class="costs" id="buy-0-Costs">
-							<div class="bldgCostPriceName">Corruption:</div><div class="bldgCostRes">10</div>
-						</div>
-						<div class="button" data-target="buy-0" onClick="buttonManager(event)">Swell by 1m^2</div>
-					</div>
-				</div>
 
 			</div> <!-- end buttonMap -->
 
@@ -142,9 +129,26 @@
 				</div>				
 
 -->
+			<h1>Grow your Corruption</h1>
+			<div class="buttonMap"> <!-- buildings follow here -->
+				<div class="buttonContainer">
+					<div class="collapsible" id="buy-0-collapsible">
+						<div class="buttonLabel" data-target="buy-0" id="swellLabel" onClick="buttonManager(event)">Swell</div><div class="notch" data-target="buy-0" onClick="expandButton(event)">&#9776;</div>
+					</div>
+					<div class="content" id="buy-0-content">
+						<p>Grow your corrupting influence and expand the swamp.</p>
+						<hr>
+						<div class="costs" id="buy-0-Costs">
+							<div class="bldgCostPriceName">Corruption:</div><div class="bldgCostRes">10</div>
+						</div>
+						<div class="button" data-target="buy-0" onClick="buttonManager(event)">Swell by 1m^2</div>
+					</div>
+				</div>
+			</div>
+
+				
 
 <div>
-	<h1>Grow your Corruption</h1>
 	<p>Swell (1m^2)</p>
 	<p>Pustule</p>
 	<p>Trap</p>
