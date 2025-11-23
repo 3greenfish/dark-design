@@ -1,5 +1,5 @@
 const messageArray = [];
-let resStatus = "visible";
+let resStatus = "visible"; // temporary variable for dev button testing of hidden attributes.
 	
 	// ["You have awakened in a new world, and your dark powers have corrupted a small bog. Time to fester..."];
 
@@ -14,7 +14,6 @@ const swampBuildings = [
 		  ],
 	  ratio: 1.2,
 	  onPurchase: function() {
-		  msg("onPurchase called");
 		  this.count += 1;
 		  msg("current count: " + this.count);
 		  this.updateButtonLabel();
@@ -24,7 +23,6 @@ const swampBuildings = [
 		  updateContentCosts(0);
 	  },
 	  updateButtonLabel: function() {
-		  msg("updateButtonLabel called for swell");
 		  let newLabel = this.label;
 		  if (this.count > 0) {
 			  newLabel = newLabel + " (" + this.count + ")";
@@ -32,10 +30,8 @@ const swampBuildings = [
 		  document.getElementById(this.name + "Label").innerText = newLabel;
 	  },
 	  updateRatio: function() {
-		  msg("updateRatio called for Swell");
 		  for (let i = 0; i < this.costs.length; i++) {
 			  let newAmount = rndPlusThree(this.costs[i].amount * this.ratio);
-			  msg("rounded to " + newAmount);
 			  this.costs[i].amount = newAmount;
 			  msg("new cost for Swell is " + this.costs[i].amount + " " + this.costs[i].name);
 		  }
@@ -110,11 +106,10 @@ const resourceStack = [
 		  }
 		  loadResource(0); // need to clean up this code
 	  },
-// -- updateGatherRate and updatePerTick are untested -- //	 
 	  updateGatherRate: function() {
 		  this.gatherRate = rndPlusThree(1 + (0.1 * swampBuildings[0].count));
-		  msg("Amount per fester is now " + this.gatherRate + " per click.");
 	  },
+// -- updatePerTick is untested -- //	 
 	  updatePerTick: function() {
 		  this.perTick = 1; // need to define logic.
 		  msg("Amount per tick is now " + this.perTick + " per click.");
@@ -148,7 +143,7 @@ const resourceStack = [
 	  perTick: 0,
 	  gatherRate: 1,
 	  gatherCost: [
-		  { name: "prey", amount: 1 }
+		  { name: "prey", amount: 5 }
 		  ],
 	  gather: function() {
 		  let totalRes = this.current;
@@ -476,15 +471,14 @@ const dev = [
 	{ name: "button2",
 	  label: "hide/show all resources",
 	  run: function() {
+		  //---- save this code for reference for future panel changes --//
 		  let resRows = document.getElementsByClassName("resource");
 		  if (resStatus == "visible") {
-			  msg("resStatus is visible");
 			  for (let i = 0; i < resRows.length; i++) {
 				  resRows[i].classList.add("hidden");
 				  resStatus = "invisible";
 			  }
 		  } else {
-			  msg("resStatus is not visible");
 			  for (let i = 0; i < resourceStack.length; i++) {
 				  resourceStack[i].isUnlocked = false;
 				  // resRows[i].classList.add("hidden");
