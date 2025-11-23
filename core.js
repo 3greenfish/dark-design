@@ -219,7 +219,7 @@ let jsUpdateTime = "11-9 1103am";
 
 function updateJStime() { //runs at end of HTML load
 	document.getElementById('jsVersion').innerText = jsUpdateTime;
-	msg("You have awakened...";
+	msg("You have awakened...");
 //	document.getElementById('messageCurrent').innerText = messageArray.toString();
 	loadResourcePanel();
 	setDevButtons();
