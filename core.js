@@ -477,7 +477,7 @@ const dev = [
 	  label: "hide/show all resources",
 	  run: function() {
 		  let resRows = document.getElementsByClassName("resource");
-		  if (resStatus = "visible") {
+		  if (resStatus == "visible") {
 			  for (let i = 0; i < resRows.length; i++) {
 			  	resRows[i].classList.add("hidden");
 			  }
