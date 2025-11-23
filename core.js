@@ -512,8 +512,8 @@ const dev = [
 	{ name: "button3",
 	  label: "add prey",
 	  run: function() {
-		  resourceStack[2].current += 5;
-		  loadResource(2);
+		  resourceStack[1].current += 5;
+		  loadResource(1);
 		  msg("added 5 prey");
 	  },
 	  setLabel: function() {
@@ -523,7 +523,7 @@ const dev = [
 	{ name: "button4",
 	  label: "add choler",
 	  run: function() {
-		  resourceStack[4].current += 5;
+		  resourceStack[3].current += 5;
 		  loadResourcePanel();
 		  msg("added 5 choler");
 	  },
