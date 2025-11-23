@@ -1,4 +1,6 @@
-const messageArray = ["You have awakened in a new world, and your dark powers have corrupted a small bog. Time to fester..."];
+const messageArray = [];
+	
+	// ["You have awakened in a new world, and your dark powers have corrupted a small bog. Time to fester..."];
 
 // ---- phase 1 buildings, replace with object stack later ---- //
 
@@ -217,7 +219,8 @@ let jsUpdateTime = "11-9 1103am";
 
 function updateJStime() { //runs at end of HTML load
 	document.getElementById('jsVersion').innerText = jsUpdateTime;
-	document.getElementById('messageCurrent').innerText = messageArray.toString();
+	msg("You have awakened...";
+//	document.getElementById('messageCurrent').innerText = messageArray.toString();
 	loadResourcePanel();
 	setDevButtons();
 }
