@@ -1,4 +1,5 @@
 const messageArray = [];
+let resStatus = "visible";
 	
 	// ["You have awakened in a new world, and your dark powers have corrupted a small bog. Time to fester..."];
 
@@ -473,16 +474,19 @@ const dev = [
 	  }
 	},
 	{ name: "button2",
-	  label: "hide all resources",
+	  label: "hide/show all resources",
 	  run: function() {
 		  let resRows = document.getElementsByClassName("resource");
-		  let type = typeof resRows;
-		  msg(type);
-		  for (let i = 0; i < resRows.length; i++) {
-			  resRows[i].classList.add("hidden");
-			  msg("attempted to hide row " + i);
+		  if (resStatus = "visible") {
+			  for (let i = 0; i < resRows.length; i++) {
+			  	resRows[i].classList.add("hidden");
+		  } else {
+			  for (let i = 0; i < resRows.length; i++) {
+				  resourceStack[i].isUnlocked = false;
+				  // resRows[i].classList.add("hidden");
+			  }
 		  }
-		  msg("finished code to hide all resources")
+		  
 	  },
 	  setLabel: function() {
 		  document.getElementById("dev" + this.name).innerText = this.label;
