@@ -90,22 +90,22 @@
 				</div>
 
 				<div class="buttonContainer">
-					<div class="collapsible" id="gat-2-collapsible">
-						<div class="buttonLabel" id="gat-2-label" data-target="gat-2" onClick="buttonManager(event)">Ensnare prey</div><div class="notch" data-target="gat-2" onClick="expandButton(event)">&#9776;</div>
+					<div class="collapsible" id="gat-1-collapsible">
+						<div class="buttonLabel" id="gat-1-label" data-target="gat-1" onClick="buttonManager(event)">Ensnare prey</div><div class="notch" data-target="gat-1" onClick="expandButton(event)">&#9776;</div>
 					</div>
-					<div class="content" id="gat-2-content">
+					<div class="content" id="gat-1-content">
 						<p>Catch unsuspecting creatures to use as fuel.</p>
-						<div class="button" data-target="gat-2" onClick="buttonManager(event)">Ensnare</div>
+						<div class="button" data-target="gat-1" onClick="buttonManager(event)">Ensnare</div>
 					</div>
 				</div>
 
 				<div class="buttonContainer">
-					<div class="collapsible" id="gat-3-collapsible">
-						<div class="buttonLabel" data-target="gat-3" id="gat-3-label" onClick="buttonManager(event)">Digest prey</div><div class="notch" data-target="gat-3" onClick="expandButton(event)">&#9776;</div>
+					<div class="collapsible" id="gat-2-collapsible">
+						<div class="buttonLabel" data-target="gat-2" id="gat-2-label" onClick="buttonManager(event)">Digest prey</div><div class="notch" data-target="gat-2" onClick="expandButton(event)">&#9776;</div>
 					</div>
-					<div class="content" id="gat-3-content">
+					<div class="content" id="gat-2-content">
 						<p>Digest your captured prey to generate sustenance.</p>
-						<div class="button" data-target="gat-3" onClick="buttonManager(event)">Digest</div>
+						<div class="button" data-target="gat-2" onClick="buttonManager(event)">Digest</div>
 					</div>
 				</div>
 				
@@ -120,7 +120,7 @@
 					</div>
 					<div class="content" id="XXX-X-content">
 						<p>DESCRIPTION HERE</p>
-						<p>-----------</p>
+						<hr>
 						<div class="costs" id="XXX-X-costs">
 							<div class="bldgCostPriceName">RESOURCE</div><div class="bldgCostRes">DEFAULT AMOUNT</div>
 						</div>
@@ -144,8 +144,68 @@
 						<div class="button" data-target="buy-0" onClick="buttonManager(event)">Swell by 1m^2</div>
 					</div>
 				</div>
-			</div>
 
+				<div class="buttonContainer">
+					<div class="collapsible" id="buy-1-collapsible">
+						<div class="buttonLabel" data-target="buy-1" id="buy-1-label" onClick="buttonManager(event)">Pustule</div><div class="notch" data-target="buy-1" onClick="expandButton(event)">&#9776;</div>
+					</div>
+					<div class="content" id="buy-1-content">
+						<p>Grow a pustule to process sustenance into a thick bile.</p>
+						<p>Once full, pustules generate corruption, and can be popped for choler.</p>
+						<hr>
+						<div class="costs" id="buy-1-costs">
+							<div class="bldgCostPriceName">RESOURCE</div><div class="bldgCostRes">DEFAULT AMOUNT</div>
+						</div>
+						<div class="button" data-target="buy-1" onClick="buttonManager(event)">Grow Pustule</div>
+						<div class="button" data-target="pop-1" onClick="buttonManager(event)">Pop</div>
+						<div class="button" data-target="pop-all" onClick="buttonManager(event)">Pop all</div>
+					</div>
+				</div>
+
+				<div class="buttonContainer">
+					<div class="collapsible" id="XXX-X-collapsible">
+						<div class="buttonLabel" data-target="gat-# OR buy-#" id="XXX-X-label" onClick="buttonManager(event)">Digestor</div><div class="notch" data-target="XXX-X" onClick="expandButton(event)">&#9776;</div>
+					</div>
+					<div class="content" id="XXX-X-content">
+						<p>DESCRIPTION HERE</p>
+						<hr>
+						<div class="costs" id="XXX-X-costs">
+							<div class="bldgCostPriceName">RESOURCE</div><div class="bldgCostRes">DEFAULT AMOUNT</div>
+						</div>
+						<div class="button" data-target="XXX-X" onClick="buttonManager(event)">LABEL</div>
+					</div>
+				</div>
+
+				<div class="buttonContainer">
+					<div class="collapsible" id="XXX-X-collapsible">
+						<div class="buttonLabel" data-target="gat-# OR buy-#" id="XXX-X-label" onClick="buttonManager(event)">Trap</div><div class="notch" data-target="XXX-X" onClick="expandButton(event)">&#9776;</div>
+					</div>
+					<div class="content" id="XXX-X-content">
+						<p>DESCRIPTION HERE</p>
+						<hr>
+						<div class="costs" id="XXX-X-costs">
+							<div class="bldgCostPriceName">RESOURCE</div><div class="bldgCostRes">DEFAULT AMOUNT</div>
+						</div>
+						<div class="button" data-target="XXX-X" onClick="buttonManager(event)">LABEL</div>
+					</div>
+				</div>
+
+				<div class="buttonContainer">
+					<div class="collapsible" id="XXX-X-collapsible">
+						<div class="buttonLabel" data-target="gat-# OR buy-#" id="XXX-X-label" onClick="buttonManager(event)">Siren</div><div class="notch" data-target="XXX-X" onClick="expandButton(event)">&#9776;</div>
+					</div>
+					<div class="content" id="XXX-X-content">
+						<p>DESCRIPTION HERE</p>
+						<hr>
+						<div class="costs" id="XXX-X-costs">
+							<div class="bldgCostPriceName">RESOURCE</div><div class="bldgCostRes">DEFAULT AMOUNT</div>
+						</div>
+						<div class="button" data-target="XXX-X" onClick="buttonManager(event)">LABEL</div>
+					</div>
+				</div>
+				
+			</div> <!-- end buttonMap for buildings -->
+			
 				
 
 <div>
