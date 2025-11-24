@@ -139,9 +139,9 @@ nav {
 .buttonContainer {
 /*	width: 260px; */
 	flex: 0 0 200px;
-	margin: 2px;
+	margin: 3px;
 	padding: 0px;
-	border: 1px solid #dddddd;
+	border: none; /* 1px solid #dddddd; */
 }
 
 .collapsible {
