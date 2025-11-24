@@ -201,7 +201,7 @@ nav {
 	border-radius: 0 0 10px 10px;
 	max-height: 0;
 	transition: max-height 0.2s ease-out;
-	font-size: 85%;
+	font-size: 80%;
 }
 
 .costs {
