@@ -69,7 +69,7 @@ nav {
 	width: 630px;
 	border: 1px dotted red;
 	margin: 0px; /* T R B L */
-	padding: 0px 10px 10px 10px;
+	padding: 0px; /* 10px 10px 10px; */
 }
 
 #rightblock {
