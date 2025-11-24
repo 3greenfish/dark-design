@@ -39,6 +39,7 @@ nav {
 	border: 1px dotted black;
 	height: auto;
 	/* white-space: nowrap; */
+	background-color: #002200;
 }
 
 .column {
@@ -138,7 +139,7 @@ nav {
 .buttonContainer {
 /*	width: 260px; */
 	flex: 0 0 200px;
-	margin: 1px;
+	margin: 2px;
 	padding: 0px;
 	border: 1px solid #dddddd;
 }
@@ -158,12 +159,6 @@ nav {
 	-webkit-user-select: none;
 	-ms-user-select: none;
 }
-
-/* .collapsible:after {
-	content: "\2630";
-	margin-left: 5px;
-	float: right;
-} */
 
 .collapsible:hover {
 	background-color: #ccccdd;
@@ -196,7 +191,7 @@ nav {
 	display: none;
 	overflow: hidden;
 	background-color: #f1f1f1;
-	width: 228px;
+	width: 199px;
 	border-top: 1px dotted black;
 	border-bottom: 1px solid black;
 	border-left: 1px solid black;
