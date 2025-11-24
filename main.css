@@ -1,7 +1,7 @@
 body {
 	color: #000000;
 	font-family: Verdana, sans-serif;
-	font-size: 16px;
+	font-size: 14px;
 }
 
 p { 
@@ -254,6 +254,7 @@ nav {
 	min-height: 1em;
 	padding: 5px;
 	overflow-y: auto;
+	color: green;
 	
 }
 
