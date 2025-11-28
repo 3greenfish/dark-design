@@ -5,6 +5,25 @@ let resStatus = "visible"; // temporary variable for dev button testing of hidde
 
 // ---- phase 1 buildings, replace with object stack later ---- //
 
+class testClass {
+	constructor() {
+		this.name = "bob";
+		this.testArray = [	
+			{ name: "testing 1", value: 17 },
+			{ name: "testing 2", value: 38 }
+		]
+	}
+	onTestCall() {
+		this.testArray[0].value += 1;
+		msg("successfully called onTestCall. Value of testArray 0 is now " + testArray[0].value);
+	}
+	wipe() {
+		this = {};
+	}
+}
+
+const bollocks = new testClass();
+
 const swampBuildings = [
 	{ name: "swell",
 	  label: "Swell",
@@ -521,20 +540,22 @@ const dev = [
 	  }
 	},
 	{ name: "button4",
-	  label: "add choler",
+	  label: "wipe class",
 	  run: function() {
-		  resourceStack[3].current += 5;
-		  loadResourcePanel();
-		  msg("added 5 choler");
+		  bollocks.wipe();
+		  bollocks.onTestCall();
+		  bollocks = new testClass();
+		  msg("done");
 	  },
 	  setLabel: function() {
 		  document.getElementById("dev" + this.name).innerText = this.label;
 	  }
 	},
 	{ name: "button5",
-	  label: "undefined",
+	  label: "test new class thing",
 	  run: function() {
-		    msg("no function defined for devbutton");
+		  bollocks.onTestCall();
+//		    msg("no function defined for devbutton");
 	  },
 	  setLabel: function() {
 		  document.getElementById("dev" + this.name).innerText = this.label;
