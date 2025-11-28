@@ -12,20 +12,20 @@ const swampBuildings = [
 	  costs: [
 		  { name: "corruption", amount: 10 }
 		  ],
-	  ratio: 1.2,
+	  ratio: 1.3,
 	  onPurchase: function() {
 		  this.count += 1;
 		  msg("current count: " + this.count);
 		  this.updateButtonLabel();
 		  this.updateRatio();
 		  resourceStack[0].updateGatherRate();
-		  resourceStack[1].gather();
+		  resourceStack[0].updateMax();
 		  updateContentCosts(0);
 	  },
 	  updateButtonLabel: function() {
 		  let newLabel = this.label;
 		  if (this.count > 0) {
-			  newLabel = newLabel + " (" + this.count + ")";
+			  newLabel = newLabel + " (" + this.count + "m^2)";
 		  }
 		  document.getElementById(this.name + "Label").innerText = newLabel;
 	  },
@@ -85,7 +85,16 @@ function findResInStack(name) {
 //		msg("did not find " + name + " in array index " + i);
 	}
 }
-	
+
+function findBldgInSwamp(name) {
+	let findName = name;
+	for (let i = 0; i < swampBuildings.length; i++) {
+		if (swampBuildings[i].name == findName) {
+			return i;
+		}
+	}
+}
+
 const resourceStack = [
 	{ name: "corruption", // 0
 	  label: "Corruption",
@@ -113,9 +122,17 @@ const resourceStack = [
 	  updatePerTick: function() {
 		  this.perTick = 1; // need to define logic.
 		  msg("Amount per tick is now " + this.perTick + " per click.");
+	  },
+	  updateMax: function() {
+		  let swl = findBldgInSwamp("swell");
+		  let pus = findBldgInSwamp("pustule");
+		  msg("swl is " + swl + ", and pus is " + pus);
+		  let newMax = 50 + (swampBuildings[swl].count * 5) + (swampBuildings[pus].count * 50);
+		  this.max = newMax;
+		  msg("new maximum is logged as " + this.max);
 	  }
 	},
-	{ name: "size", // 1
+/*	{ name: "size", // 1
 	  label: "Size",
 	  current: 1,
 	  limited: false,
@@ -125,8 +142,8 @@ const resourceStack = [
 		  this.current = 1 + swampBuildings[0].count;
 		  loadResource(1);
 	  }
-	},
-	{ name: "prey", // 2
+	}, */
+	{ name: "prey", // 1
 	  label: "Prey",
 	  current: 0,
 	  limited: true,
@@ -134,7 +151,7 @@ const resourceStack = [
 	  max: 25,
 	  perTick: 0
 	},
-	{ name: "sustenance", //3
+	{ name: "sustenance", //2
 	  label: "Sustenance",
 	  current: 0,
 	  limited: true,
@@ -196,7 +213,7 @@ const resourceStack = [
 		  }
 	  }  
 	},
-	{ name: "choler", //4
+	{ name: "choler", //3
 	  label: "Choler",
 	  current: 0,
 	  limited: true,
@@ -253,9 +270,9 @@ function loadResourcePanel() {
 				continue; } // otherwise, stop the iteration and move on to the next resource
 		}
 		
-		if (resName == "size") {
+/*		if (resName == "size") {
 			resCurrent += "m^2";
-		}
+		} */
 		document.getElementById(resName + 'Current').innerText = resCurrent;
 		
 		if (resourceStack[i].limited == true) {
@@ -495,8 +512,8 @@ const dev = [
 	{ name: "button3",
 	  label: "add prey",
 	  run: function() {
-		  resourceStack[2].current += 5;
-		  loadResource(2);
+		  resourceStack[1].current += 5;
+		  loadResource(1);
 		  msg("added 5 prey");
 	  },
 	  setLabel: function() {
@@ -506,7 +523,7 @@ const dev = [
 	{ name: "button4",
 	  label: "add choler",
 	  run: function() {
-		  resourceStack[4].current += 5;
+		  resourceStack[3].current += 5;
 		  loadResourcePanel();
 		  msg("added 5 choler");
 	  },
