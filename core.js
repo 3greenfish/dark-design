@@ -11,7 +11,7 @@ class testClass {
 		this.testArray = [	
 			{ name: "testing 1", value: 17 },
 			{ name: "testing 2", value: 38 }
-		]
+		];
 	}
 	onTestCall() {
 		this.testArray[0].value += 1;
