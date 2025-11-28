@@ -17,7 +17,9 @@ class testClass {
 		this.testArray[0].value += 1;
 		msg("successfully called onTestCall. Value of testArray 0 is now " + this.testArray[0].value);
 	}
-//	wipe() { this = {}; }
+	onNameCall() {
+		msg(this.name);
+	}
 }
 
 const bollocks = new testClass();
@@ -540,7 +542,7 @@ const dev = [
 	{ name: "button4",
 	  label: "wipe class",
 	  run: function() {
-		  bollocks.wipe();
+		  bollocks = {};
 		  bollocks.onTestCall();
 		  bollocks = new testClass();
 		  msg("done");
