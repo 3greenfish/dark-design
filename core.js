@@ -15,11 +15,9 @@ class testClass {
 	}
 	onTestCall() {
 		this.testArray[0].value += 1;
-		msg("successfully called onTestCall. Value of testArray 0 is now " + testArray[0].value);
+		msg("successfully called onTestCall. Value of testArray 0 is now " + this.testArray[0].value);
 	}
-	wipe() {
-		this = {};
-	}
+//	wipe() { this = {}; }
 }
 
 const bollocks = new testClass();
