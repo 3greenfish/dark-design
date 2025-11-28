@@ -542,10 +542,10 @@ const dev = [
 	{ name: "button4",
 	  label: "wipe class",
 	  run: function() {
-		  bollocks = null;
-		  bollocks.onTestCall();
+//		  bollocks = null;
+//		  bollocks.onTestCall();
 		  bollocks = new testClass();
-		  msg("done, here's the value: " + bollocks.testArray[0].value);
+		  msg("done, here's the value of bollocks: " + bollocks.testArray[0].value);
 	  },
 	  setLabel: function() {
 		  document.getElementById("dev" + this.name).innerText = this.label;
