@@ -5,7 +5,7 @@ let resStatus = "visible"; // temporary variable for dev button testing of hidde
 
 // ---- phase 1 buildings, replace with object stack later ---- //
 
-class testClass {
+/* class testClass {
 	constructor() {
 		this.name = "bob";
 		this.testArray = [	
@@ -20,9 +20,8 @@ class testClass {
 	onNameCall() {
 		msg(this.name);
 	}
-}
-
-const bollocks = new testClass();
+} 
+const bollocks = new testClass(); */
 
 const swampBuildings = [
 	{ name: "swell",
@@ -37,8 +36,8 @@ const swampBuildings = [
 		  msg("current count: " + this.count);
 		  this.updateButtonLabel();
 		  this.updateRatio();
-		  resourceStack[0].updateGatherRate();
-		  resourceStack[0].updateMax();
+		  resources.stack[0].updateGatherRate();
+		  resources.stack[0].updateMax();
 		  updateContentCosts(0);
 	  },
 	  updateButtonLabel: function() {
@@ -93,7 +92,180 @@ const swampBuildings = [
 
 // ---- end phase 1 buildings ---- //
 
+const resources = {
+	name: "resources go here",
+	stack: [
+		{ name: "corruption", // 0
+		  label: "Corruption",
+		  current: 0,
+		  limited: true,
+		  isUnlocked: true,
+		  max: 50,
+		  perTick: 0,
+		  gatherRate: 1,
+		  gather: function() {
+			  let totalRes = this.current;
+			  totalRes += this.gatherRate;
+			  totalRes = rndPlusThree(totalRes);
+			  if (totalRes >= this.max) {
+				  this.current = this.max;
+			  } else {
+				  this.current = totalRes;
+			  }
+			  resources.loadResource(0); // need to clean up this code
+		  },
+		  updateGatherRate: function() {
+			  this.gatherRate = rndPlusThree(1 + (0.1 * swampBuildings[0].count));
+		  },
+// -- updatePerTick is untested -- //	 
+		  updatePerTick: function() {
+			  this.perTick = 1; // need to define logic.
+			  msg("Amount per tick is now " + this.perTick + " per click.");
+		  },
+		  updateMax: function() {
+			  let swl = findBldgInSwamp("swell");
+			  let pus = findBldgInSwamp("pustule");
+			  msg("swl is " + swl + ", and pus is " + pus);
+			  let newMax = 50 + (swampBuildings[swl].count * 5) + (swampBuildings[pus].count * 50);
+			  this.max = newMax;
+			  msg("new maximum is logged as " + this.max);
+		  }
+		},
+		{ name: "prey", // 1
+		  label: "Prey",
+		  current: 0,
+		  limited: true,
+		  isUnlocked: true,
+		  max: 25,
+		  perTick: 0
+		},
+		{ name: "sustenance", //2
+		  label: "Sustenance",
+		  current: 0,
+		  limited: true,
+		  isUnlocked: false,
+		  max: 40,
+		  perTick: 0,
+		  gatherRate: 1,
+		  gatherCost: [
+			  { name: "prey", amount: 5 }
+			  ],
+		  gather: function() {
+			  let totalRes = this.current;
+			//make sure current value is not at maximum
+			  if (totalRes >= this.max) { 
+				  msg("current resource is " + totalRes + ", which is the maximum for this resource.");		  
+				  return;
+			  }
+	
+			//verify sufficient resources to perform action
+			  let priceCheck = this.checkCosts(); 
+			  if (priceCheck == "fail-insufficient") {
+				  msg("insufficient base resource to perform action");
+				  return;
+			  }
+			//pay the cost in each source resource
+			  let prices = this.gatherCost;
+			  for (let i = 0; i < prices.length; i++) {
+				  let priceName = prices[i].name;
+				  let priceCode = resources.findResInStack(priceName);
+				  let value = prices[i].amount;
+				  resources.stack[priceCode].current -= value;
+			  }
+			//update target resource
+			  totalRes += this.gatherRate;
+			  if (totalRes >= this.max) {
+				  this.current = this.max;
+			  } else {
+				  this.current = totalRes;
+			  }
+			  resources.loadResourcePanel(); // need to clean up this code
+		  },
+		  updateGatherRate: function() {
+			  msg("sustanenance rate is " + this.gatherRate + " per click. Not yet defined.");
+		  },
+		  updatePerTick: function() {
+			  this.perTick = 1; // need to define logic.
+			  msg("Amount per tick is now " + this.perTick + " per click.");
+		  },
+		  checkCosts: function() {
+			  let prices = this.gatherCost;
+			  for (let i = 0; i < prices.length; i++) {
+				  let priceName = prices[i].name;
+				  let priceCode = resources.findResInStack(priceName);
+				  let value = prices[i].amount;
+				  if (value > resources.stack[priceCode].current) {
+					  return "fail-insufficient";
+				  }
+				  return "pass-sufficient";
+			  }
+		  }  
+		},
+		{ name: "choler", //3
+		  label: "Choler",
+		  current: 0,
+		  limited: true,
+		  isUnlocked: false,
+		  max: 150,
+		  perTick: 0,
+		  gatherRate: 0
+		}
+	],
+	findResInStack: function(name) {
+		let findName = name;
+		for (let i = 0; i < this.stack.length; i++) {
+			if (this.stack[i].name == findName) {
+				return i;
+			}
+		}
+	},
+	loadResource: function(resource) {
+		let resName = this.stack[resource].name;
+		let resCurrent = rndPlusThree(this.stack.[resource].current);
+
+		document.getElementById(resName + 'Current').innerText = resCurrent;
+	
+		if (this.stack[resource].limited) {
+			let resMax = "/" + this.stack[resource].max;
+		
+			document.getElementById(resName + 'Max').innerText = resMax;
+		}
+	},
+	loadResourcePanel: function() {
+		for (let i = 0; i < this.stack.length; i++) {
+			let resName = this.stack[i].name;
+			let resCurrent = rndPlusThree(this.stack[i].current);
+
+			if (this.stack[i].isUnlocked == false) { // temp to test if identification of locked/unlocked is working
+				if (resCurrent > 0) {
+					this.stack[i].isUnlocked = true;
+					document.getElementById("res" + i + "row").classList.remove("hidden");   // unlock resource if user has any
+				} else { 
+					continue; } // otherwise, stop the iteration and move on to the next resource
+			}
+			
+			document.getElementById(resName + 'Current').innerText = resCurrent;
+		
+			if (this.stack[i].limited == true) {
+				let resMax = "/" + this.stack[i].max;
+			
+				document.getElementById(resName + 'Max').innerText = resMax;
+			}
+		}
+	}
+
+	
+	
+
+	
+
+} // --- close resources object --- //
+
+
 function findResInStack(name) {
+	msg("old findResInStack called")
+	resources.findResInStack(name);
+/*	
 	let findName = name;
 //	msg("findResInStack called for " + name);
 	for (let i = 0; i < resourceStack.length; i++) {
@@ -102,7 +274,7 @@ function findResInStack(name) {
 			return i;
 		}
 //		msg("did not find " + name + " in array index " + i);
-	}
+	} */
 }
 
 function findBldgInSwamp(name) {
@@ -132,7 +304,7 @@ const resourceStack = [
 		  } else {
 			  this.current = totalRes;
 		  }
-		  loadResource(0); // need to clean up this code
+		  resources.loadResource(0); // need to clean up this code
 	  },
 	  updateGatherRate: function() {
 		  this.gatherRate = rndPlusThree(1 + (0.1 * swampBuildings[0].count));
@@ -199,9 +371,9 @@ const resourceStack = [
 		  let prices = this.gatherCost;
 		  for (let i = 0; i < prices.length; i++) {
 			  let priceName = prices[i].name;
-			  let priceCode = findResInStack(priceName);
+			  let priceCode = resources.findResInStack(priceName);
 			  let value = prices[i].amount;
-			  resourceStack[priceCode].current -= value;
+			  resources.stack[priceCode].current -= value;
 		  }
 		//update target resource
 		  totalRes += this.gatherRate;
@@ -210,7 +382,7 @@ const resourceStack = [
 		  } else {
 			  this.current = totalRes;
 		  }
-		  loadResourcePanel(); // need to clean up this code
+		  resources.loadResourcePanel(); // need to clean up this code
 	  },
 	  updateGatherRate: function() {
 		  msg("sustanenance rate is " + this.gatherRate + " per click. Not yet defined.");
@@ -223,9 +395,9 @@ const resourceStack = [
 		  let prices = this.gatherCost;
 		  for (let i = 0; i < prices.length; i++) {
 			  let priceName = prices[i].name;
-			  let priceCode = findResInStack(priceName);
+			  let priceCode = resources.findResInStack(priceName);
 			  let value = prices[i].amount;
-			  if (value > resourceStack[priceCode].current) {
+			  if (value > resources.stack[priceCode].current) {
 				  return "fail-insufficient";
 			  }
 			  return "pass-sufficient";
@@ -253,7 +425,7 @@ function updateJStime() { //runs at end of HTML load
 	document.getElementById('jsVersion').innerText = jsUpdateTime;
 	msg("You have awakened...");
 //	document.getElementById('messageCurrent').innerText = messageArray.toString();
-	loadResourcePanel();
+	resources.loadResourcePanel();
 	setDevButtons();
 }
 
@@ -264,6 +436,9 @@ function rndPlusThree(number) {
 }
 
 function loadResource(resource) {
+	msg("old loadResource called");
+	resources.loadResource(resource);
+/*	
 	let resName = resourceStack[resource].name;
 	let resCurrent = rndPlusThree(resourceStack[resource].current);
 
@@ -273,10 +448,13 @@ function loadResource(resource) {
 		let resMax = "/" + resourceStack[resource].max;
 		
 		document.getElementById(resName + 'Max').innerText = resMax;
-	}
+	} */
 }
 
 function loadResourcePanel() {
+	msg("old loadResourcePanel called");
+	resources.loadResourcePanel();
+	/*
 	for (let i = 0; i < resourceStack.length; i++) {
 		let resName = resourceStack[i].name;
 		let resCurrent = rndPlusThree(resourceStack[i].current);
@@ -288,10 +466,6 @@ function loadResourcePanel() {
 			} else { 
 				continue; } // otherwise, stop the iteration and move on to the next resource
 		}
-		
-/*		if (resName == "size") {
-			resCurrent += "m^2";
-		} */
 		document.getElementById(resName + 'Current').innerText = resCurrent;
 		
 		if (resourceStack[i].limited == true) {
@@ -299,7 +473,7 @@ function loadResourcePanel() {
 			
 			document.getElementById(resName + 'Max').innerText = resMax;
 		}
-	}
+	}*/
 }
 
 // -- button management and purchase code goes here -- //
@@ -316,7 +490,7 @@ function buttonManager(event) {
 	let lvl2num = Number(lvl2);	
 
 	if (actionCat == "gat") {
-		resourceStack[lvl2num].gather();
+		resources.stack[lvl2num].gather();
 	}
 
 	if (actionCat == "dev") {    //-- if dev button, run code from dev button object --//
@@ -345,9 +519,9 @@ function checkPrice(num) {
 	let prices = swampBuildings[num].costs;
 	for (let i = 0; i < prices.length; i++) {
 		let priceName = prices[i].name;
-		let priceCode = findResInStack(priceName);
+		let priceCode = resources.findResInStack(priceName);
 		let value = prices[i].amount;
-		if (value > resourceStack[priceCode].current) {
+		if (value > resources.stack[priceCode].current) {
 			return "fail-insufficient";
 		}
 	}
@@ -359,11 +533,11 @@ function payPrice(num) {
 	let prices = swampBuildings[num].costs;
 	for (let i = 0; i < prices.length; i++) {
 		let priceName = prices[i].name;
-		let priceCode = findResInStack(priceName);
+		let priceCode = resources.findResInStack(priceName);
 		let value = prices[i].amount;
-		resourceStack[priceCode].current -= value;
+		resources.stack[priceCode].current -= value;
 	}
-	loadResourcePanel();
+	resources.loadResourcePanel();
 //	msg("payPrice completed");
 }
 
@@ -373,8 +547,8 @@ function updateContentCosts(num) {
 	let dispCost = "";
 	for (let i = 0; i < prices.length; i++) {
 		let priceName = prices[i].name;
-		let priceCode = findResInStack(priceName);
-		let label = resourceStack[priceCode].label;
+		let priceCode = resources.findResInStack(priceName);
+		let label = resources.stack[priceCode].label;
 		let value = prices[i].amount;
 		dispCost += "<div class=\"bldgCostPriceName\">" + label + ":</div><div class=\"bldgCostRes\">" + value + "</div>";
 	}
@@ -515,8 +689,8 @@ const dev = [
 				  resStatus = "invisible";
 			  }
 		  } else {
-			  for (let i = 0; i < resourceStack.length; i++) {
-				  resourceStack[i].isUnlocked = false;
+			  for (let i = 0; i < resources.stack.length; i++) {
+				  resources.stack[i].isUnlocked = false;
 				  // resRows[i].classList.add("hidden");
 				  resStatus = "visible";
 			  }
@@ -531,8 +705,8 @@ const dev = [
 	{ name: "button3",
 	  label: "add prey",
 	  run: function() {
-		  resourceStack[1].current += 5;
-		  loadResource(1);
+		  resources.stack[1].current += 5;
+		  resources.loadResource(1);
 		  msg("added 5 prey");
 	  },
 	  setLabel: function() {
@@ -540,7 +714,7 @@ const dev = [
 	  }
 	},
 	{ name: "button4",
-	  label: "wipe class",
+	  label: "disregard",
 	  run: function() {
 //		  bollocks = null;
 //		  bollocks.onTestCall();
@@ -552,7 +726,7 @@ const dev = [
 	  }
 	},
 	{ name: "button5",
-	  label: "test new class thing",
+	  label: "DISREGARD test new class thing",
 	  run: function() {
 		  bollocks.onTestCall();
 //		    msg("no function defined for devbutton");
@@ -577,7 +751,7 @@ let gameTimer = setInterval(tick, calendar.runSpeed);
 
 function tick() {
 //	msg("tick");
-	loadResourcePanel();
+	resources.loadResourcePanel();
 	calendar.updateCal();
 }
 
