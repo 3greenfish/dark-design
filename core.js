@@ -5,7 +5,7 @@ let resStatus = "visible"; // temporary variable for dev button testing of hidde
 
 // ---- phase 1 buildings, replace with object stack later ---- //
 
-class testClass {
+/* class testClass {
 	constructor() {
 		this.name = "bob";
 		this.testArray = [	
@@ -20,9 +20,8 @@ class testClass {
 	onNameCall() {
 		msg(this.name);
 	}
-}
-
-const bollocks = new testClass();
+} 
+const bollocks = new testClass(); */
 
 const swampBuildings = [
 	{ name: "swell",
@@ -92,6 +91,141 @@ const swampBuildings = [
 
 
 // ---- end phase 1 buildings ---- //
+
+const resources = {
+	name: "resources go here",
+	stack: [
+		{ name: "corruption", // 0
+		  label: "Corruption",
+		  current: 0,
+		  limited: true,
+		  isUnlocked: true,
+		  max: 50,
+		  perTick: 0,
+		  gatherRate: 1,
+		  gather: function() {
+			  let totalRes = this.current;
+			  totalRes += this.gatherRate;
+			  totalRes = rndPlusThree(totalRes);
+			  if (totalRes >= this.max) {
+				  this.current = this.max;
+			  } else {
+				  this.current = totalRes;
+			  }
+			  loadResource(0); // need to clean up this code
+		  },
+		  updateGatherRate: function() {
+			  this.gatherRate = rndPlusThree(1 + (0.1 * swampBuildings[0].count));
+		  },
+// -- updatePerTick is untested -- //	 
+		  updatePerTick: function() {
+			  this.perTick = 1; // need to define logic.
+			  msg("Amount per tick is now " + this.perTick + " per click.");
+		  },
+		  updateMax: function() {
+			  let swl = findBldgInSwamp("swell");
+			  let pus = findBldgInSwamp("pustule");
+			  msg("swl is " + swl + ", and pus is " + pus);
+			  let newMax = 50 + (swampBuildings[swl].count * 5) + (swampBuildings[pus].count * 50);
+			  this.max = newMax;
+			  msg("new maximum is logged as " + this.max);
+		  }
+		},
+		{ name: "prey", // 1
+		  label: "Prey",
+		  current: 0,
+		  limited: true,
+		  isUnlocked: true,
+		  max: 25,
+		  perTick: 0
+		},
+		{ name: "sustenance", //2
+		  label: "Sustenance",
+		  current: 0,
+		  limited: true,
+		  isUnlocked: false,
+		  max: 40,
+		  perTick: 0,
+		  gatherRate: 1,
+		  gatherCost: [
+			  { name: "prey", amount: 5 }
+			  ],
+		  gather: function() {
+			  let totalRes = this.current;
+			//make sure current value is not at maximum
+			  if (totalRes >= this.max) { 
+				  msg("current resource is " + totalRes + ", which is the maximum for this resource.");		  
+				  return;
+			  }
+	
+			//verify sufficient resources to perform action
+			  let priceCheck = this.checkCosts(); 
+			  if (priceCheck == "fail-insufficient") {
+				  msg("insufficient base resource to perform action");
+				  return;
+			  }
+			//pay the cost in each source resource
+			  let prices = this.gatherCost;
+			  for (let i = 0; i < prices.length; i++) {
+				  let priceName = prices[i].name;
+				  let priceCode = findResInStack(priceName);
+				  let value = prices[i].amount;
+				  resourceStack[priceCode].current -= value;
+			  }
+			//update target resource
+			  totalRes += this.gatherRate;
+			  if (totalRes >= this.max) {
+				  this.current = this.max;
+			  } else {
+				  this.current = totalRes;
+			  }
+			  loadResourcePanel(); // need to clean up this code
+		  },
+		  updateGatherRate: function() {
+			  msg("sustanenance rate is " + this.gatherRate + " per click. Not yet defined.");
+		  },
+		  updatePerTick: function() {
+			  this.perTick = 1; // need to define logic.
+			  msg("Amount per tick is now " + this.perTick + " per click.");
+		  },
+		  checkCosts: function() {
+			  let prices = this.gatherCost;
+			  for (let i = 0; i < prices.length; i++) {
+				  let priceName = prices[i].name;
+				  let priceCode = findResInStack(priceName);
+				  let value = prices[i].amount;
+				  if (value > resourceStack[priceCode].current) {
+					  return "fail-insufficient";
+				  }
+				  return "pass-sufficient";
+			  }
+		  }  
+		},
+		{ name: "choler", //3
+		  label: "Choler",
+		  current: 0,
+		  limited: true,
+		  isUnlocked: false,
+		  max: 150,
+		  perTick: 0,
+		  gatherRate: 0
+		}
+	],
+	findResInStack: function(name) {
+		let findName = name;
+		for (let i = 0; i < this.stack.length; i++) {
+			if (this.stack[i].name == findName) {
+				return i;
+			}
+		}
+	},
+	
+	
+
+	
+
+} // --- close resources object --- //
+
 
 function findResInStack(name) {
 	let findName = name;
