@@ -221,7 +221,7 @@ const resources = {
 	},
 	loadResource: function(resource) {
 		let resName = this.stack[resource].name;
-		let resCurrent = rndPlusThree(this.stack.[resource].current);
+		let resCurrent = rndPlusThree(this.stack[resource].current);
 
 		document.getElementById(resName + 'Current').innerText = resCurrent;
 	
