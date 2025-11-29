@@ -23,6 +23,91 @@ let resStatus = "visible"; // temporary variable for dev button testing of hidde
 } 
 const bollocks = new testClass(); */
 
+const swamp = {
+	name: "swamp",
+	buildings: [
+		{ name: "swell",
+		  label: "Swell",
+		  count: 0,
+		  costs: [
+			  { name: "corruption", amount: 10 }
+		  ],
+		  ratio: 1.3,
+		  onPurchase: function() {
+			  this.count += 1;
+			  msg("current count: " + this.count);
+			  this.updateButtonLabel();
+			  this.updateRatio();
+			  resources.stack[0].updateGatherRate();
+			  resources.stack[0].updateMax();
+			  updateContentCosts(0);
+		  },
+		  updateButtonLabel: function() {
+			  let newLabel = this.label;
+			  if (this.count > 0) {
+				  newLabel = newLabel + " (" + this.count + "m^2)";
+			  }
+			  document.getElementById(this.name + "Label").innerText = newLabel;
+		  },
+		  updateRatio: function() {
+			  for (let i = 0; i < this.costs.length; i++) {
+				  let newAmount = rndPlusThree(this.costs[i].amount * this.ratio);
+				  this.costs[i].amount = newAmount;
+				  msg("new cost for Swell is " + this.costs[i].amount + " " + this.costs[i].name);
+			  }
+		  }
+		},
+		{ name: "pustule",
+		  label: "Pustule",
+		  count: 0,
+		  costs: [
+			  { name: "corruption", amount: 40 }
+		  ],
+		  ratio: 1.2
+		},
+		{ name: "digestor",
+		  label: "Digestor",
+		  count: 0,
+		  costs: [
+			  { name: "corruption", amount: 20 },
+			  { name: "choler", amount: 50 }
+		  ],
+		  ratio: 1.2
+		},
+		{ name: "trap",
+		  label: "Trap",
+		  count: 0,
+		  costs: [
+			  { name: "corruption", amount: 50 },
+			  { name: "choler", amount: 20 }
+		  ],
+		  ratio: 1.2
+		},
+		{ name: "siren",
+		  label: "Siren",
+		  count: 0,
+		  costs: [],
+		  ratio: 1.2
+		}
+		],
+	buyBuilding: function(num) {
+		let validator = checkPrice(num); 
+		if (validator == "fail-insufficient") {  // should probably be a switch...
+			msg("insufficient resources");
+		}
+		if (validator == "pass-sufficient") {
+			payPrice(num);
+			swamp.buildings[num].onPurchase();
+		}
+	//	msg("buyBuilding function complete");
+	}
+}
+
+
+		
+
+/*
+
 const swampBuildings = [
 	{ name: "swell",
 	  label: "Swell",
@@ -87,13 +172,13 @@ const swampBuildings = [
 	  costs: [],
 	  ratio: 1.2
 	}
-];
+]; */
 
 
 // ---- end phase 1 buildings ---- //
 
 const resources = {
-	name: "resources go here",
+	name: "resources object",
 	stack: [
 		{ name: "corruption", // 0
 		  label: "Corruption",
@@ -115,7 +200,7 @@ const resources = {
 			  resources.loadResource(0); // need to clean up this code
 		  },
 		  updateGatherRate: function() {
-			  this.gatherRate = rndPlusThree(1 + (0.1 * swampBuildings[0].count));
+			  this.gatherRate = rndPlusThree(1 + (0.1 * swamp.buildings[0].count));
 		  },
 // -- updatePerTick is untested -- //	 
 		  updatePerTick: function() {
@@ -126,7 +211,7 @@ const resources = {
 			  let swl = findBldgInSwamp("swell");
 			  let pus = findBldgInSwamp("pustule");
 			  msg("swl is " + swl + ", and pus is " + pus);
-			  let newMax = 50 + (swampBuildings[swl].count * 5) + (swampBuildings[pus].count * 50);
+			  let newMax = 50 + (swamp.buildings[swl].count * 5) + (swamp.buildings[pus].count * 50);
 			  this.max = newMax;
 			  msg("new maximum is logged as " + this.max);
 		  }
@@ -279,14 +364,14 @@ function findResInStack(name) {
 
 function findBldgInSwamp(name) {
 	let findName = name;
-	for (let i = 0; i < swampBuildings.length; i++) {
-		if (swampBuildings[i].name == findName) {
+	for (let i = 0; i < swamp.buildings.length; i++) {
+		if (swamp.buildings[i].name == findName) {
 			return i;
 		}
 	}
 }
 
-const resourceStack = [
+/* const resourceStack = [
 	{ name: "corruption", // 0
 	  label: "Corruption",
 	  current: 0,
@@ -323,17 +408,6 @@ const resourceStack = [
 		  msg("new maximum is logged as " + this.max);
 	  }
 	},
-/*	{ name: "size", // 1
-	  label: "Size",
-	  current: 1,
-	  limited: false,
-	  isUnlocked: true,
-	  perTick: 0,
-	  gather: function() {
-		  this.current = 1 + swampBuildings[0].count;
-		  loadResource(1);
-	  }
-	}, */
 	{ name: "prey", // 1
 	  label: "Prey",
 	  current: 0,
@@ -413,7 +487,7 @@ const resourceStack = [
 	  perTick: 0,
 	  gatherRate: 0
 	}
-];
+]; */
 
 // -- start loading items here -- //
 
@@ -497,26 +571,26 @@ function buttonManager(event) {
 		dev[lvl2num].run();
 	}
 	if (actionCat == "buy") {
-		buyBuilding(lvl2num);
+		swamp.buyBuilding(lvl2num);
 	}
 
 }
 
-function buyBuilding(num) {
+/* function buyBuilding(num) {
 	let validator = checkPrice(num); 
 	if (validator == "fail-insufficient") {  // should probably be a switch...
 		msg("insufficient resources");
 	}
 	if (validator == "pass-sufficient") {
 		payPrice(num);
-		swampBuildings[num].onPurchase();
+		swamp.buildings[num].onPurchase();
 	}
 //	msg("buyBuilding function complete");
-}
+} */
 
 function checkPrice(num) {
 	msg("checkPrice called with num " + num);
-	let prices = swampBuildings[num].costs;
+	let prices = swamp.buildings[num].costs;
 	for (let i = 0; i < prices.length; i++) {
 		let priceName = prices[i].name;
 		let priceCode = resources.findResInStack(priceName);
@@ -530,7 +604,7 @@ function checkPrice(num) {
 
 function payPrice(num) {
 //	msg("payPrice called with num " + num);
-	let prices = swampBuildings[num].costs;
+	let prices = swamp.buildings[num].costs;
 	for (let i = 0; i < prices.length; i++) {
 		let priceName = prices[i].name;
 		let priceCode = resources.findResInStack(priceName);
@@ -543,7 +617,7 @@ function payPrice(num) {
 
 function updateContentCosts(num) {
 	msg("updateContentCosts called");
-	let prices = swampBuildings[num].costs;
+	let prices = swamp.buildings[num].costs;
 	let dispCost = "";
 	for (let i = 0; i < prices.length; i++) {
 		let priceName = prices[i].name;
