@@ -151,26 +151,8 @@ const resources = {
 			  ],
 		  gather: function() {
 			  let totalRes = this.current;
-/*			//make sure current value is not at maximum
-			  if (totalRes >= this.max) { 	  
-				  return;
-			  }
-	
-			//verify sufficient resources to perform action
-			  let priceCheck = resources.checkCosts(2); 
-			  if (priceCheck.result == "fail") {
-				  msg("insufficient base resource to perform action, " + priceCheck.reason);
-				  return;
-			  }
-			//pay the cost in each source resource
-			  let prices = this.gatherCost;
-			  for (let i = 0; i < prices.length; i++) {
-				  let priceName = prices[i].name;
-				  let priceCode = resources.findResInStack(priceName);
-				  let value = prices[i].amount;
-				  resources.stack[priceCode].current -= value;
-			  }
-*/			//update target resource
+
+			  //update target resource
 			  totalRes += this.gatherRate;
 			  if (totalRes >= this.max) {
 				  this.current = this.max;
@@ -186,18 +168,6 @@ const resources = {
 			  this.perTick = 1; // need to define logic.
 			  msg("Amount per tick is now " + this.perTick + " per click.");
 		  },
-	/*	  checkCosts: function() {
-			  let prices = this.gatherCost;
-			  for (let i = 0; i < prices.length; i++) {
-				  let priceName = prices[i].name;
-				  let priceCode = resources.findResInStack(priceName);
-				  let value = prices[i].amount;
-				  if (value > resources.stack[priceCode].current) {
-					  return "fail-insufficient";
-				  }
-				  return "pass-sufficient";
-			  }
-		  } */
 		},
 		{ name: "choler", //3
 		  label: "Choler",
