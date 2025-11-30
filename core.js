@@ -157,9 +157,9 @@ const resources = {
 			  }
 	
 			//verify sufficient resources to perform action
-			  let priceCheck = this.checkCosts(); 
-			  if (priceCheck == "fail-insufficient") {
-				  msg("insufficient base resource to perform action");
+			  let priceCheck = resources.checkCosts(2); 
+			  if (priceCheck.result == "fail") {
+				  msg("insufficient base resource to perform action, " + priceCheck.reason);
 				  return;
 			  }
 			//pay the cost in each source resource
@@ -197,7 +197,7 @@ const resources = {
 				  }
 				  return "pass-sufficient";
 			  }
-		  }  
+		  }
 		},
 		{ name: "choler", //3
 		  label: "Choler",
@@ -223,6 +223,26 @@ const resources = {
 		  isUnlocked: false
 		}
 	],
+	checkCosts: function(x) {
+		let result = { result: "fail", reason: "failed function" };
+		if (!this.stack[x].gatherCost.length > 0) {
+			result = { result: "pass", reason: "no costs" };
+			return result;
+		}
+		let prices = this.stack[x].gatherCost;
+		for (let i = 0; i < prices.length; i++) {
+			let priceName = prices[i].name;
+			let priceCode = resources.findResInStack(priceName);
+			let value = prices[i].amount;
+			if (value > resources.stack[priceCode].current) {
+				result.reason = "insufficient " + priceName;
+				return result;
+			}
+		}
+		result.result = "pass";
+		result.reason = "sufficient resources";
+		return result;	
+	},
 	findResInStack: function(name) {
 		let findName = name;
 		for (let i = 0; i < this.stack.length; i++) {
