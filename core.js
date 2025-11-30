@@ -3,25 +3,7 @@ let resStatus = "visible"; // temporary variable for dev button testing of hidde
 	
 	// ["You have awakened in a new world, and your dark powers have corrupted a small bog. Time to fester..."];
 
-// ---- phase 1 buildings, replace with object stack later ---- //
-
-/* class testClass {
-	constructor() {
-		this.name = "bob";
-		this.testArray = [	
-			{ name: "testing 1", value: 17 },
-			{ name: "testing 2", value: 38 }
-		];
-	}
-	onTestCall() {
-		this.testArray[0].value += 1;
-		msg("successfully called onTestCall. Value of testArray 0 is now " + this.testArray[0].value);
-	}
-	onNameCall() {
-		msg(this.name);
-	}
-} 
-const bollocks = new testClass(); */
+// ---- phase 1 buildings based as object ---- //
 
 const swamp = {
 	name: "swamp",
@@ -35,7 +17,6 @@ const swamp = {
 		  ratio: 1.3,
 		  onPurchase: function() {
 			  this.count += 1;
-			  msg("current count: " + this.count);
 			  this.updateButtonLabel();
 			  this.updateRatio();
 			  resources.stack[0].updateGatherRate();
@@ -88,6 +69,13 @@ const swamp = {
 		  count: 0,
 		  costs: [],
 		  ratio: 1.2
+		},
+		{ name: "nodule",
+		  label: "Nodule",
+		  count: 0,
+		  costs: [],
+		  ratio: 1.2,
+		  isUnlocked: false
 		}
 		],
 	buyBuilding: function(num) {
@@ -99,80 +87,8 @@ const swamp = {
 			payPrice(num);
 			swamp.buildings[num].onPurchase();
 		}
-	//	msg("buyBuilding function complete");
 	}
 }
-
-
-		
-
-/*
-
-const swampBuildings = [
-	{ name: "swell",
-	  label: "Swell",
-	  count: 0,
-	  costs: [
-		  { name: "corruption", amount: 10 }
-		  ],
-	  ratio: 1.3,
-	  onPurchase: function() {
-		  this.count += 1;
-		  msg("current count: " + this.count);
-		  this.updateButtonLabel();
-		  this.updateRatio();
-		  resources.stack[0].updateGatherRate();
-		  resources.stack[0].updateMax();
-		  updateContentCosts(0);
-	  },
-	  updateButtonLabel: function() {
-		  let newLabel = this.label;
-		  if (this.count > 0) {
-			  newLabel = newLabel + " (" + this.count + "m^2)";
-		  }
-		  document.getElementById(this.name + "Label").innerText = newLabel;
-	  },
-	  updateRatio: function() {
-		  for (let i = 0; i < this.costs.length; i++) {
-			  let newAmount = rndPlusThree(this.costs[i].amount * this.ratio);
-			  this.costs[i].amount = newAmount;
-			  msg("new cost for Swell is " + this.costs[i].amount + " " + this.costs[i].name);
-		  }
-	  }
-	},
-	{ name: "pustule",
-	  label: "Pustule",
-	  count: 0,
-	  costs: [
-		  { name: "corruption", amount: 40 }
-	  ],
-	  ratio: 1.2
-	},
-	{ name: "digestor",
-	  label: "Digestor",
-	  count: 0,
-	  costs: [
-		  { name: "corruption", amount: 20 },
-		  { name: "choler", amount: 50 }
-	  ],
-	  ratio: 1.2
-	},
-	{ name: "trap",
-	  label: "Trap",
-	  count: 0,
-	  costs: [
-		  { name: "corruption", amount: 50 },
-		  { name: "choler", amount: 20 }
-	  ],
-	  ratio: 1.2
-	},
-	{ name: "siren",
-	  label: "Siren",
-	  count: 0,
-	  costs: [],
-	  ratio: 1.2
-	}
-]; */
 
 
 // ---- end phase 1 buildings ---- //
@@ -210,10 +126,8 @@ const resources = {
 		  updateMax: function() {
 			  let swl = findBldgInSwamp("swell");
 			  let pus = findBldgInSwamp("pustule");
-			  msg("swl is " + swl + ", and pus is " + pus);
 			  let newMax = 50 + (swamp.buildings[swl].count * 5) + (swamp.buildings[pus].count * 50);
 			  this.max = newMax;
-			  msg("new maximum is logged as " + this.max);
 		  }
 		},
 		{ name: "prey", // 1
@@ -238,8 +152,7 @@ const resources = {
 		  gather: function() {
 			  let totalRes = this.current;
 			//make sure current value is not at maximum
-			  if (totalRes >= this.max) { 
-				  msg("current resource is " + totalRes + ", which is the maximum for this resource.");		  
+			  if (totalRes >= this.max) { 	  
 				  return;
 			  }
 	
@@ -267,7 +180,7 @@ const resources = {
 			  resources.loadResourcePanel(); // need to clean up this code
 		  },
 		  updateGatherRate: function() {
-			  msg("sustanenance rate is " + this.gatherRate + " per click. Not yet defined.");
+			  msg("sustenance rate is " + this.gatherRate + " per click. Not yet defined.");
 		  },
 		  updatePerTick: function() {
 			  this.perTick = 1; // need to define logic.
@@ -338,29 +251,7 @@ const resources = {
 			}
 		}
 	}
-
-	
-	
-
-	
-
 } // --- close resources object --- //
-
-
-function findResInStack(name) {
-	msg("old findResInStack called")
-	resources.findResInStack(name);
-/*	
-	let findName = name;
-//	msg("findResInStack called for " + name);
-	for (let i = 0; i < resourceStack.length; i++) {
-		if (resourceStack[i].name == findName) {
-//			msg("found " + name + " in array index " + i);
-			return i;
-		}
-//		msg("did not find " + name + " in array index " + i);
-	} */
-}
 
 function findBldgInSwamp(name) {
 	let findName = name;
@@ -371,136 +262,22 @@ function findBldgInSwamp(name) {
 	}
 }
 
-/* const resourceStack = [
-	{ name: "corruption", // 0
-	  label: "Corruption",
-	  current: 0,
-	  limited: true,
-	  isUnlocked: true,
-	  max: 50,
-	  perTick: 0,
-	  gatherRate: 1,
-	  gather: function() {
-		  let totalRes = this.current;
-		  totalRes += this.gatherRate;
-		  totalRes = rndPlusThree(totalRes);
-		  if (totalRes >= this.max) {
-			  this.current = this.max;
-		  } else {
-			  this.current = totalRes;
-		  }
-		  resources.loadResource(0); // need to clean up this code
-	  },
-	  updateGatherRate: function() {
-		  this.gatherRate = rndPlusThree(1 + (0.1 * swampBuildings[0].count));
-	  },
-// -- updatePerTick is untested -- //	 
-	  updatePerTick: function() {
-		  this.perTick = 1; // need to define logic.
-		  msg("Amount per tick is now " + this.perTick + " per click.");
-	  },
-	  updateMax: function() {
-		  let swl = findBldgInSwamp("swell");
-		  let pus = findBldgInSwamp("pustule");
-		  msg("swl is " + swl + ", and pus is " + pus);
-		  let newMax = 50 + (swampBuildings[swl].count * 5) + (swampBuildings[pus].count * 50);
-		  this.max = newMax;
-		  msg("new maximum is logged as " + this.max);
-	  }
-	},
-	{ name: "prey", // 1
-	  label: "Prey",
-	  current: 0,
-	  limited: true,
-	  isUnlocked: true,
-	  max: 25,
-	  perTick: 0
-	},
-	{ name: "sustenance", //2
-	  label: "Sustenance",
-	  current: 0,
-	  limited: true,
-	  isUnlocked: false,
-	  max: 40,
-	  perTick: 0,
-	  gatherRate: 1,
-	  gatherCost: [
-		  { name: "prey", amount: 5 }
-		  ],
-	  gather: function() {
-		  let totalRes = this.current;
-		//make sure current value is not at maximum
-		  if (totalRes >= this.max) { 
-			  msg("current resource is " + totalRes + ", which is the maximum for this resource.");		  
-			  return;
-		  }
-
-		//verify sufficient resources to perform action
-		  let priceCheck = this.checkCosts(); 
-		  if (priceCheck == "fail-insufficient") {
-			  msg("insufficient base resource to perform action");
-			  return;
-		  }
-		//pay the cost in each source resource
-		  let prices = this.gatherCost;
-		  for (let i = 0; i < prices.length; i++) {
-			  let priceName = prices[i].name;
-			  let priceCode = resources.findResInStack(priceName);
-			  let value = prices[i].amount;
-			  resources.stack[priceCode].current -= value;
-		  }
-		//update target resource
-		  totalRes += this.gatherRate;
-		  if (totalRes >= this.max) {
-			  this.current = this.max;
-		  } else {
-			  this.current = totalRes;
-		  }
-		  resources.loadResourcePanel(); // need to clean up this code
-	  },
-	  updateGatherRate: function() {
-		  msg("sustanenance rate is " + this.gatherRate + " per click. Not yet defined.");
-	  },
-	  updatePerTick: function() {
-		  this.perTick = 1; // need to define logic.
-		  msg("Amount per tick is now " + this.perTick + " per click.");
-	  },
-	  checkCosts: function() {
-		  let prices = this.gatherCost;
-		  for (let i = 0; i < prices.length; i++) {
-			  let priceName = prices[i].name;
-			  let priceCode = resources.findResInStack(priceName);
-			  let value = prices[i].amount;
-			  if (value > resources.stack[priceCode].current) {
-				  return "fail-insufficient";
-			  }
-			  return "pass-sufficient";
-		  }
-	  }  
-	},
-	{ name: "choler", //3
-	  label: "Choler",
-	  current: 0,
-	  limited: true,
-	  isUnlocked: false,
-	  max: 150,
-	  perTick: 0,
-	  gatherRate: 0
-	}
-]; */
-
 // -- start loading items here -- //
 
-let jsUpdateTime = "11-9 1103am";
+let jsUpdateTime = "11-29 356pm";
 
 // -- end loading items -- //
 
-function updateJStime() { //runs at end of HTML load
+function updateJStime() {
+	loadGame();
+	msg("loadGame called via updateJStime");
+}
+	
+function loadGame() {	//runs at end of HTML load
 	document.getElementById('jsVersion').innerText = jsUpdateTime;
-	msg("You have awakened...");
-//	document.getElementById('messageCurrent').innerText = messageArray.toString();
 	resources.loadResourcePanel();
 	setDevButtons();
+	msg("You have awakened...");
 }
 
 function rndPlusThree(number) {
@@ -509,46 +286,6 @@ function rndPlusThree(number) {
 	return numNum;
 }
 
-function loadResource(resource) {
-	msg("old loadResource called");
-	resources.loadResource(resource);
-/*	
-	let resName = resourceStack[resource].name;
-	let resCurrent = rndPlusThree(resourceStack[resource].current);
-
-	document.getElementById(resName + 'Current').innerText = resCurrent;
-	
-	if (resourceStack[resource].limited) {
-		let resMax = "/" + resourceStack[resource].max;
-		
-		document.getElementById(resName + 'Max').innerText = resMax;
-	} */
-}
-
-function loadResourcePanel() {
-	msg("old loadResourcePanel called");
-	resources.loadResourcePanel();
-	/*
-	for (let i = 0; i < resourceStack.length; i++) {
-		let resName = resourceStack[i].name;
-		let resCurrent = rndPlusThree(resourceStack[i].current);
-
-		if (resourceStack[i].isUnlocked == false) { // temp to test if identification of locked/unlocked is working
-			if (resCurrent > 0) {
-				resourceStack[i].isUnlocked = true;
-				document.getElementById("res" + i + "row").classList.remove("hidden");   // unlock resource if user has any
-			} else { 
-				continue; } // otherwise, stop the iteration and move on to the next resource
-		}
-		document.getElementById(resName + 'Current').innerText = resCurrent;
-		
-		if (resourceStack[i].limited == true) {
-			let resMax = "/" + resourceStack[i].max;
-			
-			document.getElementById(resName + 'Max').innerText = resMax;
-		}
-	}*/
-}
 
 // -- button management and purchase code goes here -- //
 /* buttons should be in the format XXX-0 or XXX-XXXXX:
@@ -575,18 +312,6 @@ function buttonManager(event) {
 	}
 
 }
-
-/* function buyBuilding(num) {
-	let validator = checkPrice(num); 
-	if (validator == "fail-insufficient") {  // should probably be a switch...
-		msg("insufficient resources");
-	}
-	if (validator == "pass-sufficient") {
-		payPrice(num);
-		swamp.buildings[num].onPurchase();
-	}
-//	msg("buyBuilding function complete");
-} */
 
 function checkPrice(num) {
 	msg("checkPrice called with num " + num);
@@ -628,9 +353,6 @@ function updateContentCosts(num) {
 	}
 	document.getElementById("buy-" + num + "-Costs").innerHTML = dispCost;
 }
-		
-
-
 
 // -- end button management and purchase code --//
 
@@ -731,7 +453,7 @@ const dev = [
 		  document.getElementById("dev" + this.name).innerText = this.label;
 	  }
 	},
-/*	{ name: "button1",
+	{ name: "button1",
 	  label: "force calendar days",
 	  run: function() {
 		let devForceDay = calendar.daysPerSeason - 5;
@@ -742,8 +464,8 @@ const dev = [
 	  setLabel: function() {
 		  document.getElementById("dev" + this.name).innerText = this.label;
 	  }
-	}, */
- 	{ name: "button1",
+	},
+ 	{ name: "button2",
 	  label: "adjust run speed",
 	  run: function() {
 		  calendar.adjustRunSpeed();
@@ -752,7 +474,7 @@ const dev = [
 		  document.getElementById("dev" + this.name).innerText = this.label;
 	  }
 	},
-	{ name: "button2",
+	{ name: "button3",
 	  label: "hide/show all resources",
 	  run: function() {
 		  //---- save this code for reference for future panel changes --//
@@ -776,7 +498,7 @@ const dev = [
 	  }
 	},
 	
-	{ name: "button3",
+	{ name: "button4",
 	  label: "add prey",
 	  run: function() {
 		  resources.stack[1].current += 5;
@@ -787,24 +509,16 @@ const dev = [
 		  document.getElementById("dev" + this.name).innerText = this.label;
 	  }
 	},
-	{ name: "button4",
-	  label: "disregard",
-	  run: function() {
-//		  bollocks = null;
-//		  bollocks.onTestCall();
-		  bollocks = new testClass();
-		  msg("done, here's the value of bollocks: " + bollocks.testArray[0].value);
-	  },
+	{ name: "button5",
+	  label: "blank",
+	  run: function() {},
 	  setLabel: function() {
 		  document.getElementById("dev" + this.name).innerText = this.label;
 	  }
 	},
-	{ name: "button5",
-	  label: "DISREGARD test new class thing",
-	  run: function() {
-		  bollocks.onTestCall();
-//		    msg("no function defined for devbutton");
-	  },
+	{ name: "button6",
+	  label: "blank",
+	  run: function() { },
 	  setLabel: function() {
 		  document.getElementById("dev" + this.name).innerText = this.label;
 	  }
