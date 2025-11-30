@@ -225,7 +225,8 @@ const resources = {
 	],
 	checkCosts: function(x) {
 		let result = { result: "fail", reason: "failed function" };
-		if (!this.stack[x].gatherCost.length > 0) {
+//		if (!this.stack[x].gatherCost.length > 0) {
+		if (this.stack[x].gatherCost.length == "undefined") {
 			result = { result: "pass", reason: "no costs" };
 			return result;
 		}
