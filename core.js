@@ -530,13 +530,13 @@ const dev = [
 		  document.getElementById("dev" + this.name).innerText = this.label;
 	  }
 	},
-	{ name: "button6",
+/*	{ name: "button6",
 	  label: "blank",
 	  run: function() { },
 	  setLabel: function() {
 		  document.getElementById("dev" + this.name).innerText = this.label;
 	  }
-	}
+	} */
 ];
 
 function setDevButtons() {
