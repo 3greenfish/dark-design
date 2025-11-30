@@ -151,7 +151,7 @@ const resources = {
 			  ],
 		  gather: function() {
 			  let totalRes = this.current;
-			//make sure current value is not at maximum
+/*			//make sure current value is not at maximum
 			  if (totalRes >= this.max) { 	  
 				  return;
 			  }
@@ -170,12 +170,12 @@ const resources = {
 				  let value = prices[i].amount;
 				  resources.stack[priceCode].current -= value;
 			  }
-			//update target resource
+*/			//update target resource
 			  totalRes += this.gatherRate;
 			  if (totalRes >= this.max) {
 				  this.current = this.max;
 			  } else {
-				  this.current = totalRes;
+				  this.current = rndPlusThree(totalRes);
 			  }
 			  resources.loadResourcePanel(); // need to clean up this code
 		  },
@@ -186,7 +186,7 @@ const resources = {
 			  this.perTick = 1; // need to define logic.
 			  msg("Amount per tick is now " + this.perTick + " per click.");
 		  },
-		  checkCosts: function() {
+	/*	  checkCosts: function() {
 			  let prices = this.gatherCost;
 			  for (let i = 0; i < prices.length; i++) {
 				  let priceName = prices[i].name;
@@ -197,7 +197,7 @@ const resources = {
 				  }
 				  return "pass-sufficient";
 			  }
-		  }
+		  } */
 		},
 		{ name: "choler", //3
 		  label: "Choler",
@@ -250,6 +250,48 @@ const resources = {
 				return i;
 			}
 		}
+	},
+	gatherByName: function(res) {
+		let code = findResInStack(res);
+		gather(code);
+	},		
+	gather: function(code) {
+		let res = this.stack[code];
+		let totalRes = res.current;
+
+		//make sure current value is not at maximum
+		if (totalRes >= res.max) { 	  
+		  return;
+		}
+
+		//check if there are costs, and if sufficient resources exist
+		let check = checkCosts(code);
+		if (check.result == "fail") {
+			msg("checkCosts failed, " + check.reason);
+			return
+		}
+		if (check.result == "pass") {
+			switch (check.reason) {
+				case "no costs":
+					msg("case no costs");
+					break;
+				case "sufficient resources":
+					//now pay the resource costs
+					msg("case sufficient resources");
+					let prices = res.gatherCost;
+					for (let i = 0; i < prices.length; i++) {
+						let priceName = prices[i].name;
+						let priceCode = resources.findResInStack(priceName);
+						let value = prices[i].amount;
+						this.stack[priceCode].current -= value;
+					}
+					break;
+				default:
+					msg("something didn't go right in the switch in gather");
+			}
+			this.stack[code].gather();
+		}
+		
 	},
 	loadResource: function(resource) {
 		let resName = this.stack[resource].name;
@@ -335,7 +377,7 @@ function buttonManager(event) {
 	let lvl2num = Number(lvl2);	
 
 	if (actionCat == "gat") {
-		resources.stack[lvl2num].gather();
+		resources.gather(lvl2num);
 	}
 
 	if (actionCat == "dev") {    //-- if dev button, run code from dev button object --//
