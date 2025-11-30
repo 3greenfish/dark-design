@@ -11,10 +11,6 @@
 	<div id="game">
 		<div class="column" id="leftblock">
 			<!-- look at css grid layout for multiple resources -->
-			
-	<!--		<div class="resource">
-				<div class="resourceName" id="foodName">Food: </div><div class="resourceValue" id="foodCurrent"></div><div class="resourceMax" id="foodmax"></div>
-			</div> -->
 
 			<div class="resource" id="res0row">
 				<div class="resourceName" id="resCorruption">Corruption:</div>
@@ -22,13 +18,6 @@
 				<div class="resourceMax" id="corruptionMax"></div>
 				<div class="resourcePer" id="corruptionPer"></div>
 			</div>
-			
-<!--			<div class="resource" id="res1row">
-				<div class="resourceName" id="resSize">Size:</div>
-				<div class="resourceValue" id="sizeCurrent"></div>
-				<div class="resourceMax" id="sizeMax"></div>
-				<div class="resourcePer" id="sizePer"></div>
-			</div> -->
 
 			<div class="resource" id="res1row">
 				<div class="resourceName" id="resPrey">Prey:</div> 
@@ -52,32 +41,28 @@
 				<div class="resourcePer" id="cholerPer"></div>
 			</div>
 
+			<div class="resource hidden" id="res4row">
+				<div class="resourceName" id="resNative">Natives:</div> 
+				<div class="resourceValue" id="nativeCurrent"></div>
+				<div class="resourceMax" id="nativeMax"></div>
+				<div class="resourcePer" id="nativePer"></div>
+			</div>
 
+			<div class="resource hidden" id="res5row">
+				<div class="resourceName" id="resHost">Hosts:</div> 
+				<div class="resourceValue" id="hostCurrent"></div>
+				<div class="resourceMax" id="hostMax"></div>
+				<div class="resourcePer" id="hostPer"></div>
+			</div>
+
+
+			
 	
 			<!-- NOTES: look at flexwrap for buttons  -->
 		</div>
 			
 		<div class="column" id="midblock">
 			<h1>A Sinister Swamp</h1>
-			<!-- <p>Stuck in the middle with you...</p>
-			<div> <div class="tabbed content">
-			</div>
-			<div class="active" id="placeholder"></div>
-			<div class="panel" id="bingo">
-				<p>Bingo was his name-oh.</p>
-			</div>
-			<div class="panel" id="bongo">
-				<p>Just playing my bongos.</p>
-			</div>
-			<div class="panel" id="Steven">
-				<p>What is Steven doing here?</p>
-			</div> -->
-
-<!--			<button type="button" class="collapsible" data-target="ClickMe" onClick="expandButton(event)">Click Me!</button>
-			<div class="content" id="ClickMeContent">
-				<p>You clicked me, good job.</p>
-			</div> -->
-
 			<div class="buttonMap">
 				<div class="buttonContainer">
 					<div class="collapsible" id="gat-0-collapsible">
@@ -108,8 +93,22 @@
 						<div class="button" data-target="gat-2" onClick="buttonManager(event)">Digest</div>
 					</div>
 				</div>
-				
 
+				<div class="buttonContainer">
+					<div class="collapsible" id="gat-5-collapsible">
+						<div class="buttonLabel" data-target="gat-5" id="gat-5-label" onClick="buttonManager(event)">Corrupt a host</div><div class="notch" data-target="gat-5" onClick="expandButton(event)">&#9776;</div>
+					</div>
+					<div class="content" id="gat-5-content">
+						<p>Use your amassed corruption to transform a captured native into your first host.</p>
+						<p>(Starts phase 2)</p>
+						<hr>
+						<div class="costs" id="gat-5-costs">
+							<div class="bldgCostPriceName">RESOURCE</div><div class="bldgCostRes">DEFAULT AMOUNT</div>
+						</div>
+						<div class="button" data-target="gat-5" onClick="buttonManager(event)">Corrupt a host</div>
+					</div>
+				</div>
+				
 			</div> <!-- end buttonMap -->
 
 <!--  main button template here
@@ -203,77 +202,23 @@
 						<div class="button" data-target="XXX-X" onClick="buttonManager(event)">LABEL</div>
 					</div>
 				</div>
+				<div class="buttonContainer">
+					<div class="collapsible" id="XXX-X-collapsible">
+						<div class="buttonLabel" data-target="gat-# OR buy-#" id="XXX-X-label" onClick="buttonManager(event)">Nodule</div><div class="notch" data-target="XXX-X" onClick="expandButton(event)">&#9776;</div>
+					</div>
+					<div class="content" id="XXX-X-content">
+						<p>DESCRIPTION HERE</p>
+						<hr>
+						<div class="costs" id="XXX-X-costs">
+							<div class="bldgCostPriceName">RESOURCE</div><div class="bldgCostRes">DEFAULT AMOUNT</div>
+						</div>
+						<div class="button" data-target="XXX-X" onClick="buttonManager(event)">Grow a nodule</div>
+					</div>
+				</div>				
 				
 			</div> <!-- end buttonMap for buildings -->
-			
-				
-
-<div>
-	<p>Swell (1m^2)</p>
-	<p>Pustule</p>
-	<p>Trap</p>
-	<p>Digestor</p>
-	<p>Siren</p>
-</div>
-
-	<h1>legacy buttons follow</h1>		
-
-			<div class="collapsible" data-target="gat-0" id="gatherFestButton" onClick="buttonManager(event)">Fester</div>
-			<div class="content" id="gatherFestButtonContent">
-				<p>Generate <span id="corruptionGatherRate">1</span> corruption</p>
-				<div class="button" data-target="gat-0" onClick="buttonManager(event)">Fester!</div>
-			</div>
-
-<!--			<div class="collapsible" data-target="buy-0" id="BuildingSwamp" onClick="buttonManager(event)"><span data-target="buy-0" id="swellLabel">Swell</span></div>
-			<div class="content" id="BuildingSwampContent">
-				<p>Grow your corrupting influence and expand the swamp.</p>
-				<p>Cost: <span id="BuildingSwampCost">10</span> corruption</p>
-				<div class="button" data-target="buy-swamp" onClick="buttonManager(event)">Swell by 1 m^2</div>
-			</div> -->
-
-<!-- TO DO: * define notch class -- change to div and try float right.
-			* once a "check prices" function is available, clicking on the non-notch part of the button should expand the collapsible for visibility on prices.
-			* add functionality to add count of buildings where appropriate
-			-->
-			
-			<div class="collapsible" data-target="gat-2" id="digest" onClick="buttonClick(event)">Digest Prey <span class="notch" data-target="gat-2" onClick="expandButton(event)">M</span></div>
-			<div class="content" id="gat-2Content">
-				<p>Digest <span id="digestCost">1</span> prey to generate <span id="digestGatherRate">1</span> sustenance</p>
-				<div class="button" data-target="buy-swamp" onClick="buttonManager(event)">Digest Prey</div>
-			</div>
-
-
-
-			
-			
-			<div class="collapsible" data-type="gather" data-target="GatherFood" id="GatherFoodButton" onClick="buttonClick(event,1)">Gather Food</div>
-				
-
-			<div class="collapsible" data-target="BuildingFarm" ID="BuildingFarm" onClick="expandButton(event)">Farm</div>
-			<div class="content" id="BuildingFarmContent">
-				<p>Build a farm to generate food automatically.</p>
-				<p>Cost: 10 Food</p>
-				<div class="button" data-target="Activated" onClick="postMessage(event)">Buy Farm</div>
-			</div>
-
-			<div class="collapsible" data-target="TestDiv2" id="TestDiv2" onClick="expandButton(event)">test div collapsible</div>
-			<div class="content" id="TestDiv2Content">
-				<p>You clicked me, good job.</p>
-			</div>
-
-			<div class="collapsible" data-target="TestDiv3" id="TestDiv3" onClick="expandButton(event)">test div collapsible</div>
-			<div class="content" id="TestDiv3Content">
-				<p>You clicked me, good job.</p>
-				<div class="button" data-target="messagetest" onClick="_PostMessage('clicked')">Try the message</div>
-			</div>
-
-
-
 		</div>  <!-- end midblock -->
-		
-		
-		
-		
+				
 		<div id="rightblock" class="column">
 			<div id="calendarBlock">default</div>
 			<div id="devButtons">
@@ -297,7 +242,7 @@
 		
 		</div>
 	</div>
-<script>updateJStime();</script>
+<script>loadGame();</script>
 	
 </body>
 </html>
