@@ -144,6 +144,7 @@ nav {
 	margin: 3px;
 	padding: 0px;
 	border: none; /* 1px solid #dddddd; */
+	position: relative;
 }
 
 .collapsible {
@@ -202,6 +203,9 @@ nav {
 	max-height: 0;
 	transition: max-height 0.2s ease-out;
 	font-size: 80%;
+	position: absolute;
+	top: 48px;
+	z-index: 5;
 }
 
 .costs {
