@@ -252,8 +252,8 @@ const resources = {
 		}
 	},
 	gatherByName: function(res) {
-		let code = findResInStack(res);
-		gather(code);
+		let code = this.findResInStack(res);
+		this.gather(code);
 	},		
 	gather: function(code) {
 		let res = this.stack[code];
@@ -265,7 +265,7 @@ const resources = {
 		}
 
 		//check if there are costs, and if sufficient resources exist
-		let check = checkCosts(code);
+		let check = this.checkCosts(code);
 		if (check.result == "fail") {
 			msg("checkCosts failed, " + check.reason);
 			return
