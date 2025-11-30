@@ -206,6 +206,9 @@ nav {
 	position: absolute;
 	top: 48px;
 	z-index: 5;
+	user-select: none;
+	-webkit-user-select: none;
+	-ms-user-select: none;
 }
 
 .costs {
@@ -229,6 +232,9 @@ nav {
 	background-color: #dddddd;
 	margin: 5px;
 	padding: 2px;
+	user-select: none;
+	-webkit-user-select: none;
+	-ms-user-select: none;
 }
 
 
