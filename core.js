@@ -207,6 +207,20 @@ const resources = {
 		  max: 150,
 		  perTick: 0,
 		  gatherRate: 0
+		},
+		{ name: "native", //4
+		  // need to build in way to change based upon phase -- native > subject > citizen > ??
+		  label: "Native",
+		  current: 0,
+		  limited: false,
+		  isUnlocked: false
+		},
+		{ name: "host", //5
+		 	// hosts are controllable by the player in phase 2
+		  label: "Hosts",
+		  current: 0,
+		  limited: false,
+		  isUnlocked: false
 		}
 	],
 	findResInStack: function(name) {
