@@ -82,7 +82,7 @@ nav {
 	border: 1px dotted red;
 	vertical-align: top;
 	position: relative;
-	overflow-y: hidden;
+/*	overflow-y: hidden; */
 }	
 
 
