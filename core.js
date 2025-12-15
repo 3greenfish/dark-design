@@ -174,7 +174,13 @@ const resources = {
 		  limited: true,
 		  isUnlocked: true,
 		  max: 25,
-		  perTick: 0
+		  perTick: 0,
+		  gatherChance: 0,
+		  gather: function() {
+			  let totalRes = this.current;
+			  let chance = this.gatherChance;
+			  
+		  }
 		},
 		{ name: "sustenance", //2
 		  label: "Sustenance",
@@ -228,7 +234,12 @@ const resources = {
 		  label: "Hosts",
 		  current: 0,
 		  limited: false,
-		  isUnlocked: false
+		  isUnlocked: false,
+		  gatherRate: 1,
+		  gatherCost: [
+			  { name: "corruption", amount: 2000 },
+			  { name: "native", amount: 1 }
+			  ]
 		}
 	],
 	checkCosts: function(x) {
