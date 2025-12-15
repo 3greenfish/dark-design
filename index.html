@@ -162,11 +162,25 @@
 				</div>
 
 				<div class="buttonContainer">
+					<div class="collapsible" id="buy-2-collapsible">
+						<div class="buttonLabel" data-target="buy-2" id="digestorlabel" onClick="buttonManager(event)">Digestor</div><div class="notch" data-target="buy-2" onClick="expandButton(event)">&#9776;</div>
+					</div>
+					<div class="content" id="buy-2-content">
+						<p>This organ will automatically process captured prey into sustenance.</p>
+						<hr>
+						<div class="costs" id="buy-2-Costs">
+							<div class="bldgCostPriceName">RESOURCE</div><div class="bldgCostRes">DEFAULT AMOUNT</div>
+						</div>
+						<div class="button" data-target="buy-2" onClick="buttonManager(event)">LABEL</div>
+					</div>
+				</div>
+
+				<div class="buttonContainer">
 					<div class="collapsible" id="buy-3-collapsible">
-						<div class="buttonLabel" data-target="buy-3" id="digestorlabel" onClick="buttonManager(event)">Digestor</div><div class="notch" data-target="buy-3" onClick="expandButton(event)">&#9776;</div>
+						<div class="buttonLabel" data-target="buy-3" id="preylabel" onClick="buttonManager(event)">Trap</div><div class="notch" data-target="buy-3" onClick="expandButton(event)">&#9776;</div>
 					</div>
 					<div class="content" id="buy-3-content">
-						<p>This organ will automatically process captured prey into sustenance.</p>
+						<p>Sticky traps improve your ability to capture prey, and have a small chance to capture prey automatically.</p>
 						<hr>
 						<div class="costs" id="buy-3-Costs">
 							<div class="bldgCostPriceName">RESOURCE</div><div class="bldgCostRes">DEFAULT AMOUNT</div>
@@ -177,10 +191,10 @@
 
 				<div class="buttonContainer">
 					<div class="collapsible" id="buy-4-collapsible">
-						<div class="buttonLabel" data-target="buy-4" id="preylabel" onClick="buttonManager(event)">Trap</div><div class="notch" data-target="buy-4" onClick="expandButton(event)">&#9776;</div>
+						<div class="buttonLabel" data-target="buy-4" id="sirenlabel" onClick="buttonManager(event)">Siren</div><div class="notch" data-target="buy-4" onClick="expandButton(event)">&#9776;</div>
 					</div>
 					<div class="content" id="buy-4-content">
-						<p>Sticky traps improve your ability to capture prey, and have a small chance to capture prey automatically.</p>
+						<p>Sirens lure in advance lifeforms. It's time to find a host!</p>
 						<hr>
 						<div class="costs" id="buy-4-Costs">
 							<div class="bldgCostPriceName">RESOURCE</div><div class="bldgCostRes">DEFAULT AMOUNT</div>
@@ -188,31 +202,17 @@
 						<div class="button" data-target="buy-4" onClick="buttonManager(event)">LABEL</div>
 					</div>
 				</div>
-
 				<div class="buttonContainer">
 					<div class="collapsible" id="buy-5-collapsible">
-						<div class="buttonLabel" data-target="buy-5" id="sirenlabel" onClick="buttonManager(event)">Siren</div><div class="notch" data-target="buy-5" onClick="expandButton(event)">&#9776;</div>
+						<div class="buttonLabel" data-target="buy-5" id="nodulelabel" onClick="buttonManager(event)">Nodule</div><div class="notch" data-target="buy-5" onClick="expandButton(event)">&#9776;</div>
 					</div>
 					<div class="content" id="buy-5-content">
-						<p>Sirens lure in advance lifeforms. It's time to find a host!</p>
+						<p>Grow a nodule to increase your total corruption.</p>
 						<hr>
 						<div class="costs" id="buy-5-Costs">
 							<div class="bldgCostPriceName">RESOURCE</div><div class="bldgCostRes">DEFAULT AMOUNT</div>
 						</div>
-						<div class="button" data-target="buy-5" onClick="buttonManager(event)">LABEL</div>
-					</div>
-				</div>
-				<div class="buttonContainer">
-					<div class="collapsible" id="buy-6-collapsible">
-						<div class="buttonLabel" data-target="buy-6" id="nodulelabel" onClick="buttonManager(event)">Nodule</div><div class="notch" data-target="buy-6" onClick="expandButton(event)">&#9776;</div>
-					</div>
-					<div class="content" id="buy-6-content">
-						<p>Grow a nodule to increase your total corruption.</p>
-						<hr>
-						<div class="costs" id="buy-6-Costs">
-							<div class="bldgCostPriceName">RESOURCE</div><div class="bldgCostRes">DEFAULT AMOUNT</div>
-						</div>
-						<div class="button" data-target="buy-6" onClick="buttonManager(event)">Grow a nodule</div>
+						<div class="button" data-target="buy-5" onClick="buttonManager(event)">Grow a nodule</div>
 					</div>
 				</div>				
 				
