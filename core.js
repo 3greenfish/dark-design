@@ -55,12 +55,12 @@ const swamp = {
 			  updateContentCosts(1);
 		  },
 		  fillPus: function(x) {
-			  msg("fillPus called with value " + x);
+			//  msg("fillPus called with value " + x);
 			  let sus = x;    //sustenance available
 			  let spent = 0;
 			  let count = this.unfilled.length; //get total number of unfilled pustules
 			  if (count < 1) { 
-				  msg("no empty pustules to fill");
+				 // msg("no empty pustules to fill");
 				  return 0;
 			  };
 			  for (let i = 0; i < count; i++) {
@@ -256,6 +256,7 @@ const resources = {
 		},
 		{ name: "native", //4
 		  // need to build in way to change based upon phase -- native > subject > citizen > ??
+		  // try making label a function, add a switch based upon phase
 		  label: "Native",
 		  current: 0,
 		  limited: false,
@@ -578,10 +579,10 @@ const calendar = {
 		document.getElementById("calendarBlock").style.display = "block";
 	},
 	adjustRunSpeed: function() {
-		if (this.runSpeed == 4000) {
+		if (this.runSpeed == 2000) {
 			this.runSpeed = 500;
 		} else {
-			this.runSpeed = 4000;
+			this.runSpeed = 2000;
 		}
 		clearInterval(gameTimer);
 		gameTimer = setInterval(tick, this.runSpeed);
