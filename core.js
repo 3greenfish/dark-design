@@ -479,6 +479,7 @@ function payPrice(num) {
 }
 
 function loadAllContentCosts() {
+	msg("load all content costs called");
 	for (let i = 0; i < swamp.buildings.length; i++) {
 		updateContentCosts(i);
 	}
