@@ -90,7 +90,7 @@ const swamp = {
 		  updateButtonLabel: function() {
 			  let newLabel = this.label;
 				  if (this.count > 0) {
-				  newLabel = newLabel + " (" + this.unfilled.length + "/" + this.filled + ")";
+				  newLabel = newLabel + " (" + this.filled + "/" + this.count + ")";
 			  }
 			  document.getElementById(this.name + "Label").innerText = newLabel;
 		  }
