@@ -44,7 +44,45 @@ const swamp = {
 		  costs: [
 			  { name: "corruption", amount: 40 }
 		  ],
-		  ratio: 1.2
+		  ratio: 1.2,
+		  filled: 0,
+		  unfilled: [],
+		  onPurchase: function() {
+			  this.unfilled.push({ level: 0 });
+			  this.count += 1;
+			  this.updateButtonLabel();
+		  },
+		  fillPus: function(x) {
+			  msg("fillPus called with value " + x);
+			  let sus = math.floor(x);    //get integer form of sustenance available
+			  let spent = 0;
+			  let count = this.unfilled.length; //get total number of unfilled pustules
+			  if (count < 1) { 
+				  msg("no empty pustules to fill");
+				  return 0;
+			  };
+			  for (let i = 0; i < count; i++) {
+				  if (sus < 1) { 
+					  break;
+				  }
+				  this.unfilled[i].level += 1;
+				  sus -= 1;
+				  spent += 1;
+				  if (this.unfilled[i].level >= 30) {
+					  this.filled += 1;
+					  this.unfilled.shift();
+					  this.updateButtonLabel();
+				  }
+			  }
+			 return spent;
+		  },
+		  updateButtonLabel: function() {
+			  let newLabel = this.label;
+				  if (this.count > 0) {
+				  newLabel = newLabel + " (" + this.unfilled.length + "/" + this.filled + ")";
+			  }
+			  document.getElementById(this.name + "Label").innerText = newLabel;
+		  }
 		},
 		{ name: "digestor",
 		  label: "Digestor",
