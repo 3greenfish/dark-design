@@ -482,6 +482,10 @@ function loadAllContentCosts() {
 	msg("load all content costs called");
 	for (let i = 0; i < swamp.buildings.length; i++) {
 		msg("loading " + i);
+		if (document.getElementById("buy-" + i + "-Costs") == null) {
+			msg("could not find element buy-" + i + "-Costs");
+			continue;
+		}
 		updateContentCosts(i);
 	}
 }
