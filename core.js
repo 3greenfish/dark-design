@@ -54,7 +54,7 @@ const swamp = {
 		  },
 		  fillPus: function(x) {
 			  msg("fillPus called with value " + x);
-			  let sus = math.floor(x);    //get integer form of sustenance available
+			  let sus = x;    //sustenance available
 			  let spent = 0;
 			  let count = this.unfilled.length; //get total number of unfilled pustules
 			  if (count < 1) { 
@@ -74,7 +74,7 @@ const swamp = {
 					  this.updateButtonLabel();
 				  }
 			  }
-			 return spent;
+			  return spent;
 		  },
 		  popPustule: function(count) {
 			  if (!this.filled > 0) {
@@ -378,7 +378,13 @@ const resources = {
 		}
 	},
 	updatePerTick: function() {
-		
+		// a bunch of stuff is needed here to calculate pertick values for all resources
+		// likely a for loop
+		// the code below is specifically for pustules and sustenance only
+		let perTickValue = 0;
+		let availableSus = this.stack[2].current + perTickValue;
+		let subtract = swamp.buildings[1].fillPus(availableSus);
+		this.stack[2].current = this.stack[2].current + perTickValue - subtract;
 	}
 } // --- close resources object --- //
 
