@@ -76,6 +76,15 @@ const swamp = {
 			  }
 			 return spent;
 		  },
+		  popPustule: function(count) {
+			  if (!this.filled > 0) {
+				  return
+			  } else {
+				  this.filled -= 1;
+				  this.unfilled.push({ level: 0 });
+				  resources.gatherByName("choler");
+			  }  
+		  },
 		  updateButtonLabel: function() {
 			  let newLabel = this.label;
 				  if (this.count > 0) {
@@ -175,11 +184,22 @@ const resources = {
 		  isUnlocked: true,
 		  max: 25,
 		  perTick: 0,
-		  gatherChance: 0,
+		  gatherChance: 0.25,
 		  gather: function() {
 			  let totalRes = this.current;
 			  let chance = this.gatherChance;
-			  
+			  if (chance >= Math.random()) {
+				  totalRes += 1;
+				  msg("you have captured prey!");
+			  }
+			  else {
+				  msg("you have failed to capture any prey");
+			  }
+			  if (totalRes >= this.max) {
+				  this.current = this.max;
+			  } else {
+				  this.current = rndPlusThree(totalRes);
+			  }
 		  }
 		},
 		{ name: "sustenance", //2
@@ -211,7 +231,7 @@ const resources = {
 		  updatePerTick: function() {
 			  this.perTick = 1; // need to define logic.
 			  msg("Amount per tick is now " + this.perTick + " per click.");
-		  },
+		  }
 		},
 		{ name: "choler", //3
 		  label: "Choler",
@@ -220,7 +240,17 @@ const resources = {
 		  isUnlocked: false,
 		  max: 150,
 		  perTick: 0,
-		  gatherRate: 0
+		  gatherRate: 30,
+		  gather: function() {
+			  let totalRes = this.current;
+			  totalRes =+ this.gatherRate;
+
+			  if (totalRes >= this.max) {
+				  this.current = this.max;
+			  } else {
+				  this.current = rndPlusThree(totalRes);
+			  }
+		  }
 		},
 		{ name: "native", //4
 		  // need to build in way to change based upon phase -- native > subject > citizen > ??
@@ -346,6 +376,9 @@ const resources = {
 				document.getElementById(resName + 'Max').innerText = resMax;
 			}
 		}
+	},
+	updatePerTick: function() {
+		
 	}
 } // --- close resources object --- //
 
@@ -635,6 +668,7 @@ let gameTimer = setInterval(tick, calendar.runSpeed);
 
 function tick() {
 //	msg("tick");
+	resources.updatePerTick();
 	resources.loadResourcePanel();
 	calendar.updateCal();
 }
