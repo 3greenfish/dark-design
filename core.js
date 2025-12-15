@@ -8,7 +8,7 @@ let resStatus = "visible"; // temporary variable for dev button testing of hidde
 const swamp = {
 	name: "swamp",
 	buildings: [
-		{ name: "swell",
+		{ name: "swell",    //0
 		  label: "Swell",
 		  count: 0,
 		  costs: [
@@ -38,13 +38,62 @@ const swamp = {
 			  }
 		  }
 		},
-		{ name: "pustule",
+		{ name: "pustule",     //1
 		  label: "Pustule",
 		  count: 0,
 		  costs: [
 			  { name: "corruption", amount: 40 }
 		  ],
-		  ratio: 1.2
+		  ratio: 1.2,
+		  filled: 0,
+		  unfilled: [],
+		  onPurchase: function() {
+			  this.unfilled.push({ level: 0 });
+			  this.count += 1;
+			  this.updateButtonLabel();
+			  this.updateRatio();
+			  updateContentCosts(1);
+		  },
+		  fillPus: function(x) {
+			//  msg("fillPus called with value " + x);
+			  let sus = x;    //sustenance available
+			  let spent = 0;
+			  let count = this.unfilled.length; //get total number of unfilled pustules
+			  if (count < 1) { 
+				 // msg("no empty pustules to fill");
+				  return 0;
+			  };
+			  for (let i = 0; i < count; i++) {
+				  if (sus < 1) { 
+					  break;
+				  }
+				  this.unfilled[i].level += 1;
+				  sus -= 1;
+				  spent += 1;
+				  if (this.unfilled[i].level >= 30) {
+					  this.filled += 1;
+					  this.unfilled.shift();
+					  this.updateButtonLabel();
+				  }
+			  }
+			  return spent;
+		  },
+		  popPustule: function(count) {
+			  if (!this.filled > 0) {
+				  return
+			  } else {
+				  this.filled -= 1;
+				  this.unfilled.push({ level: 0 });
+				  resources.gatherByName("choler");
+			  }  
+		  },
+		  updateButtonLabel: function() {
+			  let newLabel = this.label;
+				  if (this.count > 0) {
+				  newLabel = newLabel + " (" + this.filled + "/" + this.count + ")";
+			  }
+			  document.getElementById(this.name + "Label").innerText = newLabel;
+		  }
 		},
 		{ name: "digestor",
 		  label: "Digestor",
@@ -136,7 +185,24 @@ const resources = {
 		  limited: true,
 		  isUnlocked: true,
 		  max: 25,
-		  perTick: 0
+		  perTick: 0,
+		  gatherChance: 0.25,
+		  gather: function() {
+			  let totalRes = this.current;
+			  let chance = this.gatherChance;
+			  if (chance >= Math.random()) {
+				  totalRes += 1;
+				  msg("you have captured prey!");
+			  }
+			  else {
+				  msg("you have failed to capture any prey");
+			  }
+			  if (totalRes >= this.max) {
+				  this.current = this.max;
+			  } else {
+				  this.current = rndPlusThree(totalRes);
+			  }
+		  }
 		},
 		{ name: "sustenance", //2
 		  label: "Sustenance",
@@ -167,7 +233,7 @@ const resources = {
 		  updatePerTick: function() {
 			  this.perTick = 1; // need to define logic.
 			  msg("Amount per tick is now " + this.perTick + " per click.");
-		  },
+		  }
 		},
 		{ name: "choler", //3
 		  label: "Choler",
@@ -176,10 +242,21 @@ const resources = {
 		  isUnlocked: false,
 		  max: 150,
 		  perTick: 0,
-		  gatherRate: 0
+		  gatherRate: 30,
+		  gather: function() {
+			  let totalRes = this.current;
+			  totalRes =+ this.gatherRate;
+
+			  if (totalRes >= this.max) {
+				  this.current = this.max;
+			  } else {
+				  this.current = rndPlusThree(totalRes);
+			  }
+		  }
 		},
 		{ name: "native", //4
 		  // need to build in way to change based upon phase -- native > subject > citizen > ??
+		  // try making label a function, add a switch based upon phase
 		  label: "Native",
 		  current: 0,
 		  limited: false,
@@ -190,7 +267,12 @@ const resources = {
 		  label: "Hosts",
 		  current: 0,
 		  limited: false,
-		  isUnlocked: false
+		  isUnlocked: false,
+		  gatherRate: 1,
+		  gatherCost: [
+			  { name: "corruption", amount: 2000 },
+			  { name: "native", amount: 1 }
+			  ]
 		}
 	],
 	checkCosts: function(x) {
@@ -238,17 +320,17 @@ const resources = {
 		//check if there are costs, and if sufficient resources exist
 		let check = this.checkCosts(code);
 		if (check.result == "fail") {
-			msg("checkCosts failed, " + check.reason);
+			//msg("checkCosts failed, " + check.reason);
 			return
 		}
 		if (check.result == "pass") {
 			switch (check.reason) {
 				case "no costs":
-					msg("case no costs");
+					//msg("case no costs");
 					break;
 				case "sufficient resources":
 					//now pay the resource costs
-					msg("case sufficient resources");
+					//msg("case sufficient resources");
 					let prices = res.gatherCost;
 					for (let i = 0; i < prices.length; i++) {
 						let priceName = prices[i].name;
@@ -297,6 +379,15 @@ const resources = {
 				document.getElementById(resName + 'Max').innerText = resMax;
 			}
 		}
+	},
+	updatePerTick: function() {
+		// a bunch of stuff is needed here to calculate pertick values for all resources
+		// likely a for loop
+		// the code below is specifically for pustules and sustenance only
+		let perTickValue = 0;
+		let availableSus = this.stack[2].current + perTickValue;
+		let subtract = swamp.buildings[1].fillPus(availableSus);
+		this.stack[2].current = this.stack[2].current + perTickValue - subtract;
 	}
 } // --- close resources object --- //
 
@@ -324,6 +415,7 @@ function loadGame() {	//runs at end of HTML load
 	document.getElementById('jsVersion').innerText = jsUpdateTime;
 	resources.loadResourcePanel();
 	setDevButtons();
+	loadAllContentCosts();
 	msg("You have awakened...");
 }
 
@@ -361,7 +453,7 @@ function buttonManager(event) {
 }
 
 function checkPrice(num) {
-	msg("checkPrice called with num " + num);
+	//msg("checkPrice called with num " + num);
 	let prices = swamp.buildings[num].costs;
 	for (let i = 0; i < prices.length; i++) {
 		let priceName = prices[i].name;
@@ -387,8 +479,20 @@ function payPrice(num) {
 //	msg("payPrice completed");
 }
 
+function loadAllContentCosts() {
+	//msg("load all content costs called");
+	for (let i = 0; i < swamp.buildings.length; i++) {
+		//msg("loading " + i);
+		if (document.getElementById("buy-" + i + "-Costs") == null) {
+			msg("could not find element buy-" + i + "-Costs");
+			continue;
+		}
+		updateContentCosts(i);
+	}
+}
+
 function updateContentCosts(num) {
-	msg("updateContentCosts called");
+	//msg("updateContentCosts called");
 	let prices = swamp.buildings[num].costs;
 	let dispCost = "";
 	for (let i = 0; i < prices.length; i++) {
@@ -475,10 +579,10 @@ const calendar = {
 		document.getElementById("calendarBlock").style.display = "block";
 	},
 	adjustRunSpeed: function() {
-		if (this.runSpeed == 4000) {
+		if (this.runSpeed == 2000) {
 			this.runSpeed = 500;
 		} else {
-			this.runSpeed = 4000;
+			this.runSpeed = 2000;
 		}
 		clearInterval(gameTimer);
 		gameTimer = setInterval(tick, this.runSpeed);
@@ -586,6 +690,7 @@ let gameTimer = setInterval(tick, calendar.runSpeed);
 
 function tick() {
 //	msg("tick");
+	resources.updatePerTick();
 	resources.loadResourcePanel();
 	calendar.updateCal();
 }
