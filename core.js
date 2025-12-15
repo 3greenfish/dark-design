@@ -320,17 +320,17 @@ const resources = {
 		//check if there are costs, and if sufficient resources exist
 		let check = this.checkCosts(code);
 		if (check.result == "fail") {
-			msg("checkCosts failed, " + check.reason);
+			//msg("checkCosts failed, " + check.reason);
 			return
 		}
 		if (check.result == "pass") {
 			switch (check.reason) {
 				case "no costs":
-					msg("case no costs");
+					//msg("case no costs");
 					break;
 				case "sufficient resources":
 					//now pay the resource costs
-					msg("case sufficient resources");
+					//msg("case sufficient resources");
 					let prices = res.gatherCost;
 					for (let i = 0; i < prices.length; i++) {
 						let priceName = prices[i].name;
@@ -453,7 +453,7 @@ function buttonManager(event) {
 }
 
 function checkPrice(num) {
-	msg("checkPrice called with num " + num);
+	//msg("checkPrice called with num " + num);
 	let prices = swamp.buildings[num].costs;
 	for (let i = 0; i < prices.length; i++) {
 		let priceName = prices[i].name;
@@ -480,9 +480,9 @@ function payPrice(num) {
 }
 
 function loadAllContentCosts() {
-	msg("load all content costs called");
+	//msg("load all content costs called");
 	for (let i = 0; i < swamp.buildings.length; i++) {
-		msg("loading " + i);
+		//msg("loading " + i);
 		if (document.getElementById("buy-" + i + "-Costs") == null) {
 			msg("could not find element buy-" + i + "-Costs");
 			continue;
@@ -492,7 +492,7 @@ function loadAllContentCosts() {
 }
 
 function updateContentCosts(num) {
-	msg("updateContentCosts called");
+	//msg("updateContentCosts called");
 	let prices = swamp.buildings[num].costs;
 	let dispCost = "";
 	for (let i = 0; i < prices.length; i++) {
