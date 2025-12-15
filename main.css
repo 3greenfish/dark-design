@@ -82,7 +82,7 @@ nav {
 	border: 1px dotted red;
 	vertical-align: top;
 	position: relative;
-	overflow-y: hidden;
+/*	overflow-y: hidden; */
 }	
 
 
@@ -144,6 +144,7 @@ nav {
 	margin: 3px;
 	padding: 0px;
 	border: none; /* 1px solid #dddddd; */
+	position: relative;
 }
 
 .collapsible {
@@ -202,6 +203,12 @@ nav {
 	max-height: 0;
 	transition: max-height 0.2s ease-out;
 	font-size: 80%;
+	position: absolute;
+	top: 48px;
+	z-index: 5;
+	user-select: none;
+	-webkit-user-select: none;
+	-ms-user-select: none;
 }
 
 .costs {
@@ -225,6 +232,9 @@ nav {
 	background-color: #dddddd;
 	margin: 5px;
 	padding: 2px;
+	user-select: none;
+	-webkit-user-select: none;
+	-ms-user-select: none;
 }
 
 
