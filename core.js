@@ -8,7 +8,7 @@ let resStatus = "visible"; // temporary variable for dev button testing of hidde
 const swamp = {
 	name: "swamp",
 	buildings: [
-		{ name: "swell",
+		{ name: "swell",    //0
 		  label: "Swell",
 		  count: 0,
 		  costs: [
@@ -38,7 +38,7 @@ const swamp = {
 			  }
 		  }
 		},
-		{ name: "pustule",
+		{ name: "pustule",     //1
 		  label: "Pustule",
 		  count: 0,
 		  costs: [
@@ -51,6 +51,8 @@ const swamp = {
 			  this.unfilled.push({ level: 0 });
 			  this.count += 1;
 			  this.updateButtonLabel();
+			  this.updateRatio();
+			  updateContentCosts(1);
 		  },
 		  fillPus: function(x) {
 			  msg("fillPus called with value " + x);
@@ -412,6 +414,7 @@ function loadGame() {	//runs at end of HTML load
 	document.getElementById('jsVersion').innerText = jsUpdateTime;
 	resources.loadResourcePanel();
 	setDevButtons();
+	loadAllContentCosts();
 	msg("You have awakened...");
 }
 
@@ -473,6 +476,12 @@ function payPrice(num) {
 	}
 	resources.loadResourcePanel();
 //	msg("payPrice completed");
+}
+
+function loadAllContentCosts() {
+	for (let i = 0; i < swamp.buildings.length; i++) {
+		updateContentCosts(i);
+	}
 }
 
 function updateContentCosts(num) {
