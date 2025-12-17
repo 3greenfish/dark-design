@@ -157,7 +157,7 @@ nav {
 	border: 1px solid blue;
 	text-align: left;
 	outline: none;
-	border-radius: 10px;
+	/* border-radius: 10px; */
 	user-select: none;
 	-webkit-user-select: none;
 	-ms-user-select: none;
@@ -203,14 +203,14 @@ nav {
 	padding: 0;
 	vertical-align: baseline;
 	position: relative;
-	border-radius: 0 0 10px 10px
+/*	border-radius: 0 0 10px 10px */
 }
 
 #pustuleProgress {
 	height: 5px;
 	background-color: green;
 	width: 50%;
-	border-radius: 0 0 10px 10px;
+/*	border-radius: 0 0 10px 10px; */
 }
 
 .content {
@@ -223,7 +223,7 @@ nav {
 	border-bottom: 1px solid black;
 	border-left: 1px solid black;
 	border-right: 1px solid black;
-	border-radius: 0 0 10px 10px;
+/*	border-radius: 0 0 10px 10px; */
 	max-height: 0;
 	transition: max-height 0.2s ease-out;
 	font-size: 80%;
