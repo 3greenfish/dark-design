@@ -73,11 +73,12 @@ const swamp = {
 						  this.updateButtonLabel();
 					  }
 				  }
+				  msg("for loop completed in fillPus");
 			  }
 
 			  let newCount = this.unfilled.length;
 			  let progWidth = 0;
-			  if (newcount > 0) {
+			  if (newCount > 0) {
 				  progWidth = this.unfilled[0].level * 3.3;
 			  } 
 
@@ -441,7 +442,7 @@ function rndPlusThree(number) {
  * alternatively, maybe everything is a buy action but some don't have costs?? */
 
 function buttonManager(event) {
-//	msg("button pressed");
+	msg("button pressed");
 	let sourceButton = event.target.getAttribute('data-target');
 	let actionCat = sourceButton.slice(0 , 3);
 	let lvl2 = sourceButton.slice(4);
