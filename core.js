@@ -76,6 +76,11 @@ const swamp = {
 					  this.updateButtonLabel();
 				  }
 			  }
+
+			  let progWidth = this.unfilled[0].level * 3.3;
+			  msg("progWidth is " + progWidth);
+			  document.getElementById("pustuleProgress").style.width = progWidth + "%";
+			  
 			  return spent;
 		  },
 		  popPustule: function(count) {
