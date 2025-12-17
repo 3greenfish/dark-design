@@ -55,7 +55,7 @@ const swamp = {
 			  updateContentCosts(1);
 		  },
 		  fillPus: function(x) {
-			//  msg("fillPus called with value " + x);
+			  msg("fillPus called with value " + x);
 			  let sus = x;    //sustenance available
 			  let spent = 0;
 			  let count = this.unfilled.length; //get total number of unfilled pustules
@@ -74,12 +74,12 @@ const swamp = {
 					  }
 				  }
 			  }
+
 			  let newCount = this.unfilled.length;
+			  let progWidth = 0;
 			  if (newcount > 0) {
-				  let progWidth = this.unfilled[0].level * 3.3;
-			  } else {
-				  let progWidth = 0;
-			  }
+				  progWidth = this.unfilled[0].level * 3.3;
+			  } 
 
 			  msg("progWidth is " + progWidth);
 			  document.getElementById(this.name + "Progress").style.width = progWidth + "%";
