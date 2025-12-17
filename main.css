@@ -193,7 +193,7 @@ nav {
 	width: 164px;
 	border: none; /*1px solid black; */
 	margin: 0px;
-	padding: 10px 0px 5px 10px;
+	padding: 10px 0px 7px 10px;
 	display: inline-block;
 }	
 
@@ -207,9 +207,9 @@ nav {
 }
 
 #pustuleProgress {
-	height: 5px;
+	height: 3px;
 	background-color: green;
-	width: 50%;
+	width: 10%;
 /*	border-radius: 0 0 10px 10px; */
 }
 
