@@ -59,27 +59,30 @@ const swamp = {
 			  let sus = x;    //sustenance available
 			  let spent = 0;
 			  let count = this.unfilled.length; //get total number of unfilled pustules
-			  if (count < 1) { 
-				 // msg("no empty pustules to fill");
-				  return 0;
-			  };
-			  for (let i = 0; i < count; i++) {
-				  if (sus < 1) { 
-					  break;
-				  }
-				  this.unfilled[i].level += 1;
-				  sus -= 1;
-				  spent += 1;
-				  if (this.unfilled[i].level >= 30) {
-					  this.filled += 1;
-					  this.unfilled.shift();
-					  this.updateButtonLabel();
+			  if (count > 0) {
+				  for (let i = 0; i < count; i++) {
+					  if (sus < 1) { 
+						  break;
+					  }
+					  this.unfilled[i].level += 1;
+					  sus -= 1;
+					  spent += 1;
+					  if (this.unfilled[i].level >= 30) {
+						  this.filled += 1;
+						  this.unfilled.shift();
+						  this.updateButtonLabel();
+					  }
 				  }
 			  }
+			  let newCount = this.unfilled.length;
+			  if (newcount > 0) {
+				  let progWidth = this.unfilled[0].level * 3.3;
+			  } else {
+				  let progWidth = 0;
+			  }
 
-			  let progWidth = this.unfilled[0].level * 3.3;
 			  msg("progWidth is " + progWidth);
-			  document.getElementById("pustuleProgress").style.width = progWidth + "%";
+			  document.getElementById(this.name + "Progress").style.width = progWidth + "%";
 			  
 			  return spent;
 		  },
@@ -444,7 +447,25 @@ function buttonManager(event) {
 	let lvl2 = sourceButton.slice(4);
 	let lvl2num = Number(lvl2);	
 
-	if (actionCat == "gat") {
+	switch (actionCat) {
+		case "gat":
+			resources.gather(lvl2num);
+			break;
+		case "dev":
+			dev[lvl2num].run();
+			break;
+		case "buy":
+			swamp.buyBuilding(lvl2num);
+			break;
+		case "pop":
+			swamp.buildings[1].popPustule(1);
+			break;
+		default:
+			msg("button pressing didn't work");
+	}
+
+	
+/*	if (actionCat == "gat") {
 		resources.gather(lvl2num);
 	}
 
@@ -454,6 +475,10 @@ function buttonManager(event) {
 	if (actionCat == "buy") {
 		swamp.buyBuilding(lvl2num);
 	}
+
+	if (actionCat == "pop") {
+		swamp.buildings[1].popPustule(1);
+	} */
 
 }
 
