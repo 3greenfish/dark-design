@@ -55,7 +55,7 @@ const swamp = {
 			  updateContentCosts(1);
 		  },
 		  fillPus: function(x) {
-			  msg("fillPus called with value " + x);
+//			  msg("fillPus called with value " + x);
 			  let sus = x;    //sustenance available
 			  let spent = 0;
 			  let count = this.unfilled.length; //get total number of unfilled pustules
@@ -73,16 +73,14 @@ const swamp = {
 						  this.updateButtonLabel();
 					  }
 				  }
-				  msg("for loop completed in fillPus");
 			  }
 
 			  let newCount = this.unfilled.length;
 			  let progWidth = 0;
 			  if (newCount > 0) {
-				  progWidth = this.unfilled[0].level * 3.3;
+				  progWidth = (this.unfilled[0].level / 30) * 100;
 			  } 
 
-			  msg("progWidth is " + progWidth);
 			  document.getElementById(this.name + "Progress").style.width = progWidth + "%";
 			  
 			  return spent;
@@ -223,7 +221,7 @@ const resources = {
 		  perTick: 0,
 		  gatherRate: 1,
 		  gatherCost: [
-			  { name: "prey", amount: 5 }
+			  { name: "prey", amount: 2 }
 			  ],
 		  gather: function() {
 			  let totalRes = this.current;
@@ -255,7 +253,7 @@ const resources = {
 		  gatherRate: 30,
 		  gather: function() {
 			  let totalRes = this.current;
-			  totalRes =+ this.gatherRate;
+			  totalRes += this.gatherRate;
 
 			  if (totalRes >= this.max) {
 				  this.current = this.max;
