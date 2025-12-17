@@ -721,14 +721,14 @@ function expandButton(butt) {
 	if (targetContent.style.display == "block") {
 		targetContent.style.display = "none"; /* hide content DIV */
 		targetButton.style.borderBottom = "1px solid black"; /* restore border */	
-		targetButton.style.borderRadius = "10px"; /* restore rounded corners */	
+		/* targetButton.style.borderRadius = "10px"; /* restore rounded corners */	
 		targetContent.style.maxHeight = "0";
 
 	} else {
 		targetContent.style.display = "block";
 		targetContent.style.maxHeight = targetContent.scrollHeight + "px";
 		targetButton.style.borderBottom = "none";
-		targetButton.style.borderRadius = "10px 10px 0 0";
+		/* targetButton.style.borderRadius = "10px 10px 0 0"; */
 	}
 }
 
