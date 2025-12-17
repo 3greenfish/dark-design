@@ -55,27 +55,34 @@ const swamp = {
 			  updateContentCosts(1);
 		  },
 		  fillPus: function(x) {
-			//  msg("fillPus called with value " + x);
+//			  msg("fillPus called with value " + x);
 			  let sus = x;    //sustenance available
 			  let spent = 0;
 			  let count = this.unfilled.length; //get total number of unfilled pustules
-			  if (count < 1) { 
-				 // msg("no empty pustules to fill");
-				  return 0;
-			  };
-			  for (let i = 0; i < count; i++) {
-				  if (sus < 1) { 
-					  break;
-				  }
-				  this.unfilled[i].level += 1;
-				  sus -= 1;
-				  spent += 1;
-				  if (this.unfilled[i].level >= 30) {
-					  this.filled += 1;
-					  this.unfilled.shift();
-					  this.updateButtonLabel();
+			  if (count > 0) {
+				  for (let i = 0; i < count; i++) {
+					  if (sus < 1) { 
+						  break;
+					  }
+					  this.unfilled[i].level += 1;
+					  sus -= 1;
+					  spent += 1;
+					  if (this.unfilled[i].level >= 30) {
+						  this.filled += 1;
+						  this.unfilled.shift();
+						  this.updateButtonLabel();
+					  }
 				  }
 			  }
+
+			  let newCount = this.unfilled.length;
+			  let progWidth = 0;
+			  if (newCount > 0) {
+				  progWidth = (this.unfilled[0].level / 30) * 100;
+			  } 
+
+			  document.getElementById(this.name + "Progress").style.width = progWidth + "%";
+			  
 			  return spent;
 		  },
 		  popPustule: function(count) {
@@ -85,13 +92,14 @@ const swamp = {
 				  this.filled -= 1;
 				  this.unfilled.push({ level: 0 });
 				  resources.gatherByName("choler");
+				  this.updateButtonLabel();
 			  }  
 		  },
 		  updateButtonLabel: function() {
 			  let newLabel = this.label;
 				  if (this.count > 0) {
-				  newLabel = newLabel + " (" + this.filled + "/" + this.count + ")";
-			  }
+					  newLabel = newLabel + " (" + this.filled + "/" + this.count + ")";
+				  }
 			  document.getElementById(this.name + "Label").innerText = newLabel;
 		  }
 		},
@@ -213,7 +221,7 @@ const resources = {
 		  perTick: 0,
 		  gatherRate: 1,
 		  gatherCost: [
-			  { name: "prey", amount: 5 }
+			  { name: "prey", amount: 2 }
 			  ],
 		  gather: function() {
 			  let totalRes = this.current;
@@ -245,7 +253,7 @@ const resources = {
 		  gatherRate: 30,
 		  gather: function() {
 			  let totalRes = this.current;
-			  totalRes =+ this.gatherRate;
+			  totalRes += this.gatherRate;
 
 			  if (totalRes >= this.max) {
 				  this.current = this.max;
@@ -433,13 +441,31 @@ function rndPlusThree(number) {
  * alternatively, maybe everything is a buy action but some don't have costs?? */
 
 function buttonManager(event) {
-//	msg("button pressed");
+	msg("button pressed");
 	let sourceButton = event.target.getAttribute('data-target');
 	let actionCat = sourceButton.slice(0 , 3);
 	let lvl2 = sourceButton.slice(4);
 	let lvl2num = Number(lvl2);	
 
-	if (actionCat == "gat") {
+	switch (actionCat) {
+		case "gat":
+			resources.gather(lvl2num);
+			break;
+		case "dev":
+			dev[lvl2num].run();
+			break;
+		case "buy":
+			swamp.buyBuilding(lvl2num);
+			break;
+		case "pop":
+			swamp.buildings[1].popPustule(1);
+			break;
+		default:
+			msg("button pressing didn't work");
+	}
+
+	
+/*	if (actionCat == "gat") {
 		resources.gather(lvl2num);
 	}
 
@@ -449,6 +475,10 @@ function buttonManager(event) {
 	if (actionCat == "buy") {
 		swamp.buyBuilding(lvl2num);
 	}
+
+	if (actionCat == "pop") {
+		swamp.buildings[1].popPustule(1);
+	} */
 
 }
 
@@ -716,14 +746,14 @@ function expandButton(butt) {
 	if (targetContent.style.display == "block") {
 		targetContent.style.display = "none"; /* hide content DIV */
 		targetButton.style.borderBottom = "1px solid black"; /* restore border */	
-		targetButton.style.borderRadius = "10px"; /* restore rounded corners */	
+		/* targetButton.style.borderRadius = "10px"; /* restore rounded corners */	
 		targetContent.style.maxHeight = "0";
 
 	} else {
 		targetContent.style.display = "block";
 		targetContent.style.maxHeight = targetContent.scrollHeight + "px";
 		targetButton.style.borderBottom = "none";
-		targetButton.style.borderRadius = "10px 10px 0 0";
+		/* targetButton.style.borderRadius = "10px 10px 0 0"; */
 	}
 }
 
