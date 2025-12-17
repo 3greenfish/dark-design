@@ -94,13 +94,14 @@ const swamp = {
 				  this.filled -= 1;
 				  this.unfilled.push({ level: 0 });
 				  resources.gatherByName("choler");
+				  this.updateButtonLabel();
 			  }  
 		  },
 		  updateButtonLabel: function() {
 			  let newLabel = this.label;
 				  if (this.count > 0) {
-				  newLabel = newLabel + " (" + this.filled + "/" + this.count + ")";
-			  }
+					  newLabel = newLabel + " (" + this.filled + "/" + this.count + ")";
+				  }
 			  document.getElementById(this.name + "Label").innerText = newLabel;
 		  }
 		},
