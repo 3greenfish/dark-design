@@ -189,19 +189,28 @@ nav {
 	display: inline-block;
 }
 
+.buttonLabelWithBar {
+	width: 164px;
+	border: none; /*1px solid black; */
+	margin: 0px;
+	padding: 10px 0px 5px 10px;
+	display: inline-block;
+}	
+
 .buttonBarContainer {
 	width: 100%;
 	margin: 0;
 	padding: 0;
 	vertical-align: baseline;
 	position: relative;
-	top: -5px;
+	border-radius: 0 0 10px 10px
 }
 
 #pustuleProgress {
 	height: 5px;
 	background-color: green;
 	width: 50%;
+	border-radius: 0 0 10px 10px;
 }
 
 .content {
