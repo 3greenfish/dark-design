@@ -547,10 +547,13 @@ const timing = {
 	beltStep: 0,
 	activateBelt: function() {
 		//call upon initialization
+		msg("activateBelt called");
 		this.currentTime = date.now(); 
 		beltTimer = setInterval(timing.belt, timing.beltSpeed);
+		msg("beltTimer code run");
 	},
 	belt: function() {
+		msg("belt function called");
 		//check for elapsed time
 		let nowTime = date.now();
 		let elapsedTime = nowTime - this.currentTime;
