@@ -542,22 +542,22 @@ function updateContentCosts(num) {
 // -- timing belt to control triggering of periodic code --//
 
 const timing = {
-	currentTime: 0,
-	beltSpeed: 250,
+	logTime: 0,
+	beltSpeed: 1000,
 	beltStep: 0,
 	activateBelt: function() {
 		//call upon initialization
-		msg("activateBelt called");
-		this.currentTime = Date.now(); 
+			//msg("activateBelt called");
+		this.logTime = Date.now(); 
 		beltTimer = setInterval(timing.belt, timing.beltSpeed);
-		msg("beltTimer code run");
+		msg("logTime is " + this.logTime);
 	},
 	belt: function() {
 		//msg("belt function called");
 		//check for elapsed time
 		let nowTime = Date.now();
-		let elapsedTime = nowTime - this.currentTime;
-		msg("this time is now " + nowTime + ". Elapsed time since last check is " + elapsedTime);
+		let elapsedTime = nowTime - this.logTime;
+		msg("the time is now " + nowTime + ". Elapsed time since last check is " + elapsedTime);
 		
 		//update belt step
 
@@ -569,16 +569,16 @@ const timing = {
 
 		if (this.beltStep > 24) {
 			this.beltStep = 1;
-		}
+		}5
 
 		//call functions based upon belt value
 
 		//placeholder test
 
-		msg("belt is at " + this.beltStep);
+		msg("phbelt is at " + this.beltStep);
 
 		
-		//update "current" time
+		//update logTime
 
 
 
