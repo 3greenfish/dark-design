@@ -420,6 +420,7 @@ function updateJStime() {
 }
 	
 function loadGame() {	//runs at end of HTML load
+	timing.activateBelt();
 	document.getElementById('jsVersion').innerText = jsUpdateTime;
 	resources.loadResourcePanel();
 	setDevButtons();
