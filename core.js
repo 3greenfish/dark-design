@@ -550,7 +550,8 @@ const timing = {
 			//msg("activateBelt called");
 		this.logTime = Date.now(); 
 		beltTimer = setInterval(timing.belt, timing.beltSpeed);
-		msg("logTime is " + this.logTime);
+		let wtf = isNaN(logTime);
+		msg("logTime is " + this.logTime + ", and is not a number - " + wtf);
 	},
 	belt: function() {
 		//msg("belt function called");
