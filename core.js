@@ -537,6 +537,52 @@ function updateContentCosts(num) {
 
 // -- end button management and purchase code --//
 
+// -- timing belt to control triggering of periodic code --//
+
+const timing = {
+	currentTime: 0,
+	beltSpeed: 250,
+	beltStep: 0,
+	activateBelt: function() {
+		//call upon initialization
+		this.currentTime = date.now(); 
+		let beltTimer = setInterval(timing.belt, timing.beltSpeed);
+	},
+	belt: function() {
+		//check for elapsed time
+		let nowTime = date.now();
+		let elapsedTime = nowTime - this.currentTime;
+		msg("this time is now " + nowTime + ". Elapsed time since last check is " + elapsedTime);
+		
+		//update belt step
+
+		this.beltStep += 1;
+		
+		//reset belt value if necessary
+
+		if (this.beltStep > 24) {
+			this.beltStep = 1;
+		}
+
+		//call functions based upon belt value
+
+		//placeholder test
+
+		msg("belt is at " + this.beltStep);
+
+		
+		//update "current" time
+
+
+
+		
+	}
+}
+	
+
+
+
+
 // -- calendar object --//
 
 const calendar = {
