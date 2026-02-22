@@ -548,7 +548,7 @@ const timing = {
 	activateBelt: function() {
 		//call upon initialization
 		msg("activateBelt called");
-		this.currentTime = date.now(); 
+		this.currentTime = Date.now(); 
 		beltTimer = setInterval(timing.belt, timing.beltSpeed);
 		msg("beltTimer code run");
 	},
