@@ -1,7 +1,8 @@
 const messageArray = [];
-let resStatus = "visible"; // temporary variable for dev button testing of hidden attributes.
-	
 	// ["You have awakened in a new world, and your dark powers have corrupted a small bog. Time to fester..."];
+
+let resStatus = "visible"; // temporary variable for dev button testing of hidden attributes.
+let beltTimer;
 
 // ---- phase 1 buildings based as object ---- //
 
@@ -547,7 +548,7 @@ const timing = {
 	activateBelt: function() {
 		//call upon initialization
 		this.currentTime = date.now(); 
-		let beltTimer = setInterval(timing.belt, timing.beltSpeed);
+		beltTimer = setInterval(timing.belt, timing.beltSpeed);
 	},
 	belt: function() {
 		//check for elapsed time
