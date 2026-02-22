@@ -557,7 +557,9 @@ const timing = {
 		//msg("belt function called");
 		//check for elapsed time
 		let nowTime = Date.now();
+		msg("nowTime is now " + nowTime + " and is a ... " + typeof nowTime);
 		let elapsedTime = nowTime - this.logTime;
+		msg("elapsedTime is a " + typeof elapsedTime + ", but Not a Number is " + isNaN(elapsedTime));
 		msg("the time is now " + nowTime + ". Elapsed time since last check is " + elapsedTime);
 		
 		//update belt step
