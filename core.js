@@ -549,9 +549,9 @@ const timing = {
 		//call upon initialization
 			//msg("activateBelt called");
 		this.logTime = Date.now(); 
-		beltTimer = setInterval(timing.belt, timing.beltSpeed);
-		let wtf = isNaN(logTime);
+		let wtf = isNaN(this.logTime);
 		msg("logTime is " + this.logTime + ", and is not a number - " + wtf);
+		beltTimer = setInterval(timing.belt, timing.beltSpeed);
 	},
 	belt: function() {
 		//msg("belt function called");
@@ -563,7 +563,7 @@ const timing = {
 		//update belt step
 
 		this.beltStep += 1;
-		msg("belt is at " + beltStep);
+		msg("belt is at " + this.beltStep);
 
 		
 		//reset belt value if necessary
@@ -576,7 +576,7 @@ const timing = {
 
 		//placeholder test
 
-		msg("phbelt is at " + this.beltStep);
+		//msg("phbelt is at " + this.beltStep);
 
 		
 		//update logTime
