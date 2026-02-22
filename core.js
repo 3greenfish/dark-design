@@ -553,15 +553,17 @@ const timing = {
 		msg("beltTimer code run");
 	},
 	belt: function() {
-		msg("belt function called");
+		//msg("belt function called");
 		//check for elapsed time
-		let nowTime = date.now();
+		let nowTime = Date.now();
 		let elapsedTime = nowTime - this.currentTime;
 		msg("this time is now " + nowTime + ". Elapsed time since last check is " + elapsedTime);
 		
 		//update belt step
 
 		this.beltStep += 1;
+		msg("belt is at " + beltStep);
+
 		
 		//reset belt value if necessary
 
