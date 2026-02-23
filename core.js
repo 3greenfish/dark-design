@@ -551,7 +551,8 @@ const timing = {
 		this.logTime = Date.now(); 
 		msg(this.logTime);
 		msg("logTime is " + this.logTime + ", and is ... " + typeof this.logTime);
-		this.beltTimer = setInterval(timing.belt, timing.beltSpeed);
+		this.beltTimer = setInterval(this.belt.bind(this), timing.beltSpeed);
+		
 	},
 	belt: function() {
 		//msg("belt function called");
