@@ -570,8 +570,8 @@ const timing = {
 
 		console.log("updating beltstep");
 
-		this.beltStep += 1;
-		console.log(this.beltStep);
+		timing.beltStep += 1;
+		console.log(timing.beltStep);
 
 		
 /*		let getBeltStep = this.beltStep;
