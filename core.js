@@ -545,6 +545,7 @@ const timing = {
 	logTime: 0,
 	beltSpeed: 1000,
 	beltStep: 0,
+	beltTimer,
 	activateBelt: function() {
 		//call upon initialization
 		console.log("logTime is " + this.logTime + "; beltSpeed is " + this.beltSpeed + "; beltStep is " + this.beltStep);
@@ -552,7 +553,7 @@ const timing = {
 		this.logTime = Date.now(); 
 		console.log(this.logTime);
 		msg("logTime is " + this.logTime + ", and is ... " + typeof this.logTime);
-		beltTimer = setInterval(timing.belt, timing.beltSpeed);
+		this.beltTimer = setInterval(timing.belt, timing.beltSpeed);
 	},
 	belt: function() {
 		//msg("belt function called");
