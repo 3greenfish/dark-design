@@ -541,39 +541,46 @@ function updateContentCosts(num) {
 
 // -- timing belt to control triggering of periodic code --//
 
-let timing = {
+const timing = {
 	logTime: 0,
 	beltSpeed: 1000,
 	beltStep: 0,
 	activateBelt: function() {
 		//call upon initialization
-			//msg("activateBelt called");
+		console.log("activateBelt called");
 		this.logTime = Date.now(); 
-		let wtf = isNaN(this.logTime);
+		console.log(this.logTime);
 		msg("logTime is " + this.logTime + ", and is ... " + typeof this.logTime);
 		beltTimer = setInterval(timing.belt, timing.beltSpeed);
 	},
 	belt: function() {
 		//msg("belt function called");
 		//check for elapsed time
-		let nowTime = Date.now();
+	/*	let nowTime = Date.now();
 		let logTimePull = timing["logTime"];
 		console.log(logTimePull);
 		msg("nowTime is now " + nowTime + " and is a ... " + typeof nowTime);
 		let elapsedTime = nowTime - this.logTime;
 		msg("elapsedTime is a " + typeof elapsedTime + ", but Not a Number is " + isNaN(elapsedTime));
 		msg("the time is now " + nowTime + ". Elapsed time since last check is " + elapsedTime);
+	*/
 		
 		//update belt step
 
-		let getBeltStep = this.beltStep;
+		console.log("updating beltstep");
+
+		this.beltStep += 1;
+		console.log(this.beltStep);
+
+		
+/*		let getBeltStep = this.beltStep;
 
 		msg("belt is at " + getBeltStep);
 		getBeltStep += 1;
 		msg("belt is at " + getBeltStep);
 		this.beltStep = getBeltStep;
 		console.log("getBeltStep is " + getBeltStep + ", beltStep is " + this.beltStep);
-
+*/
 		
 		//reset belt value if necessary
 
