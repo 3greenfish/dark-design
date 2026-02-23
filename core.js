@@ -541,7 +541,7 @@ function updateContentCosts(num) {
 
 // -- timing belt to control triggering of periodic code --//
 
-const timing = {
+let timing = {
 	logTime: 0,
 	beltSpeed: 1000,
 	beltStep: 0,
@@ -557,6 +557,8 @@ const timing = {
 		//msg("belt function called");
 		//check for elapsed time
 		let nowTime = Date.now();
+		let logTimePull = timing["logTime"];
+		console.log(logTimePull);
 		msg("nowTime is now " + nowTime + " and is a ... " + typeof nowTime);
 		let elapsedTime = nowTime - this.logTime;
 		msg("elapsedTime is a " + typeof elapsedTime + ", but Not a Number is " + isNaN(elapsedTime));
@@ -564,9 +566,13 @@ const timing = {
 		
 		//update belt step
 
-		msg("belt is at " + this.beltStep);
-		this.beltStep += 1;
-		msg("belt is at " + this.beltStep);
+		let getBeltStep = this.beltStep;
+
+		msg("belt is at " + getBeltStep);
+		getBeltStep += 1;
+		msg("belt is at " + getBeltStep);
+		this.beltStep = getBeltStep;
+		console.log("getBeltStep is " + getBeltStep + ", beltStep is " + this.beltStep);
 
 		
 		//reset belt value if necessary
@@ -583,9 +589,6 @@ const timing = {
 
 		
 		//update logTime
-
-
-
 		
 	}
 }
