@@ -546,11 +546,11 @@ const timing = {
 	beltStep: 0,
 	activateBelt: function() {
 		//call upon initialization
-		msg("logTime is " + this.logTime + "; beltSpeed is " + this.beltSpeed + "; beltStep is " + this.beltStep);
-		msg("activateBelt called");
+		//msg("logTime is " + this.logTime + "; beltSpeed is " + this.beltSpeed + "; beltStep is " + this.beltStep);
+		//msg("activateBelt called");
 		this.logTime = Date.now(); 
-		msg(this.logTime);
-		msg("logTime is " + this.logTime + ", and is ... " + typeof this.logTime);
+		//msg(this.logTime);
+		//msg("logTime is " + this.logTime + ", and is ... " + typeof this.logTime);
 		this.beltTimer = setInterval(this.belt.bind(this), timing.beltSpeed);
 		
 	},
@@ -558,36 +558,29 @@ const timing = {
 		//msg("belt function called");
 		//check for elapsed time
 		let nowTime = Date.now();
-		let logTimePull = timing["logTime"];
-		console.log(logTimePull);
-		msg("nowTime is now " + nowTime + " and is a ... " + typeof nowTime);
+
+		msg("nowTime is now " + nowTime + " and logTime is " + this.logTime);
 		let elapsedTime = nowTime - this.logTime;
-		msg("elapsedTime is a " + typeof elapsedTime + ", but Not a Number is " + isNaN(elapsedTime));
 		msg("the time is now " + nowTime + ". Elapsed time since last check is " + elapsedTime);
 	
 		
 		//update belt step
-
-		console.log("updating beltstep");
-
-		this.beltStep += 1;
-		msg(this.beltStep);
 		
+		this.beltStep += 1;
+				
 		//reset belt value if necessary
 
 		if (this.beltStep > 24) {
 			this.beltStep = 1;
 		}
+		msg(this.beltStep);
 
-		//call functions based upon belt value
+		//call functions based upon belt value - SWITCH FUNCTION
 
-		//placeholder test
-
-		//msg("phbelt is at " + this.beltStep);
 
 		
 		//update logTime
-		
+		this.logTime = nowTime;
 	}
 }
 	
