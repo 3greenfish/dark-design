@@ -2,7 +2,6 @@ const messageArray = [];
 	// ["You have awakened in a new world, and your dark powers have corrupted a small bog. Time to fester..."];
 
 let resStatus = "visible"; // temporary variable for dev button testing of hidden attributes.
-let beltTimer;
 
 // ---- phase 1 buildings based as object ---- //
 
@@ -548,41 +547,31 @@ const timing = {
 	beltTimer,
 	activateBelt: function() {
 		//call upon initialization
-		console.log("logTime is " + this.logTime + "; beltSpeed is " + this.beltSpeed + "; beltStep is " + this.beltStep);
-		console.log("activateBelt called");
+		msg("logTime is " + this.logTime + "; beltSpeed is " + this.beltSpeed + "; beltStep is " + this.beltStep);
+		msg("activateBelt called");
 		this.logTime = Date.now(); 
-		console.log(this.logTime);
+		msg(this.logTime);
 		msg("logTime is " + this.logTime + ", and is ... " + typeof this.logTime);
 		this.beltTimer = setInterval(timing.belt, timing.beltSpeed);
 	},
 	belt: function() {
 		//msg("belt function called");
 		//check for elapsed time
-	/*	let nowTime = Date.now();
+		let nowTime = Date.now();
 		let logTimePull = timing["logTime"];
 		console.log(logTimePull);
 		msg("nowTime is now " + nowTime + " and is a ... " + typeof nowTime);
 		let elapsedTime = nowTime - this.logTime;
 		msg("elapsedTime is a " + typeof elapsedTime + ", but Not a Number is " + isNaN(elapsedTime));
 		msg("the time is now " + nowTime + ". Elapsed time since last check is " + elapsedTime);
-	*/
+	
 		
 		//update belt step
 
 		console.log("updating beltstep");
 
-		timing.beltStep += 1;
-		console.log(timing.beltStep);
-
-		
-/*		let getBeltStep = this.beltStep;
-
-		msg("belt is at " + getBeltStep);
-		getBeltStep += 1;
-		msg("belt is at " + getBeltStep);
-		this.beltStep = getBeltStep;
-		console.log("getBeltStep is " + getBeltStep + ", beltStep is " + this.beltStep);
-*/
+		this.beltStep += 1;
+		msg(this.beltStep);
 		
 		//reset belt value if necessary
 
