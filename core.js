@@ -544,7 +544,6 @@ const timing = {
 	logTime: 0,
 	beltSpeed: 1000,
 	beltStep: 0,
-	beltTimer,
 	activateBelt: function() {
 		//call upon initialization
 		msg("logTime is " + this.logTime + "; beltSpeed is " + this.beltSpeed + "; beltStep is " + this.beltStep);
