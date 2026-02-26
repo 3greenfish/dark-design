@@ -556,28 +556,83 @@ const timing = {
 	},
 	belt: function() {
 		//msg("belt function called");
-		//check for elapsed time
+		//check for elapsed time, call function if > 5 minutes
 		let nowTime = Date.now();
-
-		msg("nowTime is now " + nowTime + " and logTime is " + this.logTime);
+//		msg("nowTime is now " + nowTime + " and logTime is " + this.logTime);
 		let elapsedTime = nowTime - this.logTime;
-		msg("the time is now " + nowTime + ". Elapsed time since last check is " + elapsedTime);
-	
+//		msg("the time is now " + nowTime + ". Elapsed time since last check is " + elapsedTime);
+		if (elapsedTime >= 300000) {
+			//placeholder
+			msg("call idle resource recovery function, elapsed time is approximately " + elapsedTime/60000 + " minutes");
+		}
 		
-		//update belt step
+		//update belt step and reset belt value if necessary
 		
 		this.beltStep += 1;
-				
-		//reset belt value if necessary
-
-		if (this.beltStep > 24) {
+		if (this.beltStep > 40) {
 			this.beltStep = 1;
 		}
-		msg(this.beltStep);
 
 		//call functions based upon belt value - SWITCH FUNCTION
 
-
+		switch(beltStep) {
+			case 0:
+				break;
+			case 1:
+				msg("beltstep 1");
+				break;
+			case 2:
+				msg("beltstep 2");
+				break;
+			case 3:
+				msg("beltstep 3");
+				break;
+			case 4:
+				msg("beltstep 4");
+				break;
+			case 5:
+				msg("beltstep 5");
+				break;
+			case 6:
+				msg("beltstep 6");
+				break;
+			case 7:
+			case 8:
+			case 9:
+			case 10:
+			case 11:
+			case 12:
+			case 13:
+			case 14:
+			case 15:
+			case 16:
+			case 17:
+			case 18:
+			case 19:
+			case 20:
+			case 21:
+			case 22:
+			case 23:
+			case 24:
+			case 25:
+			case 26:
+			case 27:
+			case 28:
+			case 29:
+			case 30:
+			case 31:
+			case 32:
+			case 33:
+			case 34:
+			case 35:
+			case 36:
+			case 37:
+			case 38:
+			case 39:
+			case 40:
+				msg("beltStep collected" + this.beltStep);
+				break;
+		}
 		
 		//update logTime
 		this.logTime = nowTime;
