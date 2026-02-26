@@ -575,7 +575,7 @@ const timing = {
 
 		//call functions based upon belt value - SWITCH FUNCTION
 
-		switch(beltStep) {
+		switch(this.beltStep) {
 			case 0:
 				break;
 			case 1:
