@@ -271,7 +271,7 @@ nav {
 	display: none;
 }
 
-#devButtons {
+#devButtons, baseDevButtons {
 	border: 1px dashed red;
 	background-color: #ddddff;
 	color: black;
