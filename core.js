@@ -797,8 +797,10 @@ const dev = [
 	  }
 	},
 	{ name: "button5",
-	  label: "blank",
-	  run: function() {},
+	  label: "try dynamic dev buttons",
+	  run: function() {
+		  setDevButtonsDynamic();
+	  },
 	  setLabel: function() {
 		  document.getElementById("dev" + this.name).innerText = this.label;
 	  }
@@ -822,7 +824,7 @@ function setDevButtonsDynamic() {
 	let buttonBlock = "";
 	for (let i = 0; i < dev.length; i++) {
 		let label = dev[i].label;
-		let newButton = `<div class="button" data-target="dev-${i}" onClick="buttonManager(event)" id="devbutton${i}"></div>`;
+		let newButton = `<div class="button" data-target="dev-${i}" onClick="buttonManager(event)" id="devbutton${i}">${label}</div>`;
 		buttonBlock += newButton;
 	}
 	document.getElementById("devButtons2").innerHTML = buttonBlock;
