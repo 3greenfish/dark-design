@@ -828,7 +828,7 @@ function setDevButtonsDynamic() {
 		let newButton = `<div class="button" data-target="dev-${i}" onClick="buttonManager(event)" id="devbutton${i}">${label}</div>`;
 		buttonBlock += newButton;
 	}
-	document.getElementById("devButtons2").innerHTML = buttonBlock;
+	document.getElementById("devButtons").innerHTML = buttonBlock;
 }
 
 
