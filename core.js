@@ -818,6 +818,16 @@ function setDevButtons() {
 	}
 };
 
+function setDevButtonsDynamic() {
+	let buttonBlock = "";
+	for (let i = 0; i < dev.length; i++) {
+		let label = dev[i].label;
+		let newButton = `<div class="button" data-target="dev-${i}" onClick="buttonManager(event)" id="devbutton${i}"></div>`;
+		buttonBlock += newButton;
+	}
+	document.getElementById("devButtons2").innerHTML = buttonBlock;
+}
+
 
 //-- start interval timer --//
 //-- this should probably be an object --//
