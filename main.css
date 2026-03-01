@@ -277,7 +277,7 @@ nav {
 	color: black;
 }
 
-#devButtons p {
+#devButtons p, #baseDevButtons p {
 	text-align: center;
 	font-weight: bold;
 	color: black;
