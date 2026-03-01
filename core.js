@@ -423,7 +423,8 @@ function loadGame() {	//runs at end of HTML load
 	timing.activateBelt();
 	document.getElementById('jsVersion').innerText = jsUpdateTime;
 	resources.loadResourcePanel();
-	setDevButtons();
+	//setDevButtons();
+	setDevButtonsDynamic();
 	loadAllContentCosts();
 	msg("You have awakened...");
 }
@@ -735,9 +736,6 @@ const dev = [
 	  label: "activate calendar",
 	  run: function() {  
 		  calendar.activateCal();
-	  },
-	  setLabel: function() {
-		  document.getElementById("dev" + this.name).innerText = this.label;
 	  }
 	},
 	{ name: "button1",
@@ -747,18 +745,12 @@ const dev = [
 		msg("updateCalDev triggered, days set to " + devForceDay);
 		calendar.day = devForceDay;
 		calendar.calDisplay();
-	  },
-	  setLabel: function() {
-		  document.getElementById("dev" + this.name).innerText = this.label;
 	  }
 	},
  	{ name: "button2",
 	  label: "adjust run speed",
 	  run: function() {
 		  calendar.adjustRunSpeed();
-	  },
-	  setLabel: function() {
-		  document.getElementById("dev" + this.name).innerText = this.label;
 	  }
 	},
 	{ name: "button3",
@@ -778,45 +770,36 @@ const dev = [
 				  resStatus = "visible";
 			  }
 		  }
-		  
-	  },
-	  setLabel: function() {
-		  document.getElementById("dev" + this.name).innerText = this.label;
 	  }
 	},
-	
 	{ name: "button4",
 	  label: "add prey",
 	  run: function() {
 		  resources.stack[1].current += 5;
 		  resources.loadResource(1);
 		  msg("added 5 prey");
-	  },
-	  setLabel: function() {
-		  document.getElementById("dev" + this.name).innerText = this.label;
 	  }
 	},
 	{ name: "button5",
 	  label: "blank",
-	  run: function() {},
-	  setLabel: function() {
-		  document.getElementById("dev" + this.name).innerText = this.label;
-	  }
+	  run: function() { }
 	},
 /*	{ name: "button6",
 	  label: "blank",
-	  run: function() { },
-	  setLabel: function() {
-		  document.getElementById("dev" + this.name).innerText = this.label;
-	  }
+	  run: function() { }
+	  
 	} */
 ];
 
-function setDevButtons() {
+function setDevButtonsDynamic() {
+	let buttonBlock = "";
 	for (let i = 0; i < dev.length; i++) {
-		dev[i].setLabel();
+		let label = dev[i].label;
+		let newButton = `<div class="button" data-target="dev-${i}" onClick="buttonManager(event)" id="devbutton${i}">${label}</div>`;
+		buttonBlock += newButton;
 	}
-};
+	document.getElementById("devButtons").innerHTML = buttonBlock;
+}
 
 
 //-- start interval timer --//
