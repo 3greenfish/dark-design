@@ -736,10 +736,7 @@ const dev = [
 	  label: "activate calendar",
 	  run: function() {  
 		  calendar.activateCal();
-	  },
-/*	  setLabel: function() {
-		  document.getElementById("dev" + this.name).innerText = this.label;
-	  } */
+	  }
 	},
 	{ name: "button1",
 	  label: "force calendar days",
@@ -748,19 +745,13 @@ const dev = [
 		msg("updateCalDev triggered, days set to " + devForceDay);
 		calendar.day = devForceDay;
 		calendar.calDisplay();
-	  },
-/*	  setLabel: function() {
-		  document.getElementById("dev" + this.name).innerText = this.label;
-	  } */
+	  }
 	},
  	{ name: "button2",
 	  label: "adjust run speed",
 	  run: function() {
 		  calendar.adjustRunSpeed();
-	  },
-/*	  setLabel: function() {
-		  document.getElementById("dev" + this.name).innerText = this.label;
-	  } */
+	  }
 	},
 	{ name: "button3",
 	  label: "hide/show all resources",
@@ -779,49 +770,26 @@ const dev = [
 				  resStatus = "visible";
 			  }
 		  }
-		  
-	  },
-/*	  setLabel: function() {
-		  document.getElementById("dev" + this.name).innerText = this.label;
-	  } */
+	  }
 	},
-	
 	{ name: "button4",
 	  label: "add prey",
 	  run: function() {
 		  resources.stack[1].current += 5;
 		  resources.loadResource(1);
 		  msg("added 5 prey");
-	  },
-/*	  setLabel: function() {
-		  document.getElementById("dev" + this.name).innerText = this.label;
-	  } */
+	  }
 	},
 	{ name: "button5",
-	  label: "try dynamic dev buttons",
-	  run: function() {
-		  setDevButtonsDynamic();
-	  },
-	  /* setLabel: function() {
-		  document.getElementById("dev" + this.name).innerText = this.label;
-	  } */
+	  label: "blank",
+	  run: function() { }
 	},
 /*	{ name: "button6",
 	  label: "blank",
-	  run: function() { },
-	  setLabel: function() {
-		  document.getElementById("dev" + this.name).innerText = this.label;
-	  }
+	  run: function() { }
+	  
 	} */
 ];
-
-/* 
-PURGE
-function setDevButtons() {
-	for (let i = 0; i < dev.length; i++) {
-		dev[i].setLabel();
-	}
-}; */
 
 function setDevButtonsDynamic() {
 	let buttonBlock = "";
