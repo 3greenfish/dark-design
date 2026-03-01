@@ -1,7 +1,7 @@
 const messageArray = [];
-let resStatus = "visible"; // temporary variable for dev button testing of hidden attributes.
-	
 	// ["You have awakened in a new world, and your dark powers have corrupted a small bog. Time to fester..."];
+
+let resStatus = "visible"; // temporary variable for dev button testing of hidden attributes.
 
 // ---- phase 1 buildings based as object ---- //
 
@@ -55,27 +55,34 @@ const swamp = {
 			  updateContentCosts(1);
 		  },
 		  fillPus: function(x) {
-			//  msg("fillPus called with value " + x);
+//			  msg("fillPus called with value " + x);
 			  let sus = x;    //sustenance available
 			  let spent = 0;
 			  let count = this.unfilled.length; //get total number of unfilled pustules
-			  if (count < 1) { 
-				 // msg("no empty pustules to fill");
-				  return 0;
-			  };
-			  for (let i = 0; i < count; i++) {
-				  if (sus < 1) { 
-					  break;
-				  }
-				  this.unfilled[i].level += 1;
-				  sus -= 1;
-				  spent += 1;
-				  if (this.unfilled[i].level >= 30) {
-					  this.filled += 1;
-					  this.unfilled.shift();
-					  this.updateButtonLabel();
+			  if (count > 0) {
+				  for (let i = 0; i < count; i++) {
+					  if (sus < 1) { 
+						  break;
+					  }
+					  this.unfilled[i].level += 1;
+					  sus -= 1;
+					  spent += 1;
+					  if (this.unfilled[i].level >= 30) {
+						  this.filled += 1;
+						  this.unfilled.shift();
+						  this.updateButtonLabel();
+					  }
 				  }
 			  }
+
+			  let newCount = this.unfilled.length;
+			  let progWidth = 0;
+			  if (newCount > 0) {
+				  progWidth = (this.unfilled[0].level / 30) * 100;
+			  } 
+
+			  document.getElementById(this.name + "Progress").style.width = progWidth + "%";
+			  
 			  return spent;
 		  },
 		  popPustule: function(count) {
@@ -85,13 +92,14 @@ const swamp = {
 				  this.filled -= 1;
 				  this.unfilled.push({ level: 0 });
 				  resources.gatherByName("choler");
+				  this.updateButtonLabel();
 			  }  
 		  },
 		  updateButtonLabel: function() {
 			  let newLabel = this.label;
 				  if (this.count > 0) {
-				  newLabel = newLabel + " (" + this.filled + "/" + this.count + ")";
-			  }
+					  newLabel = newLabel + " (" + this.filled + "/" + this.count + ")";
+				  }
 			  document.getElementById(this.name + "Label").innerText = newLabel;
 		  }
 		},
@@ -213,7 +221,7 @@ const resources = {
 		  perTick: 0,
 		  gatherRate: 1,
 		  gatherCost: [
-			  { name: "prey", amount: 5 }
+			  { name: "prey", amount: 2 }
 			  ],
 		  gather: function() {
 			  let totalRes = this.current;
@@ -245,7 +253,7 @@ const resources = {
 		  gatherRate: 30,
 		  gather: function() {
 			  let totalRes = this.current;
-			  totalRes =+ this.gatherRate;
+			  totalRes += this.gatherRate;
 
 			  if (totalRes >= this.max) {
 				  this.current = this.max;
@@ -412,6 +420,7 @@ function updateJStime() {
 }
 	
 function loadGame() {	//runs at end of HTML load
+	timing.activateBelt();
 	document.getElementById('jsVersion').innerText = jsUpdateTime;
 	resources.loadResourcePanel();
 	setDevButtons();
@@ -433,13 +442,31 @@ function rndPlusThree(number) {
  * alternatively, maybe everything is a buy action but some don't have costs?? */
 
 function buttonManager(event) {
-//	msg("button pressed");
+	msg("button pressed");
 	let sourceButton = event.target.getAttribute('data-target');
 	let actionCat = sourceButton.slice(0 , 3);
 	let lvl2 = sourceButton.slice(4);
 	let lvl2num = Number(lvl2);	
 
-	if (actionCat == "gat") {
+	switch (actionCat) {
+		case "gat":
+			resources.gather(lvl2num);
+			break;
+		case "dev":
+			dev[lvl2num].run();
+			break;
+		case "buy":
+			swamp.buyBuilding(lvl2num);
+			break;
+		case "pop":
+			swamp.buildings[1].popPustule(1);
+			break;
+		default:
+			msg("button pressing didn't work");
+	}
+
+	
+/*	if (actionCat == "gat") {
 		resources.gather(lvl2num);
 	}
 
@@ -449,6 +476,10 @@ function buttonManager(event) {
 	if (actionCat == "buy") {
 		swamp.buyBuilding(lvl2num);
 	}
+
+	if (actionCat == "pop") {
+		swamp.buildings[1].popPustule(1);
+	} */
 
 }
 
@@ -506,6 +537,111 @@ function updateContentCosts(num) {
 }
 
 // -- end button management and purchase code --//
+
+// -- timing belt to control triggering of periodic code --//
+
+const timing = {
+	logTime: 0,
+	beltSpeed: 1000,
+	beltStep: 0,
+	activateBelt: function() {
+		//call upon initialization
+		//msg("logTime is " + this.logTime + "; beltSpeed is " + this.beltSpeed + "; beltStep is " + this.beltStep);
+		//msg("activateBelt called");
+		this.logTime = Date.now(); 
+		//msg(this.logTime);
+		//msg("logTime is " + this.logTime + ", and is ... " + typeof this.logTime);
+		this.beltTimer = setInterval(this.belt.bind(this), timing.beltSpeed);
+		
+	},
+	belt: function() {
+		//msg("belt function called");
+		//check for elapsed time, call function if > 5 minutes
+		let nowTime = Date.now();
+//		msg("nowTime is now " + nowTime + " and logTime is " + this.logTime);
+		let elapsedTime = nowTime - this.logTime;
+//		msg("the time is now " + nowTime + ". Elapsed time since last check is " + elapsedTime);
+		if (elapsedTime >= 300000) {
+			//placeholder
+			msg("call idle resource recovery function, elapsed time is approximately " + elapsedTime/60000 + " minutes");
+		}
+		
+		//update belt step and reset belt value if necessary
+		
+		this.beltStep += 1;
+		if (this.beltStep > 40) {
+			this.beltStep = 1;
+		}
+
+		//call functions based upon belt value - SWITCH FUNCTION
+
+		switch(this.beltStep) {
+			case 0:
+				break;
+			case 1:
+				msg("beltstep 1");
+				break;
+			case 2:
+				msg("beltstep 2");
+				break;
+			case 3:
+				msg("beltstep 3");
+				break;
+			case 4:
+				msg("beltstep 4");
+				break;
+			case 5:
+				msg("beltstep 5");
+				break;
+			case 6:
+				msg("beltstep 6");
+				break;
+			case 7:
+			case 8:
+			case 9:
+			case 10:
+			case 11:
+			case 12:
+			case 13:
+			case 14:
+			case 15:
+			case 16:
+			case 17:
+			case 18:
+			case 19:
+			case 20:
+			case 21:
+			case 22:
+			case 23:
+			case 24:
+			case 25:
+			case 26:
+			case 27:
+			case 28:
+			case 29:
+			case 30:
+			case 31:
+			case 32:
+			case 33:
+			case 34:
+			case 35:
+			case 36:
+			case 37:
+			case 38:
+			case 39:
+			case 40:
+				msg("beltStep collected" + this.beltStep);
+				break;
+		}
+		
+		//update logTime
+		this.logTime = nowTime;
+	}
+}
+	
+
+
+
 
 // -- calendar object --//
 
@@ -716,14 +852,14 @@ function expandButton(butt) {
 	if (targetContent.style.display == "block") {
 		targetContent.style.display = "none"; /* hide content DIV */
 		targetButton.style.borderBottom = "1px solid black"; /* restore border */	
-		targetButton.style.borderRadius = "10px"; /* restore rounded corners */	
+		/* targetButton.style.borderRadius = "10px"; /* restore rounded corners */	
 		targetContent.style.maxHeight = "0";
 
 	} else {
 		targetContent.style.display = "block";
 		targetContent.style.maxHeight = targetContent.scrollHeight + "px";
 		targetButton.style.borderBottom = "none";
-		targetButton.style.borderRadius = "10px 10px 0 0";
+		/* targetButton.style.borderRadius = "10px 10px 0 0"; */
 	}
 }
 

@@ -157,7 +157,7 @@ nav {
 	border: 1px solid blue;
 	text-align: left;
 	outline: none;
-	border-radius: 10px;
+	/* border-radius: 10px; */
 	user-select: none;
 	-webkit-user-select: none;
 	-ms-user-select: none;
@@ -189,6 +189,30 @@ nav {
 	display: inline-block;
 }
 
+.buttonLabelWithBar {
+	width: 164px;
+	border: none; /*1px solid black; */
+	margin: 0px;
+	padding: 10px 0px 7px 10px;
+	display: inline-block;
+}	
+
+.buttonBarContainer {
+	width: 100%;
+	margin: 0;
+	padding: 0;
+	vertical-align: baseline;
+	position: relative;
+/*	border-radius: 0 0 10px 10px */
+}
+
+#pustuleProgress {
+	height: 3px;
+	background-color: green;
+	width: 10%;
+/*	border-radius: 0 0 10px 10px; */
+}
+
 .content {
 	padding: 5px 15px 5px 15px;
 	display: none;
@@ -199,7 +223,7 @@ nav {
 	border-bottom: 1px solid black;
 	border-left: 1px solid black;
 	border-right: 1px solid black;
-	border-radius: 0 0 10px 10px;
+/*	border-radius: 0 0 10px 10px; */
 	max-height: 0;
 	transition: max-height 0.2s ease-out;
 	font-size: 80%;
