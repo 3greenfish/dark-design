@@ -46,6 +46,10 @@ nav {
 	-ms-user-select: none;
 }
 
+.activeTab {
+	font-weight: bold;
+}
+
 #game {
 	position: absolute;
 	bottom: 0;
