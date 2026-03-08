@@ -8,12 +8,13 @@ let resStatus = "visible"; // temporary variable for dev button testing of hidde
 const defaultObject = {
 	name: "Steve",
 	camels: 47,
-	winsome: "winsome"
+	winsome: "winsome",
+	bling: function() {
+		msg(this.name + "'s camels are " + this.winsome);
+	}
 };
 
 const objectTesting1 = {};
-const objectTesting2 = {};
-const objectTesting3 = {};
 
 function applyObjectTest() {
 	msg("called apply object test");
@@ -22,22 +23,22 @@ function applyObjectTest() {
 	Object.assign(objectTesting1, defaultObject);
 	objectParseMsg(objectTesting1);
 
-	objectTesting2 = objectTesting1;
-	objectParseMsg(objectTesting2);
 	msg("applyObjectTest complete");
 }
 
 function displayTestData() {
 	msg("Test1: " + objectTesting1.name + " has " + objectTesting1.camels + " " + objectTesting1.winsome + " camels.");
-	msg("Test2: " + objectTesting2.name + " has " + objectTesting2.camels + " " + objectTesting2.winsome + " camels.");
+//	msg("Test2: " + objectTesting2.name + " has " + objectTesting2.camels + " " + objectTesting2.winsome + " camels.");
 	msg("default: " + defaultObject.name + " has " + defaultObject.camels + " " + defaultObject.winsome + " camels.");
+	msg("now testing bling function in child object.");
+	objectTesting1.bling();
 }
 
 function updateObjectTest() {
 	objectTesting1.name = "Stephen";
 	objectTesting1.camels = 52;
-	objectTesting2.winsome = "sad";
-	msg("updates completed. expected results: Stephen 52 winsome, Steve 47 sad, Steve 47 winsome - this assumes objects are unconnected. If 2 and 1 remain connected, expecting Stephen 52 sad, Stephen 52 sad, Steve 47 winsome.");
+	objectTesting1.winsome = "sad";
+	msg("updates completed. expected results: Stephen 52 winsome, Steve 47 sad.");
 }
 
 function objectParseMsg(ob) {
