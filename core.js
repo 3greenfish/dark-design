@@ -89,7 +89,7 @@ const gameBase = {
 		document.getElementById("tabNav").innerHTML = navList;
 	},
 	refreshNav: function() {
-		for (let i = 0, i < this.tabs.length; i ++) {
+		for (let i = 0; i < this.tabs.length; i ++) {
 			document.getElementById("tab" + i).classList.remove("activeTab");
 		}
 		document.getElementById("tab" + this.activeTab).classList.add("activeTab");
