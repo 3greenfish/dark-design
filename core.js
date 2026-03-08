@@ -911,6 +911,10 @@ const dev = [
 	{ name: "button8",
 	  label: "display swamp object",
 	  run: function() { objectParseMsg(swamp); }
+	},
+	{ name: "button9",
+	  label: "build navigation",
+	  run: function() { game.buildNav(); }
 	}
 /*	{ name: "buttonX",
 	  label: "blank",
