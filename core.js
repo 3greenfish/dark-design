@@ -18,27 +18,26 @@ const objectTesting3 = {};
 function applyObjectTest() {
 	msg("called apply object test");
 	objectParseMsg(defaultObject);
-//	objectTesting1 = Object.create(defaultObject);
-//	objectParseMsg(objectTesting1);
-	Object.assign(objectTesting2, defaultObject);
+
+	Object.assign(objectTesting1, defaultObject);
+	objectParseMsg(objectTesting1);
+
+	objectTesting2 = objectTesting1;
 	objectParseMsg(objectTesting2);
-	Object.assign(defaultObject,objectTesting3);
-	objectParseMsg(objectTesting3);
 	msg("applyObjectTest complete");
 }
 
 function displayTestData() {
 	msg("Test1: " + objectTesting1.name + " has " + objectTesting1.camels + " " + objectTesting1.winsome + " camels.");
 	msg("Test2: " + objectTesting2.name + " has " + objectTesting2.camels + " " + objectTesting2.winsome + " camels.");
-	msg("Test3: " + objectTesting3.name + " has " + objectTesting3.camels + " " + objectTesting3.winsome + " camels.");
 	msg("default: " + defaultObject.name + " has " + defaultObject.camels + " " + defaultObject.winsome + " camels.");
 }
 
 function updateObjectTest() {
 	objectTesting1.name = "Stephen";
-	objectTesting2.camels = 52;
-	objectTesting3.winsome = "sad";
-	msg("updates completed");
+	objectTesting1.camels = 52;
+	objectTesting2.winsome = "sad";
+	msg("updates completed. expected results: Stephen 52 winsome, Steve 47 sad, Steve 47 winsome - this assumes objects are unconnected. If 2 and 1 remain connected, expecting Stephen 52 sad, Stephen 52 sad, Steve 47 winsome.");
 }
 
 function objectParseMsg(ob) {
