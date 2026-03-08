@@ -41,3 +41,44 @@ function calcManualRes(res) {
 	}
 }
 // --- end --- //
+
+const defaultObject = {
+	name: "Steve",
+	camels: 47,
+	winsome: "winsome",
+	bling: function() {
+		msg(this.name + "'s camels are " + this.winsome);
+	}
+};
+
+const objectTesting1 = {};
+
+// Object.assign(TO,FROM);
+
+function applyObjectTest() {
+	msg("called apply object test");
+	objectParseMsg(defaultObject);
+
+	Object.assign(objectTesting1, defaultObject);
+	objectParseMsg(objectTesting1);
+
+	msg("applyObjectTest complete");
+}
+
+function displayTestData() {
+	msg("Test1: " + objectTesting1.name + " has " + objectTesting1.camels + " " + objectTesting1.winsome + " camels.");
+//	msg("Test2: " + objectTesting2.name + " has " + objectTesting2.camels + " " + objectTesting2.winsome + " camels.");
+	msg("default: " + defaultObject.name + " has " + defaultObject.camels + " " + defaultObject.winsome + " camels.");
+	msg("now testing bling function in child object.");
+	objectTesting1.bling();
+}
+
+function updateObjectTest() {
+	objectTesting1.name = "Stephen";
+	objectTesting1.camels = 52;
+	objectTesting1.winsome = "sad";
+	msg("updates completed. expected results: Stephen 52 winsome, Steve 47 sad.");
+}
+
+
+
