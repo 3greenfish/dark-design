@@ -16,6 +16,8 @@ const defaultObject = {
 
 const objectTesting1 = {};
 
+// Object.assign(TO,FROM);
+
 function applyObjectTest() {
 	msg("called apply object test");
 	objectParseMsg(defaultObject);
@@ -53,7 +55,8 @@ function objectParseMsg(ob) {
 
 // ---- phase 1 buildings based as object ---- //
 
-const swamp = {
+const swamp = {};
+const swampBase = {
 	name: "swamp",
 	buildings: [
 		{ name: "swell",    //0
@@ -198,7 +201,8 @@ const swamp = {
 
 // ---- end phase 1 buildings ---- //
 
-const resources = {
+const resources = {};
+const resourcesBase = {
 	name: "resources object",
 	stack: [
 		{ name: "corruption", // 0
@@ -468,6 +472,8 @@ function updateJStime() {
 }
 	
 function loadGame() {	//runs at end of HTML load
+	Object.assign(swamp, swampBase);
+	Object.assign(resources, resourcesBase);
 	timing.activateBelt();
 	document.getElementById('jsVersion').innerText = jsUpdateTime;
 	resources.loadResourcePanel();
