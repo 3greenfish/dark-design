@@ -15,10 +15,14 @@ const objectTesting1 = {};
 
 function applyObjectTest() {
 	msg("defaultObject is named " + defaultObject.name);
+	objectParseMsg(defaultObject);
 	let objectTesting2 = {};
 	objectTesting1 = new defaultObject();
+	objectParseMsg(objectTesting1);
 	objectTesting2 = new defaultObject();
+	objectParseMsg(objectTesting2);
 	let objectTesting3 = new defaultObject();
+	objectParseMsg(objectTesting3);
 	msg("applyObjectTest complete");
 }
 
@@ -34,6 +38,15 @@ function updateObjectTest() {
 	objectTesting2.camels = 52;
 	objectTesting3.winsome = "sad";
 	msg("updates completed");
+}
+
+function objectParseMsg(ob) {
+	let output = "";
+	for (let [property, value] of Object.entries(ob)) {
+		text += property + ": " + value + "<br/>";
+	}
+	msg(output);
+	msg("object name: " + ob);
 }
 
 
