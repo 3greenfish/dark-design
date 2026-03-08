@@ -33,34 +33,39 @@ const gameBase = {
 		  label: "a sinister swamp",
 		  visible: true,
 		  lockAtPhase: 1,
-		  select: function() {
+		  select: function(num) {
+			  this.activeTab = num;
 			  msg(this.name + " selected");
 		  }
 		},
 		{ name: "personnel",
 		  label: "tribe",
 		  unlockAtPhase: 1,
-		  select: function() {
+		  select: function(num) {
+			  this.activeTab = num;
 			  msg(this.name + " selected");
 		  }
 		},
 		{ name: "home",
 		  label: "settlement",
 		  unlockAtPhase: 2,
-		  select: function() {
+		  select: function(num) {
+			  this.activeTab = num;
 			  msg(this.name + " selected");
 		  }
 		},
 		{ name: "world",
 		  label: "world", // update to start as "nearby towns"?
 		  unlockAtPhase: 3,
-		  select: function() {
+		  select: function(num) {
+			  this.activeTab = num;
 			  msg(this.name + " selected");
 		  }
 		},
 		{ name: "research",
 		  label: "research",
-		  select: function() {
+		  select: function(num) {
+			  this.activeTab = num;
 			  msg(this.name + " selected");
 		  }
 		}
@@ -579,7 +584,7 @@ function buttonManager(event) {
 			swamp.buildings[1].popPustule(1);
 			break;
 		case "tab":
-			game.tabs[lvl2num].select();
+			game.tabs[lvl2num].select(lvl2num);
 			break;
 		default:
 			msg("button pressing didn't work");
