@@ -17,11 +17,11 @@ function applyObjectTest() {
 	msg("defaultObject is named " + defaultObject.name);
 	objectParseMsg(defaultObject);
 	let objectTesting2 = {};
-	objectTesting1 = new defaultObject();
+	objectTesting1 = Object.create(defaultObject);
 	objectParseMsg(objectTesting1);
-	objectTesting2 = new defaultObject();
+	objectTesting2 = Object.create(defaultObject);
 	objectParseMsg(objectTesting2);
-	let objectTesting3 = new defaultObject();
+	let objectTesting3 = Object.create(defaultObject);
 	objectParseMsg(objectTesting3);
 	msg("applyObjectTest complete");
 }
@@ -46,7 +46,7 @@ function objectParseMsg(ob) {
 		output += property + ": " + value + "<br/>";
 	}
 	msg(output);
-	msg("object name: " + ob);
+	//msg("object name: " + ob);
 }
 
 
