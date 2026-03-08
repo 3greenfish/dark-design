@@ -848,8 +848,12 @@ const dev = [
 	{ name: "button7",
 	  label: "update object test",
 	  run: function() { updateObjectTest(); }
+	},
+	{ name: "button8",
+	  label: "display swamp object",
+	  run: function() { objectParseMsg(swamp); }
 	}
-/*	{ name: "button8",
+/*	{ name: "buttonX",
 	  label: "blank",
 	  run: function() { }
 	  
