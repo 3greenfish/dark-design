@@ -4,44 +4,7 @@ const messageArray = [];
 let resStatus = "visible"; // temporary variable for dev button testing of hidden attributes.
 
 // TESTING NEW OBJECT and LOCAL STORAGE //
-
-const defaultObject = {
-	name: "Steve",
-	camels: 47,
-	winsome: "winsome",
-	bling: function() {
-		msg(this.name + "'s camels are " + this.winsome);
-	}
-};
-
-const objectTesting1 = {};
-
 // Object.assign(TO,FROM);
-
-function applyObjectTest() {
-	msg("called apply object test");
-	objectParseMsg(defaultObject);
-
-	Object.assign(objectTesting1, defaultObject);
-	objectParseMsg(objectTesting1);
-
-	msg("applyObjectTest complete");
-}
-
-function displayTestData() {
-	msg("Test1: " + objectTesting1.name + " has " + objectTesting1.camels + " " + objectTesting1.winsome + " camels.");
-//	msg("Test2: " + objectTesting2.name + " has " + objectTesting2.camels + " " + objectTesting2.winsome + " camels.");
-	msg("default: " + defaultObject.name + " has " + defaultObject.camels + " " + defaultObject.winsome + " camels.");
-	msg("now testing bling function in child object.");
-	objectTesting1.bling();
-}
-
-function updateObjectTest() {
-	objectTesting1.name = "Stephen";
-	objectTesting1.camels = 52;
-	objectTesting1.winsome = "sad";
-	msg("updates completed. expected results: Stephen 52 winsome, Steve 47 sad.");
-}
 
 function objectParseMsg(ob) {
 	let output = "";
@@ -49,8 +12,84 @@ function objectParseMsg(ob) {
 		output += property + ": " + value + "<br/>";
 	}
 	msg(output);
-	//msg("object name: " + ob);
 }
+
+// --- basic game information saved in object --- //
+
+const game = {};
+const gameBase = {
+	currentPhase: 0,
+	phases: [
+		{ name: "swamp" },
+		{ name: "tribe" },
+		{ name: "city" },
+		{ name: "nation" },
+		{ name: "world" },
+		{ name: "space" }
+		],
+	activeTab: 0,
+	tabs: [
+		{ name: "swamp", 
+		  label: "a sinister swamp",
+		  visible: true,
+		  lockAtPhase: 1,
+		  select: function() {
+			  msg(this.name + " selected");
+		  }
+		},
+		{ name: "personnel",
+		  label: "tribe",
+		  unlockAtPhase: 1,
+		  select: function() {
+			  msg(this.name + " selected");
+		  }
+		},
+		{ name: "home",
+		  label: "settlement",
+		  unlockAtPhase: 2,
+		  select: function() {
+			  msg(this.name + " selected");
+		  }
+		},
+		{ name: "world",
+		  label: "world", // update to start as "nearby towns"?
+		  unlockAtPhase: 3,
+		  select: function() {
+			  msg(this.name + " selected");
+		  }
+		},
+		{ name: "research",
+		  label: "research",
+		  select: function() {
+			  msg(this.name + " selected");
+		  }
+		}
+		],
+	buildNav: function() {
+		let navList = "";
+		for (let i = 0; i < this.tabs.length; i ++) {
+			let tabLabel = this.tabs[i].label;
+			let newLabel = `<div class="tabNav" data-target="tab-${i}" onClick="buttonManager(event)" id="tab${i}">${tabLabel}</div> | `;
+			navList += newLabel;
+		}
+		document.getElementById("tabNav").innerHTML = navList;
+		// call function to highlight active tab
+	}
+	
+};
+		
+
+
+/*
+let buttonBlock = "";
+	for (let i = 0; i < dev.length; i++) {
+		let label = dev[i].label;
+		let newButton = `<div class="button" data-target="dev-${i}" onClick="buttonManager(event)" id="devbutton${i}">${label}</div>`;
+		buttonBlock += newButton;
+	}
+	document.getElementById("devButtons").innerHTML = buttonBlock;
+*/
+
 
 
 // ---- phase 1 buildings based as object ---- //
@@ -451,6 +490,22 @@ const resourcesBase = {
 	}
 } // --- close resources object --- //
 
+// --- start research object --- //
+
+const research = {};
+const researchBase = {};
+	
+/*
+
+
+
+
+
+*/
+
+// --- close science object --- //
+
+
 function findBldgInSwamp(name) {
 	let findName = name;
 	for (let i = 0; i < swamp.buildings.length; i++) {
@@ -474,6 +529,7 @@ function updateJStime() {
 function loadGame() {	//runs at end of HTML load
 	Object.assign(swamp, swampBase);
 	Object.assign(resources, resourcesBase);
+	Object.assign(game, gameBase);
 	timing.activateBelt();
 	document.getElementById('jsVersion').innerText = jsUpdateTime;
 	resources.loadResourcePanel();
@@ -516,6 +572,9 @@ function buttonManager(event) {
 			break;
 		case "pop":
 			swamp.buildings[1].popPustule(1);
+			break;
+		case "tab":
+			game.tabs[lvl2num].select();
 			break;
 		default:
 			msg("button pressing didn't work");

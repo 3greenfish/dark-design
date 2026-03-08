@@ -26,8 +26,24 @@ nav {
 	background-color: black;
 	color: green;
 	border: 2px solid green;
-	min-width: 1300px;
 	/* display: none; */
+}
+
+#topNav {
+	min-width: 1300px;
+}
+
+#tabNav {
+	color: #00aa00;
+}
+
+#tabNav div {
+	display: inline-block;
+	margin: 0px;
+	padding: 0px;
+	user-select: none;
+	-webkit-user-select: none;
+	-ms-user-select: none;
 }
 
 #game {
