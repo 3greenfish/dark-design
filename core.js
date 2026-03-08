@@ -43,8 +43,8 @@ const gameBase = {
 		  label: "tribe",
 		  unlockAtPhase: 1,
 		  select: function(num) {
-			  this.activeTab = num;
-			  this.refreshNav();
+			  game.activeTab = num;
+			  game.refreshNav();
 			  msg(this.name + " selected");
 		  }
 		},
@@ -52,8 +52,8 @@ const gameBase = {
 		  label: "settlement",
 		  unlockAtPhase: 2,
 		  select: function(num) {
-			  this.activeTab = num;
-			  this.refreshNav();
+			  game.activeTab = num;
+			  game.refreshNav();
 			  msg(this.name + " selected");
 		  }
 		},
@@ -61,16 +61,16 @@ const gameBase = {
 		  label: "world", // update to start as "nearby towns"?
 		  unlockAtPhase: 3,
 		  select: function(num) {
-			  this.activeTab = num;
-			  this.refreshNav();
+			  game.activeTab = num;
+			  game.refreshNav();
 			  msg(this.name + " selected");
 		  }
 		},
 		{ name: "research",
 		  label: "research",
 		  select: function(num) {
-			  this.activeTab = num;
-			  this.refreshNav();
+			  game.activeTab = num;
+			  game.refreshNav();
 			  msg(this.name + " selected");
 		  }
 		}
