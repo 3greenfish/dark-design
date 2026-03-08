@@ -91,7 +91,7 @@ const gameBase = {
 	refreshNav: function() {
 		for (let i = 0; i < this.tabs.length; i ++) {
 			let element = document.getElementById("tab" + i);
-			if (element.classList.contains("activeTab") {
+			if (element.classList.contains("activeTab")) {
 				element.classList.remove("activeTab");
 			}
 		}
