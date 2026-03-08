@@ -43,7 +43,7 @@ function updateObjectTest() {
 function objectParseMsg(ob) {
 	let output = "";
 	for (let [property, value] of Object.entries(ob)) {
-		text += property + ": " + value + "<br/>";
+		output += property + ": " + value + "<br/>";
 	}
 	msg(output);
 	msg("object name: " + ob);
