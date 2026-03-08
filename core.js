@@ -35,6 +35,7 @@ const gameBase = {
 		  lockAtPhase: 1,
 		  select: function(num) {
 			  this.activeTab = num;
+			  this.refreshNav();
 			  msg(this.name + " selected");
 		  }
 		},
@@ -43,6 +44,7 @@ const gameBase = {
 		  unlockAtPhase: 1,
 		  select: function(num) {
 			  this.activeTab = num;
+			  this.refreshNav();
 			  msg(this.name + " selected");
 		  }
 		},
@@ -51,6 +53,7 @@ const gameBase = {
 		  unlockAtPhase: 2,
 		  select: function(num) {
 			  this.activeTab = num;
+			  this.refreshNav();
 			  msg(this.name + " selected");
 		  }
 		},
@@ -59,6 +62,7 @@ const gameBase = {
 		  unlockAtPhase: 3,
 		  select: function(num) {
 			  this.activeTab = num;
+			  this.refreshNav();
 			  msg(this.name + " selected");
 		  }
 		},
@@ -66,6 +70,7 @@ const gameBase = {
 		  label: "research",
 		  select: function(num) {
 			  this.activeTab = num;
+			  this.refreshNav();
 			  msg(this.name + " selected");
 		  }
 		}
@@ -82,9 +87,13 @@ const gameBase = {
 			navList += newLabel;
 		}
 		document.getElementById("tabNav").innerHTML = navList;
-		// call function to highlight active tab
+	},
+	refreshNav: function() {
+		for (let i = 0, i < this.tabs.length; i ++) {
+			document.getElementById("tab" + i).classList.remove("activeTab");
+		}
+		document.getElementById("tab" + this.activeTab).classList.add("activeTab");
 	}
-	
 };
 		
 
