@@ -34,8 +34,8 @@ const gameBase = {
 		  visible: true,
 		  lockAtPhase: 1,
 		  select: function(num) {
-			  this.activeTab = num;
-			  this.refreshNav();
+			  game.activeTab = num;
+			  game.refreshNav();
 			  msg(this.name + " selected");
 		  }
 		},
