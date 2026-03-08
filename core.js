@@ -631,19 +631,19 @@ const timing = {
 				msg("beltstep 1");
 				break;
 			case 2:
-				msg("beltstep 2");
+			//	msg("beltstep 2");
 				break;
 			case 3:
-				msg("beltstep 3");
+			//	msg("beltstep 3");
 				break;
 			case 4:
-				msg("beltstep 4");
+			//	msg("beltstep 4");
 				break;
 			case 5:
-				msg("beltstep 5");
+			//	msg("beltstep 5");
 				break;
 			case 6:
-				msg("beltstep 6");
+			//	msg("beltstep 6");
 				break;
 			case 7:
 			case 8:
@@ -679,7 +679,7 @@ const timing = {
 			case 38:
 			case 39:
 			case 40:
-				msg("beltStep collected" + this.beltStep);
+				// msg("beltStep collected" + this.beltStep);
 				break;
 		}
 		
