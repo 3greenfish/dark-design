@@ -12,16 +12,17 @@ const defaultObject = {
 };
 
 const objectTesting1 = {};
+const objectTesting2 = {};
+const objectTesting3 = {};
 
 function applyObjectTest() {
 	msg("defaultObject is named " + defaultObject.name);
 	objectParseMsg(defaultObject);
-	let objectTesting2 = {};
 	objectTesting1 = Object.create(defaultObject);
 	objectParseMsg(objectTesting1);
 	objectTesting2 = Object.create(defaultObject);
 	objectParseMsg(objectTesting2);
-	let objectTesting3 = Object.create(defaultObject);
+	objectTesting3 = Object.create(defaultObject);
 	objectParseMsg(objectTesting3);
 	msg("applyObjectTest complete");
 }
