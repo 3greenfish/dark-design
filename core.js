@@ -18,11 +18,11 @@ const objectTesting3 = {};
 function applyObjectTest() {
 	msg("called apply object test");
 	objectParseMsg(defaultObject);
-	objectTesting1 = Object.create(defaultObject);
-	objectParseMsg(objectTesting1);
+//	objectTesting1 = Object.create(defaultObject);
+//	objectParseMsg(objectTesting1);
 	Object.assign(objectTesting2, defaultObject);
 	objectParseMsg(objectTesting2);
-	objectTesting3 = Object.create(defaultObject);
+	Object.assign(defaultObject,objectTesting3);
 	objectParseMsg(objectTesting3);
 	msg("applyObjectTest complete");
 }
