@@ -69,7 +69,11 @@ const gameBase = {
 		let navList = "";
 		for (let i = 0; i < this.tabs.length; i ++) {
 			let tabLabel = this.tabs[i].label;
-			let newLabel = `<div class="tabNav" data-target="tab-${i}" onClick="buttonManager(event)" id="tab${i}">${tabLabel}</div> | `;
+			let activeFlag = "";
+			if (this.activeTab == i) {
+				activeFlag = `class="activeTab"`;
+			}	
+			let newLabel = `<div ${activeFlag} data-target="tab-${i}" onClick="buttonManager(event)" id="tab${i}">${tabLabel}</div> | `;
 			navList += newLabel;
 		}
 		document.getElementById("tabNav").innerHTML = navList;
@@ -530,6 +534,7 @@ function loadGame() {	//runs at end of HTML load
 	Object.assign(swamp, swampBase);
 	Object.assign(resources, resourcesBase);
 	Object.assign(game, gameBase);
+	game.buildNav();
 	timing.activateBelt();
 	document.getElementById('jsVersion').innerText = jsUpdateTime;
 	resources.loadResourcePanel();
