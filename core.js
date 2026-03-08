@@ -29,8 +29,8 @@ function applyObjectTest() {
 
 function displayTestData() {
 	msg("Test1: " + objectTesting1.name + " has " + objectTesting1.camels + " " + objectTesting1.winsome + " camels.");
-	msg("Test2: " + objectTesting2.name + " has " + objectTesting2.camels + " " + objectTesting1.winsome + " camels.");
-	msg("Test3: " + objectTesting3.name + " has " + objectTesting3.camels + " " + objectTesting1.winsome + " camels.");
+	msg("Test2: " + objectTesting2.name + " has " + objectTesting2.camels + " " + objectTesting2.winsome + " camels.");
+	msg("Test3: " + objectTesting3.name + " has " + objectTesting3.camels + " " + objectTesting3.winsome + " camels.");
 	msg("default: " + defaultObject.name + " has " + defaultObject.camels + " " + defaultObject.winsome + " camels.");
 }
 
