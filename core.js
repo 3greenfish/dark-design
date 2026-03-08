@@ -3,6 +3,40 @@ const messageArray = [];
 
 let resStatus = "visible"; // temporary variable for dev button testing of hidden attributes.
 
+// TESTING NEW OBJECT and LOCAL STORAGE //
+
+const defaultObject = {
+	name: "Steve",
+	camels: 47,
+	winsome: "winsome"
+};
+
+const objectTesting1 = {};
+
+function applyObjectTest() {
+	msg("defaultObject is named " + defaultObject.name);
+	let objectTesting2 = {};
+	objectTesting1 = new defaultObject();
+	objectTesting2 = new defaultObject();
+	let objectTesting3 = new defaultObject();
+	msg("applyObjectTest complete");
+}
+
+function displayTestData() {
+	msg("Test1: " + objectTesting1.name + " has " + objectTesting1.camels + " " + objectTesting1.winsome + " camels.");
+	msg("Test2: " + objectTesting2.name + " has " + objectTesting2.camels + " " + objectTesting1.winsome + " camels.");
+	msg("Test3: " + objectTesting3.name + " has " + objectTesting3.camels + " " + objectTesting1.winsome + " camels.");
+	msg("default: " + defaultObject.name + " has " + defaultObject.camels + " " + defaultObject.winsome + " camels.");
+}
+
+function updateObjectTest() {
+	objectTesting1.name = "Stephen";
+	objectTesting2.camels = 52;
+	objectTesting3.winsome = "sad";
+	msg("updates completed");
+}
+
+
 // ---- phase 1 buildings based as object ---- //
 
 const swamp = {
@@ -427,6 +461,7 @@ function loadGame() {	//runs at end of HTML load
 	setDevButtonsDynamic();
 	loadAllContentCosts();
 	msg("You have awakened...");
+	
 }
 
 function rndPlusThree(number) {
@@ -781,10 +816,20 @@ const dev = [
 	  }
 	},
 	{ name: "button5",
-	  label: "blank",
-	  run: function() { }
+	  label: "apply object test",
+	  run: function() {
+		  applyObjectTest();
+	  }
 	},
-/*	{ name: "button6",
+	{ name: "button6",
+	  label: "display test data",
+	  run: function() { displayTestData(); },
+	},
+	{ name: "button7",
+	  label: "update object test",
+	  run: function() { updateObjectTest(); }
+	}
+/*	{ name: "button8",
 	  label: "blank",
 	  run: function() { }
 	  
