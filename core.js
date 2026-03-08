@@ -90,9 +90,9 @@ const gameBase = {
 	},
 	refreshNav: function() {
 		for (let i = 0; i < this.tabs.length; i ++) {
-			document.getElementById("tab" + i).classList.remove("activeTab");
+			document.getElementById("tab-" + i).classList.remove("activeTab");
 		}
-		document.getElementById("tab" + this.activeTab).classList.add("activeTab");
+		document.getElementById("tab-" + this.activeTab).classList.add("activeTab");
 	}
 };
 		
