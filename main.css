@@ -56,7 +56,8 @@ nav {
 }
 
 .activeTab {
-	font-weight: bold;
+	/* font-weight: bold; */
+	color: #ffffff;
 }
 
 #game {
