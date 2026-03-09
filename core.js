@@ -4,7 +4,6 @@ const messageArray = [];
 let resStatus = "visible"; // temporary variable for dev button testing of hidden attributes.
 
 // TESTING NEW OBJECT and LOCAL STORAGE //
-// Object.assign(TO,FROM);
 
 function objectParseMsg(ob) {
 	let output = "";
@@ -98,20 +97,6 @@ const gameBase = {
 		document.getElementById("tab" + this.activeTab).classList.add("activeTab");
 	}
 };
-		
-
-
-/*
-let buttonBlock = "";
-	for (let i = 0; i < dev.length; i++) {
-		let label = dev[i].label;
-		let newButton = `<div class="button" data-target="dev-${i}" onClick="buttonManager(event)" id="devbutton${i}">${label}</div>`;
-		buttonBlock += newButton;
-	}
-	document.getElementById("devButtons").innerHTML = buttonBlock;
-*/
-
-
 
 // ---- phase 1 buildings based as object ---- //
 
@@ -538,22 +523,24 @@ function findBldgInSwamp(name) {
 
 // -- start loading items here -- //
 
-let jsUpdateTime = "11-29 356pm";
+//let jsUpdateTime = "11-29 356pm";
 
 // -- end loading items -- //
 
-function updateJStime() {
+/* function updateJStime() {
 	loadGame();
 	msg("loadGame called via updateJStime");
 }
-	
+	*/
+
 function loadGame() {	//runs at end of HTML load
+// Object.assign(TO,FROM);
 	Object.assign(swamp, swampBase);
 	Object.assign(resources, resourcesBase);
 	Object.assign(game, gameBase);
 	game.buildNav();
 	timing.activateBelt();
-	document.getElementById('jsVersion').innerText = jsUpdateTime;
+//	document.getElementById('jsVersion').innerText = jsUpdateTime;
 	resources.loadResourcePanel();
 	//setDevButtons();
 	setDevButtonsDynamic();
