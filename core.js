@@ -3,9 +3,105 @@ const messageArray = [];
 
 let resStatus = "visible"; // temporary variable for dev button testing of hidden attributes.
 
+// TESTING NEW OBJECT and LOCAL STORAGE //
+
+function objectParseMsg(ob) {
+	let output = "";
+	for (let [property, value] of Object.entries(ob)) {
+		output += property + ": " + value + "<br/>";
+	}
+	msg(output);
+}
+
+// --- basic game information saved in object --- //
+
+const game = {};
+const gameBase = {
+	currentPhase: 0,
+	phases: [
+		{ name: "swamp" },
+		{ name: "tribe" },
+		{ name: "city" },
+		{ name: "nation" },
+		{ name: "world" },
+		{ name: "space" }
+		],
+	activeTab: 0,
+	tabs: [
+		{ name: "swamp", 
+		  label: "a sinister swamp",
+		  visible: true,
+		  lockAtPhase: 1,
+		  select: function(num) {
+			  game.activeTab = num;
+			  game.refreshNav();
+			  msg(this.name + " selected");
+		  }
+		},
+		{ name: "personnel",
+		  label: "tribe",
+		  unlockAtPhase: 1,
+		  select: function(num) {
+			  game.activeTab = num;
+			  game.refreshNav();
+			  msg(this.name + " selected");
+		  }
+		},
+		{ name: "home",
+		  label: "settlement",
+		  unlockAtPhase: 2,
+		  select: function(num) {
+			  game.activeTab = num;
+			  game.refreshNav();
+			  msg(this.name + " selected");
+		  }
+		},
+		{ name: "world",
+		  label: "world", // update to start as "nearby towns"?
+		  unlockAtPhase: 3,
+		  select: function(num) {
+			  game.activeTab = num;
+			  game.refreshNav();
+			  msg(this.name + " selected");
+		  }
+		},
+		{ name: "research",
+		  label: "research",
+		  select: function(num) {
+			  game.activeTab = num;
+			  game.refreshNav();
+			  msg(this.name + " selected");
+		  }
+		}
+		],
+	buildNav: function() {
+		let navList = "";
+		for (let i = 0; i < this.tabs.length; i ++) {
+			let tabLabel = this.tabs[i].label;
+			let activeFlag = "";
+			if (this.activeTab == i) {
+				activeFlag = `class="activeTab"`;
+			}	
+			let newLabel = `<div ${activeFlag} data-target="tab-${i}" onClick="buttonManager(event)" id="tab${i}">${tabLabel}</div> | `;
+			navList += newLabel;
+		}
+		document.getElementById("tabNav").innerHTML = navList;
+	},
+	refreshNav: function() {
+		for (let i = 0; i < this.tabs.length; i ++) {
+			let element = document.getElementById("tab" + i);
+			if (element.classList.contains("activeTab")) {
+				element.classList.remove("activeTab");
+			}
+		}
+		document.getElementById("tab" + this.activeTab).classList.add("activeTab");
+	}
+};
+
 // ---- phase 1 buildings based as object ---- //
 
-const swamp = {
+const swamp = {};
+const swampBase = {
 	name: "swamp",
 	buildings: [
 		{ name: "swell",    //0
@@ -150,7 +246,8 @@ const swamp = {
 
 // ---- end phase 1 buildings ---- //
 
-const resources = {
+const resources = {};
+const resourcesBase = {
 	name: "resources object",
 	stack: [
 		{ name: "corruption", // 0
@@ -399,6 +496,22 @@ const resources = {
 	}
 } // --- close resources object --- //
 
+// --- start research object --- //
+
+const research = {};
+const researchBase = {};
+	
+/*
+
+
+
+
+
+*/
+
+// --- close science object --- //
+
+
 function findBldgInSwamp(name) {
 	let findName = name;
 	for (let i = 0; i < swamp.buildings.length; i++) {
@@ -410,23 +523,30 @@ function findBldgInSwamp(name) {
 
 // -- start loading items here -- //
 
-let jsUpdateTime = "11-29 356pm";
+//let jsUpdateTime = "11-29 356pm";
 
 // -- end loading items -- //
 
-function updateJStime() {
+/* function updateJStime() {
 	loadGame();
 	msg("loadGame called via updateJStime");
 }
-	
+	*/
+
 function loadGame() {	//runs at end of HTML load
+// Object.assign(TO,FROM);
+	Object.assign(swamp, swampBase);
+	Object.assign(resources, resourcesBase);
+	Object.assign(game, gameBase);
+	game.buildNav();
 	timing.activateBelt();
-	document.getElementById('jsVersion').innerText = jsUpdateTime;
+//	document.getElementById('jsVersion').innerText = jsUpdateTime;
 	resources.loadResourcePanel();
 	//setDevButtons();
 	setDevButtonsDynamic();
 	loadAllContentCosts();
 	msg("You have awakened...");
+	
 }
 
 function rndPlusThree(number) {
@@ -461,6 +581,9 @@ function buttonManager(event) {
 			break;
 		case "pop":
 			swamp.buildings[1].popPustule(1);
+			break;
+		case "tab":
+			game.tabs[lvl2num].select(lvl2num);
 			break;
 		default:
 			msg("button pressing didn't work");
@@ -583,19 +706,19 @@ const timing = {
 				msg("beltstep 1");
 				break;
 			case 2:
-				msg("beltstep 2");
+			//	msg("beltstep 2");
 				break;
 			case 3:
-				msg("beltstep 3");
+			//	msg("beltstep 3");
 				break;
 			case 4:
-				msg("beltstep 4");
+			//	msg("beltstep 4");
 				break;
 			case 5:
-				msg("beltstep 5");
+			//	msg("beltstep 5");
 				break;
 			case 6:
-				msg("beltstep 6");
+			//	msg("beltstep 6");
 				break;
 			case 7:
 			case 8:
@@ -631,7 +754,7 @@ const timing = {
 			case 38:
 			case 39:
 			case 40:
-				msg("beltStep collected" + this.beltStep);
+				// msg("beltStep collected" + this.beltStep);
 				break;
 		}
 		
@@ -780,11 +903,11 @@ const dev = [
 		  msg("added 5 prey");
 	  }
 	},
-	{ name: "button5",
-	  label: "blank",
-	  run: function() { }
-	},
-/*	{ name: "button6",
+	{ name: "button8",
+	  label: "display swamp object",
+	  run: function() { objectParseMsg(swamp); }
+	}
+/*	{ name: "buttonX",
 	  label: "blank",
 	  run: function() { }
 	  

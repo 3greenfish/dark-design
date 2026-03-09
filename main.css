@@ -26,8 +26,37 @@ nav {
 	background-color: black;
 	color: green;
 	border: 2px solid green;
-	min-width: 1300px;
 	/* display: none; */
+}
+
+#topNav {
+	min-width: 1300px;
+}
+
+#tabNav {
+	color: #00aa00;
+	border-right: 0px;
+	border-left: 0px;
+	border-top: 0px;
+	border-bottom: 1px solid #00aa00;
+	padding-bottom: 2px;
+	padding-left: 2px;
+	user-select: none;
+	-webkit-user-select: none;
+	-ms-user-select: none;
+}
+
+#tabNav div {
+	display: inline-block;
+	margin: 0px;
+	padding: 0px;
+	user-select: none;
+	-webkit-user-select: none;
+	-ms-user-select: none;
+}
+
+.activeTab {
+	font-weight: bold;
 }
 
 #game {
