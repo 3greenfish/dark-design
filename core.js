@@ -903,27 +903,9 @@ const dev = [
 		  msg("added 5 prey");
 	  }
 	},
-	{ name: "button5",
-	  label: "apply object test",
-	  run: function() {
-		  applyObjectTest();
-	  }
-	},
-	{ name: "button6",
-	  label: "display test data",
-	  run: function() { displayTestData(); },
-	},
-	{ name: "button7",
-	  label: "update object test",
-	  run: function() { updateObjectTest(); }
-	},
 	{ name: "button8",
 	  label: "display swamp object",
 	  run: function() { objectParseMsg(swamp); }
-	},
-	{ name: "button9",
-	  label: "build navigation",
-	  run: function() { game.buildNav(); }
 	}
 /*	{ name: "buttonX",
 	  label: "blank",
