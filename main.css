@@ -35,7 +35,11 @@ nav {
 
 #tabNav {
 	color: #00aa00;
-	border: 0px 0px 2px 0px solid red;
+	border-right: 0px;
+	border-left: 0px;
+	border-top: 0px;
+	border-bottom: 1px solid #00aa00;
+	padding-bottom: 2px;
 	user-select: none;
 	-webkit-user-select: none;
 	-ms-user-select: none;
