@@ -26,9 +26,9 @@ function buildGrid() {
 	}
 	
 	let tempArray = [
-		{ name: "steve"; },
-		{ name: "john"; },
-		{ name: "susan"; }
+		{ name: "steve" },
+		{ name: "john" },
+		{ name: "susan" }
 		];
 
 	//check size, pick 2/3 column layout
