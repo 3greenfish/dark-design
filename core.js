@@ -17,12 +17,14 @@ function objectParseMsg(ob) {
 
 function buildGrid() {
 	let output = "";
-	let column1 = "";
-	let column2 = "";
-	let column3 = "";
 	let numColumns = 3;
-	let currentColumn = 1;
+	let columns = [ "", "", "" ];
+	let currentColumn = 0;
 
+	for (let c = 0; c < columns.length; c++) {
+		columns[c] = `<div class="buttonColumn" id="buttonColumn${c}">`;
+	}
+	
 	let tempArray = [
 		{ name: "steve"; },
 		{ name: "john"; },
@@ -30,6 +32,25 @@ function buildGrid() {
 		]
 
 	//check size, pick 2/3 column layout
+
+	for (let i = 0; i < tempArray.length; i++) {
+		let label = tempArray[i].name;
+		let newButton = `
+				<div class="buttonContainer">
+					<div class="collapsible">
+						<div class="buttonLabel" data-target="" id="swellLabel2" onClick="buttonManager(event)">${label}</div><div class="notch" data-target="buy-0" onClick="expandButton(event)">&#9776;</div>
+					</div>
+				</div>`;
+		columns[currentColumn] += newButton;
+		currentColumn += 1;
+		if (currentColumn > numColumns) { currentColumn = 0};
+	}
+
+	for (let c = 0; c < columns.length; c++) {
+		columns[c] += `</div>`;
+		output += columns[c];
+	}
+	
 	//for loop
 	//cycle through button array
 	//determine content for button
@@ -38,11 +59,29 @@ function buildGrid() {
 	//assemble block
 	//add HTML
 
-	document.
+	document.getElementById("fillGrid").innerHTML = output;
 }	
 
 	
-/* CURRENT BUTTONS FOR REFERENCE
+/* 
+
+function setDevButtonsDynamic() {
+	let buttonBlock = "";
+	for (let i = 0; i < dev.length; i++) {
+		let label = dev[i].label;
+		let newButton = `<div class="button" data-target="dev-${i}" onClick="buttonManager(event)" id="devbutton${i}">${label}</div>`;
+		buttonBlock += newButton;
+	}
+	document.getElementById("devButtons").innerHTML = buttonBlock;
+}
+
+
+
+
+
+
+
+CURRENT BUTTONS FOR REFERENCE
 				<div class="buttonContainer">
 					<div class="collapsible" id="buy-0-collapsible">
 						<div class="buttonLabel" data-target="buy-0" id="swellLabel" onClick="buttonManager(event)">Swell</div><div class="notch" data-target="buy-0" onClick="expandButton(event)">&#9776;</div>
@@ -960,6 +999,10 @@ const dev = [
 	{ name: "button8",
 	  label: "display swamp object",
 	  run: function() { objectParseMsg(swamp); }
+	},
+	{ name: "button9",
+	  label: "build grid",
+	  run: function() { buildGrid(); }
 	}
 /*	{ name: "buttonX",
 	  label: "blank",
