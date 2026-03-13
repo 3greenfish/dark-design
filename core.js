@@ -29,7 +29,7 @@ function buildGrid() {
 		{ name: "steve"; },
 		{ name: "john"; },
 		{ name: "susan"; }
-		]
+		];
 
 	//check size, pick 2/3 column layout
 
@@ -43,7 +43,9 @@ function buildGrid() {
 				</div>`;
 		columns[currentColumn] += newButton;
 		currentColumn += 1;
-		if (currentColumn > numColumns) { currentColumn = 0};
+		if (currentColumn > numColumns) { 
+			currentColumn = 0;
+		}
 	}
 
 	for (let c = 0; c < columns.length; c++) {
