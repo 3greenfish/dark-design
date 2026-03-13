@@ -13,6 +13,60 @@ function objectParseMsg(ob) {
 	msg(output);
 }
 
+
+
+function buildGrid() {
+	let output = "";
+	let column1 = "";
+	let column2 = "";
+	let column3 = "";
+	let numColumns = 3;
+	let currentColumn = 1;
+
+	let tempArray = [
+		{ name: "steve"; },
+		{ name: "john"; },
+		{ name: "susan"; }
+		]
+
+	//check size, pick 2/3 column layout
+	//for loop
+	//cycle through button array
+	//determine content for button
+	//decide which column goes into
+	//add to columns
+	//assemble block
+	//add HTML
+
+	document.
+}	
+
+	
+/* CURRENT BUTTONS FOR REFERENCE
+				<div class="buttonContainer">
+					<div class="collapsible" id="buy-0-collapsible">
+						<div class="buttonLabel" data-target="buy-0" id="swellLabel" onClick="buttonManager(event)">Swell</div><div class="notch" data-target="buy-0" onClick="expandButton(event)">&#9776;</div>
+					</div>
+					<div class="content" id="buy-0-content">
+						<p>Grow your corrupting influence and expand the swamp.</p>
+						<hr>
+						<div class="costs" id="buy-0-Costs">
+							<div class="bldgCostPriceName">Corruption:</div><div class="bldgCostRes">10</div>
+						</div>
+						<div class="button" data-target="buy-0" onClick="buttonManager(event)">Swell by 1m^2</div>
+					</div>
+				</div> */
+
+
+
+
+
+
+
+	
+
+
+
 // --- basic game information saved in object --- //
 
 const game = {};
