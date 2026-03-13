@@ -171,6 +171,9 @@ nav {
 .buttonMap2 {
 	background-color: #0000ff;
 }
+.buttonColumn {
+	width: 200px;
+}
 
 .buttonContainer {
 /*	width: 260px; */
