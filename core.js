@@ -67,7 +67,7 @@ function buildGrid() {
 	
 /* 
 
-function setDevButtonsDynamic() {
+reference DevButtonsDynamic() {
 	let buttonBlock = "";
 	for (let i = 0; i < dev.length; i++) {
 		let label = dev[i].label;
