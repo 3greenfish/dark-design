@@ -168,6 +168,10 @@ nav {
 	background-color: yellow;
 }
 
+.buttonMap2 {
+	background-color: #0000ff;
+}
+
 .buttonContainer {
 /*	width: 260px; */
 	flex: 0 0 200px;
