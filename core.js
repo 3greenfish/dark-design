@@ -15,27 +15,32 @@ function objectParseMsg(ob) {
 
 
 
-function buildGrid() {
+function buildGrid(source) {
 	let output = "";
-	let numColumns = 2;
+	let numColumns = 3; // plan to change this to check settings once screen size is evaluated //
 	let columns = [];
 	let currentColumn = 0;
-
+	let array = [];
+	
 	for (let c = 0; c < numColumns; c++) {
 		columns[c] = `<div class="buttonColumn" id="buttonColumn${c}">`;
 	}
-	
-	let tempArray = [
+
+	if (!source) {
+		array = [
 		{ name: "steve" },
 		{ name: "john" },
 		{ name: "susan" },
 		{ name: "franklin" }
 		];
-
+	} else {
+		array = source;
+	}
+			
 	//check size, pick 2/3 column layout
 
-	for (let i = 0; i < tempArray.length; i++) {
-		let label = tempArray[i].name;
+	for (let i = 0; i < array.length; i++) {
+		let label = array[i].name;
 		let newButton = `
 				<div class="buttonContainer">
 					<div class="collapsible">
@@ -1005,7 +1010,7 @@ const dev = [
 	},
 	{ name: "button9",
 	  label: "build grid",
-	  run: function() { buildGrid(); }
+	  run: function() { buildGrid(swamp.buildings); }
 	}
 /*	{ name: "buttonX",
 	  label: "blank",
