@@ -203,20 +203,23 @@ const swampBase = {
 		{ name: "fester",	//0
 		  label: "Fester",
 		  type: "gather",
-		  desc: ""
+		  desc: "Fester in darkness to build up Corruption.",
+		  flavor: ""
 		},
 		{ name: "ensnare",	//1
 		  label: "Ensnare prey",
 		  type: "gather",
-		  desc: ""
+		  desc: "Attempt to catch unsuspecting creatures to use as fuel.",
+		  flavor: ""
 		},
 		{ name: "digest",	//2
 		  label: "Digest prey",
 		  type: "gather",
-		  desc: ""
+		  desc: "Process captured prey to generate Sustenance."
 		},
 		{ name: "swell",    //3
 		  label: "Swell",
+		  desc: "A burgeoning swamp expands Corruption limits and enhances Festering.",
 		  count: 0,
 		  costs: [
 			  { name: "corruption", amount: 10 }
@@ -247,6 +250,8 @@ const swampBase = {
 		},
 		{ name: "pustule",     //4
 		  label: "Pustule",
+		  desc: `Pustules process Sustenance into a thick bile.</p><p>
+Once full, pustules generate Corruptions, and can be popped for Choler.`,
 		  count: 0,
 		  costs: [
 			  { name: "corruption", amount: 40 }
@@ -312,6 +317,7 @@ const swampBase = {
 		},
 		{ name: "digestor",		//5
 		  label: "Digestor",
+		  desc: "This organ automatically processes captured prey into Sustenance.",
 		  count: 0,
 		  costs: [
 			  { name: "corruption", amount: 20 },
@@ -321,6 +327,7 @@ const swampBase = {
 		},
 		{ name: "trap",			//6
 		  label: "Trap",
+		  desc: "Sticky traps make it easier to catch prey, and have a small chance to capture prey automatically.",
 		  count: 0,
 		  costs: [
 			  { name: "corruption", amount: 50 },
@@ -330,21 +337,24 @@ const swampBase = {
 		},
 		{ name: "siren",		//7
 		  label: "Siren",
+		  desc: "Lure in advanced lifeforms.",
 		  count: 0,
 		  costs: [],
 		  ratio: 1.2
 		},
-		{ name: "corruptHost",
-		  label: "Corrupt a host",
-		  type: "gather",
-		  desc: ""
-		},
-		{ name: "nodule",		//9
+		{ name: "nodule",		//8
 		  label: "Nodule",
+		  desc: "Store additional corruption.",
 		  count: 0,
 		  costs: [],
 		  ratio: 1.2,
 		  isUnlocked: false
+		},
+		{ name: "corruptHost",	//9
+		  label: "Corrupt a host",
+		  type: "gather",
+		  desc: `Convert a captured native into your first corrupted Host.
+(Starts phase 2)`
 		}
 		],
 	buyBuilding: function(num) {
