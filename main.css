@@ -169,19 +169,19 @@ nav {
 }
 
 .buttonMap2 {
-	background-color: #0000ff;
+	background-color: #002200;
 	display: flex;
 }
 .buttonColumn {
 	width: 200px;
 	display: inline-block;
 	margin: 3px;
-	border: 1px solid red;
+/*	border: 1px solid red; */
 }
 
 .buttonContainer {
 /*	width: 260px; */
-	flex: 0 0 200px;
+/*	flex: 0 0 200px; */
 	margin: 0px;
 	padding: 0px;
 	border: none; /* 1px solid #dddddd; */
