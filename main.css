@@ -16,9 +16,7 @@ h1 {
 }
 
 /* padding is INSIDE, margin is OUTSIDE */
-
 /* test out button, replace with DIV later */
-
 
 /* --- main components --- */
 
@@ -168,10 +166,21 @@ nav {
 	background-color: yellow;
 }
 
+.buttonMap2 {
+	background-color: #002200;
+	display: flex;
+}
+.buttonColumn {
+	width: 200px;
+	display: inline-block;
+	margin: 3px;
+/*	border: 1px solid red; */
+}
+
 .buttonContainer {
 /*	width: 260px; */
-	flex: 0 0 200px;
-	margin: 3px;
+/*	flex: 0 0 200px; */
+	margin: 0px;
 	padding: 0px;
 	border: none; /* 1px solid #dddddd; */
 	position: relative;
@@ -239,7 +248,7 @@ nav {
 #pustuleProgress {
 	height: 3px;
 	background-color: green;
-	width: 10%;
+	width: 0%;
 /*	border-radius: 0 0 10px 10px; */
 }
 

@@ -13,6 +13,107 @@ function objectParseMsg(ob) {
 	msg(output);
 }
 
+
+
+function buildGrid(source) {
+	let output = "";
+	let numColumns = 3; // plan to change this to check settings once screen size is evaluated //
+	let columns = [];
+	let currentColumn = 0;
+	let array = [];
+	
+	for (let c = 0; c < numColumns; c++) {
+		columns[c] = `<div class="buttonColumn" id="buttonColumn${c}">`;
+	}
+
+	if (!source) {
+		array = [
+		{ name: "steve" },
+		{ name: "john" },
+		{ name: "susan" },
+		{ name: "franklin" }
+		];
+	} else {
+		array = source;
+	}
+			
+	//check size, pick 2/3 column layout
+
+	for (let i = 0; i < array.length; i++) {
+		let label = array[i].name;
+		let newButton = `
+				<div class="buttonContainer">
+					<div class="collapsible">
+						<div class="buttonLabel" data-target="" id="swellLabel2" onClick="buttonManager(event)">${label}</div><div class="notch" data-target="buy-0" onClick="expandButton(event)">&#9776;</div>
+					</div>
+				</div>`;
+		columns[currentColumn] += newButton;
+		currentColumn += 1;
+		if (currentColumn >= numColumns) { 
+			currentColumn = 0;
+		}
+	}
+
+	for (let c = 0; c < columns.length; c++) {
+		columns[c] += `</div>`;
+		output += columns[c];
+	}
+	
+	//for loop
+	//cycle through button array
+	//determine content for button
+	//decide which column goes into
+	//add to columns
+	//assemble block
+	//add HTML
+
+	document.getElementById("fillGrid").innerHTML = output;
+}	
+
+	
+/* 
+
+reference DevButtonsDynamic() {
+	let buttonBlock = "";
+	for (let i = 0; i < dev.length; i++) {
+		let label = dev[i].label;
+		let newButton = `<div class="button" data-target="dev-${i}" onClick="buttonManager(event)" id="devbutton${i}">${label}</div>`;
+		buttonBlock += newButton;
+	}
+	document.getElementById("devButtons").innerHTML = buttonBlock;
+}
+
+
+
+
+
+
+
+CURRENT BUTTONS FOR REFERENCE
+				<div class="buttonContainer">
+					<div class="collapsible" id="buy-0-collapsible">
+						<div class="buttonLabel" data-target="buy-0" id="swellLabel" onClick="buttonManager(event)">Swell</div><div class="notch" data-target="buy-0" onClick="expandButton(event)">&#9776;</div>
+					</div>
+					<div class="content" id="buy-0-content">
+						<p>Grow your corrupting influence and expand the swamp.</p>
+						<hr>
+						<div class="costs" id="buy-0-Costs">
+							<div class="bldgCostPriceName">Corruption:</div><div class="bldgCostRes">10</div>
+						</div>
+						<div class="button" data-target="buy-0" onClick="buttonManager(event)">Swell by 1m^2</div>
+					</div>
+				</div> */
+
+
+
+
+
+
+
+	
+
+
+
 // --- basic game information saved in object --- //
 
 const game = {};
@@ -906,6 +1007,10 @@ const dev = [
 	{ name: "button8",
 	  label: "display swamp object",
 	  run: function() { objectParseMsg(swamp); }
+	},
+	{ name: "button9",
+	  label: "build grid",
+	  run: function() { buildGrid(swamp.buildings); }
 	}
 /*	{ name: "buttonX",
 	  label: "blank",
