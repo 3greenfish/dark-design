@@ -17,7 +17,7 @@ function objectParseMsg(ob) {
 
 function buildGrid() {
 	let output = "";
-	let numColumns = 3;
+	let numColumns = 2;
 	let columns = [];
 	let currentColumn = 0;
 
