@@ -200,7 +200,22 @@ const swamp = {};
 const swampBase = {
 	name: "swamp",
 	stack: [
-		{ name: "swell",    //0
+		{ name: "fester",	//0
+		  label: "Fester",
+		  type: "gather",
+		  desc: ""
+		},
+		{ name: "ensnare",	//1
+		  label: "Ensnare prey",
+		  type: "gather",
+		  desc: ""
+		},
+		{ name: "digest",	//2
+		  label: "Digest prey",
+		  type: "gather",
+		  desc: ""
+		},
+		{ name: "swell",    //3
 		  label: "Swell",
 		  count: 0,
 		  costs: [
@@ -230,7 +245,7 @@ const swampBase = {
 			  }
 		  }
 		},
-		{ name: "pustule",     //1
+		{ name: "pustule",     //4
 		  label: "Pustule",
 		  count: 0,
 		  costs: [
@@ -295,7 +310,7 @@ const swampBase = {
 			  document.getElementById(this.name + "Label").innerText = newLabel;
 		  }
 		},
-		{ name: "digestor",
+		{ name: "digestor",		//5
 		  label: "Digestor",
 		  count: 0,
 		  costs: [
@@ -304,7 +319,7 @@ const swampBase = {
 		  ],
 		  ratio: 1.2
 		},
-		{ name: "trap",
+		{ name: "trap",			//6
 		  label: "Trap",
 		  count: 0,
 		  costs: [
@@ -313,13 +328,18 @@ const swampBase = {
 		  ],
 		  ratio: 1.2
 		},
-		{ name: "siren",
+		{ name: "siren",		//7
 		  label: "Siren",
 		  count: 0,
 		  costs: [],
 		  ratio: 1.2
 		},
-		{ name: "nodule",
+		{ name: "corruptHost",
+		  label: "Corrupt a host",
+		  type: "gather",
+		  desc: ""
+		},
+		{ name: "nodule",		//9
 		  label: "Nodule",
 		  count: 0,
 		  costs: [],
