@@ -204,13 +204,15 @@ const swampBase = {
 		  label: "Fester",
 		  type: "gather",
 		  desc: "Fester in darkness to build up Corruption.",
-		  flavor: ""
+		  flavor: "",
+		  actions: []
 		},
 		{ name: "ensnare",	//1
 		  label: "Ensnare prey",
 		  type: "gather",
 		  desc: "Attempt to catch unsuspecting creatures to use as fuel.",
-		  flavor: ""
+		  flavor: "",
+		  actions: []
 		},
 		{ name: "digest",	//2
 		  label: "Digest prey",
