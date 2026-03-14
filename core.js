@@ -27,12 +27,7 @@ function buildGrid(source) {
 	}
 
 	if (!source) {
-		array = [
-		{ name: "steve" },
-		{ name: "john" },
-		{ name: "susan" },
-		{ name: "franklin" }
-		];
+		array = [{ label: "no source array" },{ label: "have a button anyway" }];
 	} else {
 		array = source;
 	}
@@ -40,7 +35,7 @@ function buildGrid(source) {
 	//check size, pick 2/3 column layout
 
 	for (let i = 0; i < array.length; i++) {
-		let label = array[i].name;
+		let label = array[i].label;
 		let newButton = `
 				<div class="buttonContainer">
 					<div class="collapsible">
@@ -204,7 +199,7 @@ const gameBase = {
 const swamp = {};
 const swampBase = {
 	name: "swamp",
-	buildings: [
+	stack: [
 		{ name: "swell",    //0
 		  label: "Swell",
 		  count: 0,
@@ -339,7 +334,7 @@ const swampBase = {
 		}
 		if (validator == "pass-sufficient") {
 			payPrice(num);
-			swamp.buildings[num].onPurchase();
+			swamp.stack[num].onPurchase();
 		}
 	}
 }
@@ -371,7 +366,7 @@ const resourcesBase = {
 			  resources.loadResource(0); // need to clean up this code
 		  },
 		  updateGatherRate: function() {
-			  this.gatherRate = rndPlusThree(1 + (0.1 * swamp.buildings[0].count));
+			  this.gatherRate = rndPlusThree(1 + (0.1 * swamp.stack[0].count));
 		  },
 // -- updatePerTick is untested -- //	 
 		  updatePerTick: function() {
@@ -381,7 +376,7 @@ const resourcesBase = {
 		  updateMax: function() {
 			  let swl = findBldgInSwamp("swell");
 			  let pus = findBldgInSwamp("pustule");
-			  let newMax = 50 + (swamp.buildings[swl].count * 5) + (swamp.buildings[pus].count * 50);
+			  let newMax = 50 + (swamp.stack[swl].count * 5) + (swamp.stack[pus].count * 50);
 			  this.max = newMax;
 		  }
 		},
@@ -592,7 +587,7 @@ const resourcesBase = {
 		// the code below is specifically for pustules and sustenance only
 		let perTickValue = 0;
 		let availableSus = this.stack[2].current + perTickValue;
-		let subtract = swamp.buildings[1].fillPus(availableSus);
+		let subtract = swamp.stack[1].fillPus(availableSus);
 		this.stack[2].current = this.stack[2].current + perTickValue - subtract;
 	}
 } // --- close resources object --- //
@@ -615,8 +610,8 @@ const researchBase = {};
 
 function findBldgInSwamp(name) {
 	let findName = name;
-	for (let i = 0; i < swamp.buildings.length; i++) {
-		if (swamp.buildings[i].name == findName) {
+	for (let i = 0; i < swamp.stack.length; i++) {
+		if (swamp.stack[i].name == findName) {
 			return i;
 		}
 	}
@@ -681,7 +676,7 @@ function buttonManager(event) {
 			swamp.buyBuilding(lvl2num);
 			break;
 		case "pop":
-			swamp.buildings[1].popPustule(1);
+			swamp.stack[1].popPustule(1);
 			break;
 		case "tab":
 			game.tabs[lvl2num].select(lvl2num);
@@ -703,14 +698,14 @@ function buttonManager(event) {
 	}
 
 	if (actionCat == "pop") {
-		swamp.buildings[1].popPustule(1);
+		swamp.stack[1].popPustule(1);
 	} */
 
 }
 
 function checkPrice(num) {
 	//msg("checkPrice called with num " + num);
-	let prices = swamp.buildings[num].costs;
+	let prices = swamp.stack[num].costs;
 	for (let i = 0; i < prices.length; i++) {
 		let priceName = prices[i].name;
 		let priceCode = resources.findResInStack(priceName);
@@ -724,7 +719,7 @@ function checkPrice(num) {
 
 function payPrice(num) {
 //	msg("payPrice called with num " + num);
-	let prices = swamp.buildings[num].costs;
+	let prices = swamp.stack[num].costs;
 	for (let i = 0; i < prices.length; i++) {
 		let priceName = prices[i].name;
 		let priceCode = resources.findResInStack(priceName);
@@ -737,7 +732,7 @@ function payPrice(num) {
 
 function loadAllContentCosts() {
 	//msg("load all content costs called");
-	for (let i = 0; i < swamp.buildings.length; i++) {
+	for (let i = 0; i < swamp.stack.length; i++) {
 		//msg("loading " + i);
 		if (document.getElementById("buy-" + i + "-Costs") == null) {
 			msg("could not find element buy-" + i + "-Costs");
@@ -749,7 +744,7 @@ function loadAllContentCosts() {
 
 function updateContentCosts(num) {
 	//msg("updateContentCosts called");
-	let prices = swamp.buildings[num].costs;
+	let prices = swamp.stack[num].costs;
 	let dispCost = "";
 	for (let i = 0; i < prices.length; i++) {
 		let priceName = prices[i].name;
@@ -1010,7 +1005,7 @@ const dev = [
 	},
 	{ name: "button9",
 	  label: "build grid",
-	  run: function() { buildGrid(swamp.buildings); }
+	  run: function() { buildGrid(swamp.stack); }
 	}
 /*	{ name: "buttonX",
 	  label: "blank",
