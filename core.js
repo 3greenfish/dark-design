@@ -18,10 +18,10 @@ function objectParseMsg(ob) {
 function buildGrid() {
 	let output = "";
 	let numColumns = 3;
-	let columns = [ "", "", "" ];
+	let columns = [];
 	let currentColumn = 0;
 
-	for (let c = 0; c < columns.length; c++) {
+	for (let c = 0; c < numColumns; c++) {
 		columns[c] = `<div class="buttonColumn" id="buttonColumn${c}">`;
 	}
 	
