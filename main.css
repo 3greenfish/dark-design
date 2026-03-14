@@ -170,6 +170,7 @@ nav {
 
 .buttonMap2 {
 	background-color: #0000ff;
+	display: flex;
 }
 .buttonColumn {
 	width: 200px;
