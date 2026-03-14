@@ -181,7 +181,7 @@ nav {
 .buttonContainer {
 /*	width: 260px; */
 	flex: 0 0 200px;
-	margin: 3px;
+	margin: 0px;
 	padding: 0px;
 	border: none; /* 1px solid #dddddd; */
 	position: relative;
@@ -249,7 +249,7 @@ nav {
 #pustuleProgress {
 	height: 3px;
 	background-color: green;
-	width: 10%;
+	width: 0%;
 /*	border-radius: 0 0 10px 10px; */
 }
 
