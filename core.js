@@ -44,7 +44,7 @@ function buildGrid() {
 				</div>`;
 		columns[currentColumn] += newButton;
 		currentColumn += 1;
-		if (currentColumn > numColumns) { 
+		if (currentColumn >= numColumns) { 
 			currentColumn = 0;
 		}
 	}
