@@ -593,6 +593,7 @@ const resourcesBase = {
 
 		if (totalRes >= max) {
 			res.current = res.max;
+			res.max += 50;
 		} else {
 			res.current = rndPlusThree(totalRes);
 		}
