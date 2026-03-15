@@ -899,7 +899,7 @@ function updateContentCosts(num) {
 
 const timing = {
 	logTime: 0,
-	beltSpeed: 1000,
+	beltSpeed: 250,
 	beltStep: 0,
 	activateBelt: function() {
 		//call upon initialization
@@ -954,7 +954,10 @@ const timing = {
 			//	msg("beltstep 6");
 				break;
 			case 7:
+				break;
 			case 8:
+				calendar.updateCal();
+				break;
 			case 9:
 			case 10:
 			case 11:
@@ -962,7 +965,10 @@ const timing = {
 			case 13:
 			case 14:
 			case 15:
+				break;
 			case 16:
+				calendar.updateCal();
+				break;
 			case 17:
 			case 18:
 			case 19:
@@ -970,7 +976,10 @@ const timing = {
 			case 21:
 			case 22:
 			case 23:
+				break;
 			case 24:
+				calendar.updateCal();
+				break;
 			case 25:
 			case 26:
 			case 27:
@@ -978,7 +987,10 @@ const timing = {
 			case 29:
 			case 30:
 			case 31:
+				break;
 			case 32:
+				calendar.updateCal();
+				break;
 			case 33:
 			case 34:
 			case 35:
@@ -986,8 +998,10 @@ const timing = {
 			case 37:
 			case 38:
 			case 39:
+				break;
 			case 40:
 				// msg("beltStep collected" + this.beltStep);
+				calendar.updateCal();
 				break;
 		}
 		
@@ -1071,7 +1085,7 @@ const calendar = {
 		this.showCal = true;
 		document.getElementById("calendarBlock").style.display = "block";
 	},
-	adjustRunSpeed: function() {
+/*	adjustRunSpeed: function() {
 		if (this.runSpeed == 2000) {
 			this.runSpeed = 500;
 		} else {
@@ -1080,7 +1094,7 @@ const calendar = {
 		clearInterval(gameTimer);
 		gameTimer = setInterval(tick, this.runSpeed);
 
-	}
+	} */
 }; 
 
 //-- end calendar object --//
@@ -1103,12 +1117,12 @@ const dev = [
 		calendar.calDisplay();
 	  }
 	},
- 	{ name: "button2",
+/* 	{ name: "button2",
 	  label: "adjust run speed",
 	  run: function() {
 		  calendar.adjustRunSpeed();
 	  }
-	},
+	}, */
 	{ name: "button3",
 	  label: "hide/show all resources",
 	  run: function() {
@@ -1170,9 +1184,9 @@ let gameTimer = setInterval(tick, calendar.runSpeed);
 
 function tick() {
 //	msg("tick");
-	resources.updatePerTick();
+//	resources.updatePerTick();
 	resources.loadResourcePanel();
-	calendar.updateCal();
+//	calendar.updateCal();
 }
 
 //-- end interval timer --//
