@@ -267,6 +267,7 @@ const swampBase = {
 		  actions: [
 			  { subLabel: "Digest prey", type: "main", press: function() { }
 			  }
+		  ]
 		},
 		{ name: "swell",    //3
 		  label: "Swell",
