@@ -47,7 +47,7 @@ function buildGrid(source, sourceArray) {
 						<div class="costs" id="${identifer}Costs">
 							${costs}
 						</div>`;		
-		} else { cost = false; }
+		} /* else { cost = false; } */
 			
 		let newButton = `
 				<div class="buttonContainer">
