@@ -1119,7 +1119,8 @@ function setDevButtonsDynamic() {
 	let buttonBlock = "";
 	for (let i = 0; i < dev.length; i++) {
 		let label = dev[i].label;
-		let newButton = `<div class="button" data-target="dev-${i}" onClick="buttonManager(event)" id="devbutton${i}">${label}</div>`;
+/*		let newButton = `<div class="button" data-target="dev-${i}" onClick="buttonManager(event)" id="devbutton${i}">${label}</div>`; */
+		let newButton = `<div class="button" onClick="dev[${i}.run()" id="devbutton${i}">${label}</div>`;
 		buttonBlock += newButton;
 	}
 	document.getElementById("devButtons").innerHTML = buttonBlock;
