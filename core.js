@@ -584,7 +584,7 @@ const resourcesBase = {
 		}
 	],
 	addRes: function(resCode, amount) {
-		msg("addRes called with resCode " + resCode + " and amount " + amount);
+		//msg("addRes called with resCode " + resCode + " and amount " + amount);
 		let res = this.stack[resCode];
 		let totalRes = res.current;
 		let max = res.max;
@@ -593,7 +593,6 @@ const resourcesBase = {
 
 		if (totalRes >= max) {
 			res.current = res.max;
-			res.max += 50;
 		} else {
 			res.current = rndPlusThree(totalRes);
 		}
