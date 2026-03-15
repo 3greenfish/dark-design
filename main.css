@@ -266,9 +266,9 @@ nav {
 	max-height: 0;
 	transition: max-height 0.2s ease-out;
 	font-size: 80%;
-	position: absolute;
+/*	position: absolute;
 	top: 48px;
-	z-index: 5;
+	z-index: 5; */
 	user-select: none;
 	-webkit-user-select: none;
 	-ms-user-select: none;
