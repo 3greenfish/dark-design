@@ -58,11 +58,12 @@ function buildGrid(source, sourceArray) {
 			actions += `<div class="button" onClick="${buttonCode}">${sub}</div>`;
 		}
 
-			
+		let mainActionCode = `${source.name}.stack[${i}].actions[0].press(true)`;
+
 		let newButton = `
 				<div class="buttonContainer">
 					<div class="collapsible" id="${identifier}Collapsible">
-						<div class="buttonLabel" data-target="${identifier}" id="${identifier}Label" onClick="buttonManager(event)">${label}</div><div class="notch" data-target="${identifier}" onClick="expandButton2(event)">&#9776;</div>
+						<div class="buttonLabel" data-target="${identifier}" id="${identifier}Label" onClick="${mainActionCode}">${label}</div><div class="notch" data-target="${identifier}" onClick="expandButton2(event)">&#9776;</div>
 					</div>
 					<div class="content" id="${identifier}Content">
 						<p>${desc}</p>
@@ -238,7 +239,10 @@ const gameBase = {
 			press: calls a function when the button is pressed.
 
 
-			  { subLabel: "", type: "", press: function() { }
+			  { subLabel: "",
+			    type: "",
+				press: function(isMain = false) { 
+				}
 			  }
 		 
 
@@ -256,10 +260,12 @@ const swampBase = {
 		  actions: [
 			  { subLabel: "Fester",
 			    type: "main", 
-			    press: function() {
+			    press: function(isMain = false) {
 					let r = resources.findResInStack("corruption");
 					let a = resources.stack[r].gatherRate;
 					resources.addRes(r, a);
+
+					msg("isMain is " + isMain);
 				}
 			  }
 		  ]
@@ -279,7 +285,11 @@ const swampBase = {
 		  type: "gather",
 		  desc: "Process captured prey to generate Sustenance.",
 		  actions: [
-			  { subLabel: "Digest prey", type: "main", press: function() { }
+			  { subLabel: "Digest prey",
+			    type: "main",
+			    press: function(isMain = false) {
+					
+				}
 			  }
 		  ]
 		},
