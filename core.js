@@ -15,7 +15,7 @@ function objectParseMsg(ob) {
 
 
 
-function buildGrid(source) {
+function buildGrid(source, sourceArray) {
 	let output = "";
 	let numColumns = 3; // plan to change this to check settings once screen size is evaluated //
 	let columns = [];
@@ -26,25 +26,48 @@ function buildGrid(source) {
 		columns[c] = `<div class="buttonColumn" id="buttonColumn${c}">`;
 	}
 
-	if (!source) {
-		array = [
-		{ name: "steve" },
-		{ name: "john" },
-		{ name: "susan" },
-		{ name: "franklin" }
-		];
+	if (!sourceArray) {
+		array = [{ label: "no source array" },{ label: "have a button anyway" }];
 	} else {
-		array = source;
+		array = sourceArray;
 	}
-			
-	//check size, pick 2/3 column layout
 
-	for (let i = 0; i < array.length; i++) {
-		let label = array[i].name;
+	for (let i = 0; i < array.length; i++) {		//for every button in stack
+
+		// IF test to check if hidden or blocked, then continue FOR loop.
+		
+		let label = array[i].label;		//this is what shows in the label, will need to be updated for counts
+		let identifier = source.name + i;
+		let desc = array[i].desc;		//gets description from stack
+		let cost = "";
+		
+		if (array[i].costs) {
+			let costs = getContentCosts(source, i);
+			cost = `
+					<hr>
+						<div class="costs" id="${identifier}Costs">
+							${costs}
+						</div>`;		
+		} /* else { cost = false; } */
+
+		let actionsArray = array[i].actions;
+		let actions = "";
+		for (let a = 0; a < actionsArray.length; a++) {
+			let sub = actionsArray[a].subLabel;
+			let buttonCode = `${source.name}.stack[${i}].actions[${a}].press()`;
+			actions += `<div class="button" onClick="${buttonCode}">${sub}</div>`;
+		}
+
+			
 		let newButton = `
 				<div class="buttonContainer">
-					<div class="collapsible">
-						<div class="buttonLabel" data-target="" id="swellLabel2" onClick="buttonManager(event)">${label}</div><div class="notch" data-target="buy-0" onClick="expandButton(event)">&#9776;</div>
+					<div class="collapsible" id="${identifier}Collapsible">
+						<div class="buttonLabel" data-target="${identifier}" id="${identifier}Label" onClick="buttonManager(event)">${label}</div><div class="notch" data-target="${identifier}" onClick="expandButton2(event)">&#9776;</div>
+					</div>
+					<div class="content" id="${identifier}Content">
+						<p>${desc}</p>
+						${cost}
+						${actions}
 					</div>
 				</div>`;
 		columns[currentColumn] += newButton;
@@ -199,26 +222,86 @@ const gameBase = {
 	}
 };
 
-// ---- phase 1 buildings based as object ---- //
+// ---- phase 1 buttons based as object ---- //
+
+		 /*
+
+		 Each button has actions in an array.
+		 The first action is ALWAYS the main button, and should incorporate code to alternately check whether
+		 	a. costs exist
+			b. costs can be paid
+		 if costs can't be paid, expand button
+
+		 actions has following properties:
+		 	subLabel: what shows on the button when expanded. For main button, overwritten by label in parent.
+			type: main, maybe like a side-by-side button thing?
+			press: calls a function when the button is pressed.
+
+
+			  { subLabel: "", type: "", press: function() { }
+			  }
+		 
+
+		 */
 
 const swamp = {};
 const swampBase = {
 	name: "swamp",
-	buildings: [
-		{ name: "swell",    //0
+	stack: [
+		{ name: "fester",	//0
+		  label: "Fester",
+		  type: "gather",
+		  desc: "Fester in darkness to build up Corruption.",
+		  flavor: "",
+		  actions: [
+			  { subLabel: "Fester",
+			    type: "main", 
+			    press: function() {
+					let r = resources.findResInStack("corruption");
+					let a = resources.stack[r].gatherRate;
+					resources.addRes(r, a);
+				}
+			  }
+		  ]
+		},
+		{ name: "ensnare",	//1
+		  label: "Ensnare prey",
+		  type: "gather",
+		  desc: "Attempt to catch unsuspecting creatures to use as fuel.",
+		  flavor: "",
+		  actions: [
+			  { subLabel: "Ensnare", type: "main", press: function() { }
+			  }
+		  ]
+		},
+		{ name: "digest",	//2
+		  label: "Digest prey",
+		  type: "gather",
+		  desc: "Process captured prey to generate Sustenance.",
+		  actions: [
+			  { subLabel: "Digest prey", type: "main", press: function() { }
+			  }
+		  ]
+		},
+		{ name: "swell",    //3
 		  label: "Swell",
+		  desc: "A burgeoning swamp expands Corruption limits and enhances Festering.",
 		  count: 0,
 		  costs: [
 			  { name: "corruption", amount: 10 }
 		  ],
 		  ratio: 1.3,
+		  actions: [
+			  { subLabel: "Swell by 1m^2", type: "main", press: function() { }
+			  }
+		  ],
 		  onPurchase: function() {
 			  this.count += 1;
 			  this.updateButtonLabel();
 			  this.updateRatio();
 			  resources.stack[0].updateGatherRate();
 			  resources.stack[0].updateMax();
-			  updateContentCosts(0);
+			  updateContentCosts(3);
 		  },
 		  updateButtonLabel: function() {
 			  let newLabel = this.label;
@@ -235,13 +318,16 @@ const swampBase = {
 			  }
 		  }
 		},
-		{ name: "pustule",     //1
+		{ name: "pustule",     //4
 		  label: "Pustule",
+		  desc: `Pustules process Sustenance into a thick bile.</p><p>
+Once full, pustules generate Corruptions, and can be popped for Choler.`,
 		  count: 0,
 		  costs: [
 			  { name: "corruption", amount: 40 }
 		  ],
 		  ratio: 1.2,
+		  actions: [],
 		  filled: 0,
 		  unfilled: [],
 		  onPurchase: function() {
@@ -300,36 +386,51 @@ const swampBase = {
 			  document.getElementById(this.name + "Label").innerText = newLabel;
 		  }
 		},
-		{ name: "digestor",
+		{ name: "digestor",		//5
 		  label: "Digestor",
+		  desc: "This organ automatically processes captured prey into Sustenance.",
 		  count: 0,
 		  costs: [
 			  { name: "corruption", amount: 20 },
 			  { name: "choler", amount: 50 }
 		  ],
-		  ratio: 1.2
+		  ratio: 1.2,
+		  actions: []
 		},
-		{ name: "trap",
+		{ name: "trap",			//6
 		  label: "Trap",
+		  desc: "Sticky traps make it easier to catch prey, and have a small chance to capture prey automatically.",
 		  count: 0,
 		  costs: [
 			  { name: "corruption", amount: 50 },
 			  { name: "choler", amount: 20 }
 		  ],
-		  ratio: 1.2
+		  ratio: 1.2,
+		  actions: []
 		},
-		{ name: "siren",
+		{ name: "siren",		//7
 		  label: "Siren",
-		  count: 0,
-		  costs: [],
-		  ratio: 1.2
-		},
-		{ name: "nodule",
-		  label: "Nodule",
+		  desc: "Lure in advanced lifeforms.",
 		  count: 0,
 		  costs: [],
 		  ratio: 1.2,
+		  actions: []
+		},
+		{ name: "nodule",		//8
+		  label: "Nodule",
+		  desc: "Store additional corruption.",
+		  count: 0,
+		  costs: [],
+		  ratio: 1.2,
+		  actions: [],
 		  isUnlocked: false
+		},
+		{ name: "corruptHost",	//9
+		  label: "Corrupt a host",
+		  type: "gather",
+		  desc: `Convert a captured native into your first corrupted Host.
+(Starts phase 2)`,
+		  actions: []
 		}
 		],
 	buyBuilding: function(num) {
@@ -339,7 +440,7 @@ const swampBase = {
 		}
 		if (validator == "pass-sufficient") {
 			payPrice(num);
-			swamp.buildings[num].onPurchase();
+			swamp.stack[num].onPurchase();
 		}
 	}
 }
@@ -357,6 +458,7 @@ const resourcesBase = {
 		  limited: true,
 		  isUnlocked: true,
 		  max: 50,
+		  overflow: 0,
 		  perTick: 0,
 		  gatherRate: 1,
 		  gather: function() {
@@ -371,7 +473,7 @@ const resourcesBase = {
 			  resources.loadResource(0); // need to clean up this code
 		  },
 		  updateGatherRate: function() {
-			  this.gatherRate = rndPlusThree(1 + (0.1 * swamp.buildings[0].count));
+			  this.gatherRate = rndPlusThree(1 + (0.1 * swamp.stack[0].count));
 		  },
 // -- updatePerTick is untested -- //	 
 		  updatePerTick: function() {
@@ -381,7 +483,7 @@ const resourcesBase = {
 		  updateMax: function() {
 			  let swl = findBldgInSwamp("swell");
 			  let pus = findBldgInSwamp("pustule");
-			  let newMax = 50 + (swamp.buildings[swl].count * 5) + (swamp.buildings[pus].count * 50);
+			  let newMax = 50 + (swamp.stack[swl].count * 5) + (swamp.stack[pus].count * 50);
 			  this.max = newMax;
 		  }
 		},
@@ -481,6 +583,22 @@ const resourcesBase = {
 			  ]
 		}
 	],
+	addRes: function(resCode, amount) {
+		//msg("addRes called with resCode " + resCode + " and amount " + amount);
+		let res = this.stack[resCode];
+		let totalRes = res.current;
+		let max = res.max;
+
+		totalRes += amount;
+
+		if (totalRes >= max) {
+			res.current = res.max;
+		} else {
+			res.current = rndPlusThree(totalRes);
+		}
+		this.loadResource(resCode);
+		msg("addRes completed");
+	},
 	checkCosts: function(x) {
 		let result = { result: "fail", reason: "failed function" };
 //		if (!this.stack[x].gatherCost.length > 0) {
@@ -592,7 +710,7 @@ const resourcesBase = {
 		// the code below is specifically for pustules and sustenance only
 		let perTickValue = 0;
 		let availableSus = this.stack[2].current + perTickValue;
-		let subtract = swamp.buildings[1].fillPus(availableSus);
+		let subtract = swamp.stack[1].fillPus(availableSus);
 		this.stack[2].current = this.stack[2].current + perTickValue - subtract;
 	}
 } // --- close resources object --- //
@@ -615,8 +733,8 @@ const researchBase = {};
 
 function findBldgInSwamp(name) {
 	let findName = name;
-	for (let i = 0; i < swamp.buildings.length; i++) {
-		if (swamp.buildings[i].name == findName) {
+	for (let i = 0; i < swamp.stack.length; i++) {
+		if (swamp.stack[i].name == findName) {
 			return i;
 		}
 	}
@@ -645,7 +763,7 @@ function loadGame() {	//runs at end of HTML load
 	resources.loadResourcePanel();
 	//setDevButtons();
 	setDevButtonsDynamic();
-	loadAllContentCosts();
+//	loadAllContentCosts();		comment out, dynamic build should handle this once added.
 	msg("You have awakened...");
 	
 }
@@ -681,7 +799,7 @@ function buttonManager(event) {
 			swamp.buyBuilding(lvl2num);
 			break;
 		case "pop":
-			swamp.buildings[1].popPustule(1);
+			swamp.stack[1].popPustule(1);
 			break;
 		case "tab":
 			game.tabs[lvl2num].select(lvl2num);
@@ -703,14 +821,14 @@ function buttonManager(event) {
 	}
 
 	if (actionCat == "pop") {
-		swamp.buildings[1].popPustule(1);
+		swamp.stack[1].popPustule(1);
 	} */
 
 }
 
 function checkPrice(num) {
 	//msg("checkPrice called with num " + num);
-	let prices = swamp.buildings[num].costs;
+	let prices = swamp.stack[num].costs;
 	for (let i = 0; i < prices.length; i++) {
 		let priceName = prices[i].name;
 		let priceCode = resources.findResInStack(priceName);
@@ -724,7 +842,7 @@ function checkPrice(num) {
 
 function payPrice(num) {
 //	msg("payPrice called with num " + num);
-	let prices = swamp.buildings[num].costs;
+	let prices = swamp.stack[num].costs;
 	for (let i = 0; i < prices.length; i++) {
 		let priceName = prices[i].name;
 		let priceCode = resources.findResInStack(priceName);
@@ -735,9 +853,9 @@ function payPrice(num) {
 //	msg("payPrice completed");
 }
 
-function loadAllContentCosts() {
+function loadAllContentCosts() { 		//updates needed for new button scheme, or delete
 	//msg("load all content costs called");
-	for (let i = 0; i < swamp.buildings.length; i++) {
+	for (let i = 0; i < swamp.stack.length; i++) {
 		//msg("loading " + i);
 		if (document.getElementById("buy-" + i + "-Costs") == null) {
 			msg("could not find element buy-" + i + "-Costs");
@@ -747,9 +865,24 @@ function loadAllContentCosts() {
 	}
 }
 
+function getContentCosts(stack, num) {
+	//msg("getContentCosts called");
+	
+	let prices = stack.stack[num].costs;
+	let dispCost = "";
+	for (let i = 0; i < prices.length; i++) {
+		let priceName = prices[i].name;
+		let priceCode = resources.findResInStack(priceName);
+		let label = resources.stack[priceCode].label;
+		let value = prices[i].amount;
+		dispCost += `<div class="bldgCostPriceName">${label}:</div><div class="bldgCostRes">${value}</div>`;
+	}
+	return dispCost;	
+}
+
 function updateContentCosts(num) {
 	//msg("updateContentCosts called");
-	let prices = swamp.buildings[num].costs;
+	let prices = swamp.stack[num].costs;
 	let dispCost = "";
 	for (let i = 0; i < prices.length; i++) {
 		let priceName = prices[i].name;
@@ -767,7 +900,7 @@ function updateContentCosts(num) {
 
 const timing = {
 	logTime: 0,
-	beltSpeed: 1000,
+	beltSpeed: 250,
 	beltStep: 0,
 	activateBelt: function() {
 		//call upon initialization
@@ -822,7 +955,10 @@ const timing = {
 			//	msg("beltstep 6");
 				break;
 			case 7:
+				break;
 			case 8:
+				calendar.updateCal();
+				break;
 			case 9:
 			case 10:
 			case 11:
@@ -830,7 +966,10 @@ const timing = {
 			case 13:
 			case 14:
 			case 15:
+				break;
 			case 16:
+				calendar.updateCal();
+				break;
 			case 17:
 			case 18:
 			case 19:
@@ -838,7 +977,10 @@ const timing = {
 			case 21:
 			case 22:
 			case 23:
+				break;
 			case 24:
+				calendar.updateCal();
+				break;
 			case 25:
 			case 26:
 			case 27:
@@ -846,7 +988,10 @@ const timing = {
 			case 29:
 			case 30:
 			case 31:
+				break;
 			case 32:
+				calendar.updateCal();
+				break;
 			case 33:
 			case 34:
 			case 35:
@@ -854,8 +999,10 @@ const timing = {
 			case 37:
 			case 38:
 			case 39:
+				break;
 			case 40:
 				// msg("beltStep collected" + this.beltStep);
+				calendar.updateCal();
 				break;
 		}
 		
@@ -939,7 +1086,7 @@ const calendar = {
 		this.showCal = true;
 		document.getElementById("calendarBlock").style.display = "block";
 	},
-	adjustRunSpeed: function() {
+/*	adjustRunSpeed: function() {
 		if (this.runSpeed == 2000) {
 			this.runSpeed = 500;
 		} else {
@@ -948,7 +1095,7 @@ const calendar = {
 		clearInterval(gameTimer);
 		gameTimer = setInterval(tick, this.runSpeed);
 
-	}
+	} */
 }; 
 
 //-- end calendar object --//
@@ -971,12 +1118,12 @@ const dev = [
 		calendar.calDisplay();
 	  }
 	},
- 	{ name: "button2",
+/* 	{ name: "button2",
 	  label: "adjust run speed",
 	  run: function() {
 		  calendar.adjustRunSpeed();
 	  }
-	},
+	}, */
 	{ name: "button3",
 	  label: "hide/show all resources",
 	  run: function() {
@@ -1010,7 +1157,7 @@ const dev = [
 	},
 	{ name: "button9",
 	  label: "build grid",
-	  run: function() { buildGrid(swamp.buildings); }
+	  run: function() { buildGrid(swamp, swamp.stack); }
 	}
 /*	{ name: "buttonX",
 	  label: "blank",
@@ -1023,7 +1170,8 @@ function setDevButtonsDynamic() {
 	let buttonBlock = "";
 	for (let i = 0; i < dev.length; i++) {
 		let label = dev[i].label;
-		let newButton = `<div class="button" data-target="dev-${i}" onClick="buttonManager(event)" id="devbutton${i}">${label}</div>`;
+/*		let newButton = `<div class="button" data-target="dev-${i}" onClick="buttonManager(event)" id="devbutton${i}">${label}</div>`; */
+		let newButton = `<div class="button" onClick="dev[${i}].run()" id="devbutton${i}">${label}</div>`;
 		buttonBlock += newButton;
 	}
 	document.getElementById("devButtons").innerHTML = buttonBlock;
@@ -1037,9 +1185,9 @@ let gameTimer = setInterval(tick, calendar.runSpeed);
 
 function tick() {
 //	msg("tick");
-	resources.updatePerTick();
+//	resources.updatePerTick();
 	resources.loadResourcePanel();
-	calendar.updateCal();
+//	calendar.updateCal();
 }
 
 //-- end interval timer --//
@@ -1054,6 +1202,23 @@ function toggleActive(e) {
 	targetPanel.classList.toggle('active')
 }
 
+
+function expandButton2(butt) {
+	const target = butt.target.getAttribute('data-target');
+	const targetContent = document.getElementById(target + "Content");
+	const targetButton = document.getElementById(target + "Collapsible");
+	
+	if (targetContent.style.display == "block") {
+		targetContent.style.display = "none"; /* hide content DIV */
+		targetButton.style.borderBottom = "1px solid black"; /* restore border */	
+		targetContent.style.maxHeight = "0";
+
+	} else {
+		targetContent.style.display = "block";
+		targetContent.style.maxHeight = targetContent.scrollHeight + "px";
+		targetButton.style.borderBottom = "none";
+	}
+}
 
 function expandButton(butt) {
 	const target = butt.target.getAttribute('data-target');

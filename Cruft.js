@@ -82,3 +82,144 @@ function updateObjectTest() {
 
 
 
+const swampBase = {
+	name: "swamp",
+	stack: [
+		{ name: "swell",    //0
+		  label: "Swell",
+		  count: 0,
+		  costs: [
+			  { name: "corruption", amount: 10 }
+		  ],
+		  ratio: 1.3,
+		  onPurchase: function() {
+			  this.count += 1;
+			  this.updateButtonLabel();
+			  this.updateRatio();
+			  resources.stack[0].updateGatherRate();
+			  resources.stack[0].updateMax();
+			  updateContentCosts(0);
+		  },
+		  updateButtonLabel: function() {
+			  let newLabel = this.label;
+			  if (this.count > 0) {
+				  newLabel = newLabel + " (" + this.count + "m^2)";
+			  }
+			  document.getElementById(this.name + "Label").innerText = newLabel;
+		  },
+		  updateRatio: function() {
+			  for (let i = 0; i < this.costs.length; i++) {
+				  let newAmount = rndPlusThree(this.costs[i].amount * this.ratio);
+				  this.costs[i].amount = newAmount;
+				  msg("new cost for Swell is " + this.costs[i].amount + " " + this.costs[i].name);
+			  }
+		  }
+		},
+		{ name: "pustule",     //1
+		  label: "Pustule",
+		  count: 0,
+		  costs: [
+			  { name: "corruption", amount: 40 }
+		  ],
+		  ratio: 1.2,
+		  filled: 0,
+		  unfilled: [],
+		  onPurchase: function() {
+			  this.unfilled.push({ level: 0 });
+			  this.count += 1;
+			  this.updateButtonLabel();
+			  this.updateRatio();
+			  updateContentCosts(1);
+		  },
+		  fillPus: function(x) {
+//			  msg("fillPus called with value " + x);
+			  let sus = x;    //sustenance available
+			  let spent = 0;
+			  let count = this.unfilled.length; //get total number of unfilled pustules
+			  if (count > 0) {
+				  for (let i = 0; i < count; i++) {
+					  if (sus < 1) { 
+						  break;
+					  }
+					  this.unfilled[i].level += 1;
+					  sus -= 1;
+					  spent += 1;
+					  if (this.unfilled[i].level >= 30) {
+						  this.filled += 1;
+						  this.unfilled.shift();
+						  this.updateButtonLabel();
+					  }
+				  }
+			  }
+
+			  let newCount = this.unfilled.length;
+			  let progWidth = 0;
+			  if (newCount > 0) {
+				  progWidth = (this.unfilled[0].level / 30) * 100;
+			  } 
+
+			  document.getElementById(this.name + "Progress").style.width = progWidth + "%";
+			  
+			  return spent;
+		  },
+		  popPustule: function(count) {
+			  if (!this.filled > 0) {
+				  return
+			  } else {
+				  this.filled -= 1;
+				  this.unfilled.push({ level: 0 });
+				  resources.gatherByName("choler");
+				  this.updateButtonLabel();
+			  }  
+		  },
+		  updateButtonLabel: function() {
+			  let newLabel = this.label;
+				  if (this.count > 0) {
+					  newLabel = newLabel + " (" + this.filled + "/" + this.count + ")";
+				  }
+			  document.getElementById(this.name + "Label").innerText = newLabel;
+		  }
+		},
+		{ name: "digestor",
+		  label: "Digestor",
+		  count: 0,
+		  costs: [
+			  { name: "corruption", amount: 20 },
+			  { name: "choler", amount: 50 }
+		  ],
+		  ratio: 1.2
+		},
+		{ name: "trap",
+		  label: "Trap",
+		  count: 0,
+		  costs: [
+			  { name: "corruption", amount: 50 },
+			  { name: "choler", amount: 20 }
+		  ],
+		  ratio: 1.2
+		},
+		{ name: "siren",
+		  label: "Siren",
+		  count: 0,
+		  costs: [],
+		  ratio: 1.2
+		},
+		{ name: "nodule",
+		  label: "Nodule",
+		  count: 0,
+		  costs: [],
+		  ratio: 1.2,
+		  isUnlocked: false
+		}
+		],
+	buyBuilding: function(num) {
+		let validator = checkPrice(num); 
+		if (validator == "fail-insufficient") {  // should probably be a switch...
+			msg("insufficient resources");
+		}
+		if (validator == "pass-sufficient") {
+			payPrice(num);
+			swamp.stack[num].onPurchase();
+		}
+	}
+}
