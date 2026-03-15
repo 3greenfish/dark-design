@@ -327,6 +327,7 @@ Once full, pustules generate Corruptions, and can be popped for Choler.`,
 			  { name: "corruption", amount: 40 }
 		  ],
 		  ratio: 1.2,
+		  actions: [],
 		  filled: 0,
 		  unfilled: [],
 		  onPurchase: function() {
@@ -393,7 +394,8 @@ Once full, pustules generate Corruptions, and can be popped for Choler.`,
 			  { name: "corruption", amount: 20 },
 			  { name: "choler", amount: 50 }
 		  ],
-		  ratio: 1.2
+		  ratio: 1.2,
+		  actions: []
 		},
 		{ name: "trap",			//6
 		  label: "Trap",
@@ -403,14 +405,16 @@ Once full, pustules generate Corruptions, and can be popped for Choler.`,
 			  { name: "corruption", amount: 50 },
 			  { name: "choler", amount: 20 }
 		  ],
-		  ratio: 1.2
+		  ratio: 1.2,
+		  actions: []
 		},
 		{ name: "siren",		//7
 		  label: "Siren",
 		  desc: "Lure in advanced lifeforms.",
 		  count: 0,
 		  costs: [],
-		  ratio: 1.2
+		  ratio: 1.2,
+		  actions: []
 		},
 		{ name: "nodule",		//8
 		  label: "Nodule",
@@ -418,13 +422,15 @@ Once full, pustules generate Corruptions, and can be popped for Choler.`,
 		  count: 0,
 		  costs: [],
 		  ratio: 1.2,
+		  actions: [],
 		  isUnlocked: false
 		},
 		{ name: "corruptHost",	//9
 		  label: "Corrupt a host",
 		  type: "gather",
 		  desc: `Convert a captured native into your first corrupted Host.
-(Starts phase 2)`
+(Starts phase 2)`,
+		  actions: []
 		}
 		],
 	buyBuilding: function(num) {
