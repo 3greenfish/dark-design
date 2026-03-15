@@ -214,7 +214,27 @@ const gameBase = {
 	}
 };
 
-// ---- phase 1 buildings based as object ---- //
+// ---- phase 1 buttons based as object ---- //
+
+		 /*
+
+		 Each button has actions in an array.
+		 The first action is ALWAYS the main button, and should incorporate code to alternately check whether
+		 	a. costs exist
+			b. costs can be paid
+		 if costs can't be paid, expand button
+
+		 actions has following properties:
+		 	subLabel: what shows on the button when expanded. For main button, overwritten by label in parent.
+			type: main, maybe like a side-by-side button thing?
+			press: calls a function when the button is pressed.
+
+
+			  { subLabel: "", type: "", press: function() { }
+			  }
+		 
+
+		 */
 
 const swamp = {};
 const swampBase = {
@@ -225,19 +245,28 @@ const swampBase = {
 		  type: "gather",
 		  desc: "Fester in darkness to build up Corruption.",
 		  flavor: "",
-		  actions: []
+		  actions: [
+			  { subLabel: "Fester", type: "main", press: function() { }
+			  }
+		  ]
 		},
 		{ name: "ensnare",	//1
 		  label: "Ensnare prey",
 		  type: "gather",
 		  desc: "Attempt to catch unsuspecting creatures to use as fuel.",
 		  flavor: "",
-		  actions: []
+		  actions: [
+			  { subLabel: "Ensnare", type: "main", press: function() { }
+			  }
+		  ]
 		},
 		{ name: "digest",	//2
 		  label: "Digest prey",
 		  type: "gather",
-		  desc: "Process captured prey to generate Sustenance."
+		  desc: "Process captured prey to generate Sustenance.",
+		  actions: [
+			  { subLabel: "Digest prey", type: "main", press: function() { }
+			  }
 		},
 		{ name: "swell",    //3
 		  label: "Swell",
@@ -247,13 +276,17 @@ const swampBase = {
 			  { name: "corruption", amount: 10 }
 		  ],
 		  ratio: 1.3,
+		  actions: [
+			  { subLabel: "Swell by 1m^2", type: "main", press: function() { }
+			  }
+		  ],
 		  onPurchase: function() {
 			  this.count += 1;
 			  this.updateButtonLabel();
 			  this.updateRatio();
 			  resources.stack[0].updateGatherRate();
 			  resources.stack[0].updateMax();
-			  updateContentCosts(0);
+			  updateContentCosts(3);
 		  },
 		  updateButtonLabel: function() {
 			  let newLabel = this.label;
@@ -692,7 +725,7 @@ function loadGame() {	//runs at end of HTML load
 	resources.loadResourcePanel();
 	//setDevButtons();
 	setDevButtonsDynamic();
-	loadAllContentCosts();
+//	loadAllContentCosts();		comment out, dynamic build should handle this once added.
 	msg("You have awakened...");
 	
 }
@@ -782,7 +815,7 @@ function payPrice(num) {
 //	msg("payPrice completed");
 }
 
-function loadAllContentCosts() {
+function loadAllContentCosts() { 		//updates needed for new button scheme, or delete
 	//msg("load all content costs called");
 	for (let i = 0; i < swamp.stack.length; i++) {
 		//msg("loading " + i);
