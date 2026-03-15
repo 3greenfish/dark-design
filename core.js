@@ -1072,7 +1072,7 @@ const dev = [
 	},
 	{ name: "button9",
 	  label: "build grid",
-	  run: function() { buildGrid(swamp.stack); }
+	  run: function() { buildGrid(swamp, swamp.stack); }
 	}
 /*	{ name: "buttonX",
 	  label: "blank",
