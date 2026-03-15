@@ -51,8 +51,8 @@ function buildGrid(source, sourceArray) {
 			
 		let newButton = `
 				<div class="buttonContainer">
-					<div class="collapsible">
-						<div class="buttonLabel" data-target="" id="${identifier}Label" onClick="buttonManager(event)">${label}</div><div class="notch" data-target="buy-0" onClick="expandButton(event)">&#9776;</div>
+					<div class="${identifier}Collapsible">
+						<div class="buttonLabel" data-target="${identifier}" id="${identifier}Label" onClick="buttonManager(event)">${label}</div><div class="notch" data-target="${identifier}" onClick="expandButton2(event)">&#9776;</div>
 					</div>
 					<div class="content" id="${identifier}Content">
 						<p>${desc}</p>
@@ -1116,6 +1116,23 @@ function toggleActive(e) {
 	targetPanel.classList.toggle('active')
 }
 
+
+function expandButton2(butt) {
+	const target = butt.target.getAttribute('data-target');
+	const targetContent = document.getElementById(target + "Content");
+	const targetButton = document.getElementById(target + "Collapsible");
+	
+	if (targetContent.style.display == "block") {
+		targetContent.style.display = "none"; /* hide content DIV */
+		targetButton.style.borderBottom = "1px solid black"; /* restore border */	
+		targetContent.style.maxHeight = "0";
+
+	} else {
+		targetContent.style.display = "block";
+		targetContent.style.maxHeight = targetContent.scrollHeight + "px";
+		targetButton.style.borderBottom = "none";
+	}
+}
 
 function expandButton(butt) {
 	const target = butt.target.getAttribute('data-target');
