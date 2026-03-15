@@ -596,6 +596,7 @@ const resourcesBase = {
 		} else {
 			res.current = rndPlusThree(totalRes);
 		}
+		this.loadResource(resCode);
 		msg("addRes completed");
 	},
 	checkCosts: function(x) {
