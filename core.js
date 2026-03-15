@@ -44,7 +44,7 @@ function buildGrid(source, sourceArray) {
 			let costs = getContentCosts(source, i);
 			cost = `
 					<hr>
-						<div class="costs" id="${identifer}Costs">
+						<div class="costs" id="${identifier}Costs">
 							${costs}
 						</div>`;		
 		} /* else { cost = false; } */
