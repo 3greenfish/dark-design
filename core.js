@@ -32,7 +32,7 @@ function buildGrid(source, sourceArray) {
 		array = sourceArray;
 	}
 
-	for (let i = 0; i < array.length; i++) {
+	for (let i = 0; i < array.length; i++) {		//for every button in stack
 
 		// IF test to check if hidden or blocked, then continue FOR loop.
 		
@@ -49,6 +49,15 @@ function buildGrid(source, sourceArray) {
 							${costs}
 						</div>`;		
 		} /* else { cost = false; } */
+
+		let actionsArray = array[i].actions;
+		let actions = "";
+		for (let a = 0; a < actionsArray.length; a++) {
+			let sub = actionsArray[a].subLabel;
+			let buttonCode = `${source.name}.stack[${i}].actions[${a}].press()`;
+			actions += `<div class="button" onClick="${buttonCode}">${sub}</div>`;
+		}
+
 			
 		let newButton = `
 				<div class="buttonContainer">
@@ -58,10 +67,8 @@ function buildGrid(source, sourceArray) {
 					<div class="content" id="${identifier}Content">
 						<p>${desc}</p>
 						${cost}
-						<div class="button" data-target="buy-0" onClick="buttonManager(event)">Swell by 1m^2</div>
+						${actions}
 					</div>
-
-					
 				</div>`;
 		columns[currentColumn] += newButton;
 		currentColumn += 1;
@@ -247,7 +254,13 @@ const swampBase = {
 		  desc: "Fester in darkness to build up Corruption.",
 		  flavor: "",
 		  actions: [
-			  { subLabel: "Fester", type: "main", press: function() { }
+			  { subLabel: "Fester",
+			    type: "main", 
+			    press: function() {
+					let r = resources.findResInStack("corruption");
+					let a = resources.stack[r].gatherRate;
+					resources.addRes(r, a);
+				}
 			  }
 		  ]
 		},
@@ -439,6 +452,7 @@ const resourcesBase = {
 		  limited: true,
 		  isUnlocked: true,
 		  max: 50,
+		  overflow: 0,
 		  perTick: 0,
 		  gatherRate: 1,
 		  gather: function() {
@@ -563,6 +577,21 @@ const resourcesBase = {
 			  ]
 		}
 	],
+	addRes: function(resCode, amount) {
+		msg("addRes called with resCode " + resCode + " and amount " + amount);
+		let res = this.stack[resCode];
+		let totalRes = res.current;
+		let max = res.max;
+
+		totalRes += amount;
+
+		if (totalRes >= max) {
+			res.current = res.max;
+		} else {
+			res.current = rndPlusThree(totalRes);
+		}
+		msg("addRes completed");
+	},
 	checkCosts: function(x) {
 		let result = { result: "fail", reason: "failed function" };
 //		if (!this.stack[x].gatherCost.length > 0) {
