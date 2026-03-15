@@ -15,7 +15,7 @@ function objectParseMsg(ob) {
 
 
 
-function buildGrid(source) {
+function buildGrid(source, sourceArray) {
 	let output = "";
 	let numColumns = 3; // plan to change this to check settings once screen size is evaluated //
 	let columns = [];
@@ -26,21 +26,41 @@ function buildGrid(source) {
 		columns[c] = `<div class="buttonColumn" id="buttonColumn${c}">`;
 	}
 
-	if (!source) {
+	if (!sourceArray) {
 		array = [{ label: "no source array" },{ label: "have a button anyway" }];
 	} else {
-		array = source;
+		array = sourceArray;
 	}
 			
 	//check size, pick 2/3 column layout
 
 	for (let i = 0; i < array.length; i++) {
-		let label = array[i].label;
+		let label = array[i].label;		//this is what shows in the label, will need to be updated for counts
+		let identifier = source.name + i;
+		let desc = array[i].desc;		//gets description from stack
+		let cost = "";
+		
+		if (array[i].costs) {
+			let costs = getContentCosts(source, i);
+			cost = `
+					<hr>
+						<div class="costs" id="${identifer}Costs">
+							${costs}
+						</div>`;		
+		} else { cost = false; }
+			
 		let newButton = `
 				<div class="buttonContainer">
 					<div class="collapsible">
-						<div class="buttonLabel" data-target="" id="swellLabel2" onClick="buttonManager(event)">${label}</div><div class="notch" data-target="buy-0" onClick="expandButton(event)">&#9776;</div>
+						<div class="buttonLabel" data-target="" id="${identifier}Label" onClick="buttonManager(event)">${label}</div><div class="notch" data-target="buy-0" onClick="expandButton(event)">&#9776;</div>
 					</div>
+					<div class="content" id="${identifier}Content">
+						<p>${desc}</p>
+						${cost}
+						<div class="button" data-target="buy-0" onClick="buttonManager(event)">Swell by 1m^2</div>
+					</div>
+
+					
 				</div>`;
 		columns[currentColumn] += newButton;
 		currentColumn += 1;
@@ -772,6 +792,21 @@ function loadAllContentCosts() {
 		}
 		updateContentCosts(i);
 	}
+}
+
+function getContentCosts(stack, num) {
+	//msg("getContentCosts called");
+	
+	let prices = stack.stack[num].costs;
+	let dispCost = "";
+	for (let i = 0; i < prices.length; i++) {
+		let priceName = prices[i].name;
+		let priceCode = resources.findResInStack(priceName);
+		let label = resources.stack[priceCode].label;
+		let value = prices[i].amount;
+		dispCost += `<div class="bldgCostPriceName">${label}:</div><div class="bldgCostRes">${value}</div>`;
+	}
+	return dispCost;	
 }
 
 function updateContentCosts(num) {
