@@ -31,10 +31,11 @@ function buildGrid(source, sourceArray) {
 	} else {
 		array = sourceArray;
 	}
-			
-	//check size, pick 2/3 column layout
 
 	for (let i = 0; i < array.length; i++) {
+
+		// IF test to check if hidden or blocked, then continue FOR loop.
+		
 		let label = array[i].label;		//this is what shows in the label, will need to be updated for counts
 		let identifier = source.name + i;
 		let desc = array[i].desc;		//gets description from stack
