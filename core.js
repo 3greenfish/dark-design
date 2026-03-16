@@ -703,6 +703,7 @@ const resourcesBase = {
 			let priceCode = resources.findResInStack(priceName);
 			let value = array[i].amount;
 			resources.stack[priceCode].current -= value;
+			resources.loadResource(priceCode);
 		}
 		msg("payCostsByArray completed");
 	},
