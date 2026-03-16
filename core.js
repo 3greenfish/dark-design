@@ -300,7 +300,7 @@ const swampBase = {
 					} else if (isMain = true) {
 						//expand or close button
 						msg("isMain is TRUE, calling expandButton2");
-						expandButton2("swamp" + code));
+						expandButton2("swamp" + code);
 					}
 				}
 			  }
