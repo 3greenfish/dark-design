@@ -54,11 +54,11 @@ function buildGrid(source, sourceArray) {
 		let actions = "";
 		for (let a = 0; a < actionsArray.length; a++) {
 			let sub = actionsArray[a].subLabel;
-			let buttonCode = `${source.name}.stack[${i}].actions[${a}].press()`;
+			let buttonCode = `${source.name}.stack[${i}].actions[${a}].press(${i})`;
 			actions += `<div class="button" onClick="${buttonCode}">${sub}</div>`;
 		}
 
-		let mainActionCode = `${source.name}.stack[${i}].actions[0].press(true)`;
+		let mainActionCode = `${source.name}.stack[${i}].actions[0].press(${i},true)`;
 
 		let newButton = `
 				<div class="buttonContainer">
@@ -237,11 +237,13 @@ const gameBase = {
 		 	subLabel: what shows on the button when expanded. For main button, overwritten by label in parent.
 			type: main, maybe like a side-by-side button thing?
 			press: calls a function when the button is pressed.
+				code: this is built into the button to facilitate calling parent items.
+				isMain: defaults to false. Will be true for main buttons, can be used to expand/close collapsible.
 
 
 			  { subLabel: "",
 			    type: "",
-				press: function(isMain = false) { 
+				press: function(code, isMain = false) { 
 				}
 			  }
 		 
@@ -260,12 +262,12 @@ const swampBase = {
 		  actions: [
 			  { subLabel: "Fester",
 			    type: "main", 
-			    press: function(isMain = false) {
+			    press: function(code, isMain = false) {
 					let r = resources.findResInStack("corruption");
 					let a = resources.stack[r].gatherRate;
 					resources.addRes(r, a);
 
-					msg("isMain is " + isMain);
+					msg("code is " + code + ", isMain is " + isMain);
 				}
 			  }
 		  ]
@@ -276,7 +278,7 @@ const swampBase = {
 		  desc: "Attempt to catch unsuspecting creatures to use as fuel.",
 		  flavor: "",
 		  actions: [
-			  { subLabel: "Ensnare", type: "main", press: function() { }
+			  { subLabel: "Ensnare", type: "main", press: function(code, isMain = false) { }
 			  }
 		  ]
 		},
@@ -284,10 +286,15 @@ const swampBase = {
 		  label: "Digest prey",
 		  type: "gather",
 		  desc: "Process captured prey to generate Sustenance.",
+		  costs: [
+			  { name: "prey", amount: 2 }
+		  ],
 		  actions: [
 			  { subLabel: "Digest prey",
 			    type: "main",
-			    press: function(isMain = false) {
+			    press: function(code, isMain = false) {
+					let getCosts = swamp[code].costs;
+					resources.checkCostsByArray(getCosts);
 					
 				}
 			  }
@@ -302,7 +309,11 @@ const swampBase = {
 		  ],
 		  ratio: 1.3,
 		  actions: [
-			  { subLabel: "Swell by 1m^2", type: "main", press: function() { }
+			  { subLabel: "Swell by 1m^2",
+			    type: "main",
+			    press: function(code, isMain = false) {
+					
+				}
 			  }
 		  ],
 		  onPurchase: function() {
@@ -452,6 +463,17 @@ Once full, pustules generate Corruptions, and can be popped for Choler.`,
 			payPrice(num);
 			swamp.stack[num].onPurchase();
 		}
+	},
+	findEntry: function(name) {
+		let findName = name;
+		for (let i = 0; i < swamp.stack.length; i++) {
+			if (swamp.stack[i].name == findName) {
+				return i;
+			}
+		}
+	},
+	buyEntry: function(num) {
+		
 	}
 }
 
@@ -629,6 +651,35 @@ const resourcesBase = {
 		result.result = "pass";
 		result.reason = "sufficient resources";
 		return result;	
+	},
+	checkCostsByArray: function(array) {		//send resources.checkCostsByArray an array of costs to check
+		let result = { result: "fail", reason: "failed function" };
+		if (array === undefined) {
+			result = { result: "pass", reason: "no costs" };
+			return result;
+		}
+		let prices = array;
+		for (let i = 0; i < prices.length; i++) {
+			let priceName = prices[i].name;
+			let priceCode = resources.findResInStack(priceName);
+			let value = prices[i].amount;
+			if (value > resources.stack[priceCode].current) {
+				result.reason = "insufficient " + priceName;
+				return result;
+			}
+		}
+		result.result = "pass";
+		result.reason = "sufficient resources";
+		return result;	
+	},
+	payCostsByArray: function(array) {
+		for (let i = 0; i < array.length; i++) {
+			let priceName = prices[i].name;
+			let priceCode = resources.findResInStack(priceName);
+			let value = prices[i].amount;
+			resources.stack[priceCode].current -= value;
+		}
+		msg("payCostsByArray completed");
 	},
 	findResInStack: function(name) {
 		let findName = name;
