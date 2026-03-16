@@ -293,14 +293,17 @@ const swampBase = {
 			  { subLabel: "Digest prey",
 			    type: "main",
 			    press: function(code, isMain = false) {
+					msg("Digest button called");
 					let getCosts = swamp[code].costs;
+					msg("loaded getCosts");
 					if (resources.checkCostsByArray(getCosts).result = "pass" && resources.canAddRes("sustenance", 1)) {
+						msg("checked costs, checked to add res");
 						resources.payCostsByArray(getCosts);
-						
 					} else if (isMain = true) {
 						//expand or close button
 						msg("isMain is TRUE, calling expandButton2");
-						expandButton2("swamp" + code);
+						let target = "swamp" + code;
+						expandButton2(target);
 					}
 				}
 			  }
@@ -1277,6 +1280,7 @@ function toggleActive(e) {
 
 
 function expandButton2(target) {
+	msg("expandButton2 called with target: " + target);
 	const targetContent = document.getElementById(target + "Content");
 	const targetButton = document.getElementById(target + "Collapsible");
 	
