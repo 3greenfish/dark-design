@@ -294,7 +294,7 @@ const swampBase = {
 			    type: "main",
 			    press: function(code, isMain = false) {
 					msg("Digest button called");
-					let getCosts = swamp[code].costs;
+					let getCosts = swamp.stack[code].costs;
 					msg("loaded getCosts");
 					if (resources.checkCostsByArray(getCosts).result = "pass" && resources.canAddRes("sustenance", 1)) {
 						msg("checked costs, checked to add res");
