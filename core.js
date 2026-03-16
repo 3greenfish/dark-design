@@ -297,15 +297,18 @@ const swampBase = {
 					let getCosts = swamp.stack[code].costs;
 					msg("loaded getCosts");
 
-					let bob = resources.checkCostsByArray(getCosts);
+			/*		let bob = resources.checkCostsByArray(getCosts);
 					msg("called checkCostsByArray, result: " + bob.result);
 
 					let bobby = resources.canAddRes("sustenance", 1);
-					msg("called canAddRes, result: " + bobby);
+					msg("called canAddRes, result: " + bobby); */
 					
 					if (resources.checkCostsByArray(getCosts).result == "pass" && resources.canAddRes("sustenance", 1)) {
 						msg("checked costs, checked to add res");
 						resources.payCostsByArray(getCosts);
+						let r = resources.findResInStack("sustenance");
+						let a = 1;
+						resources.addRes(r, a);
 					} else if (isMain == true) {
 						//expand or close button
 						msg("isMain is TRUE, calling expandButton2");
