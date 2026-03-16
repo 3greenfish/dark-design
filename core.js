@@ -299,7 +299,7 @@ const swampBase = {
 						
 					} else if (isMain = true) {
 						//expand or close button
-						expandButton2(document.getElementById("swamp" + code + "Collapsible");
+						expandButton2(document.getElementById("swamp" + code + "Collapsible"));
 					}
 				}
 			  }
