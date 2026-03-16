@@ -649,7 +649,7 @@ const resourcesBase = {
 	},
 	canAddRes: function(res, amount) {
 		targetRes = resources.stack[resources.findResInStack(res)];
-		if (targetRes.current + amount <= targetRes.Max) {
+		if (targetRes.current + amount <= targetRes.max) {
 			return true }
 		else { return false}
 	},		
