@@ -696,9 +696,9 @@ const resourcesBase = {
 	},
 	payCostsByArray: function(array) {
 		for (let i = 0; i < array.length; i++) {
-			let priceName = prices[i].name;
+			let priceName = array[i].name;
 			let priceCode = resources.findResInStack(priceName);
-			let value = prices[i].amount;
+			let value = array[i].amount;
 			resources.stack[priceCode].current -= value;
 		}
 		msg("payCostsByArray completed");
