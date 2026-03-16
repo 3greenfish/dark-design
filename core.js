@@ -294,8 +294,13 @@ const swampBase = {
 			    type: "main",
 			    press: function(code, isMain = false) {
 					let getCosts = swamp[code].costs;
-					resources.checkCostsByArray(getCosts);
-					
+					if (resources.checkCostsByArray(getCosts).result = "pass" && resources.canAddRes("sustenance", 1)) {
+						resources.payCostsByArray(getCosts);
+						
+					} else if (isMain = true) {
+						//expand or close button
+						expandButton2(document.getElementById("swamp" + code + "Collapsible");
+					}
 				}
 			  }
 		  ]
@@ -631,6 +636,12 @@ const resourcesBase = {
 		this.loadResource(resCode);
 		msg("addRes completed");
 	},
+	canAddRes: function(res, amount) {
+		targetRes = resources.stack[resources.findResInStack(res)];
+		if (targetRes.current + amount <= targetRes.Max) {
+			return true }
+		else { return false}
+	},		
 	checkCosts: function(x) {
 		let result = { result: "fail", reason: "failed function" };
 //		if (!this.stack[x].gatherCost.length > 0) {
