@@ -290,7 +290,7 @@ const swampBase = {
 							totalRes += 1;		//FLAG FOR UPDATING BY CALCULATION
 							msg("Prey captured!");
 						} else {
-							msg("You have failed to capture any prey.";
+							msg("You have failed to capture any prey.");
 						}
 						if (totalRes >= this.max) {
 							this.current = this.max;
