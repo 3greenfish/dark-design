@@ -12,6 +12,8 @@ p {
 
 hr {
 	border: none;
+	height: 2px;
+	color: #00ff00;
 }
 
 h1 {
