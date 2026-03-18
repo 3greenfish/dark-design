@@ -1,4 +1,5 @@
 const messageArray = [];
+const devMode = false;
 	// ["You have awakened in a new world, and your dark powers have corrupted a small bog. Time to fester..."];
 
 let resStatus = "visible"; // temporary variable for dev button testing of hidden attributes.
@@ -195,7 +196,7 @@ const gameBase = {
 		  select: function(num) {
 			  game.activeTab = num;
 			  game.refreshNav();
-			  msg(this.name + " selected");
+			  devMsg(this.name + " selected");
 		  }
 		}
 		],
@@ -267,7 +268,7 @@ const swampBase = {
 					let a = resources.stack[r].gatherRate;
 					resources.addRes(r, a);
 
-					msg("code is " + code + ", isMain is " + isMain);
+					devMsg("code is " + code + ", isMain is " + isMain);
 				}
 			  }
 		  ]
@@ -1245,6 +1246,18 @@ const dev = [
 	{ name: "button9",
 	  label: "build grid",
 	  run: function() { buildGrid(swamp, swamp.stack); }
+	},
+	{ name: "button10",
+	  label: "dev mode on/off",
+	  run: function() {
+		  if (devMode == false) {
+			  devMode = true;
+			  msg("dev mode activated");
+		  } else {
+			  devMode = false;
+			  msg("dev mode deactivated");
+		  }
+	  }
 	}
 /*	{ name: "buttonX",
 	  label: "blank",
@@ -1323,6 +1336,12 @@ function expandButton(butt) {
 		targetContent.style.maxHeight = targetContent.scrollHeight + "px";
 		targetButton.style.borderBottom = "none";
 		/* targetButton.style.borderRadius = "10px 10px 0 0"; */
+	}
+}
+
+function devMsg(text) {
+	if (devMode == true) {
+		msg(text);
 	}
 }
 
