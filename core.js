@@ -1,5 +1,5 @@
 const messageArray = [];
-const devMode = false;
+let devMode = false;
 	// ["You have awakened in a new world, and your dark powers have corrupted a small bog. Time to fester..."];
 
 let resStatus = "visible"; // temporary variable for dev button testing of hidden attributes.
@@ -279,7 +279,26 @@ const swampBase = {
 		  desc: "Attempt to catch unsuspecting creatures to use as fuel.",
 		  flavor: "",
 		  actions: [
-			  { subLabel: "Ensnare", type: "main", press: function(code, isMain = false) { }
+			  { subLabel: "Ensnare",
+			    type: "main",
+			    press: function(code, isMain = false) {
+					let r = resources.findResInStack("prey");
+					let ch = resources.stack[r].gatherChance; // FLAG FOR CALCULATION
+					if (resources.canAddAnyRes(r) == true ) {
+						let totalRes = r.current;
+						if (ch >= Math.random()) {
+							totalRes += 1;		//FLAG FOR UPDATING BY CALCULATION
+							msg("Prey captured!");
+						} else {
+							msg("You have failed to capture any prey.";
+						}
+						if (totalRes >= this.max) {
+							this.current = this.max;
+						} else {
+							this.current = rndPlusThree(totalRes);
+						}
+					}
+				}
 			  }
 		  ]
 		},
@@ -652,11 +671,17 @@ const resourcesBase = {
 		msg("addRes completed");
 	},
 	canAddRes: function(res, amount) {
-		targetRes = resources.stack[resources.findResInStack(res)];
+		let targetRes = resources.stack[resources.findResInStack(res)];
 		if (targetRes.current + amount <= targetRes.max) {
 			return true }
 		else { return false}
-	},		
+	},
+	canAddAnyRes: function(res) {
+		let resCode = ( typeof res = number ) ? res : resources.findResInStack(res);		
+		let targetRes = resources.stack[resCode];
+		let result = (targetRes.current < targetRes.max) ? true : false;
+		return result;
+	},
 	checkCosts: function(x) {
 		let result = { result: "fail", reason: "failed function" };
 //		if (!this.stack[x].gatherCost.length > 0) {
@@ -1258,13 +1283,32 @@ const dev = [
 			  msg("dev mode deactivated");
 		  }
 	  }
-	}
+	},
+	{ name: "button11",
+	  label: "canAddAnyRes - name",
+	  run: function() {
+		  let result = resources.canAddAnyRes("prey");
+		  devMsg("called canAddAnyRes with resource prey by name, result: " + result);
+	  }
+	  
+	},
+	{ name: "button12",
+	  label: "canAddAnyRes - number",
+	  run: function() {
+		  let result = resources.canAddAnyRes(1);
+		  devMsg("called canAddAnyRes with resource prey by number, result: " + result);
+	  }
+	  
+	
 /*	{ name: "buttonX",
 	  label: "blank",
 	  run: function() { }
 	  
 	} */
 ];
+
+
+
 
 function setDevButtonsDynamic() {
 	let buttonBlock = "";
