@@ -283,19 +283,20 @@ const swampBase = {
 			    type: "main",
 			    press: function(code, isMain = false) {
 					let r = resources.findResInStack("prey");
-					let ch = resources.stack[r].gatherChance; // FLAG FOR CALCULATION
+					let res = resources.stack[r];
+					let ch = res.gatherChance; // FLAG FOR CALCULATION
 					if (resources.canAddAnyRes(r) == true ) {
-						let totalRes = r.current;
+						let totalRes = res.current;
 						if (ch >= Math.random()) {
 							totalRes += 1;		//FLAG FOR UPDATING BY CALCULATION
 							msg("Prey captured!");
 						} else {
 							msg("You have failed to capture any prey.");
 						}
-						if (totalRes >= this.max) {
-							this.current = this.max;
+						if (totalRes >= res.max) {
+							res.current = res.max;
 						} else {
-							this.current = rndPlusThree(totalRes);
+							res.current = rndPlusThree(totalRes);
 						}
 					}
 				}
@@ -674,10 +675,11 @@ const resourcesBase = {
 		let targetRes = resources.stack[resources.findResInStack(res)];
 		if (targetRes.current + amount <= targetRes.max) {
 			return true }
-		else { return false}
+		else { return false }
 	},
 	canAddAnyRes: function(res) {
-		let resCode = ( typeof res = number ) ? res : resources.findResInStack(res);		
+		let checkType = typeof res;
+		let resCode = (checkType == "number") ? res : resources.findResInStack(res);		
 		let targetRes = resources.stack[resCode];
 		let result = (targetRes.current < targetRes.max) ? true : false;
 		return result;
