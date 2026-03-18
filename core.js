@@ -1298,8 +1298,7 @@ const dev = [
 		  let result = resources.canAddAnyRes(1);
 		  devMsg("called canAddAnyRes with resource prey by number, result: " + result);
 	  }
-	  
-	
+	}
 /*	{ name: "buttonX",
 	  label: "blank",
 	  run: function() { }
