@@ -38,6 +38,9 @@ function buildGrid(source, sourceArray) {
 		// IF test to check if hidden or blocked, then continue FOR loop.
 		
 		let label = array[i].label;		//this is what shows in the label, will need to be updated for counts
+		if (array[i].count > 0) {
+			label = label + " (" + array[i].count + ")";
+		}					//FLAG -- make this into a separate function that accounts for active/inactive buildings		
 		let identifier = source.name + i;
 		let desc = array[i].desc;		//gets description from stack
 		let cost = "";
@@ -293,9 +296,9 @@ const swampBase = {
 						let totalRes = res.current;
 						if (ch >= Math.random()) {
 							totalRes += 1;		//FLAG FOR UPDATING BY CALCULATION
-							devMsg("Prey captured!");
+							msg("Prey captured!");
 						} else {
-							devMsg("You have failed to capture any prey.");
+							msg("You have failed to capture any prey.");
 						}
 						if (totalRes >= res.max) {
 							res.current = res.max;
@@ -309,7 +312,7 @@ const swampBase = {
 						let target = "swamp" + code;
 						expandButton2(target);
 					}
-						
+					// FLAG TO DO -- refresh resource here
 				}
 			  }
 		  ]
@@ -327,14 +330,7 @@ const swampBase = {
 			    press: function(code, isMain = false) {
 					devMsg("Digest button called");
 					let getCosts = swamp.stack[code].costs;
-					devMsg("loaded getCosts");
-
-			/*		let bob = resources.checkCostsByArray(getCosts);
-					msg("called checkCostsByArray, result: " + bob.result);
-
-					let bobby = resources.canAddRes("sustenance", 1);
-					msg("called canAddRes, result: " + bobby); */
-					
+					devMsg("loaded getCosts");					
 					if (resources.checkCostsByArray(getCosts).result == "pass" && resources.canAddRes("sustenance", 1)) {
 						devMsg("checked costs, checked to add res");
 						resources.payCostsByArray(getCosts);
@@ -363,6 +359,21 @@ const swampBase = {
 			  { subLabel: "Swell by 1m^2",
 			    type: "main",
 			    press: function(code, isMain = false) {
+					let swell = swamp.stack[code];
+					let getCosts = swell.costs;
+
+					if (resources.checkCostsByArray(getCosts) == "pass") {
+						resources.payCostsByArray(getCosts);
+						swell.count += 1;
+						
+						buildGrid(swamp, swamp.stack);
+						/*FLAG -- replace buildGrid WITH:
+						 1. refresh label
+						 2. recalculate costs
+						 3. refresh contentcosts
+						
+						*/
+					}
 					
 				}
 			  }
@@ -393,7 +404,7 @@ const swampBase = {
 		{ name: "pustule",     //4
 		  label: "Pustule",
 		  desc: `Pustules process Sustenance into a thick bile.</p><p>
-Once full, pustules generate Corruptions, and can be popped for Choler.`,
+Once full, pustules generate Corruption, and can be popped for Choler.`,
 		  count: 0,
 		  costs: [
 			  { name: "corruption", amount: 40 }
@@ -505,7 +516,7 @@ Once full, pustules generate Corruptions, and can be popped for Choler.`,
 		  actions: []
 		}
 		],
-	buyBuilding: function(num) {
+	buyBuilding: function(num) {				//FLAG FOR DELETION
 		let validator = checkPrice(num); 
 		if (validator == "fail-insufficient") {  // should probably be a switch...
 			msg("insufficient resources");
@@ -734,6 +745,7 @@ const resourcesBase = {
 		}
 		result.result = "pass";
 		result.reason = "sufficient resources";
+		devMsg(result);
 		return result;	
 	},
 	payCostsByArray: function(array) {
@@ -757,8 +769,8 @@ const resourcesBase = {
 	gatherByName: function(res) {
 		let code = this.findResInStack(res);
 		this.gather(code);
-	},		
-	gather: function(code) {
+	},
+	gather: function(code) {			//FLAG FOR POTENTIAL DELETION
 		let res = this.stack[code];
 		let totalRes = res.current;
 
@@ -889,7 +901,8 @@ function loadGame() {	//runs at end of HTML load
 	resources.loadResourcePanel();
 	//setDevButtons();
 	setDevButtonsDynamic();
-//	loadAllContentCosts();		comment out, dynamic build should handle this once added.
+	buildGrid(swamp, swamp.stack);
+//	loadAllContentCosts();		// FLAGGING for deletion, dynamic build should handle this once added.
 	msg("You have awakened...");
 	
 }
@@ -907,7 +920,7 @@ function rndPlusThree(number) {
  * or buy-swell (activate purchase code for buying one swell)
  * alternatively, maybe everything is a buy action but some don't have costs?? */
 
-function buttonManager(event) {
+function buttonManager(event) {				//FLAG FOR DELETION with dynamic button creation
 	msg("button pressed");
 	let sourceButton = event.target.getAttribute('data-target');
 	let actionCat = sourceButton.slice(0 , 3);
