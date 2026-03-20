@@ -161,7 +161,7 @@ const gameBase = {
 		  select: function(num) {
 			  game.activeTab = num;
 			  game.refreshNav();
-			  msg(this.name + " selected");
+			  devMsg(this.name + " selected");
 		  }
 		},
 		{ name: "personnel",
@@ -170,7 +170,7 @@ const gameBase = {
 		  select: function(num) {
 			  game.activeTab = num;
 			  game.refreshNav();
-			  msg(this.name + " selected");
+			  devMsg(this.name + " selected");
 		  }
 		},
 		{ name: "home",
@@ -179,7 +179,7 @@ const gameBase = {
 		  select: function(num) {
 			  game.activeTab = num;
 			  game.refreshNav();
-			  msg(this.name + " selected");
+			  devMsg(this.name + " selected");
 		  }
 		},
 		{ name: "world",
@@ -188,7 +188,7 @@ const gameBase = {
 		  select: function(num) {
 			  game.activeTab = num;
 			  game.refreshNav();
-			  msg(this.name + " selected");
+			  devMsg(this.name + " selected");
 		  }
 		},
 		{ name: "research",
@@ -207,8 +207,12 @@ const gameBase = {
 			let activeFlag = "";
 			if (this.activeTab == i) {
 				activeFlag = `class="activeTab"`;
-			}	
-			let newLabel = `<div ${activeFlag} data-target="tab-${i}" onClick="buttonManager(event)" id="tab${i}">${tabLabel}</div> | `;
+			}
+			let newLabel = "";
+			if (i > 0) { 
+				newLabel = " | ";
+			}
+			newLabel += `<div ${activeFlag} data-target="tab-${i}" onClick="buttonManager(event)" id="tab${i}">${tabLabel}</div>`;
 			navList += newLabel;
 		}
 		document.getElementById("tabNav").innerHTML = navList;
@@ -289,9 +293,9 @@ const swampBase = {
 						let totalRes = res.current;
 						if (ch >= Math.random()) {
 							totalRes += 1;		//FLAG FOR UPDATING BY CALCULATION
-							msg("Prey captured!");
+							devMsg("Prey captured!");
 						} else {
-							msg("You have failed to capture any prey.");
+							devMsg("You have failed to capture any prey.");
 						}
 						if (totalRes >= res.max) {
 							res.current = res.max;
@@ -299,6 +303,13 @@ const swampBase = {
 							res.current = rndPlusThree(totalRes);
 						}
 					}
+					else if (isMain == true) {
+						//expand or close button
+						devMsg("isMain is TRUE, calling expandButton2");
+						let target = "swamp" + code;
+						expandButton2(target);
+					}
+						
 				}
 			  }
 		  ]
@@ -314,9 +325,9 @@ const swampBase = {
 			  { subLabel: "Digest prey",
 			    type: "main",
 			    press: function(code, isMain = false) {
-					msg("Digest button called");
+					devMsg("Digest button called");
 					let getCosts = swamp.stack[code].costs;
-					msg("loaded getCosts");
+					devMsg("loaded getCosts");
 
 			/*		let bob = resources.checkCostsByArray(getCosts);
 					msg("called checkCostsByArray, result: " + bob.result);
@@ -325,14 +336,14 @@ const swampBase = {
 					msg("called canAddRes, result: " + bobby); */
 					
 					if (resources.checkCostsByArray(getCosts).result == "pass" && resources.canAddRes("sustenance", 1)) {
-						msg("checked costs, checked to add res");
+						devMsg("checked costs, checked to add res");
 						resources.payCostsByArray(getCosts);
 						let r = resources.findResInStack("sustenance");
 						let a = 1;
 						resources.addRes(r, a);
 					} else if (isMain == true) {
 						//expand or close button
-						msg("isMain is TRUE, calling expandButton2");
+						devMsg("isMain is TRUE, calling expandButton2");
 						let target = "swamp" + code;
 						expandButton2(target);
 					}
@@ -981,7 +992,7 @@ function loadAllContentCosts() { 		//updates needed for new button scheme, or de
 }
 
 function getContentCosts(stack, num) {
-	//msg("getContentCosts called");
+	devMsg("getContentCosts called");
 	
 	let prices = stack.stack[num].costs;
 	let dispCost = "";
