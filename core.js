@@ -18,7 +18,7 @@ function objectParseMsg(ob) {
 
 function buildGrid(source, sourceArray) {
 	let output = "";
-	let numColumns = 3; // plan to change this to check settings once screen size is evaluated //
+	let numColumns = 3; // FLAG -- plan to change this to check settings once screen size is evaluated //
 	let columns = [];
 	let currentColumn = 0;
 	let array = [];
@@ -1076,7 +1076,7 @@ const timing = {
 			case 0:
 				break;
 			case 1:
-				msg("beltstep 1");
+				devMsg("beltstep 1");
 				break;
 			case 2:
 			//	msg("beltstep 2");
