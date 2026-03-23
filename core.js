@@ -917,7 +917,8 @@ function loadGame() {	//runs at end of HTML load
 
 function rndPlusThree(number) {
 	msg("round3 called via deprecated rndPlusThree");
-	round3(number);
+	let numNum = round3(number);
+	return numNum;
 }
 
 function round3(number) {
