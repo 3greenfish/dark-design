@@ -46,7 +46,7 @@ function buildGrid(source, sourceArray) {
 		let cost = "";
 		
 		if (array[i].costs) {
-			devMsg("BuildGrid reached getContentCosts);
+			devMsg("BuildGrid reached getContentCosts");
 			let costs = getContentCosts(source, i);
 			cost = `
 					<hr>
