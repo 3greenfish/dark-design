@@ -1,5 +1,5 @@
 const messageArray = [];
-let devMode = true;
+let devMode = false;
 	// ["You have awakened in a new world, and your dark powers have corrupted a small bog. Time to fester..."];
 
 let resStatus = "visible"; // temporary variable for dev button testing of hidden attributes.
