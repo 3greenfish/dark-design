@@ -1013,11 +1013,12 @@ function loadAllContentCosts() { 		//updates needed for new button scheme, or de
 	}
 }
 
-function getContentCosts(stack, num, count) {
+function getContentCosts(stack, num) {
 	devMsg("getContentCosts called");
 	
 	let prices = stack.stack[num].costs;
 	let dispCost = "";
+	let count = stack.stack[num].count;
 	for (let i = 0; i < prices.length; i++) {
 		let priceName = prices[i].name;
 		let priceCode = resources.findResInStack(priceName);
