@@ -1,7 +1,8 @@
 const messageArray = [];
+let devMode = false;
 	// ["You have awakened in a new world, and your dark powers have corrupted a small bog. Time to fester..."];
 
-let resStatus = "visible"; // temporary variable for dev button testing of hidden attributes.
+let resStatus = "visible"; // FLAG temporary variable for dev button testing of hidden attributes.
 
 // TESTING NEW OBJECT and LOCAL STORAGE //
 
@@ -13,11 +14,12 @@ function objectParseMsg(ob) {
 	msg(output);
 }
 
+// --- BUILD GRID FUNCTION --- //
+//this is a loop that cycles through the applicable button array, determines content for each button, decides which column the button goes into, adds it to the column, assembles a block of HTML, and outputs it to the parent container.
 
-
-function buildGrid(source) {
+function buildGrid(source, sourceArray) {
 	let output = "";
-	let numColumns = 3; // plan to change this to check settings once screen size is evaluated //
+	let numColumns = 3; // FLAG -- plan to change this to check settings once screen size is evaluated //
 	let columns = [];
 	let currentColumn = 0;
 	let array = [];
@@ -26,25 +28,53 @@ function buildGrid(source) {
 		columns[c] = `<div class="buttonColumn" id="buttonColumn${c}">`;
 	}
 
-	if (!source) {
-		array = [
-		{ name: "steve" },
-		{ name: "john" },
-		{ name: "susan" },
-		{ name: "franklin" }
-		];
+	if (!sourceArray) {
+		array = [{ label: "no source array" },{ label: "have a button anyway" }];
 	} else {
-		array = source;
+		array = sourceArray;
 	}
-			
-	//check size, pick 2/3 column layout
 
-	for (let i = 0; i < array.length; i++) {
-		let label = array[i].name;
+	for (let i = 0; i < array.length; i++) {		//for every button in stack
+
+		// IF test to check if hidden or blocked, then continue FOR loop.
+		
+		let label = array[i].label;		//this is what shows in the label, will need to be updated for counts
+		if (array[i].count > 0) {
+			label = label + " (" + array[i].count + ")";
+		}					//FLAG -- make this into a separate function that accounts for active/inactive buildings		
+		let identifier = source.name + i;
+		let desc = array[i].desc;		//gets description from stack
+		let cost = "";
+		
+		if (array[i].costs) {
+			devMsg("BuildGrid reached getContentCosts");
+			let costs = getContentCosts(source, i);
+			cost = `
+					<hr>
+						<div class="costs" id="${identifier}Costs">
+							${costs}
+						</div>`;		
+		} 
+
+		let actionsArray = array[i].actions;
+		let actions = "";
+		for (let a = 0; a < actionsArray.length; a++) {
+			let sub = actionsArray[a].subLabel;
+			let buttonCode = `${source.name}.stack[${i}].actions[${a}].press(${i})`;
+			actions += `<div class="button" onClick="${buttonCode}">${sub}</div>`;
+		}
+
+		let mainActionCode = `${source.name}.stack[${i}].actions[0].press(${i},true)`;
+
 		let newButton = `
 				<div class="buttonContainer">
-					<div class="collapsible">
-						<div class="buttonLabel" data-target="" id="swellLabel2" onClick="buttonManager(event)">${label}</div><div class="notch" data-target="buy-0" onClick="expandButton(event)">&#9776;</div>
+					<div class="collapsible" id="${identifier}Collapsible">
+						<div class="buttonLabel" data-target="${identifier}" id="${identifier}Label" onClick="${mainActionCode}">${label}</div><div class="notch" data-target="${identifier}" onClick="expandButton2('${identifier}')">&#9776;</div>
+					</div>
+					<div class="content" id="${identifier}Content">
+						<p>${desc}</p>
+						${cost}
+						${actions}
 					</div>
 				</div>`;
 		columns[currentColumn] += newButton;
@@ -58,61 +88,8 @@ function buildGrid(source) {
 		columns[c] += `</div>`;
 		output += columns[c];
 	}
-	
-	//for loop
-	//cycle through button array
-	//determine content for button
-	//decide which column goes into
-	//add to columns
-	//assemble block
-	//add HTML
-
 	document.getElementById("fillGrid").innerHTML = output;
 }	
-
-	
-/* 
-
-reference DevButtonsDynamic() {
-	let buttonBlock = "";
-	for (let i = 0; i < dev.length; i++) {
-		let label = dev[i].label;
-		let newButton = `<div class="button" data-target="dev-${i}" onClick="buttonManager(event)" id="devbutton${i}">${label}</div>`;
-		buttonBlock += newButton;
-	}
-	document.getElementById("devButtons").innerHTML = buttonBlock;
-}
-
-
-
-
-
-
-
-CURRENT BUTTONS FOR REFERENCE
-				<div class="buttonContainer">
-					<div class="collapsible" id="buy-0-collapsible">
-						<div class="buttonLabel" data-target="buy-0" id="swellLabel" onClick="buttonManager(event)">Swell</div><div class="notch" data-target="buy-0" onClick="expandButton(event)">&#9776;</div>
-					</div>
-					<div class="content" id="buy-0-content">
-						<p>Grow your corrupting influence and expand the swamp.</p>
-						<hr>
-						<div class="costs" id="buy-0-Costs">
-							<div class="bldgCostPriceName">Corruption:</div><div class="bldgCostRes">10</div>
-						</div>
-						<div class="button" data-target="buy-0" onClick="buttonManager(event)">Swell by 1m^2</div>
-					</div>
-				</div> */
-
-
-
-
-
-
-
-	
-
-
 
 // --- basic game information saved in object --- //
 
@@ -136,7 +113,7 @@ const gameBase = {
 		  select: function(num) {
 			  game.activeTab = num;
 			  game.refreshNav();
-			  msg(this.name + " selected");
+			  devMsg(this.name + " selected");
 		  }
 		},
 		{ name: "personnel",
@@ -145,7 +122,7 @@ const gameBase = {
 		  select: function(num) {
 			  game.activeTab = num;
 			  game.refreshNav();
-			  msg(this.name + " selected");
+			  devMsg(this.name + " selected");
 		  }
 		},
 		{ name: "home",
@@ -154,7 +131,7 @@ const gameBase = {
 		  select: function(num) {
 			  game.activeTab = num;
 			  game.refreshNav();
-			  msg(this.name + " selected");
+			  devMsg(this.name + " selected");
 		  }
 		},
 		{ name: "world",
@@ -163,7 +140,7 @@ const gameBase = {
 		  select: function(num) {
 			  game.activeTab = num;
 			  game.refreshNav();
-			  msg(this.name + " selected");
+			  devMsg(this.name + " selected");
 		  }
 		},
 		{ name: "research",
@@ -171,19 +148,23 @@ const gameBase = {
 		  select: function(num) {
 			  game.activeTab = num;
 			  game.refreshNav();
-			  msg(this.name + " selected");
+			  devMsg(this.name + " selected");
 		  }
 		}
 		],
 	buildNav: function() {
 		let navList = "";
-		for (let i = 0; i < this.tabs.length; i ++) {
+		for (let i = 0; i < this.tabs.length; i++) {
 			let tabLabel = this.tabs[i].label;
 			let activeFlag = "";
 			if (this.activeTab == i) {
 				activeFlag = `class="activeTab"`;
-			}	
-			let newLabel = `<div ${activeFlag} data-target="tab-${i}" onClick="buttonManager(event)" id="tab${i}">${tabLabel}</div> | `;
+			}
+			let newLabel = "";
+			if (i > 0) { 
+				newLabel = " | ";
+			}
+			newLabel += `<div ${activeFlag} data-target="tab-${i}" onClick="buttonManager(event)" id="tab${i}">${tabLabel}</div>`;
 			navList += newLabel;
 		}
 		document.getElementById("tabNav").innerHTML = navList;
@@ -199,49 +180,190 @@ const gameBase = {
 	}
 };
 
-// ---- phase 1 buildings based as object ---- //
+// ---- phase 1 buttons based as object ---- //
+
+		 /*
+
+		 Each button has actions in an array.
+		 The first action is ALWAYS the main button, and should incorporate code to alternately check whether
+		 	a. costs exist
+			b. costs can be paid
+		 if costs can't be paid, expand button
+
+		 actions has following properties:
+		 	subLabel: what shows on the button when expanded. For main button, overwritten by label in parent.
+			type: main, maybe like a side-by-side button thing?
+			press: calls a function when the button is pressed.
+				code: this is built into the button to facilitate calling parent items.
+				isMain: defaults to false. Will be true for main buttons, can be used to expand/close collapsible.
+
+
+			  { subLabel: "",
+			    type: "",
+				press: function(code, isMain = false) { 
+				}
+			  }
+		 
+
+		 */
 
 const swamp = {};
 const swampBase = {
 	name: "swamp",
-	buildings: [
-		{ name: "swell",    //0
+	stack: [
+		{ name: "fester",	//0
+		  label: "Fester",
+		  type: "gather",
+		  desc: "Fester in darkness to build up Corruption.",
+		  flavor: "",
+		  actions: [
+			  { subLabel: "Fester",
+			    type: "main", 
+			    press: function(code, isMain = false) {
+					let r = resources.findResInStack("corruption");
+					let a = resources.stack[r].gatherRate;
+					resources.addRes(r, a);
+
+					devMsg("code is " + code + ", isMain is " + isMain);
+				}
+			  }
+		  ]
+		},
+		{ name: "ensnare",	//1
+		  label: "Ensnare prey",
+		  type: "gather",
+		  desc: "Attempt to catch unsuspecting creatures to use as fuel.",
+		  flavor: "",
+		  actions: [
+			  { subLabel: "Ensnare",
+			    type: "main",
+			    press: function(code, isMain = false) {
+					let r = resources.findResInStack("prey");
+					let res = resources.stack[r];
+					let ch = res.gatherChance; // FLAG FOR CALCULATION
+					if (resources.canAddAnyRes(r) == true ) {
+						if (ch >= Math.random()) {
+							let amountCaught = 1;		//FLAG FOR UPDATING BY CALCULATION
+							resources.addRes(r, amountCaught);
+							msg("Prey captured!");
+						} else {
+							msg("You have failed to capture any prey.");
+						}
+					}
+					else if (isMain == true) {			//expand or close button
+						devMsg("isMain is TRUE, calling expandButton2");
+						let target = "swamp" + code;
+						expandButton2(target);
+					}
+				}
+			  }
+		  ]
+		},
+		{ name: "digest",	//2
+		  label: "Digest prey",
+		  type: "gather",
+		  desc: "Process captured prey to generate Sustenance.",
+		  costs: [
+			  { name: "prey", amount: 2 }
+		  ],
+		  actions: [
+			  { subLabel: "Digest prey",
+			    type: "main",
+			    press: function(code, isMain = false) {
+					devMsg("Digest button called");
+					let getCosts = swamp.stack[code].costs;
+					devMsg("loaded getCosts");					
+					if (resources.checkCostsByArray(getCosts).result == "pass" && resources.canAddAnyRes("sustenance")) {
+						devMsg("checked costs, checked to add res");
+						resources.payCostsByArray(getCosts);
+						let r = resources.findResInStack("sustenance");
+						let a = 1;
+						resources.addRes(r, a);
+					} else if (isMain == true) {
+						//expand or close button
+						devMsg("isMain is TRUE, calling expandButton2");
+						let target = "swamp" + code;
+						expandButton2(target);
+					}
+				}
+			  }
+		  ]
+		},
+		{ name: "swell",    //3
 		  label: "Swell",
+		  desc: "A burgeoning swamp expands Corruption limits and enhances Festering.",
 		  count: 0,
 		  costs: [
-			  { name: "corruption", amount: 10 }
+			  { name: "corruption", amount: 10, ratio: 1.3 }
 		  ],
-		  ratio: 1.3,
-		  onPurchase: function() {
+		  actions: [
+			  { subLabel: "Swell by 1m^2",
+			    type: "main",
+			    press: function(code, isMain = false) {
+					devMsg("buy swell called");
+					let swell = swamp.stack[code];
+					let getCosts = swell.costs;
+					let current = swell.count;
+					devMsg("swell getCosts called");
+
+					if (resources.checkCostsByArray(getCosts, current).result == "pass") {
+						resources.payCostsByArray(getCosts, current);
+						swell.count += 1;
+
+						updateLabel(swamp, code);
+						updateContentCosts2(swamp, code);
+					}
+					else if (isMain == true) {
+						//expand or close button
+						devMsg("isMain is TRUE, calling expandButton2");
+						let target = "swamp" + code;
+						expandButton2(target);
+					}					
+				}
+			  }
+		  ],
+		  effects: [
+			  { stack: "resource", res: "corruption", type: "perClick", amount: 0.1, source: "swamp", button: "swell" },
+			  { stack: "resource", res: "corruption", type: "max", amount: 5, source: "swamp", button: "swell" }
+		  ],
+		  unlocks: [],
+		  lockedBy: [],
+/*		  onPurchase: function() {			//FLAG FOR DELETION
 			  this.count += 1;
 			  this.updateButtonLabel();
 			  this.updateRatio();
 			  resources.stack[0].updateGatherRate();
 			  resources.stack[0].updateMax();
-			  updateContentCosts(0);
-		  },
-		  updateButtonLabel: function() {
+			  updateContentCosts(3);
+		  }, */
+/*		  updateButtonLabel: function() {
 			  let newLabel = this.label;
 			  if (this.count > 0) {
 				  newLabel = newLabel + " (" + this.count + "m^2)";
 			  }
 			  document.getElementById(this.name + "Label").innerText = newLabel;
-		  },
-		  updateRatio: function() {
+		  }, */
+/*		  updateRatio: function() {
 			  for (let i = 0; i < this.costs.length; i++) {
-				  let newAmount = rndPlusThree(this.costs[i].amount * this.ratio);
+				  let newAmount = round3(this.costs[i].amount * this.ratio);
 				  this.costs[i].amount = newAmount;
 				  msg("new cost for Swell is " + this.costs[i].amount + " " + this.costs[i].name);
 			  }
-		  }
+		  } */
 		},
-		{ name: "pustule",     //1
+		{ name: "pustule",     //4
 		  label: "Pustule",
+		  desc: `Pustules process Sustenance into a thick bile.</p><p>
+Once full, pustules generate Corruption, and can be popped for Choler.`,
 		  count: 0,
 		  costs: [
-			  { name: "corruption", amount: 40 }
+			  { name: "corruption", amount: 40, ratio: 1.2 }
 		  ],
 		  ratio: 1.2,
+		  actions: [],
+		  effects: [
+			  { stack: "resource", res: "corruption", type: "max", amount: 50, source: "swamp", button: "pustule" }
+		  ],
 		  filled: 0,
 		  unfilled: [],
 		  onPurchase: function() {
@@ -300,47 +422,71 @@ const swampBase = {
 			  document.getElementById(this.name + "Label").innerText = newLabel;
 		  }
 		},
-		{ name: "digestor",
+		{ name: "digestor",		//5
 		  label: "Digestor",
+		  desc: "This organ automatically processes captured prey into Sustenance.",
 		  count: 0,
 		  costs: [
-			  { name: "corruption", amount: 20 },
-			  { name: "choler", amount: 50 }
+			  { name: "corruption", amount: 20, ratio: 1.2 },
+			  { name: "choler", amount: 50, ratio: 1.2 }
 		  ],
-		  ratio: 1.2
+		  actions: []
 		},
-		{ name: "trap",
+		{ name: "trap",			//6
 		  label: "Trap",
+		  desc: "Sticky traps make it easier to catch prey, and have a small chance to capture prey automatically.",
 		  count: 0,
 		  costs: [
-			  { name: "corruption", amount: 50 },
-			  { name: "choler", amount: 20 }
+			  { name: "corruption", amount: 50, ratio: 1.2 },
+			  { name: "choler", amount: 20, ratio: 1.2 }
 		  ],
-		  ratio: 1.2
+		  actions: []
 		},
-		{ name: "siren",
+		{ name: "siren",		//7
 		  label: "Siren",
-		  count: 0,
-		  costs: [],
-		  ratio: 1.2
-		},
-		{ name: "nodule",
-		  label: "Nodule",
+		  desc: "Lure in advanced lifeforms.",
 		  count: 0,
 		  costs: [],
 		  ratio: 1.2,
+		  actions: []
+		},
+		{ name: "nodule",		//8
+		  label: "Nodule",
+		  desc: "Store additional corruption.",
+		  count: 0,
+		  costs: [],
+		  ratio: 1.2,
+		  actions: [],
 		  isUnlocked: false
+		},
+		{ name: "corruptHost",	//9
+		  label: "Corrupt a host",
+		  type: "gather",
+		  desc: `Convert a captured native into your first corrupted Host.
+(Starts phase 2)`,
+		  actions: []
 		}
 		],
-	buyBuilding: function(num) {
+	buyBuilding: function(num) {				//FLAG FOR DELETION
 		let validator = checkPrice(num); 
 		if (validator == "fail-insufficient") {  // should probably be a switch...
 			msg("insufficient resources");
 		}
 		if (validator == "pass-sufficient") {
 			payPrice(num);
-			swamp.buildings[num].onPurchase();
+			swamp.stack[num].onPurchase();
 		}
+	},
+	findEntry: function(name) {
+		let findName = name;
+		for (let i = 0; i < swamp.stack.length; i++) {
+			if (swamp.stack[i].name == findName) {
+				return i;
+			}
+		}
+	},
+	buyEntry: function(num) {
+		
 	}
 }
 
@@ -357,31 +503,32 @@ const resourcesBase = {
 		  limited: true,
 		  isUnlocked: true,
 		  max: 50,
+		  overflow: 0,
 		  perTick: 0,
 		  gatherRate: 1,
-		  gather: function() {
+/*		  gather: function() {					// FLAG FOR DELETION
 			  let totalRes = this.current;
 			  totalRes += this.gatherRate;
-			  totalRes = rndPlusThree(totalRes);
+			  totalRes = round3(totalRes);
 			  if (totalRes >= this.max) {
 				  this.current = this.max;
 			  } else {
 				  this.current = totalRes;
 			  }
 			  resources.loadResource(0); // need to clean up this code
-		  },
+		  }, 
 		  updateGatherRate: function() {
-			  this.gatherRate = rndPlusThree(1 + (0.1 * swamp.buildings[0].count));
-		  },
+			  this.gatherRate = round3(1 + (0.1 * swamp.stack[0].count));
+		  }, */
 // -- updatePerTick is untested -- //	 
-		  updatePerTick: function() {
-			  this.perTick = 1; // need to define logic.
+/*		  updatePerTick: function() {
+			  this.perTick = 1; 			
 			  msg("Amount per tick is now " + this.perTick + " per click.");
-		  },
-		  updateMax: function() {
+		  }, */
+		  updateMax: function() {					//FLAG need to build into EFFECTS object arrays
 			  let swl = findBldgInSwamp("swell");
 			  let pus = findBldgInSwamp("pustule");
-			  let newMax = 50 + (swamp.buildings[swl].count * 5) + (swamp.buildings[pus].count * 50);
+			  let newMax = 50 + (swamp.stack[swl].count * 5) + (swamp.stack[pus].count * 50);
 			  this.max = newMax;
 		  }
 		},
@@ -406,9 +553,9 @@ const resourcesBase = {
 			  if (totalRes >= this.max) {
 				  this.current = this.max;
 			  } else {
-				  this.current = rndPlusThree(totalRes);
-			  }
+				  this.current = round3(totalRes);
 		  }
+			  }
 		},
 		{ name: "sustenance", //2
 		  label: "Sustenance",
@@ -429,7 +576,7 @@ const resourcesBase = {
 			  if (totalRes >= this.max) {
 				  this.current = this.max;
 			  } else {
-				  this.current = rndPlusThree(totalRes);
+				  this.current = round3(totalRes);
 			  }
 			  resources.loadResourcePanel(); // need to clean up this code
 		  },
@@ -456,7 +603,7 @@ const resourcesBase = {
 			  if (totalRes >= this.max) {
 				  this.current = this.max;
 			  } else {
-				  this.current = rndPlusThree(totalRes);
+				  this.current = round3(totalRes);
 			  }
 		  }
 		},
@@ -481,6 +628,35 @@ const resourcesBase = {
 			  ]
 		}
 	],
+	addRes: function(resCode, amount) {
+		devMsg("resources.addRes called with resCode " + resCode + " and amount " + amount);
+		let res = this.stack[resCode];
+		let totalRes = res.current;
+		let max = res.max;
+
+		totalRes += amount;
+
+		if (totalRes >= max) {
+			res.current = res.max;
+		} else {
+			res.current = round3(totalRes);
+		}
+		this.loadResource(resCode);
+		msg("addRes completed");
+	},
+/*	canAddRes: function(res, amount) {			// FLAG FOR DELETION
+		let targetRes = resources.stack[resources.findResInStack(res)];
+		if (targetRes.current + amount <= targetRes.max) {
+			return true }
+		else { return false }
+	}, */
+	canAddAnyRes: function(res) {
+		let checkType = typeof res;
+		let resCode = (checkType == "number") ? res : resources.findResInStack(res);		
+		let targetRes = resources.stack[resCode];
+		let result = (targetRes.current < targetRes.max) ? true : false;
+		return result;
+	},
 	checkCosts: function(x) {
 		let result = { result: "fail", reason: "failed function" };
 //		if (!this.stack[x].gatherCost.length > 0) {
@@ -502,6 +678,37 @@ const resourcesBase = {
 		result.reason = "sufficient resources";
 		return result;	
 	},
+	checkCostsByArray: function(array, multi) {		//send resources.checkCostsByArray an array of costs to check
+		let result = { result: "fail", reason: "failed function" };
+		if (array === undefined) {
+			result = { result: "pass", reason: "no costs" };
+			return result;
+		}
+		let prices = array;
+		for (let i = 0; i < prices.length; i++) {
+			let priceName = prices[i].name;
+			let priceCode = resources.findResInStack(priceName);
+			let value = (prices[i].ratio > 0) ? round3(prices[i].amount * Math.pow(prices[i].ratio, multi)) : prices[i].amount;
+			if (value > resources.stack[priceCode].current) {
+				result.reason = "insufficient " + priceName;
+				return result;
+			}
+		}
+		result.result = "pass";
+		result.reason = "sufficient resources";
+		devMsg(result.result + " " + result.reason);
+		return result;
+	},
+	payCostsByArray: function(array, multi) {
+		for (let i = 0; i < array.length; i++) {
+			let priceName = array[i].name;
+			let priceCode = resources.findResInStack(priceName);
+			let value = (array[i].ratio > 0) ? round3(array[i].amount * Math.pow(array[i].ratio, multi)) : array[i].amount;
+			resources.stack[priceCode].current -= value;
+			resources.loadResource(priceCode);
+		}
+		msg("payCostsByArray completed");
+	},
 	findResInStack: function(name) {
 		let findName = name;
 		for (let i = 0; i < this.stack.length; i++) {
@@ -513,8 +720,8 @@ const resourcesBase = {
 	gatherByName: function(res) {
 		let code = this.findResInStack(res);
 		this.gather(code);
-	},		
-	gather: function(code) {
+	},
+	gather: function(code) {			//FLAG FOR POTENTIAL DELETION
 		let res = this.stack[code];
 		let totalRes = res.current;
 
@@ -554,7 +761,7 @@ const resourcesBase = {
 	},
 	loadResource: function(resource) {
 		let resName = this.stack[resource].name;
-		let resCurrent = rndPlusThree(this.stack[resource].current);
+		let resCurrent = round3(this.stack[resource].current);
 
 		document.getElementById(resName + 'Current').innerText = resCurrent;
 	
@@ -567,7 +774,7 @@ const resourcesBase = {
 	loadResourcePanel: function() {
 		for (let i = 0; i < this.stack.length; i++) {
 			let resName = this.stack[i].name;
-			let resCurrent = rndPlusThree(this.stack[i].current);
+			let resCurrent = round3(this.stack[i].current);
 
 			if (this.stack[i].isUnlocked == false) { // temp to test if identification of locked/unlocked is working
 				if (resCurrent > 0) {
@@ -592,7 +799,7 @@ const resourcesBase = {
 		// the code below is specifically for pustules and sustenance only
 		let perTickValue = 0;
 		let availableSus = this.stack[2].current + perTickValue;
-		let subtract = swamp.buildings[1].fillPus(availableSus);
+		let subtract = swamp.stack[1].fillPus(availableSus);
 		this.stack[2].current = this.stack[2].current + perTickValue - subtract;
 	}
 } // --- close resources object --- //
@@ -615,8 +822,8 @@ const researchBase = {};
 
 function findBldgInSwamp(name) {
 	let findName = name;
-	for (let i = 0; i < swamp.buildings.length; i++) {
-		if (swamp.buildings[i].name == findName) {
+	for (let i = 0; i < swamp.stack.length; i++) {
+		if (swamp.stack[i].name == findName) {
 			return i;
 		}
 	}
@@ -645,12 +852,13 @@ function loadGame() {	//runs at end of HTML load
 	resources.loadResourcePanel();
 	//setDevButtons();
 	setDevButtonsDynamic();
-	loadAllContentCosts();
+	buildGrid(swamp, swamp.stack);
+//	loadAllContentCosts();		// FLAGGING for deletion, dynamic build should handle this once added.
 	msg("You have awakened...");
 	
 }
 
-function rndPlusThree(number) {
+function round3(number) {
 	let numNum = Math.round(number * 1000);
 	numNum = numNum / 1000;
 	return numNum;
@@ -663,7 +871,7 @@ function rndPlusThree(number) {
  * or buy-swell (activate purchase code for buying one swell)
  * alternatively, maybe everything is a buy action but some don't have costs?? */
 
-function buttonManager(event) {
+function buttonManager(event) {				//FLAG FOR DELETION with dynamic button creation
 	msg("button pressed");
 	let sourceButton = event.target.getAttribute('data-target');
 	let actionCat = sourceButton.slice(0 , 3);
@@ -681,7 +889,7 @@ function buttonManager(event) {
 			swamp.buyBuilding(lvl2num);
 			break;
 		case "pop":
-			swamp.buildings[1].popPustule(1);
+			swamp.stack[1].popPustule(1);
 			break;
 		case "tab":
 			game.tabs[lvl2num].select(lvl2num);
@@ -703,14 +911,14 @@ function buttonManager(event) {
 	}
 
 	if (actionCat == "pop") {
-		swamp.buildings[1].popPustule(1);
+		swamp.stack[1].popPustule(1);
 	} */
 
 }
 
-function checkPrice(num) {
+function checkPrice(num) {				// FLAG for deletion
 	//msg("checkPrice called with num " + num);
-	let prices = swamp.buildings[num].costs;
+	let prices = swamp.stack[num].costs;
 	for (let i = 0; i < prices.length; i++) {
 		let priceName = prices[i].name;
 		let priceCode = resources.findResInStack(priceName);
@@ -722,9 +930,9 @@ function checkPrice(num) {
 	return "pass-sufficient";
 }
 
-function payPrice(num) {
+function payPrice(num) {				// FLAG for deletion
 //	msg("payPrice called with num " + num);
-	let prices = swamp.buildings[num].costs;
+	let prices = swamp.stack[num].costs;
 	for (let i = 0; i < prices.length; i++) {
 		let priceName = prices[i].name;
 		let priceCode = resources.findResInStack(priceName);
@@ -735,9 +943,9 @@ function payPrice(num) {
 //	msg("payPrice completed");
 }
 
-function loadAllContentCosts() {
+/* function loadAllContentCosts() { 		//updates needed for new button scheme, or delete
 	//msg("load all content costs called");
-	for (let i = 0; i < swamp.buildings.length; i++) {
+	for (let i = 0; i < swamp.stack.length; i++) {
 		//msg("loading " + i);
 		if (document.getElementById("buy-" + i + "-Costs") == null) {
 			msg("could not find element buy-" + i + "-Costs");
@@ -745,11 +953,45 @@ function loadAllContentCosts() {
 		}
 		updateContentCosts(i);
 	}
+} */
+
+function getContentCosts(stack, num) {
+	devMsg("getContentCosts called");
+	
+	let prices = stack.stack[num].costs;
+	let dispCost = "";
+	let count = stack.stack[num].count;
+	for (let i = 0; i < prices.length; i++) {
+		let priceName = prices[i].name;
+		let priceCode = resources.findResInStack(priceName);
+		let label = resources.stack[priceCode].label;
+		devMsg("calling value");
+		let value = (prices[i].ratio > 0) ? round3(prices[i].amount * Math.pow(prices[i].ratio, count)) : prices[i].amount;
+		devMsg("value called");
+		dispCost += `<div class="bldgCostPriceName">${label}:</div><div class="bldgCostRes">${value}</div>`;
+	}
+	return dispCost;	
 }
+
+function updateContentCosts2(stack, num) {
+	devMsg("updateContentCosts2 called with values: " + stack.name + " and " + num);
+	let costs = getContentCosts(stack, num);
+	document.getElementById(stack.name + num + "Costs").innerHTML = costs;	
+}
+
+function updateLabel(stack, num) {
+	devMsg("updateLabel called with values: " + stack.name + " and " + num);
+	let newLabel = stack.stack[num].label;
+	if (stack.stack[num].count > 0) {
+		newLabel += " (" + stack.stack[num].count + ")";
+		document.getElementById(stack.name + num + "Label").innerHTML = newLabel;
+	}
+}
+
 
 function updateContentCosts(num) {
 	//msg("updateContentCosts called");
-	let prices = swamp.buildings[num].costs;
+	let prices = swamp.stack[num].costs;
 	let dispCost = "";
 	for (let i = 0; i < prices.length; i++) {
 		let priceName = prices[i].name;
@@ -767,7 +1009,7 @@ function updateContentCosts(num) {
 
 const timing = {
 	logTime: 0,
-	beltSpeed: 1000,
+	beltSpeed: 250,
 	beltStep: 0,
 	activateBelt: function() {
 		//call upon initialization
@@ -804,7 +1046,7 @@ const timing = {
 			case 0:
 				break;
 			case 1:
-				msg("beltstep 1");
+				devMsg("beltstep 1");
 				break;
 			case 2:
 			//	msg("beltstep 2");
@@ -822,7 +1064,10 @@ const timing = {
 			//	msg("beltstep 6");
 				break;
 			case 7:
+				break;
 			case 8:
+				calendar.updateCal();
+				break;
 			case 9:
 			case 10:
 			case 11:
@@ -830,7 +1075,10 @@ const timing = {
 			case 13:
 			case 14:
 			case 15:
+				break;
 			case 16:
+				calendar.updateCal();
+				break;
 			case 17:
 			case 18:
 			case 19:
@@ -838,7 +1086,10 @@ const timing = {
 			case 21:
 			case 22:
 			case 23:
+				break;
 			case 24:
+				calendar.updateCal();
+				break;
 			case 25:
 			case 26:
 			case 27:
@@ -846,7 +1097,10 @@ const timing = {
 			case 29:
 			case 30:
 			case 31:
+				break;
 			case 32:
+				calendar.updateCal();
+				break;
 			case 33:
 			case 34:
 			case 35:
@@ -854,8 +1108,10 @@ const timing = {
 			case 37:
 			case 38:
 			case 39:
+				break;
 			case 40:
 				// msg("beltStep collected" + this.beltStep);
+				calendar.updateCal();
 				break;
 		}
 		
@@ -939,7 +1195,7 @@ const calendar = {
 		this.showCal = true;
 		document.getElementById("calendarBlock").style.display = "block";
 	},
-	adjustRunSpeed: function() {
+/*	adjustRunSpeed: function() {
 		if (this.runSpeed == 2000) {
 			this.runSpeed = 500;
 		} else {
@@ -948,7 +1204,7 @@ const calendar = {
 		clearInterval(gameTimer);
 		gameTimer = setInterval(tick, this.runSpeed);
 
-	}
+	} */
 }; 
 
 //-- end calendar object --//
@@ -971,12 +1227,12 @@ const dev = [
 		calendar.calDisplay();
 	  }
 	},
- 	{ name: "button2",
+/* 	{ name: "button2",
 	  label: "adjust run speed",
 	  run: function() {
 		  calendar.adjustRunSpeed();
 	  }
-	},
+	}, */
 	{ name: "button3",
 	  label: "hide/show all resources",
 	  run: function() {
@@ -1010,7 +1266,34 @@ const dev = [
 	},
 	{ name: "button9",
 	  label: "build grid",
-	  run: function() { buildGrid(swamp.buildings); }
+	  run: function() { buildGrid(swamp, swamp.stack); }
+	},
+	{ name: "button10",
+	  label: "dev mode on/off",
+	  run: function() {
+		  if (devMode == false) {
+			  devMode = true;
+			  msg("dev mode activated");
+		  } else {
+			  devMode = false;
+			  msg("dev mode deactivated");
+		  }
+	  }
+	},
+	{ name: "button11",
+	  label: "canAddAnyRes - name",
+	  run: function() {
+		  let result = resources.canAddAnyRes("prey");
+		  devMsg("called canAddAnyRes with resource prey by name, result: " + result);
+	  }
+	  
+	},
+	{ name: "button12",
+	  label: "canAddAnyRes - number",
+	  run: function() {
+		  let result = resources.canAddAnyRes(1);
+		  devMsg("called canAddAnyRes with resource prey by number, result: " + result);
+	  }
 	}
 /*	{ name: "buttonX",
 	  label: "blank",
@@ -1019,11 +1302,15 @@ const dev = [
 	} */
 ];
 
+
+
+
 function setDevButtonsDynamic() {
 	let buttonBlock = "";
 	for (let i = 0; i < dev.length; i++) {
 		let label = dev[i].label;
-		let newButton = `<div class="button" data-target="dev-${i}" onClick="buttonManager(event)" id="devbutton${i}">${label}</div>`;
+/*		let newButton = `<div class="button" data-target="dev-${i}" onClick="buttonManager(event)" id="devbutton${i}">${label}</div>`; */
+		let newButton = `<div class="button" onClick="dev[${i}].run()" id="devbutton${i}">${label}</div>`;
 		buttonBlock += newButton;
 	}
 	document.getElementById("devButtons").innerHTML = buttonBlock;
@@ -1037,9 +1324,9 @@ let gameTimer = setInterval(tick, calendar.runSpeed);
 
 function tick() {
 //	msg("tick");
-	resources.updatePerTick();
+//	resources.updatePerTick();
 	resources.loadResourcePanel();
-	calendar.updateCal();
+//	calendar.updateCal();
 }
 
 //-- end interval timer --//
@@ -1055,7 +1342,25 @@ function toggleActive(e) {
 }
 
 
+function expandButton2(target) {
+	devMsg("expandButton2 called with target: " + target);
+	const targetContent = document.getElementById(target + "Content");
+	const targetButton = document.getElementById(target + "Collapsible");
+	
+	if (targetContent.style.display == "block") {
+		targetContent.style.display = "none"; /* hide content DIV */
+		targetButton.style.borderBottom = "1px solid black"; /* restore border */	
+		targetContent.style.maxHeight = "0";
+
+	} else {
+		targetContent.style.display = "block";
+		targetContent.style.maxHeight = targetContent.scrollHeight + "px";
+		targetButton.style.borderBottom = "none";
+	}
+}
+
 function expandButton(butt) {
+	devMsg("expandButton (original) called");
 	const target = butt.target.getAttribute('data-target');
 	const targetContent = document.getElementById(target + "-content");
 	const targetButton = document.getElementById(target + "-collapsible");
@@ -1074,6 +1379,12 @@ function expandButton(butt) {
 	}
 }
 
+function devMsg(text) {
+	if (devMode == true) {
+		msg(text);
+	}
+}
+
 function msg(messagetext) {
 	messageArray.unshift(messagetext);
 	if (messageArray.length > 25) {
@@ -1085,5 +1396,3 @@ function msg(messagetext) {
 	}
 	document.getElementById("messagebox").innerHTML = finalArray;
 }
-
-	
