@@ -2,7 +2,7 @@ const messageArray = [];
 let devMode = false;
 	// ["You have awakened in a new world, and your dark powers have corrupted a small bog. Time to fester..."];
 
-let resStatus = "visible"; // temporary variable for dev button testing of hidden attributes.
+let resStatus = "visible"; // FLAG temporary variable for dev button testing of hidden attributes.
 
 // TESTING NEW OBJECT and LOCAL STORAGE //
 
@@ -98,55 +98,6 @@ function buildGrid(source, sourceArray) {
 
 	document.getElementById("fillGrid").innerHTML = output;
 }	
-
-function refreshButton(stack, code) {
-
-	
-}
-
-	
-/* 
-
-reference DevButtonsDynamic() {
-	let buttonBlock = "";
-	for (let i = 0; i < dev.length; i++) {
-		let label = dev[i].label;
-		let newButton = `<div class="button" data-target="dev-${i}" onClick="buttonManager(event)" id="devbutton${i}">${label}</div>`;
-		buttonBlock += newButton;
-	}
-	document.getElementById("devButtons").innerHTML = buttonBlock;
-}
-
-
-
-
-
-
-
-CURRENT BUTTONS FOR REFERENCE
-				<div class="buttonContainer">
-					<div class="collapsible" id="buy-0-collapsible">
-						<div class="buttonLabel" data-target="buy-0" id="swellLabel" onClick="buttonManager(event)">Swell</div><div class="notch" data-target="buy-0" onClick="expandButton(event)">&#9776;</div>
-					</div>
-					<div class="content" id="buy-0-content">
-						<p>Grow your corrupting influence and expand the swamp.</p>
-						<hr>
-						<div class="costs" id="buy-0-Costs">
-							<div class="bldgCostPriceName">Corruption:</div><div class="bldgCostRes">10</div>
-						</div>
-						<div class="button" data-target="buy-0" onClick="buttonManager(event)">Swell by 1m^2</div>
-					</div>
-				</div> */
-
-
-
-
-
-
-
-	
-
-
 
 // --- basic game information saved in object --- //
 
@@ -306,14 +257,8 @@ const swampBase = {
 						} else {
 							msg("You have failed to capture any prey.");
 						}
-/*						if (totalRes >= res.max) {			//FLAG for DELETION
-							res.current = res.max;
-						} else {
-							res.current = rndPlusThree(totalRes);
-						} */
 					}
-					else if (isMain == true) {
-						//expand or close button
+					else if (isMain == true) {			//expand or close button
 						devMsg("isMain is TRUE, calling expandButton2");
 						let target = "swamp" + code;
 						expandButton2(target);
@@ -359,7 +304,6 @@ const swampBase = {
 		  costs: [
 			  { name: "corruption", amount: 10, ratio: 1.3 }
 		  ],
-//		  ratio: 1.3,
 		  actions: [
 			  { subLabel: "Swell by 1m^2",
 			    type: "main",
@@ -367,7 +311,7 @@ const swampBase = {
 					devMsg("buy swell called");
 					let swell = swamp.stack[code];
 					let getCosts = swell.costs;
-					let current = swell.count
+					let current = swell.count;
 					devMsg("swell getCosts called");
 
 					if (resources.checkCostsByArray(getCosts, current).result == "pass") {
@@ -376,14 +320,6 @@ const swampBase = {
 
 						updateLabel(swamp, code);
 						updateContentCosts2(swamp, code);
-						
-						//buildGrid(swamp, swamp.stack);
-						/*FLAG -- replace buildGrid WITH:
-						 1. refresh label
-						 2. recalculate costs
-						 3. refresh contentcosts
-						
-						*/
 					}
 					else if (isMain == true) {
 						//expand or close button
@@ -393,34 +329,35 @@ const swampBase = {
 					}					
 				}
 			  }
-		  	  ],
+		  ],
 		  effects: [
-			  { stack: "resource", res: "corruption", type: "perClick" }
-			  ],
+			  { stack: "resource", res: "corruption", type: "perClick", amount: 0.1, source: "swamp", button: "swell" },
+			  { stack: "resource", res: "corruption", type: "max", amount: 5, source: "swamp", button: "swell" }
+		  ],
 		  unlocks: [],
 		  lockedBy: [],
-		  onPurchase: function() {
+/*		  onPurchase: function() {			//FLAG FOR DELETION
 			  this.count += 1;
 			  this.updateButtonLabel();
 			  this.updateRatio();
 			  resources.stack[0].updateGatherRate();
 			  resources.stack[0].updateMax();
 			  updateContentCosts(3);
-		  },
-		  updateButtonLabel: function() {
+		  }, */
+/*		  updateButtonLabel: function() {
 			  let newLabel = this.label;
 			  if (this.count > 0) {
 				  newLabel = newLabel + " (" + this.count + "m^2)";
 			  }
 			  document.getElementById(this.name + "Label").innerText = newLabel;
-		  },
-		  updateRatio: function() {
+		  }, */
+/*		  updateRatio: function() {
 			  for (let i = 0; i < this.costs.length; i++) {
 				  let newAmount = round3(this.costs[i].amount * this.ratio);
 				  this.costs[i].amount = newAmount;
 				  msg("new cost for Swell is " + this.costs[i].amount + " " + this.costs[i].name);
 			  }
-		  }
+		  } */
 		},
 		{ name: "pustule",     //4
 		  label: "Pustule",
@@ -428,7 +365,7 @@ const swampBase = {
 Once full, pustules generate Corruption, and can be popped for Choler.`,
 		  count: 0,
 		  costs: [
-			  { name: "corruption", amount: 40 }
+			  { name: "corruption", amount: 40, ratio: 1.2 }
 		  ],
 		  ratio: 1.2,
 		  actions: [],
@@ -495,10 +432,9 @@ Once full, pustules generate Corruption, and can be popped for Choler.`,
 		  desc: "This organ automatically processes captured prey into Sustenance.",
 		  count: 0,
 		  costs: [
-			  { name: "corruption", amount: 20 },
-			  { name: "choler", amount: 50 }
+			  { name: "corruption", amount: 20, ratio: 1.2 },
+			  { name: "choler", amount: 50, ratio: 1.2 }
 		  ],
-		  ratio: 1.2,
 		  actions: []
 		},
 		{ name: "trap",			//6
@@ -506,10 +442,9 @@ Once full, pustules generate Corruption, and can be popped for Choler.`,
 		  desc: "Sticky traps make it easier to catch prey, and have a small chance to capture prey automatically.",
 		  count: 0,
 		  costs: [
-			  { name: "corruption", amount: 50 },
-			  { name: "choler", amount: 20 }
+			  { name: "corruption", amount: 50, ratio: 1.2 },
+			  { name: "choler", amount: 20, ratio: 1.2 }
 		  ],
-		  ratio: 1.2,
 		  actions: []
 		},
 		{ name: "siren",		//7
