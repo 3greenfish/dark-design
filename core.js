@@ -746,7 +746,7 @@ const resourcesBase = {
 		for (let i = 0; i < prices.length; i++) {
 			let priceName = prices[i].name;
 			let priceCode = resources.findResInStack(priceName);
-			let value = (prices[i].ratio) ? prices.[i].amount * Math.pow(price[i].ratio, multi) : prices[i].amount;
+			let value = (prices[i].ratio) ? prices.[i].amount * Math.pow(prices[i].ratio, multi) : prices[i].amount;
 			if (value > resources.stack[priceCode].current) {
 				result.reason = "insufficient " + priceName;
 				return result;
