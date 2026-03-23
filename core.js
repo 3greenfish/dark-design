@@ -358,10 +358,12 @@ const swampBase = {
 			  { subLabel: "Swell by 1m^2",
 			    type: "main",
 			    press: function(code, isMain = false) {
+					devMsg("buy swell called");
 					let swell = swamp.stack[code];
 					let getCosts = swell.costs;
+					devMsg("swell getCosts called");
 
-					if (resources.checkCostsByArray(getCosts) == "pass") {
+					if (resources.checkCostsByArray(getCosts).result == "pass") {
 						resources.payCostsByArray(getCosts);
 						swell.count += 1;
 						
