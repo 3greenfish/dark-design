@@ -374,6 +374,7 @@ const swampBase = {
 						resources.payCostsByArray(getCosts, current);
 						swell.count += 1;
 
+						updateLabel(swamp, code);
 						updateContentCosts2(swamp, code);
 						
 						//buildGrid(swamp, swamp.stack);
@@ -1051,14 +1052,18 @@ function getContentCosts(stack, num) {
 function updateContentCosts2(stack, num) {
 	devMsg("updateContentCosts2 called with values: " + stack.name + " and " + num);
 	let costs = getContentCosts(stack, num);
-/* 	let newID = stack.name + num + "Costs";
-	devMsg(newID);
-	document.getElementById(newID).innerHTML = costs; */
-
-	document.getElementById(stack.name + num + "Costs").innerHTML = costs;
-
-	
+	document.getElementById(stack.name + num + "Costs").innerHTML = costs;	
 }
+
+function updateLabel(stack, num) {
+	devMsg("updateLabel called with values: " + stack.name + " and " + num);
+	let newLabel = stack.stack[num].label;
+	if (stack.stack[num].count > 0 {
+		newLabel += " (" + stack.stack[num].count + ")";
+		document.getElementById(stack.name + num + "Label").innerHTML = newLabel;
+	}
+}
+
 
 function updateContentCosts(num) {
 	//msg("updateContentCosts called");
