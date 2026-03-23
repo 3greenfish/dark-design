@@ -1049,9 +1049,11 @@ function getContentCosts(stack, num) {
 }
 
 function updateContentCosts2(stack, num) {
-	devMsg("updateContentCosts2 called with values: " + stack + " and " + num);
+	devMsg("updateContentCosts2 called with values: " + stack.name + " and " + num);
 	let costs = getContentCosts(stack, num);
-	document.getElementByID(stack.name + num + "Costs").innerHTML = costs;
+	let newID = stack.name + num + "Costs";
+	devMsg(newID);
+	document.getElementByID(newID).innerHTML = costs;
 }
 
 function updateContentCosts(num) {
