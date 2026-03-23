@@ -293,18 +293,18 @@ const swampBase = {
 					let res = resources.stack[r];
 					let ch = res.gatherChance; // FLAG FOR CALCULATION
 					if (resources.canAddAnyRes(r) == true ) {
-						let totalRes = res.current;
 						if (ch >= Math.random()) {
-							totalRes += 1;		//FLAG FOR UPDATING BY CALCULATION
+							let amountCaught = 1;		//FLAG FOR UPDATING BY CALCULATION
+							resources.addRes(r, amountCaught);
 							msg("Prey captured!");
 						} else {
 							msg("You have failed to capture any prey.");
 						}
-						if (totalRes >= res.max) {
+/*						if (totalRes >= res.max) {			//FLAG for DELETION
 							res.current = res.max;
 						} else {
 							res.current = rndPlusThree(totalRes);
-						}
+						} */
 					}
 					else if (isMain == true) {
 						//expand or close button
@@ -312,7 +312,6 @@ const swampBase = {
 						let target = "swamp" + code;
 						expandButton2(target);
 					}
-					// FLAG TO DO -- refresh resource here
 				}
 			  }
 		  ]
@@ -603,8 +602,8 @@ const resourcesBase = {
 				  this.current = this.max;
 			  } else {
 				  this.current = rndPlusThree(totalRes);
-			  }
 		  }
+			  }
 		},
 		{ name: "sustenance", //2
 		  label: "Sustenance",
@@ -678,7 +677,7 @@ const resourcesBase = {
 		}
 	],
 	addRes: function(resCode, amount) {
-		//msg("addRes called with resCode " + resCode + " and amount " + amount);
+		devMsg("resources.addRes called with resCode " + resCode + " and amount " + amount);
 		let res = this.stack[resCode];
 		let totalRes = res.current;
 		let max = res.max;
