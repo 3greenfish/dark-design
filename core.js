@@ -351,9 +351,9 @@ const swampBase = {
 		  desc: "A burgeoning swamp expands Corruption limits and enhances Festering.",
 		  count: 0,
 		  costs: [
-			  { name: "corruption", amount: 10 }
+			  { name: "corruption", amount: 10, ratio: 1.3 }
 		  ],
-		  ratio: 1.3,
+//		  ratio: 1.3,
 		  actions: [
 			  { subLabel: "Swell by 1m^2",
 			    type: "main",
@@ -361,10 +361,11 @@ const swampBase = {
 					devMsg("buy swell called");
 					let swell = swamp.stack[code];
 					let getCosts = swell.costs;
+					let current = swell.count
 					devMsg("swell getCosts called");
 
-					if (resources.checkCostsByArray(getCosts).result == "pass") {
-						resources.payCostsByArray(getCosts);
+					if (resources.checkCostsByArray(getCosts, current).result == "pass") {
+						resources.payCostsByArray(getCosts, current);
 						swell.count += 1;
 						
 						buildGrid(swamp, swamp.stack);
@@ -375,6 +376,13 @@ const swampBase = {
 						
 						*/
 					}
+					else if (isMain == true) {
+						//expand or close button
+						devMsg("isMain is TRUE, calling expandButton2");
+						let target = "swamp" + code;
+						expandButton2(target);
+					}
+
 					
 				}
 			  }
@@ -728,7 +736,7 @@ const resourcesBase = {
 		result.reason = "sufficient resources";
 		return result;	
 	},
-	checkCostsByArray: function(array) {		//send resources.checkCostsByArray an array of costs to check
+	checkCostsByArray: function(array, multi) {		//send resources.checkCostsByArray an array of costs to check
 		let result = { result: "fail", reason: "failed function" };
 		if (array === undefined) {
 			result = { result: "pass", reason: "no costs" };
@@ -738,7 +746,7 @@ const resourcesBase = {
 		for (let i = 0; i < prices.length; i++) {
 			let priceName = prices[i].name;
 			let priceCode = resources.findResInStack(priceName);
-			let value = prices[i].amount;
+			let value = (prices[i].ratio) ? price[i].ratio^multi : prices[i].amount;
 			if (value > resources.stack[priceCode].current) {
 				result.reason = "insufficient " + priceName;
 				return result;
@@ -749,11 +757,11 @@ const resourcesBase = {
 		devMsg(result);
 		return result;	
 	},
-	payCostsByArray: function(array) {
+	payCostsByArray: function(array, multi) {
 		for (let i = 0; i < array.length; i++) {
 			let priceName = array[i].name;
 			let priceCode = resources.findResInStack(priceName);
-			let value = array[i].amount;
+			let value = (array[i].ratio) ? array[i].ratio^multi : array[i].amount;
 			resources.stack[priceCode].current -= value;
 			resources.loadResource(priceCode);
 		}
@@ -1005,7 +1013,7 @@ function loadAllContentCosts() { 		//updates needed for new button scheme, or de
 	}
 }
 
-function getContentCosts(stack, num) {
+function getContentCosts(stack, num, count) {
 	devMsg("getContentCosts called");
 	
 	let prices = stack.stack[num].costs;
@@ -1014,7 +1022,7 @@ function getContentCosts(stack, num) {
 		let priceName = prices[i].name;
 		let priceCode = resources.findResInStack(priceName);
 		let label = resources.stack[priceCode].label;
-		let value = prices[i].amount;
+		let value = (prices[i].ratio) ? prices[i].amount * prices[i].ratio^count : prices[i].amount;
 		dispCost += `<div class="bldgCostPriceName">${label}:</div><div class="bldgCostRes">${value}</div>`;
 	}
 	return dispCost;	
