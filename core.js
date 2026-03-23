@@ -745,7 +745,7 @@ const resourcesBase = {
 		for (let i = 0; i < prices.length; i++) {
 			let priceName = prices[i].name;
 			let priceCode = resources.findResInStack(priceName);
-			let value = (prices[i].ratio > 0) ? prices[i].amount * Math.pow(prices[i].ratio, multi) : prices[i].amount;
+			let value = (prices[i].ratio > 0) ? round3(prices[i].amount * Math.pow(prices[i].ratio, multi)) : prices[i].amount;
 			if (value > resources.stack[priceCode].current) {
 				result.reason = "insufficient " + priceName;
 				return result;
@@ -760,7 +760,7 @@ const resourcesBase = {
 		for (let i = 0; i < array.length; i++) {
 			let priceName = array[i].name;
 			let priceCode = resources.findResInStack(priceName);
-			let value = (array[i].ratio > 0) ? array[i].amount * Math.pow(array[i].ratio, multi) : array[i].amount;
+			let value = (array[i].ratio > 0) ? round3(array[i].amount * Math.pow(array[i].ratio, multi)) : array[i].amount;
 			resources.stack[priceCode].current -= value;
 			resources.loadResource(priceCode);
 		}
@@ -916,6 +916,11 @@ function loadGame() {	//runs at end of HTML load
 }
 
 function rndPlusThree(number) {
+	msg("round3 called via deprecated rndPlusThree");
+	round3(number);
+}
+
+function round3(number) {
 	let numNum = Math.round(number * 1000);
 	numNum = numNum / 1000;
 	return numNum;
@@ -1023,7 +1028,7 @@ function getContentCosts(stack, num) {
 		let priceCode = resources.findResInStack(priceName);
 		let label = resources.stack[priceCode].label;
 		devMsg("calling value");
-		let value = (prices[i].ratio > 0) ? prices[i].amount * Math.pow(prices[i].ratio, count) : prices[i].amount;
+		let value = (prices[i].ratio > 0) ? round3(prices[i].amount * Math.pow(prices[i].ratio, count)) : prices[i].amount;
 		devMsg("value called");
 		dispCost += `<div class="bldgCostPriceName">${label}:</div><div class="bldgCostRes">${value}</div>`;
 	}
@@ -1436,5 +1441,3 @@ function msg(messagetext) {
 	}
 	document.getElementById("messagebox").innerHTML = finalArray;
 }
-
-	
