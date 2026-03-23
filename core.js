@@ -382,9 +382,7 @@ const swampBase = {
 						devMsg("isMain is TRUE, calling expandButton2");
 						let target = "swamp" + code;
 						expandButton2(target);
-					}
-
-					
+					}					
 				}
 			  }
 		  ],
@@ -747,7 +745,7 @@ const resourcesBase = {
 		for (let i = 0; i < prices.length; i++) {
 			let priceName = prices[i].name;
 			let priceCode = resources.findResInStack(priceName);
-			let value = (prices[i].ratio) ? prices.[i].amount * Math.pow(prices[i].ratio, multi) : prices[i].amount;
+			let value = (prices[i].ratio > 0) ? prices.[i].amount * Math.pow(prices[i].ratio, multi) : prices[i].amount;
 			if (value > resources.stack[priceCode].current) {
 				result.reason = "insufficient " + priceName;
 				return result;
@@ -762,7 +760,7 @@ const resourcesBase = {
 		for (let i = 0; i < array.length; i++) {
 			let priceName = array[i].name;
 			let priceCode = resources.findResInStack(priceName);
-			let value = (array[i].ratio) ? array[i].amount * Math.pow(array[i].ratio, multi) : array[i].amount;
+			let value = (array[i].ratio > 0) ? array[i].amount * Math.pow(array[i].ratio, multi) : array[i].amount;
 			resources.stack[priceCode].current -= value;
 			resources.loadResource(priceCode);
 		}
@@ -975,7 +973,7 @@ function buttonManager(event) {				//FLAG FOR DELETION with dynamic button creat
 
 }
 
-function checkPrice(num) {
+function checkPrice(num) {				// FLAG for deletion
 	//msg("checkPrice called with num " + num);
 	let prices = swamp.stack[num].costs;
 	for (let i = 0; i < prices.length; i++) {
@@ -989,7 +987,7 @@ function checkPrice(num) {
 	return "pass-sufficient";
 }
 
-function payPrice(num) {
+function payPrice(num) {				// FLAG for deletion
 //	msg("payPrice called with num " + num);
 	let prices = swamp.stack[num].costs;
 	for (let i = 0; i < prices.length; i++) {
