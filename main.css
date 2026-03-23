@@ -10,15 +10,19 @@ p {
 	margin-bottom: 0;
 }
 
+hr {
+	border: none;
+	height: 2px;
+	background-color: #00ff00;
+}
+
 h1 {
 	margin-top: 0;
 	color: #00aa00;
 }
 
 /* padding is INSIDE, margin is OUTSIDE */
-
 /* test out button, replace with DIV later */
-
 
 /* --- main components --- */
 
@@ -168,10 +172,21 @@ nav {
 	background-color: yellow;
 }
 
+.buttonMap2 {
+	background-color: #002200;
+	display: flex;
+}
+.buttonColumn {
+	width: 200px;
+	display: inline-block;
+	margin: 3px;
+/*	border: 1px solid red; */
+}
+
 .buttonContainer {
 /*	width: 260px; */
-	flex: 0 0 200px;
-	margin: 3px;
+/*	flex: 0 0 200px; */
+	margin: 0px;
 	padding: 0px;
 	border: none; /* 1px solid #dddddd; */
 	position: relative;
@@ -239,7 +254,7 @@ nav {
 #pustuleProgress {
 	height: 3px;
 	background-color: green;
-	width: 10%;
+	width: 0%;
 /*	border-radius: 0 0 10px 10px; */
 }
 
@@ -257,9 +272,9 @@ nav {
 	max-height: 0;
 	transition: max-height 0.2s ease-out;
 	font-size: 80%;
-	position: absolute;
+/*	position: absolute;
 	top: 48px;
-	z-index: 5;
+	z-index: 5; */
 	user-select: none;
 	-webkit-user-select: none;
 	-ms-user-select: none;
