@@ -1058,7 +1058,7 @@ function updateContentCosts2(stack, num) {
 function updateLabel(stack, num) {
 	devMsg("updateLabel called with values: " + stack.name + " and " + num);
 	let newLabel = stack.stack[num].label;
-	if (stack.stack[num].count > 0 {
+	if (stack.stack[num].count > 0) {
 		newLabel += " (" + stack.stack[num].count + ")";
 		document.getElementById(stack.name + num + "Label").innerHTML = newLabel;
 	}
