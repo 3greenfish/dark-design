@@ -53,7 +53,7 @@ function buildGrid(source, sourceArray) {
 						<div class="costs" id="${identifier}Costs">
 							${costs}
 						</div>`;		
-		} /* else { cost = false; } */
+		} 
 
 		let actionsArray = array[i].actions;
 		let actions = "";
@@ -98,6 +98,11 @@ function buildGrid(source, sourceArray) {
 
 	document.getElementById("fillGrid").innerHTML = output;
 }	
+
+function refreshButton(stack, code) {
+
+	
+}
 
 	
 /* 
@@ -368,8 +373,10 @@ const swampBase = {
 					if (resources.checkCostsByArray(getCosts, current).result == "pass") {
 						resources.payCostsByArray(getCosts, current);
 						swell.count += 1;
+
+						updateContentCosts2(swamp, code);
 						
-						buildGrid(swamp, swamp.stack);
+						//buildGrid(swamp, swamp.stack);
 						/*FLAG -- replace buildGrid WITH:
 						 1. refresh label
 						 2. recalculate costs
@@ -385,7 +392,12 @@ const swampBase = {
 					}					
 				}
 			  }
-		  ],
+		  	  ],
+		  effects: [
+			  { stack: "resource", res: "corruption", type: "perClick" }
+			  ],
+		  unlocks: [],
+		  lockedBy: [],
 		  onPurchase: function() {
 			  this.count += 1;
 			  this.updateButtonLabel();
@@ -403,7 +415,7 @@ const swampBase = {
 		  },
 		  updateRatio: function() {
 			  for (let i = 0; i < this.costs.length; i++) {
-				  let newAmount = rndPlusThree(this.costs[i].amount * this.ratio);
+				  let newAmount = round3(this.costs[i].amount * this.ratio);
 				  this.costs[i].amount = newAmount;
 				  msg("new cost for Swell is " + this.costs[i].amount + " " + this.costs[i].name);
 			  }
@@ -566,7 +578,7 @@ const resourcesBase = {
 		  gather: function() {
 			  let totalRes = this.current;
 			  totalRes += this.gatherRate;
-			  totalRes = rndPlusThree(totalRes);
+			  totalRes = round3(totalRes);
 			  if (totalRes >= this.max) {
 				  this.current = this.max;
 			  } else {
@@ -575,7 +587,7 @@ const resourcesBase = {
 			  resources.loadResource(0); // need to clean up this code
 		  },
 		  updateGatherRate: function() {
-			  this.gatherRate = rndPlusThree(1 + (0.1 * swamp.stack[0].count));
+			  this.gatherRate = round3(1 + (0.1 * swamp.stack[0].count));
 		  },
 // -- updatePerTick is untested -- //	 
 		  updatePerTick: function() {
@@ -610,7 +622,7 @@ const resourcesBase = {
 			  if (totalRes >= this.max) {
 				  this.current = this.max;
 			  } else {
-				  this.current = rndPlusThree(totalRes);
+				  this.current = round3(totalRes);
 		  }
 			  }
 		},
@@ -633,7 +645,7 @@ const resourcesBase = {
 			  if (totalRes >= this.max) {
 				  this.current = this.max;
 			  } else {
-				  this.current = rndPlusThree(totalRes);
+				  this.current = round3(totalRes);
 			  }
 			  resources.loadResourcePanel(); // need to clean up this code
 		  },
@@ -660,7 +672,7 @@ const resourcesBase = {
 			  if (totalRes >= this.max) {
 				  this.current = this.max;
 			  } else {
-				  this.current = rndPlusThree(totalRes);
+				  this.current = round3(totalRes);
 			  }
 		  }
 		},
@@ -696,7 +708,7 @@ const resourcesBase = {
 		if (totalRes >= max) {
 			res.current = res.max;
 		} else {
-			res.current = rndPlusThree(totalRes);
+			res.current = round3(totalRes);
 		}
 		this.loadResource(resCode);
 		msg("addRes completed");
@@ -818,7 +830,7 @@ const resourcesBase = {
 	},
 	loadResource: function(resource) {
 		let resName = this.stack[resource].name;
-		let resCurrent = rndPlusThree(this.stack[resource].current);
+		let resCurrent = round3(this.stack[resource].current);
 
 		document.getElementById(resName + 'Current').innerText = resCurrent;
 	
@@ -831,7 +843,7 @@ const resourcesBase = {
 	loadResourcePanel: function() {
 		for (let i = 0; i < this.stack.length; i++) {
 			let resName = this.stack[i].name;
-			let resCurrent = rndPlusThree(this.stack[i].current);
+			let resCurrent = round3(this.stack[i].current);
 
 			if (this.stack[i].isUnlocked == false) { // temp to test if identification of locked/unlocked is working
 				if (resCurrent > 0) {
@@ -1034,6 +1046,12 @@ function getContentCosts(stack, num) {
 		dispCost += `<div class="bldgCostPriceName">${label}:</div><div class="bldgCostRes">${value}</div>`;
 	}
 	return dispCost;	
+}
+
+function updateContentCosts2(stack, num) {
+	devMsg("updateContentCosts2 called with values: " + stack + " and " + num);
+	let costs = getContentCosts(stack, num);
+	document.getElementByID(stack + num + "Costs").innerHTML = costs;
 }
 
 function updateContentCosts(num) {
