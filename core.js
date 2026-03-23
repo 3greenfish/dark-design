@@ -14,7 +14,8 @@ function objectParseMsg(ob) {
 	msg(output);
 }
 
-
+// --- BUILD GRID FUNCTION --- //
+//this is a loop that cycles through the applicable button array, determines content for each button, decides which column the button goes into, adds it to the column, assembles a block of HTML, and outputs it to the parent container.
 
 function buildGrid(source, sourceArray) {
 	let output = "";
@@ -87,15 +88,6 @@ function buildGrid(source, sourceArray) {
 		columns[c] += `</div>`;
 		output += columns[c];
 	}
-	
-	//for loop
-	//cycle through button array
-	//determine content for button
-	//decide which column goes into
-	//add to columns
-	//assemble block
-	//add HTML
-
 	document.getElementById("fillGrid").innerHTML = output;
 }	
 
@@ -162,7 +154,7 @@ const gameBase = {
 		],
 	buildNav: function() {
 		let navList = "";
-		for (let i = 0; i < this.tabs.length; i ++) {
+		for (let i = 0; i < this.tabs.length; i++) {
 			let tabLabel = this.tabs[i].label;
 			let activeFlag = "";
 			if (this.activeTab == i) {
@@ -281,7 +273,7 @@ const swampBase = {
 					devMsg("Digest button called");
 					let getCosts = swamp.stack[code].costs;
 					devMsg("loaded getCosts");					
-					if (resources.checkCostsByArray(getCosts).result == "pass" && resources.canAddRes("sustenance", 1)) {
+					if (resources.checkCostsByArray(getCosts).result == "pass" && resources.canAddAnyRes("sustenance")) {
 						devMsg("checked costs, checked to add res");
 						resources.payCostsByArray(getCosts);
 						let r = resources.findResInStack("sustenance");
@@ -369,6 +361,9 @@ Once full, pustules generate Corruption, and can be popped for Choler.`,
 		  ],
 		  ratio: 1.2,
 		  actions: [],
+		  effects: [
+			  { stack: "resource", res: "corruption", type: "max", amount: 50, source: "swamp", button: "pustule" }
+		  ],
 		  filled: 0,
 		  unfilled: [],
 		  onPurchase: function() {
@@ -511,7 +506,7 @@ const resourcesBase = {
 		  overflow: 0,
 		  perTick: 0,
 		  gatherRate: 1,
-		  gather: function() {
+/*		  gather: function() {					// FLAG FOR DELETION
 			  let totalRes = this.current;
 			  totalRes += this.gatherRate;
 			  totalRes = round3(totalRes);
@@ -521,16 +516,16 @@ const resourcesBase = {
 				  this.current = totalRes;
 			  }
 			  resources.loadResource(0); // need to clean up this code
-		  },
+		  }, 
 		  updateGatherRate: function() {
 			  this.gatherRate = round3(1 + (0.1 * swamp.stack[0].count));
-		  },
+		  }, */
 // -- updatePerTick is untested -- //	 
-		  updatePerTick: function() {
-			  this.perTick = 1; // need to define logic.
+/*		  updatePerTick: function() {
+			  this.perTick = 1; 			
 			  msg("Amount per tick is now " + this.perTick + " per click.");
-		  },
-		  updateMax: function() {
+		  }, */
+		  updateMax: function() {					//FLAG need to build into EFFECTS object arrays
 			  let swl = findBldgInSwamp("swell");
 			  let pus = findBldgInSwamp("pustule");
 			  let newMax = 50 + (swamp.stack[swl].count * 5) + (swamp.stack[pus].count * 50);
@@ -649,12 +644,12 @@ const resourcesBase = {
 		this.loadResource(resCode);
 		msg("addRes completed");
 	},
-	canAddRes: function(res, amount) {
+/*	canAddRes: function(res, amount) {			// FLAG FOR DELETION
 		let targetRes = resources.stack[resources.findResInStack(res)];
 		if (targetRes.current + amount <= targetRes.max) {
 			return true }
 		else { return false }
-	},
+	}, */
 	canAddAnyRes: function(res) {
 		let checkType = typeof res;
 		let resCode = (checkType == "number") ? res : resources.findResInStack(res);		
@@ -701,8 +696,8 @@ const resourcesBase = {
 		}
 		result.result = "pass";
 		result.reason = "sufficient resources";
-		devMsg(result);
-		return result;	
+		devMsg(result.result + " " + result.reason);
+		return result;
 	},
 	payCostsByArray: function(array, multi) {
 		for (let i = 0; i < array.length; i++) {
@@ -863,12 +858,6 @@ function loadGame() {	//runs at end of HTML load
 	
 }
 
-function rndPlusThree(number) {
-	msg("round3 called via deprecated rndPlusThree");
-	let numNum = round3(number);
-	return numNum;
-}
-
 function round3(number) {
 	let numNum = Math.round(number * 1000);
 	numNum = numNum / 1000;
@@ -954,7 +943,7 @@ function payPrice(num) {				// FLAG for deletion
 //	msg("payPrice completed");
 }
 
-function loadAllContentCosts() { 		//updates needed for new button scheme, or delete
+/* function loadAllContentCosts() { 		//updates needed for new button scheme, or delete
 	//msg("load all content costs called");
 	for (let i = 0; i < swamp.stack.length; i++) {
 		//msg("loading " + i);
@@ -964,7 +953,7 @@ function loadAllContentCosts() { 		//updates needed for new button scheme, or de
 		}
 		updateContentCosts(i);
 	}
-}
+} */
 
 function getContentCosts(stack, num) {
 	devMsg("getContentCosts called");
@@ -1354,7 +1343,7 @@ function toggleActive(e) {
 
 
 function expandButton2(target) {
-	msg("expandButton2 called with target: " + target);
+	devMsg("expandButton2 called with target: " + target);
 	const targetContent = document.getElementById(target + "Content");
 	const targetButton = document.getElementById(target + "Collapsible");
 	
@@ -1371,6 +1360,7 @@ function expandButton2(target) {
 }
 
 function expandButton(butt) {
+	devMsg("expandButton (original) called");
 	const target = butt.target.getAttribute('data-target');
 	const targetContent = document.getElementById(target + "-content");
 	const targetButton = document.getElementById(target + "-collapsible");
