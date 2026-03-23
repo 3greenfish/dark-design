@@ -1023,7 +1023,7 @@ function getContentCosts(stack, num) {
 		let priceCode = resources.findResInStack(priceName);
 		let label = resources.stack[priceCode].label;
 		devMsg("calling value");
-		let value = (prices[i].ratio) ? prices[i].amount * Math.pow(prices[i].ratio, count) : prices[i].amount;
+		let value = (prices[i].ratio > 0) ? prices[i].amount * Math.pow(prices[i].ratio, count) : prices[i].amount;
 		devMsg("value called");
 		dispCost += `<div class="bldgCostPriceName">${label}:</div><div class="bldgCostRes">${value}</div>`;
 	}
