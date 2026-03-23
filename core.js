@@ -1,5 +1,5 @@
 const messageArray = [];
-let devMode = false;
+let devMode = true;
 	// ["You have awakened in a new world, and your dark powers have corrupted a small bog. Time to fester..."];
 
 let resStatus = "visible"; // temporary variable for dev button testing of hidden attributes.
@@ -46,6 +46,7 @@ function buildGrid(source, sourceArray) {
 		let cost = "";
 		
 		if (array[i].costs) {
+			devMsg("BuildGrid reached getContentCosts);
 			let costs = getContentCosts(source, i);
 			cost = `
 					<hr>
@@ -1023,7 +1024,9 @@ function getContentCosts(stack, num) {
 		let priceName = prices[i].name;
 		let priceCode = resources.findResInStack(priceName);
 		let label = resources.stack[priceCode].label;
+		devMsg("calling value");
 		let value = (prices[i].ratio) ? prices[i].amount * Math.pow(prices[i].ratio, count) : prices[i].amount;
+		devMsg("value called");
 		dispCost += `<div class="bldgCostPriceName">${label}:</div><div class="bldgCostRes">${value}</div>`;
 	}
 	return dispCost;	
