@@ -161,7 +161,7 @@ const gameBase = {
 				activeFlag = `class="activeTab"`;
 			}
 			let newLabel = "";
-			if (i > 0) { 
+			if (navList != "") {      /* (i > 0) */
 				newLabel = " | ";
 			}
 			newLabel += `<div ${activeFlag} data-target="tab-${i}" onClick="buttonManager(event)" id="tab${i}">${tabLabel}</div>`;
