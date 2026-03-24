@@ -117,7 +117,7 @@ const gameBase = {
 		  }
 		},
 		{ name: "personnel",
-		  /* get label() {
+		  get label() {
 			  let label2 = "";
 			  switch(game.currentPhase) {
 				  case 0:
@@ -138,8 +138,8 @@ const gameBase = {
 					  label2 = "error";
 			  }
 			  return label2;
-		  }, */
-		  label: "tribe",
+		  },
+//		  label: "tribe",
 		  unlockAtPhase: 1,
 		  select: function(num) {
 			  game.activeTab = num;
@@ -933,9 +933,9 @@ function round3(number) {
 
 	if (actionCat == "pop") {
 		swamp.stack[1].popPustule(1);
-	} */
+	} 
 
-}
+} */
 
 function checkPrice(num) {				// FLAG for deletion
 	//msg("checkPrice called with num " + num);
@@ -1316,14 +1316,14 @@ const dev = [
 		  devMsg("called canAddAnyRes with resource prey by number, result: " + result);
 	  }
 	},
-	{ name: "buttonX",
+	{ name: "button13",
 	  label: "add phase",
 	  run: function() {
 		  game.currentPhase += 1;
 		  msg("current phase is now " + game.currentPhase);
 	  } 
 	},
-	{ name: "buttonX",
+	{ name: "button14",
 	  label: "refresh nav",
 	  run: function() {
 		  game.buildNav();
