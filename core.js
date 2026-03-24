@@ -117,7 +117,25 @@ const gameBase = {
 		  }
 		},
 		{ name: "personnel",
-		  label: "tribe",
+		  get label() {
+			  let label = "";
+			  switch(game.currentPhase) {
+				  case 0:
+				  case 1:
+					  label = "tribe";
+					  break;
+				  case 2:
+					  label = "residents";
+					  break;
+				  case 3:
+					  label = "citizens";
+					  break;
+				  case 4:
+					  label = "population";
+					  break;
+			  }
+			  return label;
+		  },
 		  unlockAtPhase: 1,
 		  select: function(num) {
 			  game.activeTab = num;
@@ -162,18 +180,16 @@ const gameBase = {
 				activeFlag = `class="activeTab"`;
 			}
 			let newLabel = "";
-			if (navList != "") {      /* (i > 0) */
+			if (navList != "") {
 				newLabel = " | ";
 			}
-			newLabel += `<div ${activeFlag} onClick="${action}" id="tab${i}">${tabLabel}</div>`; //data-target="tab-${i}"
+			newLabel += `<div ${activeFlag} onClick="${action}" id="tab${i}">${tabLabel}</div>`;
 			navList += newLabel;
 		}
 		document.getElementById("tabNav").innerHTML = navList;
-
-		// 		let mainActionCode = `${source.name}.stack[${i}].actions[0].press(${i},true)`;
 	},
 	refreshNav: function() {
-		for (let i = 0; i < this.tabs.length; i ++) {
+		for (let i = 0; i < this.tabs.length; i++) {
 			let element = document.getElementById("tab" + i);
 			if (element.classList.contains("activeTab")) {
 				element.classList.remove("activeTab");
@@ -470,7 +486,7 @@ Once full, pustules generate Corruption, and can be popped for Choler.`,
 		  actions: []
 		}
 		],
-	buyBuilding: function(num) {				//FLAG FOR DELETION
+/*	buyBuilding: function(num) {				//FLAG FOR DELETION
 		let validator = checkPrice(num); 
 		if (validator == "fail-insufficient") {  // should probably be a switch...
 			msg("insufficient resources");
@@ -479,7 +495,7 @@ Once full, pustules generate Corruption, and can be popped for Choler.`,
 			payPrice(num);
 			swamp.stack[num].onPurchase();
 		}
-	},
+	}, */
 	findEntry: function(name) {
 		let findName = name;
 		for (let i = 0; i < swamp.stack.length; i++) {
@@ -488,9 +504,7 @@ Once full, pustules generate Corruption, and can be popped for Choler.`,
 			}
 		}
 	},
-	buyEntry: function(num) {
-		
-	}
+	buyEntry: function(num) { }
 }
 
 
@@ -874,7 +888,7 @@ function round3(number) {
  * or buy-swell (activate purchase code for buying one swell)
  * alternatively, maybe everything is a buy action but some don't have costs?? */
 
-function buttonManager(event) {				//FLAG FOR DELETION with dynamic button creation
+/* function buttonManager(event) {				//FLAG FOR DELETION with dynamic button creation
 	msg("button pressed");
 	let sourceButton = event.target.getAttribute('data-target');
 	let actionCat = sourceButton.slice(0 , 3);
@@ -900,7 +914,7 @@ function buttonManager(event) {				//FLAG FOR DELETION with dynamic button creat
 		default:
 			msg("button pressing didn't work");
 	}
-
+*/
 	
 /*	if (actionCat == "gat") {
 		resources.gather(lvl2num);
@@ -1297,6 +1311,21 @@ const dev = [
 		  let result = resources.canAddAnyRes(1);
 		  devMsg("called canAddAnyRes with resource prey by number, result: " + result);
 	  }
+	},
+	{ name: "buttonX",
+	  label: "add phase",
+	  run: function() {
+		  game.currentPhase += 1;
+		  msg("current phase is now " + game.currentPhase);
+	  }
+	  
+	},
+	{ name: "buttonX",
+	  label: "refresh nav",
+	  run: function() {
+		  game.buildNav();
+	  }
+	  
 	}
 /*	{ name: "buttonX",
 	  label: "blank",
@@ -1312,7 +1341,6 @@ function setDevButtonsDynamic() {
 	let buttonBlock = "";
 	for (let i = 0; i < dev.length; i++) {
 		let label = dev[i].label;
-/*		let newButton = `<div class="button" data-target="dev-${i}" onClick="buttonManager(event)" id="devbutton${i}">${label}</div>`; */
 		let newButton = `<div class="button" onClick="dev[${i}].run()" id="devbutton${i}">${label}</div>`;
 		buttonBlock += newButton;
 	}
