@@ -157,6 +157,7 @@ const gameBase = {
 		for (let i = 0; i < this.tabs.length; i++) {
 			let tabLabel = this.tabs[i].label;
 			let activeFlag = "";
+			let action = `game.tabs[${i}].select(${i})`;
 			if (this.activeTab == i) {
 				activeFlag = `class="activeTab"`;
 			}
@@ -164,10 +165,12 @@ const gameBase = {
 			if (navList != "") {      /* (i > 0) */
 				newLabel = " | ";
 			}
-			newLabel += `<div ${activeFlag} data-target="tab-${i}" onClick="buttonManager(event)" id="tab${i}">${tabLabel}</div>`;
+			newLabel += `<div ${activeFlag} onClick="${action}" id="tab${i}">${tabLabel}</div>`; //data-target="tab-${i}"
 			navList += newLabel;
 		}
 		document.getElementById("tabNav").innerHTML = navList;
+
+		// 		let mainActionCode = `${source.name}.stack[${i}].actions[0].press(${i},true)`;
 	},
 	refreshNav: function() {
 		for (let i = 0; i < this.tabs.length; i ++) {
