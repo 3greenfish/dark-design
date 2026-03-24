@@ -117,7 +117,7 @@ const gameBase = {
 		  }
 		},
 		{ name: "personnel",
-		  get label() {
+		  /* get label() {
 			  let label2 = "";
 			  switch(game.currentPhase) {
 				  case 0:
@@ -138,7 +138,8 @@ const gameBase = {
 					  label2 = "error";
 			  }
 			  return label2;
-		  },
+		  }, */
+		  label: "tribe",
 		  unlockAtPhase: 1,
 		  select: function(num) {
 			  game.activeTab = num;
