@@ -118,23 +118,26 @@ const gameBase = {
 		},
 		{ name: "personnel",
 		  get label() {
-			  let label = "";
+			  let label2 = "";
 			  switch(game.currentPhase) {
 				  case 0:
+					  label2 = "ERROR";
+					  break;
 				  case 1:
-					  label = "tribe";
+					  label2 = "tribe";
 					  break;
 				  case 2:
-					  label = "residents";
+					  label2 = "residents";
 					  break;
 				  case 3:
-					  label = "citizens";
+					  label2 = "citizens";
 					  break;
 				  case 4:
-					  label = "population";
-					  break;
+					  label2 = "population";
+				  default:
+					  label2 = "error";
 			  }
-			  return label;
+			  return label2;
 		  },
 		  unlockAtPhase: 1,
 		  select: function(num) {
@@ -1317,15 +1320,13 @@ const dev = [
 	  run: function() {
 		  game.currentPhase += 1;
 		  msg("current phase is now " + game.currentPhase);
-	  }
-	  
+	  } 
 	},
 	{ name: "buttonX",
 	  label: "refresh nav",
 	  run: function() {
 		  game.buildNav();
 	  }
-	  
 	}
 /*	{ name: "buttonX",
 	  label: "blank",
