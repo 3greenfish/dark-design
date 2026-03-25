@@ -742,7 +742,7 @@ const resourcesBase = {
 		let code = this.findResInStack(res);
 		this.gather(code);
 	},
-	gather: function(code) {			//FLAG FOR POTENTIAL DELETION
+/*	gather: function(code) {			//FLAG FOR POTENTIAL DELETION
 		let res = this.stack[code];
 		let totalRes = res.current;
 
@@ -779,7 +779,7 @@ const resourcesBase = {
 			this.stack[code].gather();
 		}
 		
-	},
+	}, */
 	loadResource: function(resource) {
 		let resName = this.stack[resource].name;
 		let resCurrent = round3(this.stack[resource].current);
@@ -937,7 +937,7 @@ function round3(number) {
 
 } */
 
-function checkPrice(num) {				// FLAG for deletion
+/* function checkPrice(num) {				// FLAG for deletion
 	//msg("checkPrice called with num " + num);
 	let prices = swamp.stack[num].costs;
 	for (let i = 0; i < prices.length; i++) {
@@ -949,9 +949,9 @@ function checkPrice(num) {				// FLAG for deletion
 		}
 	}
 	return "pass-sufficient";
-}
+} */
 
-function payPrice(num) {				// FLAG for deletion
+/* function payPrice(num) {				// FLAG for deletion
 //	msg("payPrice called with num " + num);
 	let prices = swamp.stack[num].costs;
 	for (let i = 0; i < prices.length; i++) {
@@ -962,7 +962,7 @@ function payPrice(num) {				// FLAG for deletion
 	}
 	resources.loadResourcePanel();
 //	msg("payPrice completed");
-}
+} */
 
 /* function loadAllContentCosts() { 		//updates needed for new button scheme, or delete
 	//msg("load all content costs called");
@@ -1040,7 +1040,6 @@ const timing = {
 		//msg(this.logTime);
 		//msg("logTime is " + this.logTime + ", and is ... " + typeof this.logTime);
 		this.beltTimer = setInterval(this.belt.bind(this), timing.beltSpeed);
-		
 	},
 	belt: function() {
 		//msg("belt function called");
@@ -1392,25 +1391,25 @@ function expandButton2(target) {
 	}
 }
 
-function expandButton(butt) {
+/* function expandButton(butt) {
 	devMsg("expandButton (original) called");
 	const target = butt.target.getAttribute('data-target');
 	const targetContent = document.getElementById(target + "-content");
 	const targetButton = document.getElementById(target + "-collapsible");
 	
 	if (targetContent.style.display == "block") {
-		targetContent.style.display = "none"; /* hide content DIV */
-		targetButton.style.borderBottom = "1px solid black"; /* restore border */	
-		/* targetButton.style.borderRadius = "10px"; /* restore rounded corners */	
+		targetContent.style.display = "none"; // hide content DIV
+		targetButton.style.borderBottom = "1px solid black"; // restore border
+		// targetButton.style.borderRadius = "10px"; // restore rounded corners	
 		targetContent.style.maxHeight = "0";
 
 	} else {
 		targetContent.style.display = "block";
 		targetContent.style.maxHeight = targetContent.scrollHeight + "px";
 		targetButton.style.borderBottom = "none";
-		/* targetButton.style.borderRadius = "10px 10px 0 0"; */
+		// targetButton.style.borderRadius = "10px 10px 0 0"; 
 	}
-}
+} */
 
 function devMsg(text) {
 	if (devMode == true) {
