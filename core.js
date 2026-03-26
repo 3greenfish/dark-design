@@ -423,6 +423,18 @@ Once full, pustules generate Corruption, and can be popped for Choler.`,
 						expandButton2(target);
 					}
 				}
+			  },
+			  { subLabel: "Pop",
+			    type: "",
+			    press: function(code) {}
+			  },
+			  { subLabel: "Pop all",
+			    type: "",
+			    press: function(code) {
+					let count = swamp.stack[code].filled;
+
+					// call pop pustule code? check for amount fillable?
+				}
 			  }
 		  ],
 		  effects: [
