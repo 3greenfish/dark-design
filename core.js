@@ -675,7 +675,7 @@ const resourcesBase = {
 			res.current = round3(totalRes);
 		}
 		this.loadResource(resCode);
-		msg("addRes completed");
+		devMsg("addRes completed");
 	},
 	canAddAnyRes: function(res) {
 		let checkType = typeof res;
@@ -869,6 +869,7 @@ function updateLabel(stack, num) {
 	devMsg("updateLabel called with values: " + stack.name + " and " + num);
 	let newLabel = stack.stack[num].label;
 	if (stack.stack[num].count > 0) {
+		devMsg("stack count is " + stack.stack[num].count + " and inactive count is " + stack.stack[num].inactive);
 		let act = (stack.stack[num].inactive > 0) ? stack.stack[num].count - stack.stack[num].inactive + "/" : "";
 		newLabel += " (" + act + stack.stack[num].count + ")";
 		document.getElementById(stack.name + num + "Label").innerHTML = newLabel;
