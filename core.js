@@ -17,6 +17,33 @@ function objectParseMsg(ob) {
 // --- BUILD GRID FUNCTION --- //
 //this is a loop that cycles through the applicable button array, determines content for each button, decides which column the button goes into, adds it to the column, assembles a block of HTML, and outputs it to the parent container.
 
+/*
+<div class="buttonContainer">
+					<div class="collapsible" id="buy-1-collapsible">
+						<div class="buttonLabelWithBar" data-target="buy-1" id="pustuleLabel" onClick="buttonManager(event)">Pustule</div><div class="notch" data-target="buy-1" onClick="expandButton(event)">&#9776;</div>
+						<div class="buttonBarContainer">
+							<div id="pustuleProgress"></div>
+						</div>
+					</div>
+					<div class="content" id="buy-1-content">
+						<p>Grow a pustule to process sustenance into a thick bile.</p>
+						<p>Once full, pustules generate corruption, and can be popped for choler.</p>
+						<hr>
+						<div class="costs" id="buy-1-Costs">
+							<div class="bldgCostPriceName">RESOURCE</div><div class="bldgCostRes">DEFAULT AMOUNT</div>
+						</div>
+						<div class="button" data-target="buy-1" onClick="buttonManager(event)">Grow Pustule</div>
+						<div class="button" data-target="pop-1" onClick="buttonManager(event)">Pop</div>
+						<div class="button" data-target="pop-all" onClick="buttonManager(event)">Pop all</div>
+					</div>
+				</div>
+
+
+
+*/
+
+
+
 function buildGrid(source, sourceArray) {
 	let output = "";
 	let numColumns = 3; // FLAG -- plan to change this to check settings once screen size is evaluated //
@@ -40,7 +67,8 @@ function buildGrid(source, sourceArray) {
 		
 		let label = array[i].label;		//this is what shows in the label, will need to be updated for counts
 		if (array[i].count > 0) {
-			label = label + " (" + array[i].count + ")";
+			let act = (array[i].inactive > 0) ? array[i].count - array[i].inactive + "/" : "";
+			label = label + " (" + act + array[i].count + ")";
 		}					//FLAG -- make this into a separate function that accounts for active/inactive buildings		
 		let identifier = source.name + i;
 		let desc = array[i].desc;		//gets description from stack
@@ -70,6 +98,9 @@ function buildGrid(source, sourceArray) {
 				<div class="buttonContainer">
 					<div class="collapsible" id="${identifier}Collapsible">
 						<div class="buttonLabel" data-target="${identifier}" id="${identifier}Label" onClick="${mainActionCode}">${label}</div><div class="notch" data-target="${identifier}" onClick="expandButton2('${identifier}')">&#9776;</div>
+						<div class="buttonBarContainer">
+							<div id="${identifier}Progress"></div>
+						</div>
 					</div>
 					<div class="content" id="${identifier}Content">
 						<p>${desc}</p>
@@ -356,24 +387,55 @@ const swampBase = {
 		  label: "Pustule",
 		  desc: `Pustules process Sustenance into a thick bile.</p><p>
 Once full, pustules generate Corruption, and can be popped for Choler.`,
-		  count: 0,
+		  get count() {
+			  console.log("getting pustule count");
+			  return this.filled + this.unfilled.length;
+		  },
+		  get inactive() {
+			  return this.unfilled.length;
+		  },
 		  costs: [
 			  { name: "corruption", amount: 40, ratio: 1.2 }
 		  ],
-		  ratio: 1.2,
-		  actions: [],
+//		  ratio: 1.2,
+		  actions: [
+			  { subLabel: "Grow pustule",
+			    type: "main",
+			    press: function(code, isMain = false) {
+					devMsg("buy pustule called");
+					let grow = swamp.stack[code];
+					let getCosts = grow.costs;
+					let current = grow.count;
+					devMsg("pustule getCosts called");
+
+					if (resources.checkCostsByArray(getCosts, current).result == "pass") {
+						resources.payCostsByArray(getCosts, current);
+
+						grow.unfilled.push({ level: 0 });
+
+						updateLabel(swamp, code);
+						updateContentCosts2(swamp, code);
+					}
+					else if (isMain == true) {
+						//expand or close button
+						devMsg("isMain is TRUE, calling expandButton2");
+						let target = "swamp" + code;
+						expandButton2(target);
+				}
+			  }
+		  ],
 		  effects: [
 			  { stack: "resource", res: "corruption", type: "max", amount: 50, source: "swamp", button: "pustule" }
 		  ],
 		  filled: 0,
 		  unfilled: [],
-		  onPurchase: function() {
+/*		  onPurchase: function() {
 			  this.unfilled.push({ level: 0 });
 			  this.count += 1;
 			  this.updateButtonLabel();
 			  this.updateRatio();
 			  updateContentCosts(1);
-		  },
+		  }, */
 		  fillPus: function(x) {
 //			  msg("fillPus called with value " + x);
 			  let sus = x;    //sustenance available
