@@ -869,7 +869,8 @@ function updateLabel(stack, num) {
 	devMsg("updateLabel called with values: " + stack.name + " and " + num);
 	let newLabel = stack.stack[num].label;
 	if (stack.stack[num].count > 0) {
-		newLabel += " (" + stack.stack[num].count + ")";
+		let act = (stack.stack[num].inactive > 0) ? stack.stack[num].count - stack.stack[num].inactive + "/" : "";
+		newLabel += " (" + act + stack.stack[num].count + ")";
 		document.getElementById(stack.name + num + "Label").innerHTML = newLabel;
 	}
 }
@@ -1136,8 +1137,8 @@ const dev = [
 	  }
 	},
 	{ name: "button8",
-	  label: "display swamp object",
-	  run: function() { objectParseMsg(swamp); }
+	  label: "display pustule object",
+	  run: function() { objectParseMsg(swamp[4]); }
 	},
 	{ name: "button9",
 	  label: "build grid",
