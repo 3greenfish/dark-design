@@ -916,10 +916,10 @@ function updateLabel(stack, num) {
 		document.getElementById(stack.name + num + "Label").innerHTML = newLabel;
 	}
 
-	if (stack.stack[i].costs) {
+	if (stack.stack[num].costs) {
 		let AC = "";
 		devMsg("updateLabel now checking costs for button highlighting");
-		if (resources.checkCostsByArray(stack.stack[i].costs, stack.stack[i].count).result == "pass") {
+		if (resources.checkCostsByArray(stack.stack[num].costs, stack.stack[num].count).result == "pass") {
 			AC = "active";
 		}
 		let target = document.getElementById(stack.name + num + "Collapsible");
@@ -929,7 +929,7 @@ function updateLabel(stack, num) {
 		else if (!target.classList.contains("active") && AC = "active") {
 			target.classList.add("active");
 		}
-	}	
+	}
 }
 
 function updateContentCosts(num) {
