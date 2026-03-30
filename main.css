@@ -366,8 +366,7 @@ nav {
 }
 
 .active {
-	animation-name: buyable;
-	animation-duration: 4s;
+	animation: buyable 4s infinite linear;
 }
 
 .hidden {
