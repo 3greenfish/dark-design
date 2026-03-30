@@ -1294,13 +1294,7 @@ function expandForce(target) {
 	targetContent.style.display = "block";
 	targetContent.style.maxHeight = targetContent.scrollHeight + "px";
 	targetButton.style.borderBottom = "none";
-	
 }
-
-
-}
-
-
 
 function devMsg(text) {
 	if (devMode == true) {
