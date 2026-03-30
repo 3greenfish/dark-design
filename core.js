@@ -1290,11 +1290,11 @@ function expandForce(target) {
 	const targetContent = document.getElementById(target + "Content");
 	const targetButton = document.getElementById(target + "Collapsible");
 
-	targetContent.style.transitionDuration = "0s";
+//	targetContent.style.transitionDuration = "0s";
 	targetContent.style.display = "block";
 	targetContent.style.maxHeight = targetContent.scrollHeight + "px";
 	targetButton.style.borderBottom = "none";
-	targetContent.style.transitionDuration = "2s";
+//	targetContent.style.transitionDuration = "0.2s";
 }
 
 function devMsg(text) {
