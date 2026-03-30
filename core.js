@@ -194,6 +194,7 @@ const gameBase = {
 					  break;
 				  case 4:
 					  label2 = "population";
+					  break;
 				  default:
 					  label2 = "error";
 			  }
@@ -356,9 +357,9 @@ const swampBase = {
 					devMsg("Digest button called");
 					let getCosts = swamp.stack[code].costs;
 					devMsg("loaded getCosts");					
-					if (resources.checkCostsByArray(getCosts).result == "pass" && resources.canAddAnyRes("sustenance")) {
+					if (resources.checkCostsByArray(getCosts, 0).result == "pass" && resources.canAddAnyRes("sustenance")) {
 						devMsg("checked costs, checked to add res");
-						resources.payCostsByArray(getCosts);
+						resources.payCostsByArray(getCosts, 0);
 						let r = resources.findResInStack("sustenance");
 						let a = 1;
 						resources.addRes(r, a);
@@ -510,8 +511,8 @@ Once full, pustules generate Corruption, and can be popped for Choler.`,
 			  return spent;
 		  },
 		  popPustule: function(count) {
-			  if (!this.filled > 0) {
-				  return
+			  if (!(this.filled > 0)) {
+				  return;
 			  } else {
 				  this.filled -= 1;
 				  this.unfilled.push({ level: 0 });
@@ -628,8 +629,8 @@ const resourcesBase = {
 				  this.current = this.max;
 			  } else {
 				  this.current = round3(totalRes);
-		  }
 			  }
+		  }
 		},
 		{ name: "sustenance", //2
 		  label: "Sustenance",
