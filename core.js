@@ -1247,7 +1247,7 @@ function expandButton2(target) {
 	
 	if (targetContent.style.display == "block") {
 		targetContent.style.display = "none"; /* hide content DIV */
-		targetButton.style.borderBottom = "1px solid black"; /* restore border */	
+		targetButton.style.borderBottom = "1px solid #00ff00"; /* restore border */	
 		targetContent.style.maxHeight = "0";
 
 	} else {
