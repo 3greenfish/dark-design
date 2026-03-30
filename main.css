@@ -370,21 +370,6 @@ nav {
 	animation-duration: 4s;
 }
 
-
-
-div {
-  width: 100px;
-  height: 100px;
-  position: relative;
-  background-color: red;
-  animation-name: myAnimation;
-  animation-duration: 4s;
-}
-
-
-
-
-
 .hidden {
 	display: none;
 }
