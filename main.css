@@ -347,7 +347,7 @@ nav {
 
 /* -- miscellaneous styles with priority -- */
 
-.panel {
+.panel {				/* FLAG for deletion */
 	display: none;
 }
 
@@ -358,15 +358,15 @@ nav {
 /* -- keep at end to ensure override -- */
 
 @keyframes buyable {
-  0%   {background-color: #003300;}
-  25%  {background-color: #226622;}
-  50%  {background-color: #44aa44;}
-  75%  {background-color: #226622;}
-  100% {background-color: #003300;}
+  0%   {background-color: #003000;}
+  25%  {background-color: #186018;}
+  50%  {background-color: #309030;}
+  75%  {background-color: #186018;}
+  100% {background-color: #003000;}
 }
 
 .active {
-	animation: buyable 4s infinite linear;
+	animation: buyable 8s infinite linear;
 }
 
 .hidden {
