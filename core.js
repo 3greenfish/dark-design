@@ -96,7 +96,7 @@ function buildGrid(source, sourceArray) {
 
 		let newButton = `
 				<div class="buttonContainer">
-					<div class="collapsible" id="${identifier}Collapsible">
+					<div class="collapsible active" id="${identifier}Collapsible">
 						<div class="buttonLabel" data-target="${identifier}" id="${identifier}Label" onClick="${mainActionCode}">${label}</div><div class="notch" data-target="${identifier}" onClick="expandButton2('${identifier}')">&#9776;</div>
 						<div class="buttonBarContainer">
 							<div id="${identifier}Progress"></div>
