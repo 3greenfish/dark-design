@@ -73,7 +73,8 @@ function buildGrid(source, sourceArray) {
 		let identifier = source.name + i;
 		let desc = array[i].desc;		//gets description from stack
 		let cost = "";
-		
+
+		let AC = ""; //variable to flag active class
 		if (array[i].costs) {
 			devMsg("BuildGrid reached getContentCosts");
 			let costs = getContentCosts(source, i);
@@ -81,7 +82,10 @@ function buildGrid(source, sourceArray) {
 					<hr>
 						<div class="costs" id="${identifier}Costs">
 							${costs}
-						</div>`;		
+						</div>`;
+			if (resources.checkCostsByArray(array[i].costs).result == "pass") {
+				AC = "active";
+			}
 		} 
 
 		let actionsArray = array[i].actions;
@@ -96,7 +100,7 @@ function buildGrid(source, sourceArray) {
 
 		let newButton = `
 				<div class="buttonContainer">
-					<div class="collapsible active" id="${identifier}Collapsible">
+					<div class="collapsible ${AC}" id="${identifier}Collapsible">
 						<div class="buttonLabel" data-target="${identifier}" id="${identifier}Label" onClick="${mainActionCode}">${label}</div><div class="notch" data-target="${identifier}" onClick="expandButton2('${identifier}')">&#9776;</div>
 						<div class="buttonBarContainer">
 							<div id="${identifier}Progress"></div>
