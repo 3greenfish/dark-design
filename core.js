@@ -926,7 +926,7 @@ function updateLabel(stack, num) {
 		if (target.classList.contains("active") && AC != "active") {
 			target.classList.remove("active");
 		}
-		else if (!target.classList.contains("active") && AC = "active") {
+		else if (!(target.classList.contains("active")) && AC = "active") {
 			target.classList.add("active");
 		}
 	}
