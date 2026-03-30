@@ -915,6 +915,21 @@ function updateLabel(stack, num) {
 		newLabel += " (" + act + stack.stack[num].count + ")";
 		document.getElementById(stack.name + num + "Label").innerHTML = newLabel;
 	}
+
+	if (stack.stack[i].costs) {
+		let AC = "";
+		devMsg("updateLabel now checking costs for button highlighting");
+		if (resources.checkCostsByArray(stack.stack[i].costs, stack.stack[i].count).result == "pass") {
+			AC = "active";
+		}
+		let target = document.getElementById(stack.name + num + "Collapsible");
+		if (target.classList.contains("active") && AC != "active") {
+			target.classList.remove("active");
+		}
+		else if (!target.classList.contains("active") && AC = "active") {
+			target.classList.add("active");
+		}
+	}	
 }
 
 function updateContentCosts(num) {
