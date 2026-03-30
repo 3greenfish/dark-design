@@ -44,7 +44,7 @@ function objectParseMsg(ob) {
 
 
 
-function buildGrid(source, sourceArray) {
+function buildGrid(source, sourceArray, refresh = false) {
 	let output = "";
 	let numColumns = 3; // FLAG -- plan to change this to check settings once screen size is evaluated //
 	let columns = [];
@@ -61,6 +61,8 @@ function buildGrid(source, sourceArray) {
 		array = sourceArray;
 	}
 
+	let openArray = (refresh == true) ? logOpenTabs(source, sourceArray) : "";
+		
 	for (let i = 0; i < array.length; i++) {		//for every button in stack
 
 		// IF test to check if hidden or blocked, then continue FOR loop.
@@ -124,7 +126,29 @@ function buildGrid(source, sourceArray) {
 		output += columns[c];
 	}
 	document.getElementById("fillGrid").innerHTML = output;
+	if (refresh == true) {
+		reopenTabs(source, openArray);
+	}
+
 }	
+
+function logOpenTabs(source, sourceArray) {
+	let array = [];
+	for (let i = 0; i < sourceArray.length; i++) {
+		let iteration = (document.getElementById(source.name + i + "Content").style.display == "block") ? true : false;
+		array.push(iteration);
+	}
+	return array;
+}
+
+function reopenTabs(source, array) {
+	for (let i = 0; i < array.length; i++) {
+		if (array[i] == true) { expandButton2(source.name + i); }
+	}
+
+}
+
+
 
 // --- basic game information saved in object --- //
 
@@ -1158,8 +1182,8 @@ const dev = [
 	  run: function() { objectParseMsg(swamp[4]); }
 	},
 	{ name: "button9",
-	  label: "build grid",
-	  run: function() { buildGrid(swamp, swamp.stack); }
+	  label: "build grid with open tabs",
+	  run: function() { buildGrid(swamp, swamp.stack, true); }
 	},
 	{ name: "button10",
 	  label: "dev mode on/off",
