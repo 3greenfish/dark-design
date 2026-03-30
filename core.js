@@ -143,7 +143,7 @@ function logOpenTabs(source, sourceArray) {
 
 function reopenTabs(source, array) {
 	for (let i = 0; i < array.length; i++) {
-		if (array[i] == true) { expandButton2(source.name + i); }
+		if (array[i] == true) { expandForce(source.name + i); }
 	}
 
 }
@@ -1275,7 +1275,7 @@ function expandButton2(target) {
 	
 	if (targetContent.style.display == "block") {
 		targetContent.style.display = "none"; /* hide content DIV */
-		targetButton.style.borderBottom = "1px solid #00ff00"; /* restore border */	
+		targetButton.style.borderBottom = "1px solid #33aa33"; /* restore border */	
 		targetContent.style.maxHeight = "0";
 
 	} else {
@@ -1284,6 +1284,23 @@ function expandButton2(target) {
 		targetButton.style.borderBottom = "none";
 	}
 }
+
+function expandForce(target) {
+	devMsg("expandForce called with target: " + target);
+	const targetContent = document.getElementById(target + "Content");
+	const targetButton = document.getElementById(target + "Collapsible");
+
+	targetContent.style.transitionDuration = "0s";
+	targetContent.style.display = "block";
+	targetContent.style.maxHeight = targetContent.scrollHeight + "px";
+	targetButton.style.borderBottom = "none";
+	
+}
+
+
+}
+
+
 
 function devMsg(text) {
 	if (devMode == true) {
