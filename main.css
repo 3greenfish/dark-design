@@ -271,7 +271,7 @@ nav {
 	border-right: 1px solid #33aa33;
 /*	border-radius: 0 0 10px 10px; */
 	max-height: 0;
-	transition: max-height 0.2s ease-out;
+/*	transition: max-height 0.2s ease-out; */
 	font-size: 80%;
 /*	position: absolute;
 	top: 48px;
