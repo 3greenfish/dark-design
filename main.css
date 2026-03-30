@@ -193,7 +193,7 @@ nav {
 }
 
 .collapsible {
-	background-color: #001100;
+	background-color: #003300;
 	color: #00ff00;
 	cursor: pointer;
 	padding: 0px;
@@ -262,7 +262,7 @@ nav {
 	padding: 5px 15px 5px 15px;
 	display: none;
 	overflow: hidden;
-	background-color: #001100;
+	background-color: #003300;
 	color: #00ff00;
 	width: 169px;
 	border-top: 1px dotted black;
@@ -299,7 +299,8 @@ nav {
 .button {
 	border-radius: 5px;
 	border: 1px solid black;
-	background-color: #dddddd;
+	background-color: #33aa33;
+	color: #000000;
 	margin: 5px;
 	padding: 2px;
 	user-select: none;
