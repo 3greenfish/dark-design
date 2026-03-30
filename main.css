@@ -193,13 +193,13 @@ nav {
 }
 
 .collapsible {
-	background-color: #eeeeee;
-	color: #444444;
+	background-color: #001100;
+	color: #00ff00;
 	cursor: pointer;
 	padding: 0px;
 	margin-top: 10px;
 	width: 199px;
-	border: 1px solid blue;
+	border: 1px solid #00ff00;
 	text-align: left;
 	outline: none;
 	/* border-radius: 10px; */
@@ -208,13 +208,13 @@ nav {
 	-ms-user-select: none;
 }
 
-.collapsible:hover {
+/* .collapsible:hover {
 	background-color: #ccccdd;
 }
 
 .collapsible:focus {
 	background-color: #ccaadd;
-}
+} */
 
 .buttonLabel {
 	width: 164px;
@@ -262,7 +262,8 @@ nav {
 	padding: 5px 15px 5px 15px;
 	display: none;
 	overflow: hidden;
-	background-color: #f1f1f1;
+	background-color: #001100;
+	color: #00ff00;
 	width: 169px;
 	border-top: 1px dotted black;
 	border-bottom: 1px solid black;
