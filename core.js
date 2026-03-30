@@ -83,7 +83,7 @@ function buildGrid(source, sourceArray) {
 						<div class="costs" id="${identifier}Costs">
 							${costs}
 						</div>`;
-			if (resources.checkCostsByArray(array[i].costs).result == "pass") {
+			if (resources.checkCostsByArray(array[i].costs, array[i].count).result == "pass") {
 				AC = "active";
 			}
 		} 
