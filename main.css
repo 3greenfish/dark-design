@@ -356,6 +356,35 @@ nav {
 }
 
 /* -- keep at end to ensure override -- */
+
+@keyframes buyable {
+  0%   {background-color: #003300;}
+  25%  {background-color: #226622;}
+  50%  {background-color: #44aa44;}
+  75%  {background-color: #226622;}
+  100% {background-color: #003300;}
+}
+
+.active {
+	animation-name: buyable;
+	animation-duration: 4s;
+}
+
+
+
+div {
+  width: 100px;
+  height: 100px;
+  position: relative;
+  background-color: red;
+  animation-name: myAnimation;
+  animation-duration: 4s;
+}
+
+
+
+
+
 .hidden {
 	display: none;
 }
