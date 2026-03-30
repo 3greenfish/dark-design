@@ -173,6 +173,7 @@ const gameBase = {
 			  game.activeTab = num;
 			  game.refreshNav();
 			  devMsg(this.name + " selected");
+			  buildGrid(swamp, swamp.stack);
 		  }
 		},
 		{ name: "personnel",
@@ -1008,7 +1009,15 @@ const timing = {
 			case 17:
 			case 18:
 			case 19:
+				break;
 			case 20:
+				devMsg("calling buildGrid");
+				let tab = game.activeTab;
+				if (tab == 0) {
+					let base = game.tabs[tab].name;
+					buildGrid(base, base.stack, true);
+				}
+				break;
 			case 21:
 			case 22:
 			case 23:
