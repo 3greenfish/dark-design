@@ -359,12 +359,12 @@ nav {
 
 @keyframes buyable {
   0%   {background-color: #003000;}
-  50%  {background-color: #186018;}
+  50%  {background-color: #105010;}
   100% {background-color: #003000;}
 }
 
 .active {
-	animation: buyable 8s infinite linear;
+	animation: buyable 5s infinite linear;
 }
 
 .hidden {
