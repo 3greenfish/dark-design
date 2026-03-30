@@ -359,9 +359,7 @@ nav {
 
 @keyframes buyable {
   0%   {background-color: #003000;}
-  25%  {background-color: #186018;}
-  50%  {background-color: #309030;}
-  75%  {background-color: #186018;}
+  50%  {background-color: #186018;}
   100% {background-color: #003000;}
 }
 
