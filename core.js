@@ -1011,12 +1011,7 @@ const timing = {
 			case 19:
 				break;
 			case 20:
-				devMsg("calling buildGrid");
-				let tab = game.activeTab;
-				if (tab == 0) {
-					let base = game.tabs[tab].name;
-					buildGrid(base, base.stack, true);
-				}
+				this.callBuild();
 				break;
 			case 21:
 			case 22:
@@ -1052,6 +1047,19 @@ const timing = {
 		
 		//update logTime
 		this.logTime = nowTime;
+	},
+	callBuild: function() {
+		devMsg("refreshing active panel via callBuild, auto-called from timing belt");
+		switch(game.activeTab) {
+			case 0:
+				buildGrid(swamp, swamp.stack, true);
+				break;
+			case 1:
+			case 2:
+			case 3:
+			case 4:
+				break;
+		}
 	}
 }
 
