@@ -411,7 +411,7 @@ Once full, pustules generate Corruption, and can be popped for Choler.`,
 					if (resources.checkCostsByArray(getCosts, current).result == "pass") {
 						resources.payCostsByArray(getCosts, current);
 
-						grow.unfilled.push({ level: 0 });
+						grow.unfilled.push({ level: 12 });
 
 						updateLabel(swamp, code);
 						updateContentCosts2(swamp, code);
