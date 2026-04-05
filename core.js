@@ -169,10 +169,10 @@ const gameBase = {
 		  label: "a sinister swamp",
 		  visible: true,
 		  lockAtPhase: 1,
-		  select: function(num) {
-			  game.activeTab = num;
+		  select: function() {
+/*			  game.activeTab = num;
 			  game.refreshNav();
-			  devMsg(this.name + " selected");
+			  devMsg(this.name + " selected"); */
 			  buildGrid(swamp, swamp.stack);
 		  }
 		},
@@ -203,35 +203,35 @@ const gameBase = {
 //		  label: "tribe",
 		  unlockAtPhase: 1,
 		  select: function(num) {
-			  game.activeTab = num;
+/*			  game.activeTab = num;
 			  game.refreshNav();
-			  devMsg(this.name + " selected");
+			  devMsg(this.name + " selected"); */
 		  }
 		},
 		{ name: "home",
 		  label: "settlement",
 		  unlockAtPhase: 2,
 		  select: function(num) {
-			  game.activeTab = num;
+/*			  game.activeTab = num;
 			  game.refreshNav();
-			  devMsg(this.name + " selected");
+			  devMsg(this.name + " selected"); */
 		  }
 		},
 		{ name: "world",
 		  label: "world", // update to start as "nearby towns"?
 		  unlockAtPhase: 3,
 		  select: function(num) {
-			  game.activeTab = num;
+/*			  game.activeTab = num;
 			  game.refreshNav();
-			  devMsg(this.name + " selected");
+			  devMsg(this.name + " selected"); */
 		  }
 		},
 		{ name: "research",
 		  label: "research",
 		  select: function(num) {
-			  game.activeTab = num;
+/*			  game.activeTab = num;
 			  game.refreshNav();
-			  devMsg(this.name + " selected");
+			  devMsg(this.name + " selected"); */
 		  }
 		}
 		],
@@ -240,7 +240,8 @@ const gameBase = {
 		for (let i = 0; i < this.tabs.length; i++) {
 			let tabLabel = this.tabs[i].label;
 			let activeFlag = "";
-			let action = `game.tabs[${i}].select(${i})`;
+	//		let action = `game.tabs[${i}].select(${i})`;
+			let action = `game.selectNav(${i})`;
 			if (this.activeTab == i) {
 				activeFlag = `class="activeTab"`;
 			}
@@ -261,7 +262,13 @@ const gameBase = {
 			}
 		}
 		document.getElementById("tab" + this.activeTab).classList.add("activeTab");
-	}
+	},
+	selectNav: function(x) {
+		game.activeTab = x;
+		game.refreshNav();
+		game.tabs[x].select();
+		devMsg(game.tabs[x].name + " selected");
+	}	
 };
 
 // ---- phase 1 buttons based as object ---- //
