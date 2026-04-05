@@ -150,7 +150,6 @@ function reopenTabs(source, array) {
 }
 
 function refreshProgAll(source, array) {
-	msg("refreshProgAll called");
 	for (let i = 0; i < array.length; i ++) {
 		if (array[i].hidden == true || array[i].hasProg != true || array[i].blocked == true ) { 
 			continue;
@@ -438,9 +437,9 @@ Once full, pustules generate Corruption, and can be popped for Choler.`,
 		  get prog() {
 			  let result = 0;
 			  if ( this.unfilled.length > 0 ) {
-				  msg ("length of pustule array is " + this.unfilled.length);
+	//			  msg ("length of pustule array is " + this.unfilled.length);
 				  result = (this.unfilled[0].level / 30) * 100;
-				  msg("current pustule level is " + result);
+	//			  msg("current pustule level is " + result);
 			  }
 			  return result;
 		  },
@@ -468,10 +467,11 @@ Once full, pustules generate Corruption, and can be popped for Choler.`,
 					if (resources.checkCostsByArray(getCosts, current).result == "pass") {
 						resources.payCostsByArray(getCosts, current);
 
-						swamp.stack[code].unfilled.push({ level: 11 });
+						swamp.stack[code].unfilled.push({ level: 0 });
 
 						updateLabel(swamp, code);
 						updateContentCosts2(swamp, code);
+						refreshProgAll(swamp, swamp.stack);
 					}
 					else if (isMain == true) {
 						//expand or close button
@@ -547,13 +547,13 @@ Once full, pustules generate Corruption, and can be popped for Choler.`,
 				  this.updateButtonLabel();
 			  }  
 		  },
-		  updateButtonLabel: function() {
+/*		  updateButtonLabel: function() {				//READY TO DELETE
 			  let newLabel = this.label;
 				  if (this.count > 0) {
 					  newLabel = newLabel + " (" + this.filled + "/" + this.count + ")";
 				  }
 			  document.getElementById(this.name + "Label").innerText = newLabel;
-		  }
+		  } */
 		},
 		{ name: "digestor",		//5
 		  label: "Digestor",
