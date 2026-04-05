@@ -468,7 +468,7 @@ Once full, pustules generate Corruption, and can be popped for Choler.`,
 					if (resources.checkCostsByArray(getCosts, current).result == "pass") {
 						resources.payCostsByArray(getCosts, current);
 
-						swamp.stack[code].unfilled.push({ level: 12 });
+						swamp.stack[code].unfilled.push({ level: 11 });
 
 						updateLabel(swamp, code);
 						updateContentCosts2(swamp, code);
@@ -1283,7 +1283,13 @@ const dev = [
 	  run: function() {
 		  game.buildNav();
 	  }
-	}
+	},
+	{ name: "button15",
+	  label: "update pustule",
+	  run: function() {
+		  swamp.stack[4].unfilled[0].level += 1;
+		  refreshProgAll(swamp, swamp.stack);
+	  }
 /*	{ name: "buttonX",
 	  label: "blank",
 	  run: function() { }
