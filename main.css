@@ -364,7 +364,8 @@ nav {
 }
 
 .active {
-	animation: buyable 5s infinite linear;
+/*	animation: buyable 5s infinite linear; */
+	background-color: #105010;
 }
 
 .hidden {
