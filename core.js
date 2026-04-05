@@ -150,10 +150,11 @@ function reopenTabs(source, array) {
 }
 
 function refreshProgAll(source, array) {
+	msg("refreshProgAll called");
 	for (let i = 0; i < array.length; i ++) {
 		if (array[i].hidden == true || array[i].hasProg != true || array[i].blocked == true ) { 
-			continue 
-		} 
+			continue;
+		}
 		let progWidth = array[i].prog;
 		document.getElementById(source.name + i + "Progress").style.width = progWidth + "%";
 	}
@@ -437,12 +438,14 @@ Once full, pustules generate Corruption, and can be popped for Choler.`,
 		  get prog() {
 			  let result = 0;
 			  if ( this.unfilled.length > 0 ) {
+				  msg ("length of pustule array is " + this.unfilled.length);
 				  result = (this.unfilled[0].level / 30) * 100;
-			  }			  
+				  msg("current pustule level is " + result);
+			  }
 			  return result;
 		  },
 		  get count() {
-			  console.log("getting pustule count");
+//			  console.log("getting pustule count");
 			  return this.filled + this.unfilled.length;
 		  },
 		  get inactive() {
@@ -465,7 +468,7 @@ Once full, pustules generate Corruption, and can be popped for Choler.`,
 					if (resources.checkCostsByArray(getCosts, current).result == "pass") {
 						resources.payCostsByArray(getCosts, current);
 
-						grow.unfilled.push({ level: 12 });
+						swamp.stack[code].unfilled.push({ level: 12 });
 
 						updateLabel(swamp, code);
 						updateContentCosts2(swamp, code);
