@@ -126,6 +126,7 @@ function buildGrid(source, sourceArray, refresh = false) {
 		output += columns[c];
 	}
 	document.getElementById("fillGrid").innerHTML = output;
+	refreshProgAll(source, sourceArray);
 	if (refresh == true) {
 		reopenTabs(source, openArray);
 	}
@@ -148,7 +149,15 @@ function reopenTabs(source, array) {
 
 }
 
-
+function refreshProgAll(source, array) {
+	for (let i = 0; i < array.length; i ++) {
+		if (array[i].hidden == true || array[i].hasProg != true || array[i].blocked == true ) { 
+			continue 
+		} 
+		let progWidth = array[i].prog;
+		document.getElementById(source.name + i + "Progress").style.width = progWidth + "%";
+	}
+}
 
 // --- basic game information saved in object --- //
 
@@ -424,6 +433,14 @@ const swampBase = {
 		  label: "Pustule",
 		  desc: `Pustules process Sustenance into a thick bile.</p><p>
 Once full, pustules generate Corruption, and can be popped for Choler.`,
+		  hasProg: true,
+		  get prog() {
+			  let result = 0;
+			  if ( this.unfilled.length > 0 ) {
+				  result = (this.unfilled[0].level / 30) * 100;
+			  }			  
+			  return result;
+		  },
 		  get count() {
 			  console.log("getting pustule count");
 			  return this.filled + this.unfilled.length;
