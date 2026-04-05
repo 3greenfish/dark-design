@@ -1290,6 +1290,7 @@ const dev = [
 		  swamp.stack[4].unfilled[0].level += 1;
 		  refreshProgAll(swamp, swamp.stack);
 	  }
+	}
 /*	{ name: "buttonX",
 	  label: "blank",
 	  run: function() { }
