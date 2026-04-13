@@ -905,7 +905,7 @@ const researchBase = {
 					if (resources.checkCostsByArray(getCosts).result == "pass") {
 						resources.payCostsByArray(getCosts);
 						calendar.activateCal();
-						cal.purchased = true;
+						research.stack[code].purchased = true;
 					}
 					else if (isMain == true) {
 						let target = "research" + code;
