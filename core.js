@@ -100,6 +100,7 @@ function buildGrid(source, sourceArray, refresh = false) {
 		}
 
 		let mainActionCode = `${source.name}.stack[${i}].actions[0].press(${i},true)`;
+		let flavor = (array[i].flavor) ? `<div class="flavor">array[i].flavor</div>` : "";
 
 		let newButton = `
 				<div class="buttonContainer">
@@ -113,6 +114,7 @@ function buildGrid(source, sourceArray, refresh = false) {
 						<p>${desc}</p>
 						${cost}
 						${actions}
+						${flavor}
 					</div>
 				</div>`;
 		columns[currentColumn] += newButton;
@@ -889,7 +891,7 @@ const researchBase = {
 		{ name: "calendar",
 		  label: "Calendar",
 		  desc: "Discover the world's cyclical cycle.",
-		  flavor: "",
+		  flavor: null,
 		  costs: [
 			  { name: "corruption", amount: 10 }
 		  ],
@@ -906,6 +908,7 @@ const researchBase = {
 						resources.payCostsByArray(getCosts);
 						calendar.activateCal();
 						research.stack[code].purchased = true;
+						buildGrid(research, research.stack, true);
 					}
 					else if (isMain == true) {
 						let target = "research" + code;
@@ -916,7 +919,21 @@ const researchBase = {
 		  ],
 		  effects: [],
 		  unlocks: []
+		},
+		{ name: "stone tools",
+		  label: "Stone tools",
+		  desc: "Improve hunting and gathering with tools made of stone.",
+		  flavor: "sometimes you just have to hit something with a rock.",
+		  costs: [
+			  { name: "corruption", amount: 15 }
+		  ],
+		  purchased: false,
+		  actions: [],
+		  effects: [],
+		  unlocks: []
 		}
+
+	
 	]
 };
 	
