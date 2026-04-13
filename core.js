@@ -238,6 +238,7 @@ const gameBase = {
 		{ name: "research",
 		  label: "research",
 		  select: function(num) {
+			  buildGrid(research, research.stack);
 /*			  game.activeTab = num;
 			  game.refreshNav();
 			  devMsg(this.name + " selected"); */
@@ -864,11 +865,77 @@ const resourcesBase = {
 
 // --- start research object --- //
 
-const research = {};
-const researchBase = {};
-	
 /*
 
+		{ name: 
+		  label: 
+		  desc: 
+		  flavor: 
+		  costs: [],
+		  actions: [],
+		  effects: [],
+		  unlocks: []
+		}
+*/
+
+
+
+const research = {};
+const researchBase = {
+	name: "research object",
+	stack: [
+		{ name: "calendar",
+		  label: "Calendar",
+		  desc: "Discover the world's cyclical cycle.",
+		  flavor: "",
+		  costs: [
+			  { name: "corruption", amount: 10 }
+		  ],
+		  actions: [
+			  { sublabel: "Research",
+			    type: "main",
+			    press: function(code, isMain = false) {
+					devMsg("purchasing research");
+					let cal = research.stack[code];
+					let getCosts = cal.costs;
+
+					if (resources.checkCostsByArray(getCosts).result == "pass") {
+						resources.payCostsByArray(getCosts);
+						calendar.activateCal();
+					}
+					else if (isMain == true) {
+						let target = "research" + code;
+						expandButton2(target);
+					}
+				}
+			  }
+		  ],
+		  effects: [],
+		  unlocks: []
+		}
+	]
+};
+	
+/*
+					devMsg("buy swell called");
+					let swell = swamp.stack[code];
+					let getCosts = swell.costs;
+					let current = swell.count;
+					devMsg("swell getCosts called");
+
+					if (resources.checkCostsByArray(getCosts, current).result == "pass") {
+						resources.payCostsByArray(getCosts, current);
+						swell.count += 1;
+
+						updateLabel(swamp, code);
+						updateContentCosts2(swamp, code);
+					}
+					else if (isMain == true) {
+						//expand or close button
+						devMsg("isMain is TRUE, calling expandButton2");
+						let target = "swamp" + code;
+						expandButton2(target);
+					}
 
 
 
@@ -894,11 +961,12 @@ function loadGame() {	//runs at end of HTML load
 	Object.assign(swamp, swampBase);
 	Object.assign(resources, resourcesBase);
 	Object.assign(game, gameBase);
+	Object.assign(research, researchBase);
 	game.buildNav();
 	timing.activateBelt();
 	resources.loadResourcePanel();
 	setDevButtonsDynamic();
-	buildGrid(swamp, swamp.stack);
+	buildGrid(swamp, swamp.stack);	//need to update to define by phase when loading game/refreshing from LocalStorage
 	msg("You have awakened...");	
 }
 
