@@ -882,7 +882,7 @@ const resourcesBase = {
 
 const research = {};
 const researchBase = {
-	name: "research object",
+	name: "research",
 	stack: [
 		{ name: "calendar",
 		  label: "Calendar",
@@ -892,7 +892,7 @@ const researchBase = {
 			  { name: "corruption", amount: 10 }
 		  ],
 		  actions: [
-			  { sublabel: "Research",
+			  { subLabel: "Research",
 			    type: "main",
 			    press: function(code, isMain = false) {
 					devMsg("purchasing research");
