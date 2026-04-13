@@ -65,6 +65,7 @@ function buildGrid(source, sourceArray, refresh = false) {
 		
 	for (let i = 0; i < array.length; i++) {		//for every button in stack
 
+		if (array[i].purchased == "true") { continue; }
 		// IF test to check if hidden or blocked, then continue FOR loop.
 		
 		let label = array[i].label;		//this is what shows in the label, will need to be updated for counts
@@ -174,7 +175,7 @@ const gameBase = {
 		],
 	activeTab: 0,
 	tabs: [
-		{ name: "swamp", 
+		{ name: "swamp", 		//0
 		  label: "a sinister swamp",
 		  visible: true,
 		  lockAtPhase: 1,
@@ -185,7 +186,7 @@ const gameBase = {
 			  buildGrid(swamp, swamp.stack);
 		  }
 		},
-		{ name: "personnel",
+		{ name: "personnel",	//1
 		  get label() {
 			  let label2 = "";
 			  switch(game.currentPhase) {
@@ -217,7 +218,7 @@ const gameBase = {
 			  devMsg(this.name + " selected"); */
 		  }
 		},
-		{ name: "home",
+		{ name: "home",			//2
 		  label: "settlement",
 		  unlockAtPhase: 2,
 		  select: function(num) {
@@ -226,7 +227,7 @@ const gameBase = {
 			  devMsg(this.name + " selected"); */
 		  }
 		},
-		{ name: "world",
+		{ name: "world",		//3
 		  label: "world", // update to start as "nearby towns"?
 		  unlockAtPhase: 3,
 		  select: function(num) {
@@ -235,7 +236,7 @@ const gameBase = {
 			  devMsg(this.name + " selected"); */
 		  }
 		},
-		{ name: "research",
+		{ name: "research",		//4
 		  label: "research",
 		  select: function(num) {
 			  buildGrid(research, research.stack);
@@ -872,6 +873,7 @@ const resourcesBase = {
 		  desc: 
 		  flavor: 
 		  costs: [],
+		  purchased: 
 		  actions: [],
 		  effects: [],
 		  unlocks: []
@@ -891,6 +893,7 @@ const researchBase = {
 		  costs: [
 			  { name: "corruption", amount: 10 }
 		  ],
+		  purchased: false,
 		  actions: [
 			  { subLabel: "Research",
 			    type: "main",
@@ -902,6 +905,7 @@ const researchBase = {
 					if (resources.checkCostsByArray(getCosts).result == "pass") {
 						resources.payCostsByArray(getCosts);
 						calendar.activateCal();
+						cal.purchased = true;
 					}
 					else if (isMain == true) {
 						let target = "research" + code;
@@ -917,28 +921,6 @@ const researchBase = {
 };
 	
 /*
-					devMsg("buy swell called");
-					let swell = swamp.stack[code];
-					let getCosts = swell.costs;
-					let current = swell.count;
-					devMsg("swell getCosts called");
-
-					if (resources.checkCostsByArray(getCosts, current).result == "pass") {
-						resources.payCostsByArray(getCosts, current);
-						swell.count += 1;
-
-						updateLabel(swamp, code);
-						updateContentCosts2(swamp, code);
-					}
-					else if (isMain == true) {
-						//expand or close button
-						devMsg("isMain is TRUE, calling expandButton2");
-						let target = "swamp" + code;
-						expandButton2(target);
-					}
-
-
-
 
 */
 
@@ -1161,13 +1143,15 @@ const timing = {
 	callBuild: function() {
 		devMsg("refreshing active panel via callBuild, auto-called from timing belt");
 		switch(game.activeTab) {
-			case 0:
+			case 0: //swamp
 				buildGrid(swamp, swamp.stack, true);
 				break;
-			case 1:
-			case 2:
-			case 3:
-			case 4:
+			case 1:	//personnel
+			case 2: //settlement
+			case 3: //world
+				break;
+			case 4: //research
+				buildGrid(research, research.stack, true);
 				break;
 		}
 	}
