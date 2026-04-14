@@ -166,7 +166,7 @@ function testUnlock(button) {					//FLAG THERE IS A PROBLEM SOMEWHERE IN HERE
 	
 	for (let i = 0; i < locks.length; i++) {
 		msg("calling locks for " + button.name);
-		if (locks[i].open == true) { 
+		if (locks[i].opened == true) { 
 			continue; 
 		}
 		if (locks[i].type == "res") {
@@ -178,7 +178,7 @@ function testUnlock(button) {					//FLAG THERE IS A PROBLEM SOMEWHERE IN HERE
 			msg("bobtext is " + bobtext + " and length is now " + throwArray.length);
 			if (resources.checkCostsByArray(throwArray, 0).result == "pass") {
 				msg("check costs for " + button.name + " lock " + i + "has passed successfully");
-				locks[i].open = true;
+				locks[i].opened = true;
 			}
 			else { 
 				msg("check costs for " + button.name + " lock " + i + "has failed");
