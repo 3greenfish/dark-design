@@ -973,8 +973,8 @@ const researchBase = {
 					let cal = research.stack[code];
 					let getCosts = cal.costs;
 
-					if (resources.checkCostsByArray(getCosts).result == "pass") {
-						resources.payCostsByArray(getCosts);
+					if (resources.checkCostsByArray(getCosts, 0).result == "pass") {
+						resources.payCostsByArray(getCosts, 0);
 						calendar.activateCal();
 						cal.purchased = true;
 						buildGrid(research, research.stack, true);
@@ -1374,10 +1374,10 @@ const dev = [
 		  msg("added 5 prey");
 	  }
 	},
-	{ name: "button8",
+/*	{ name: "button8",
 	  label: "display pustule object",
 	  run: function() { objectParseMsg(swamp[4]); }
-	},
+	}, */
 	{ name: "button9",
 	  label: "build grid with open tabs",
 	  run: function() { buildGrid(swamp, swamp.stack, true); }
@@ -1468,7 +1468,7 @@ function toggleActive(e) {
 	if (activePanels) {
 		activePanels[0].classList.toggle('active'); /* hides everything */
 	} 
-	targetPanel.classList.toggle('active')
+	targetPanel.classList.toggle('active');
 }
 
 
