@@ -150,13 +150,15 @@ function testUnlock(button) {
 		return;
 	}
 
-	msg("testUnlock opened");
+//	msg("testUnlock opened");
 	let locks = button.lockedBy;
 	let pass = true;
 
 	if (locks === undefined) {
-		msg("warning, no locks for " + button.name);
+//		msg("warning, no locks for " + button.name);
 		return;
+	} else {
+		msg("length of locks for " + button.name + " is " + locks.length);
 	}
 	
 	for (let i = 0; i < locks.length; i++) {
@@ -168,6 +170,9 @@ function testUnlock(button) {
 			let throwArray = [];
 			throwArray[0] = locks[i];
 			msg(throwArray.toString());
+			let bob = Object.values(throwArray[0]);
+			let bobtext = bob.toString();
+			msg("bobtext is " + bobtext);
 			if (resources.checkCostsByArray(throwArray, 0).result == "pass") { 
 				locks[i].open = true;
 			}
