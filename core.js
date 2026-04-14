@@ -152,7 +152,7 @@ function testUnlock(button) {
 	let locks = button.lockedBy;
 	let pass = true;
 
-	if (!locks.length) {
+	if (locks === undefined) {
 		msg("warning, no locks for " + button.name);
 		return;
 	}
