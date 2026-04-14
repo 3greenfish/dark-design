@@ -66,6 +66,7 @@ function buildGrid(source, sourceArray, refresh = false) {
 	for (let i = 0; i < array.length; i++) {		//for every button in stack
 
 		if (array[i].isUnlocked != true) {
+			msg("calling testUnlock with array object for " + array[i].name);
 			//check whether can unlock
 			testUnlock(array[i]);
 		}
@@ -147,10 +148,12 @@ function testUnlock(button) {
 		return;
 	}
 
+	msg("testUnlock opened");
 	let locks = button.lockedBy;
 	let pass = true;
 	
 	for (let i = 0; i < locks.length; i++) {
+		msg("calling locks for " + button.name);
 		if (locks[i].open == true) { continue; }
 		if (locks[i].type == "res") {
 			let throwArray = [];
