@@ -143,7 +143,7 @@ function buildGrid(source, sourceArray, refresh = false) {
 }	
 
 function testUnlock(button) {
-	if (button.isUnlocked) {
+	if (button.isUnlocked == true) {
 		msg("WARNING, BUTTON ALREADY UNLOCKED");
 		return;
 	}
@@ -170,9 +170,9 @@ function testUnlock(button) {
 				pass = false;
 			}
 		}
-		if (locks[i].type == "tech") {
+		if (locks[i].type == "tech") { continue;
 		}
-		if (locks[i].type == "button") {
+		if (locks[i].type == "button") { continue;
 		}
 	}
 	if (pass == true) {
