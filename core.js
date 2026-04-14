@@ -140,6 +140,52 @@ function buildGrid(source, sourceArray, refresh = false) {
 
 }	
 
+function testUnlock(button) {
+	if (button.isUnlocked) {
+		msg("WARNING, BUTTON ALREADY UNLOCKED");
+		return;
+	}
+
+	let locks = button.lockedBy;
+	let pass = true;
+	
+	for (let i = 0; i < locks.length; i++) {
+		if (locks[i].open == true) { continue; }
+		if (locks[i].type == "res") {
+			let throwArray = [];
+			throwArray[0] = locks[i];
+			if (resources.checkCostsByArray(throwArray, 0).result == "pass") { 
+				locks[i].open = true;
+			}
+			else { 
+				pass = false;
+			}
+		}
+		if (locks[i].type == "tech") {
+		}
+		if (locks[i].type == "button") {
+		}
+	}
+	if (pass == true) {
+		button.isUnlocked = true;
+	}
+}
+
+/*
+	type: resource, button, tech
+	resource: could be any entry in resource stack
+	button: could be any button in building stack
+	amount: just a quantity if relevant
+	unlocked: triggered for multi-unlock items
+
+	{ type: "res", name: "prey", amount: 1 }
+
+*/
+
+
+	
+}
+
 function logOpenTabs(source, sourceArray) {
 	let array = [];
 	for (let i = 0; i < sourceArray.length; i++) {
