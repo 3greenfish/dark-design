@@ -144,7 +144,6 @@ function buildGrid(source, sourceArray, refresh = false) {
 	if (refresh == true) {
 		reopenTabs(source, openArray);
 	}
-
 }	
 
 function testUnlock(button) {					//FLAG THERE IS A PROBLEM SOMEWHERE IN HERE
@@ -152,7 +151,6 @@ function testUnlock(button) {					//FLAG THERE IS A PROBLEM SOMEWHERE IN HERE
 		msg("WARNING, BUTTON ALREADY UNLOCKED");
 		return;
 	}
-
 //	msg("testUnlock opened");
 	let locks = button.lockedBy;
 	let pass = true;
@@ -166,7 +164,7 @@ function testUnlock(button) {					//FLAG THERE IS A PROBLEM SOMEWHERE IN HERE
 	
 	for (let i = 0; i < locks.length; i++) {
 		msg("calling locks for " + button.name);
-		if (locks[i].opened == true) { 
+		if (locks[i].opened === true) { 
 			continue; 
 		}
 		if (locks[i].type == "res") {
@@ -179,8 +177,10 @@ function testUnlock(button) {					//FLAG THERE IS A PROBLEM SOMEWHERE IN HERE
 			if (resources.checkCostsByArray(throwArray, 0).result == "pass") {
 				msg("check costs for " + button.name + " lock " + i + "has passed successfully");
 				locks[i].opened = true;
-			}
-			else { 
+				let newbob = Object.values(locks[i]);
+				let newbobtext = newbob.toString();
+				msg("new bobtext is " + newbobtext);
+			} else { 
 				msg("check costs for " + button.name + " lock " + i + "has failed");
 				pass = false;
 			}
