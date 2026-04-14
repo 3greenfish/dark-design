@@ -151,6 +151,11 @@ function testUnlock(button) {
 	msg("testUnlock opened");
 	let locks = button.lockedBy;
 	let pass = true;
+
+	if (!locks.length) {
+		msg("warning, no locks for " + button.name);
+		return;
+	}
 	
 	for (let i = 0; i < locks.length; i++) {
 		msg("calling locks for " + button.name);
