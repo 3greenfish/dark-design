@@ -65,13 +65,15 @@ function buildGrid(source, sourceArray, refresh = false) {
 		
 	for (let i = 0; i < array.length; i++) {		//for every button in stack
 
-		if (array[i].isUnlocked != true) {
+		if (array[i].isUnlocked !== true) {
 			msg("calling testUnlock with array object for " + array[i].name);
 			//check whether can unlock
 			testUnlock(array[i]);
 		}
 		
-		if (array[i].purchased == true || array[i].isUnlocked != true) { continue; }
+		if (array[i].purchased == true || array[i].isUnlocked !== true) { 
+			continue; 
+		}
 		// IF test to check if hidden or blocked, then continue FOR loop.
 		
 		let label = array[i].label;		//this is what shows in the label, will need to be updated for counts
