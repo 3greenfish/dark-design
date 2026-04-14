@@ -68,7 +68,10 @@ function buildGrid(source, sourceArray, refresh = false) {
 		if (array[i].isUnlocked !== true) {
 			msg("calling testUnlock with array object for " + array[i].name);
 			//check whether can unlock
-			testUnlock(array[i]);
+			let checkValue = testUnlock(array[i]);
+			if (checkValue == true) {
+				array[i].isUnlocked = true;
+			}
 		}
 		
 		if (array[i].purchased == true || array[i].isUnlocked !== true) { 
@@ -144,7 +147,7 @@ function buildGrid(source, sourceArray, refresh = false) {
 
 }	
 
-function testUnlock(button) {
+function testUnlock(button) {					//FLAG THERE IS A PROBLEM SOMEWHERE IN HERE
 	if (button.isUnlocked == true) {
 		msg("WARNING, BUTTON ALREADY UNLOCKED");
 		return;
@@ -172,11 +175,13 @@ function testUnlock(button) {
 			msg(throwArray.toString());
 			let bob = Object.values(throwArray[0]);
 			let bobtext = bob.toString();
-			msg("bobtext is " + bobtext);
-			if (resources.checkCostsByArray(throwArray, 0).result == "pass") { 
+			msg("bobtext is " + bobtext + " and length is now " + throwArray.length);
+			if (resources.checkCostsByArray(throwArray, 0).result == "pass") {
+				msg("check costs for " + button.name + " lock " + i + "has passed successfully");
 				locks[i].open = true;
 			}
 			else { 
+				msg("check costs for " + button.name + " lock " + i + "has failed");
 				pass = false;
 			}
 		}
@@ -190,7 +195,7 @@ function testUnlock(button) {
 		}
 	}
 	if (pass == true) {
-		button.isUnlocked = true;
+		return true;
 	}
 }
 
@@ -1384,8 +1389,11 @@ const dev = [
 	  run: function() { objectParseMsg(swamp[4]); }
 	}, */
 	{ name: "button9",
-	  label: "build grid with open tabs",
-	  run: function() { buildGrid(swamp, swamp.stack, true); }
+	  label: "build grid for swamp with open tabs",
+	  run: function() { 
+		  msg("build grid for swamp called via dev button");
+		  buildGrid(swamp, swamp.stack, true); 
+	  }
 	},
 	{ name: "button10",
 	  label: "dev mode on/off",
