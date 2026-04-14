@@ -100,7 +100,7 @@ function buildGrid(source, sourceArray, refresh = false) {
 		}
 
 		let mainActionCode = `${source.name}.stack[${i}].actions[0].press(${i},true)`;
-		let flavor = (array[i].flavor) ? `<div class="flavor">array[i].flavor</div>` : "";
+		let flavor = (array[i].flavor) ? `<div class="flavor">` + array[i].flavor + "</div>" : "";
 
 		let newButton = `
 				<div class="buttonContainer">
