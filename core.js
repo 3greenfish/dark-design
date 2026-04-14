@@ -67,6 +67,7 @@ function buildGrid(source, sourceArray, refresh = false) {
 
 		if (array[i].isUnlocked != true) {
 			//check whether can unlock
+			testUnlock(array[i]);
 		}
 		
 		if (array[i].purchased == true || array[i].isUnlocked != true) { continue; }
@@ -181,10 +182,6 @@ function testUnlock(button) {
 	{ type: "res", name: "prey", amount: 1 }
 
 */
-
-
-	
-}
 
 function logOpenTabs(source, sourceArray) {
 	let array = [];
