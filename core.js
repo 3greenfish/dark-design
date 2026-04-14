@@ -65,7 +65,11 @@ function buildGrid(source, sourceArray, refresh = false) {
 		
 	for (let i = 0; i < array.length; i++) {		//for every button in stack
 
-		if (array[i].purchased == true) { continue; }
+		if (array[i].isUnlocked != true) {
+			//check whether can unlock
+		}
+		
+		if (array[i].purchased == true || array[i].isUnlocked != true) { continue; }
 		// IF test to check if hidden or blocked, then continue FOR loop.
 		
 		let label = array[i].label;		//this is what shows in the label, will need to be updated for counts
@@ -319,7 +323,8 @@ const swampBase = {
 		  label: "Fester",
 		  type: "gather",
 		  desc: "Fester in darkness to build up Corruption.",
-		  flavor: "",
+		  flavor: "", 
+		  isUnlocked: true,
 		  actions: [
 			  { subLabel: "Fester",
 			    type: "main", 
@@ -338,6 +343,7 @@ const swampBase = {
 		  type: "gather",
 		  desc: "Attempt to catch unsuspecting creatures to use as fuel.",
 		  flavor: "",
+		  isUnlocked: true,
 		  actions: [
 			  { subLabel: "Ensnare",
 			    type: "main",
@@ -369,6 +375,9 @@ const swampBase = {
 		  desc: "Process captured prey to generate Sustenance.",
 		  costs: [
 			  { name: "prey", amount: 2 }
+		  ],
+		  lockedBy: [
+			  { type: "res", name: "prey", amount: 1 }
 		  ],
 		  actions: [
 			  { subLabel: "Digest prey",
@@ -907,7 +916,7 @@ const researchBase = {
 					if (resources.checkCostsByArray(getCosts).result == "pass") {
 						resources.payCostsByArray(getCosts);
 						calendar.activateCal();
-						research.stack[code].purchased = true;
+						cal.purchased = true;
 						buildGrid(research, research.stack, true);
 					}
 					else if (isMain == true) {
