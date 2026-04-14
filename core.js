@@ -159,10 +159,13 @@ function testUnlock(button) {
 	
 	for (let i = 0; i < locks.length; i++) {
 		msg("calling locks for " + button.name);
-		if (locks[i].open == true) { continue; }
+		if (locks[i].open == true) { 
+			continue; 
+		}
 		if (locks[i].type == "res") {
 			let throwArray = [];
 			throwArray[0] = locks[i];
+			msg(throwArray.toString());
 			if (resources.checkCostsByArray(throwArray, 0).result == "pass") { 
 				locks[i].open = true;
 			}
@@ -170,9 +173,13 @@ function testUnlock(button) {
 				pass = false;
 			}
 		}
-		if (locks[i].type == "tech") { continue;
+		if (locks[i].type == "tech") { 
+			msg("type is tech");
+			continue;
 		}
-		if (locks[i].type == "button") { continue;
+		if (locks[i].type == "button") { 
+			msg("type is button");
+			continue;
 		}
 	}
 	if (pass == true) {
