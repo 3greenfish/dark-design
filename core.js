@@ -158,30 +158,29 @@ function testUnlock(button) {					//FLAG THERE IS A PROBLEM SOMEWHERE IN HERE
 	if (locks === undefined) {
 //		msg("warning, no locks for " + button.name);
 		return;
-	} else {
-		msg("length of locks for " + button.name + " is " + locks.length);
-	}
+	} 
+//	else { devMsg("length of locks for " + button.name + " is " + locks.length); }
 	
 	for (let i = 0; i < locks.length; i++) {
-		msg("calling locks for " + button.name);
+//		msg("calling locks for " + button.name);
 		if (locks[i].opened === true) { 
 			continue; 
 		}
 		if (locks[i].type == "res") {
 			let throwArray = [];
 			throwArray[0] = locks[i];
-			msg(throwArray.toString());
+//			msg(throwArray.toString());
 			let bob = Object.values(throwArray[0]);
 			let bobtext = bob.toString();
-			msg("bobtext is " + bobtext + " and length is now " + throwArray.length);
+//			msg("bobtext is " + bobtext + " and length is now " + throwArray.length);
 			if (resources.checkCostsByArray(throwArray, 0).result == "pass") {
-				msg("check costs for " + button.name + " lock " + i + "has passed successfully");
+//				msg("check costs for " + button.name + " lock " + i + "has passed successfully");
 				locks[i].opened = true;
 				let newbob = Object.values(locks[i]);
 				let newbobtext = newbob.toString();
-				msg("new bobtext is " + newbobtext);
+//				msg("new bobtext is " + newbobtext);
 			} else { 
-				msg("check costs for " + button.name + " lock " + i + "has failed");
+//				msg("check costs for " + button.name + " lock " + i + "has failed");
 				pass = false;
 			}
 		}
@@ -421,7 +420,7 @@ const swampBase = {
 		  type: "gather",
 		  desc: "Attempt to catch unsuspecting creatures to use as fuel.",
 		  flavor: "",
-		  isUnlocked: true,
+//		  isUnlocked: true,
 		  actions: [
 			  { subLabel: "Ensnare",
 			    type: "main",
@@ -445,6 +444,9 @@ const swampBase = {
 					}
 				}
 			  }
+		  ],
+		  lockedBy: [
+			  { type: "res", name: "corruption", amount: 1 }
 		  ]
 		},
 		{ name: "digest",	//2
@@ -518,7 +520,9 @@ const swampBase = {
 			  { stack: "resource", res: "corruption", type: "max", amount: 5, source: "swamp", button: "swell" }
 		  ],
 		  unlocks: [],
-		  lockedBy: []
+		  lockedBy: [
+			  { type: "res", name: "corruption", amount: 10 }
+		  ]
 		},
 		{ name: "pustule",     //4
 		  label: "Pustule",
@@ -588,6 +592,9 @@ Once full, pustules generate Corruption, and can be popped for Choler.`,
 		  effects: [
 			  { stack: "resource", res: "corruption", type: "max", amount: 50, source: "swamp", button: "pustule" }
 		  ],
+		  lockedBy: [
+			  { type: "res", name: "corruption", amount: 30 }
+		  ],
 		  filled: 0,
 		  unfilled: [],
 /*		  onPurchase: function() {
@@ -654,7 +661,11 @@ Once full, pustules generate Corruption, and can be popped for Choler.`,
 			  { name: "corruption", amount: 20, ratio: 1.2 },
 			  { name: "choler", amount: 50, ratio: 1.2 }
 		  ],
-		  actions: []
+		  actions: [],
+		  lockedBy: [
+			  { type: "res", name: "choler", amount: 10 },
+			  { type: "button", stack: "swamp", name: "pustule", count: 1 }
+		  ]
 		},
 		{ name: "trap",			//6
 		  label: "Trap",
@@ -664,7 +675,10 @@ Once full, pustules generate Corruption, and can be popped for Choler.`,
 			  { name: "corruption", amount: 50, ratio: 1.2 },
 			  { name: "choler", amount: 20, ratio: 1.2 }
 		  ],
-		  actions: []
+		  actions: [],
+		  lockedBy: [
+			  { type: "res", name: "choler", amount: 10 }
+		  ]
 		},
 		{ name: "siren",		//7
 		  label: "Siren",
@@ -1449,13 +1463,18 @@ const dev = [
 		  swamp.stack[4].unfilled[0].level += 1;
 		  refreshProgAll(swamp, swamp.stack);
 	  }
-	}
+	},
+	{ name: "button16",
+	  label: "unlock all buttons on current tab",
+	  run: function() { 
+		  devUnlockAll(); 
+	  }
 /*	{ name: "buttonX",
 	  label: "blank",
 	  run: function() { }
 	  
 	} */
-];
+]
 
 function setDevButtonsDynamic() {
 	let buttonBlock = "";
@@ -1466,6 +1485,33 @@ function setDevButtonsDynamic() {
 	}
 	document.getElementById("devButtons").innerHTML = buttonBlock;
 }
+
+
+function devUnlockAll() {
+	let base = "";
+	let stack = "";
+	switch(game.activeTab) {
+	case 0: //swamp
+		base = swamp;
+		stack = swamp.stack;
+		break;
+	case 1:	//personnel
+	case 2: //settlement
+	case 3: //world
+		break;
+	case 4: //research
+		base = research;
+		stack = research.stack;
+		break;
+	}
+	for (let i = 0; i < stack.length; i ++) {
+		stack[i].isUnlocked = true;
+	}
+	buildGrid(base, stack, true);	
+}
+
+
+
 
 
 //-- start interval timer --//
