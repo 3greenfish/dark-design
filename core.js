@@ -1469,6 +1469,7 @@ const dev = [
 	  run: function() { 
 		  devUnlockAll(); 
 	  }
+	}
 /*	{ name: "buttonX",
 	  label: "blank",
 	  run: function() { }
