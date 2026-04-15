@@ -213,7 +213,10 @@ function testUnlock(button) {					//FLAG THERE IS A PROBLEM SOMEWHERE IN HERE
 function logOpenTabs(source, sourceArray) {
 	let array = [];
 	for (let i = 0; i < sourceArray.length; i++) {
-		let iteration = (document.getElementById(source.name + i + "Content").style.display == "block") ? true : false;
+		let iteration = false;
+		if (document.getElementById(source.name + i + "Content") !== null) {
+			iteration = (document.getElementById(source.name + i + "Content").style.display == "block") ? true : false;
+		}
 		array.push(iteration);
 	}
 	return array;
@@ -221,7 +224,7 @@ function logOpenTabs(source, sourceArray) {
 
 function reopenTabs(source, array) {
 	for (let i = 0; i < array.length; i++) {
-		if (array[i] == true) { expandForce(source.name + i); }
+		if (array[i] === true) { expandForce(source.name + i); }
 	}
 
 }
