@@ -140,7 +140,7 @@ function buildGrid(source, sourceArray, refresh = false) {
 		output += columns[c];
 	}
 	document.getElementById("fillGrid").innerHTML = output;
-	refreshProgAll(source, sourceArray);
+//	refreshProgAll(source, sourceArray);		//FLAG TEMPORARY COMMENTING OUT FOR ERROR CORRECTION PURPOSES
 	if (refresh == true) {
 		reopenTabs(source, openArray);
 	}
@@ -213,25 +213,27 @@ function testUnlock(button) {					//FLAG THERE IS A PROBLEM SOMEWHERE IN HERE
 function logOpenTabs(source, sourceArray) {
 	let array = [];
 	for (let i = 0; i < sourceArray.length; i++) {
-		let iteration = false;
-		if (document.getElementById(source.name + i + "Content") !== null) {
-			iteration = (document.getElementById(source.name + i + "Content").style.display == "block") ? true : false;
+		if (document.getElementById(source.name + i + "Content") == null) {
+			array.push(false);
+		} else {
+			let iteration = (document.getElementById(source.name + i + "Content").style.display == "block") ? true : false;
+			array.push(iteration);
 		}
-		array.push(iteration);
 	}
 	return array;
 }
 
 function reopenTabs(source, array) {
 	for (let i = 0; i < array.length; i++) {
-		if (array[i] === true) { expandForce(source.name + i); }
+		if (array[i] === true) { 
+			expandForce(source.name + i); 
+		}
 	}
-
 }
 
 function refreshProgAll(source, array) {
 	for (let i = 0; i < array.length; i ++) {
-		if (array[i].hidden == true || array[i].hasProg != true || array[i].blocked == true ) { 
+		if (array[i].hidden == true || array[i].hasProg !== true || array[i].blocked == true ) { 
 			continue;
 		}
 		let progWidth = array[i].prog;
