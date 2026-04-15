@@ -140,7 +140,7 @@ function buildGrid(source, sourceArray, refresh = false) {
 		output += columns[c];
 	}
 	document.getElementById("fillGrid").innerHTML = output;
-//	refreshProgAll(source, sourceArray);		//FLAG TEMPORARY COMMENTING OUT FOR ERROR CORRECTION PURPOSES
+	refreshProgAll(source, sourceArray);
 	if (refresh == true) {
 		reopenTabs(source, openArray);
 	}
@@ -234,6 +234,9 @@ function reopenTabs(source, array) {
 function refreshProgAll(source, array) {
 	for (let i = 0; i < array.length; i ++) {
 		if (array[i].hidden == true || array[i].hasProg !== true || array[i].blocked == true ) { 
+			continue;
+		}
+		if (document.getElementById(source.name + i + "Collapsible") == null) {
 			continue;
 		}
 		let progWidth = array[i].prog;
