@@ -190,7 +190,27 @@ function testUnlock(button) {					//FLAG THERE IS A PROBLEM SOMEWHERE IN HERE
 		}
 		if (locks[i].type == "button") { 
 			msg("type is button");
-			continue;
+			let stack = "";
+			switch (locks[i].stack) {
+				case "swamp":
+					stack = swamp.stack;
+					break;
+/*				case "research":
+					stack = research.stack;
+					break; */
+					//FLAG -- separate code for checking research
+			}
+
+			let location = findentry(stack, locks[i].name);
+			if (location.found == true) {
+				if (stack[location.loc].count >= locks[i].count) {
+					locks[i].opened = true;
+				} else {
+					pass = false;
+				}
+			} else {
+				pass = false;
+			}
 		}
 	}
 	if (pass == true) {
@@ -593,7 +613,8 @@ Once full, pustules generate Corruption, and can be popped for Choler.`,
 			  { stack: "resource", res: "corruption", type: "max", amount: 50, source: "swamp", button: "pustule" }
 		  ],
 		  lockedBy: [
-			  { type: "res", name: "corruption", amount: 30 }
+			  { type: "res", name: "corruption", amount: 30 },
+			  { type: "res", name: "sustenance", amount: 10 }
 		  ],
 		  filled: 0,
 		  unfilled: [],
@@ -664,7 +685,7 @@ Once full, pustules generate Corruption, and can be popped for Choler.`,
 		  actions: [],
 		  lockedBy: [
 			  { type: "res", name: "choler", amount: 10 },
-			  { type: "button", stack: "swamp", name: "pustule", count: 1 }
+			  { type: "button", stack: "swamp", name: "pustule", count: 2 }
 		  ]
 		},
 		{ name: "trap",			//6
@@ -718,6 +739,20 @@ Once full, pustules generate Corruption, and can be popped for Choler.`,
 
 
 // ---- end phase 1 buildings ---- //
+
+function findEntry(stack, name) {
+	let result = { found: false, loc: 0 }
+
+	for (let i = 0; i < stack.length; i++) {
+		if (stack[i].name == name) {
+			result.found = true;
+			result.loc = i;
+			break;
+		}
+	}
+	return result;
+}
+
 
 const resources = {};
 const resourcesBase = {
