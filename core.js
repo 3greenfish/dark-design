@@ -201,7 +201,7 @@ function testUnlock(button) {					//FLAG THERE IS A PROBLEM SOMEWHERE IN HERE
 					//FLAG -- separate code for checking research
 			}
 
-			let location = findentry(stack, locks[i].name);
+			let location = findEntry(stack, locks[i].name);
 			if (location.found == true) {
 				if (stack[location.loc].count >= locks[i].count) {
 					locks[i].opened = true;
