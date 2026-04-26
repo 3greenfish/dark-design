@@ -186,7 +186,17 @@ function testUnlock(button) {					//FLAG THERE IS A PROBLEM SOMEWHERE IN HERE
 		}
 		if (locks[i].type == "tech") { 
 			msg("type is tech");
-			continue;
+			let stack = research.stack;
+			let location = findEntry(stack, locks[i].name);
+			if (location.found == true) {
+				if (stack[location.loc].purchased === true) {
+					locks[i].opened = true;
+				} else {
+					pass = false;
+				}
+			} else {
+				pass = false;
+			}
 		}
 		if (locks[i].type == "button") { 
 			msg("type is button");
@@ -203,7 +213,7 @@ function testUnlock(button) {					//FLAG THERE IS A PROBLEM SOMEWHERE IN HERE
 
 			let location = findEntry(stack, locks[i].name);
 			if (location.found == true) {
-				if (stack[location.loc].count >= locks[i].count) {
+				if (stack[location.loc].count >= locks[i].amount) {
 					locks[i].opened = true;
 				} else {
 					pass = false;
@@ -213,11 +223,13 @@ function testUnlock(button) {					//FLAG THERE IS A PROBLEM SOMEWHERE IN HERE
 			}
 		}
 	}
+/*				SHOULD NOT BE NECESSARY GIVEN THAT IT MATCHES VALUE OF PASS
 	if (pass == true) {
 		return true;
 	} else { 
 		return false; 
-	}
+	} */
+	return pass;
 }
 
 /*
@@ -616,7 +628,8 @@ Once full, pustules generate Corruption, and can be popped for Choler.`,
 		  ],
 		  lockedBy: [
 			  { type: "res", name: "corruption", amount: 30 },
-			  { type: "res", name: "sustenance", amount: 10 }
+			  { type: "res", name: "sustenance", amount: 10 },
+			  { type: "button", stack: "swamp", name: "swell", amount: 1 }
 		  ],
 		  filled: 0,
 		  unfilled: [],
@@ -687,7 +700,7 @@ Once full, pustules generate Corruption, and can be popped for Choler.`,
 		  actions: [],
 		  lockedBy: [
 			  { type: "res", name: "choler", amount: 10 },
-			  { type: "button", stack: "swamp", name: "pustule", count: 2 }
+			  { type: "button", stack: "swamp", name: "pustule", amount: 2 }
 		  ]
 		},
 		{ name: "trap",			//6
@@ -1066,6 +1079,9 @@ const researchBase = {
 			  { name: "corruption", amount: 15 }
 		  ],
 		  purchased: false,
+		  lockedBy: [
+			  { type: "tech", tech: "calendar" }
+		  ],
 		  actions: [],
 		  effects: [],
 		  unlocks: []
