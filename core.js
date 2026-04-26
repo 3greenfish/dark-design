@@ -195,6 +195,7 @@ function testUnlock(button) {					//FLAG THERE IS A PROBLEM SOMEWHERE IN HERE
 					pass = false;
 				}
 			} else {
+				msg("could not find " + locks[i].name;
 				pass = false;
 			}
 		}
@@ -1080,7 +1081,7 @@ const researchBase = {
 		  ],
 		  purchased: false,
 		  lockedBy: [
-			  { type: "tech", tech: "calendar" }
+			  { type: "tech", name: "calendar" }
 		  ],
 		  actions: [],
 		  effects: [],
