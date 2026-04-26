@@ -195,7 +195,7 @@ function testUnlock(button) {					//FLAG THERE IS A PROBLEM SOMEWHERE IN HERE
 					pass = false;
 				}
 			} else {
-				msg("could not find " + locks[i].name");
+				msg("could not find " + locks[i].name);
 				pass = false;
 			}
 		}
