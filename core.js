@@ -17,7 +17,34 @@ function objectParseMsg(ob) {
 // --- BUILD GRID FUNCTION --- //
 //this is a loop that cycles through the applicable button array, determines content for each button, decides which column the button goes into, adds it to the column, assembles a block of HTML, and outputs it to the parent container.
 
-function buildGrid(source, sourceArray) {
+/*
+<div class="buttonContainer">
+					<div class="collapsible" id="buy-1-collapsible">
+						<div class="buttonLabelWithBar" data-target="buy-1" id="pustuleLabel" onClick="buttonManager(event)">Pustule</div><div class="notch" data-target="buy-1" onClick="expandButton(event)">&#9776;</div>
+						<div class="buttonBarContainer">
+							<div id="pustuleProgress"></div>
+						</div>
+					</div>
+					<div class="content" id="buy-1-content">
+						<p>Grow a pustule to process sustenance into a thick bile.</p>
+						<p>Once full, pustules generate corruption, and can be popped for choler.</p>
+						<hr>
+						<div class="costs" id="buy-1-Costs">
+							<div class="bldgCostPriceName">RESOURCE</div><div class="bldgCostRes">DEFAULT AMOUNT</div>
+						</div>
+						<div class="button" data-target="buy-1" onClick="buttonManager(event)">Grow Pustule</div>
+						<div class="button" data-target="pop-1" onClick="buttonManager(event)">Pop</div>
+						<div class="button" data-target="pop-all" onClick="buttonManager(event)">Pop all</div>
+					</div>
+				</div>
+
+
+
+*/
+
+
+
+function buildGrid(source, sourceArray, refresh = false) {
 	let output = "";
 	let numColumns = 3; // FLAG -- plan to change this to check settings once screen size is evaluated //
 	let columns = [];
@@ -34,18 +61,34 @@ function buildGrid(source, sourceArray) {
 		array = sourceArray;
 	}
 
+	let openArray = (refresh == true) ? logOpenTabs(source, sourceArray) : "";
+		
 	for (let i = 0; i < array.length; i++) {		//for every button in stack
 
+		if (array[i].isUnlocked !== true) {
+			msg("calling testUnlock with array object for " + array[i].name);
+			//check whether can unlock
+			let checkValue = testUnlock(array[i]);
+			if (checkValue == true) {
+				array[i].isUnlocked = true;
+			}
+		}
+		
+		if (array[i].purchased == true || array[i].isUnlocked !== true) { 
+			continue; 
+		}
 		// IF test to check if hidden or blocked, then continue FOR loop.
 		
 		let label = array[i].label;		//this is what shows in the label, will need to be updated for counts
 		if (array[i].count > 0) {
-			label = label + " (" + array[i].count + ")";
+			let act = (array[i].inactive > 0) ? array[i].count - array[i].inactive + "/" : "";
+			label = label + " (" + act + array[i].count + ")";
 		}					//FLAG -- make this into a separate function that accounts for active/inactive buildings		
 		let identifier = source.name + i;
 		let desc = array[i].desc;		//gets description from stack
 		let cost = "";
-		
+
+		let AC = ""; //variable to flag active class
 		if (array[i].costs) {
 			devMsg("BuildGrid reached getContentCosts");
 			let costs = getContentCosts(source, i);
@@ -53,7 +96,10 @@ function buildGrid(source, sourceArray) {
 					<hr>
 						<div class="costs" id="${identifier}Costs">
 							${costs}
-						</div>`;		
+						</div>`;
+			if (resources.checkCostsByArray(array[i].costs, array[i].count).result == "pass") {
+				AC = "active";
+			}
 		} 
 
 		let actionsArray = array[i].actions;
@@ -65,16 +111,21 @@ function buildGrid(source, sourceArray) {
 		}
 
 		let mainActionCode = `${source.name}.stack[${i}].actions[0].press(${i},true)`;
+		let flavor = (array[i].flavor) ? `<div class="flavor">` + array[i].flavor + "</div>" : "";
 
 		let newButton = `
 				<div class="buttonContainer">
-					<div class="collapsible" id="${identifier}Collapsible">
+					<div class="collapsible ${AC}" id="${identifier}Collapsible">
 						<div class="buttonLabel" data-target="${identifier}" id="${identifier}Label" onClick="${mainActionCode}">${label}</div><div class="notch" data-target="${identifier}" onClick="expandButton2('${identifier}')">&#9776;</div>
+						<div class="buttonBarContainer">
+							<div id="${identifier}Progress"></div>
+						</div>
 					</div>
 					<div class="content" id="${identifier}Content">
 						<p>${desc}</p>
 						${cost}
 						${actions}
+						${flavor}
 					</div>
 				</div>`;
 		columns[currentColumn] += newButton;
@@ -89,7 +140,143 @@ function buildGrid(source, sourceArray) {
 		output += columns[c];
 	}
 	document.getElementById("fillGrid").innerHTML = output;
+	refreshProgAll(source, sourceArray);
+	if (refresh == true) {
+		reopenTabs(source, openArray);
+	}
 }	
+
+function testUnlock(button) {					//FLAG THERE IS A PROBLEM SOMEWHERE IN HERE
+	if (button.isUnlocked == true) {
+		msg("WARNING, BUTTON ALREADY UNLOCKED");
+		return true;
+	}
+//	msg("testUnlock opened");
+	let locks = button.lockedBy;
+	let pass = true;
+
+	if (locks === undefined) {
+//		msg("warning, no locks for " + button.name);
+		return true;
+	} 
+//	else { devMsg("length of locks for " + button.name + " is " + locks.length); }
+	
+	for (let i = 0; i < locks.length; i++) {
+//		msg("calling locks for " + button.name);
+		if (locks[i].opened === true) { 
+			continue; 
+		}
+		if (locks[i].type == "res") {
+			let throwArray = [];
+			throwArray[0] = locks[i];
+//			msg(throwArray.toString());
+			let bob = Object.values(throwArray[0]);
+			let bobtext = bob.toString();
+//			msg("bobtext is " + bobtext + " and length is now " + throwArray.length);
+			if (resources.checkCostsByArray(throwArray, 0).result == "pass") {
+//				msg("check costs for " + button.name + " lock " + i + "has passed successfully");
+				locks[i].opened = true;
+				let newbob = Object.values(locks[i]);
+				let newbobtext = newbob.toString();
+//				msg("new bobtext is " + newbobtext);
+			} else { 
+//				msg("check costs for " + button.name + " lock " + i + "has failed");
+				pass = false;
+			}
+		}
+		if (locks[i].type == "tech") { 
+			msg("type is tech");
+			let stack = research.stack;
+			let location = findEntry(stack, locks[i].name);
+			if (location.found == true) {
+				if (stack[location.loc].purchased === true) {
+					locks[i].opened = true;
+				} else {
+					pass = false;
+				}
+			} else {
+				msg("could not find " + locks[i].name);
+				pass = false;
+			}
+		}
+		if (locks[i].type == "button") { 
+			msg("type is button");
+			let stack = "";
+			switch (locks[i].stack) {
+				case "swamp":
+					stack = swamp.stack;
+					break;
+/*				case "research":
+					stack = research.stack;
+					break; */
+					//FLAG -- separate code for checking research
+			}
+
+			let location = findEntry(stack, locks[i].name);
+			if (location.found == true) {
+				if (stack[location.loc].count >= locks[i].amount) {
+					locks[i].opened = true;
+				} else {
+					pass = false;
+				}
+			} else {
+				pass = false;
+			}
+		}
+	}
+/*				SHOULD NOT BE NECESSARY GIVEN THAT IT MATCHES VALUE OF PASS
+	if (pass == true) {
+		return true;
+	} else { 
+		return false; 
+	} */
+	return pass;
+}
+
+/*
+	type: resource, button, tech
+	resource: could be any entry in resource stack
+	button: could be any button in building stack
+	amount: just a quantity if relevant
+	unlocked: triggered for multi-unlock items
+
+	{ type: "res", name: "prey", amount: 1 }
+
+*/
+
+function logOpenTabs(source, sourceArray) {
+	let array = [];
+	for (let i = 0; i < sourceArray.length; i++) {
+		if (document.getElementById(source.name + i + "Content") == null) {
+			array.push(false);
+		} else {
+			let iteration = (document.getElementById(source.name + i + "Content").style.display == "block") ? true : false;
+			array.push(iteration);
+		}
+	}
+	return array;
+}
+
+function reopenTabs(source, array) {
+	for (let i = 0; i < array.length; i++) {
+		if (array[i] === true) { 
+			expandForce(source.name + i); 
+		}
+	}
+}
+
+function refreshProgAll(source, array) {
+	for (let i = 0; i < array.length; i ++) {
+		if (array[i].hidden == true || array[i].hasProg !== true || array[i].blocked == true ) { 
+			continue;
+		}
+		if (document.getElementById(source.name + i + "Collapsible") == null) {
+			continue;
+		}
+		let progWidth = array[i].prog;
+		document.getElementById(source.name + i + "Progress").style.width = progWidth + "%";
+	}
+}
 
 // --- basic game information saved in object --- //
 
@@ -106,17 +293,18 @@ const gameBase = {
 		],
 	activeTab: 0,
 	tabs: [
-		{ name: "swamp", 
+		{ name: "swamp", 		//0
 		  label: "a sinister swamp",
 		  visible: true,
 		  lockAtPhase: 1,
-		  select: function(num) {
-			  game.activeTab = num;
+		  select: function() {
+/*			  game.activeTab = num;
 			  game.refreshNav();
-			  devMsg(this.name + " selected");
+			  devMsg(this.name + " selected"); */
+			  buildGrid(swamp, swamp.stack);
 		  }
 		},
-		{ name: "personnel",
+		{ name: "personnel",	//1
 		  get label() {
 			  let label2 = "";
 			  switch(game.currentPhase) {
@@ -134,6 +322,7 @@ const gameBase = {
 					  break;
 				  case 4:
 					  label2 = "population";
+					  break;
 				  default:
 					  label2 = "error";
 			  }
@@ -142,35 +331,36 @@ const gameBase = {
 //		  label: "tribe",
 		  unlockAtPhase: 1,
 		  select: function(num) {
-			  game.activeTab = num;
+/*			  game.activeTab = num;
 			  game.refreshNav();
-			  devMsg(this.name + " selected");
+			  devMsg(this.name + " selected"); */
 		  }
 		},
-		{ name: "home",
+		{ name: "home",			//2
 		  label: "settlement",
 		  unlockAtPhase: 2,
 		  select: function(num) {
-			  game.activeTab = num;
+/*			  game.activeTab = num;
 			  game.refreshNav();
-			  devMsg(this.name + " selected");
+			  devMsg(this.name + " selected"); */
 		  }
 		},
-		{ name: "world",
+		{ name: "world",		//3
 		  label: "world", // update to start as "nearby towns"?
 		  unlockAtPhase: 3,
 		  select: function(num) {
-			  game.activeTab = num;
+/*			  game.activeTab = num;
 			  game.refreshNav();
-			  devMsg(this.name + " selected");
+			  devMsg(this.name + " selected"); */
 		  }
 		},
-		{ name: "research",
+		{ name: "research",		//4
 		  label: "research",
 		  select: function(num) {
-			  game.activeTab = num;
+			  buildGrid(research, research.stack);
+/*			  game.activeTab = num;
 			  game.refreshNav();
-			  devMsg(this.name + " selected");
+			  devMsg(this.name + " selected"); */
 		  }
 		}
 		],
@@ -179,7 +369,8 @@ const gameBase = {
 		for (let i = 0; i < this.tabs.length; i++) {
 			let tabLabel = this.tabs[i].label;
 			let activeFlag = "";
-			let action = `game.tabs[${i}].select(${i})`;
+	//		let action = `game.tabs[${i}].select(${i})`;
+			let action = `game.selectNav(${i})`;
 			if (this.activeTab == i) {
 				activeFlag = `class="activeTab"`;
 			}
@@ -200,7 +391,13 @@ const gameBase = {
 			}
 		}
 		document.getElementById("tab" + this.activeTab).classList.add("activeTab");
-	}
+	},
+	selectNav: function(x) {
+		game.activeTab = x;
+		game.refreshNav();
+		game.tabs[x].select();
+		devMsg(game.tabs[x].name + " selected");
+	}	
 };
 
 // ---- phase 1 buttons based as object ---- //
@@ -238,7 +435,8 @@ const swampBase = {
 		  label: "Fester",
 		  type: "gather",
 		  desc: "Fester in darkness to build up Corruption.",
-		  flavor: "",
+		  flavor: "", 
+		  isUnlocked: true,
 		  actions: [
 			  { subLabel: "Fester",
 			    type: "main", 
@@ -257,6 +455,10 @@ const swampBase = {
 		  type: "gather",
 		  desc: "Attempt to catch unsuspecting creatures to use as fuel.",
 		  flavor: "",
+		  costs: [
+			  { name: "corruption", amount: 1 }
+		  ],
+//		  isUnlocked: true,
 		  actions: [
 			  { subLabel: "Ensnare",
 			    type: "main",
@@ -280,6 +482,9 @@ const swampBase = {
 					}
 				}
 			  }
+		  ],
+		  lockedBy: [
+			  { type: "res", name: "corruption", amount: 1 }
 		  ]
 		},
 		{ name: "digest",	//2
@@ -289,6 +494,9 @@ const swampBase = {
 		  costs: [
 			  { name: "prey", amount: 2 }
 		  ],
+		  lockedBy: [
+			  { type: "res", name: "prey", amount: 1 }
+		  ],
 		  actions: [
 			  { subLabel: "Digest prey",
 			    type: "main",
@@ -296,9 +504,9 @@ const swampBase = {
 					devMsg("Digest button called");
 					let getCosts = swamp.stack[code].costs;
 					devMsg("loaded getCosts");					
-					if (resources.checkCostsByArray(getCosts).result == "pass" && resources.canAddAnyRes("sustenance")) {
+					if (resources.checkCostsByArray(getCosts, 0).result == "pass" && resources.canAddAnyRes("sustenance")) {
 						devMsg("checked costs, checked to add res");
-						resources.payCostsByArray(getCosts);
+						resources.payCostsByArray(getCosts, 0);
 						let r = resources.findResInStack("sustenance");
 						let a = 1;
 						resources.addRes(r, a);
@@ -350,30 +558,94 @@ const swampBase = {
 			  { stack: "resource", res: "corruption", type: "max", amount: 5, source: "swamp", button: "swell" }
 		  ],
 		  unlocks: [],
-		  lockedBy: []
+		  lockedBy: [
+			  { type: "res", name: "corruption", amount: 10 }
+		  ]
 		},
 		{ name: "pustule",     //4
 		  label: "Pustule",
 		  desc: `Pustules process Sustenance into a thick bile.</p><p>
 Once full, pustules generate Corruption, and can be popped for Choler.`,
-		  count: 0,
+		  hasProg: true,
+		  get prog() {
+			  let result = 0;
+			  if ( this.special.unfilled.length > 0 ) {
+	//			  msg ("length of pustule array is " + this.unfilled.length);
+				  result = (this.special.unfilled[0].level / 30) * 100;
+	//			  msg("current pustule level is " + result);
+			  }
+			  return result;
+		  },
+		  get count() {
+//			  console.log("getting pustule count");
+			  return this.special.filled + this.special.unfilled.length;
+		  },
+		  get inactive() {
+			  return this.special.unfilled.length;
+		  },
 		  costs: [
 			  { name: "corruption", amount: 40, ratio: 1.2 }
 		  ],
-		  ratio: 1.2,
-		  actions: [],
+//		  ratio: 1.2,
+		  actions: [
+			  { subLabel: "Grow pustule",
+			    type: "main",
+			    press: function(code, isMain = false) {
+					devMsg("buy pustule called");
+					let grow = swamp.stack[code];
+					let getCosts = grow.costs;
+					let current = grow.count;
+					devMsg("pustule getCosts called");
+
+					if (resources.checkCostsByArray(getCosts, current).result == "pass") {
+						resources.payCostsByArray(getCosts, current);
+
+						swamp.stack[code].special.unfilled.push({ level: 0 });
+
+						updateLabel(swamp, code);
+						updateContentCosts2(swamp, code);
+						refreshProgAll(swamp, swamp.stack);
+					}
+					else if (isMain == true) {
+						//expand or close button
+						devMsg("isMain is TRUE, calling expandButton2");
+						let target = "swamp" + code;
+						expandButton2(target);
+					}
+				}
+			  },
+			  { subLabel: "Pop",
+			    type: "",
+			    press: function(code) {}
+			  },
+			  { subLabel: "Pop all",
+			    type: "",
+			    press: function(code) {
+		//			let count = swamp.stack[code].filled;
+
+					// call pop pustule code? check for amount fillable?
+				}
+			  }
+		  ],
 		  effects: [
 			  { stack: "resource", res: "corruption", type: "max", amount: 50, source: "swamp", button: "pustule" }
 		  ],
-		  filled: 0,
-		  unfilled: [],
-		  onPurchase: function() {
+		  lockedBy: [
+			  { type: "res", name: "corruption", amount: 30 },
+			  { type: "res", name: "sustenance", amount: 10 },
+			  { type: "button", stack: "swamp", name: "swell", amount: 1 }
+		  ],
+		  special: {
+			  filled: 0,
+			  unfilled: []		//try converting this to just numbers, not objects in numbers
+		  },
+/*		  onPurchase: function() {
 			  this.unfilled.push({ level: 0 });
 			  this.count += 1;
 			  this.updateButtonLabel();
 			  this.updateRatio();
 			  updateContentCosts(1);
-		  },
+		  }, */
 		  fillPus: function(x) {
 //			  msg("fillPus called with value " + x);
 			  let sus = x;    //sustenance available
@@ -406,8 +678,8 @@ Once full, pustules generate Corruption, and can be popped for Choler.`,
 			  return spent;
 		  },
 		  popPustule: function(count) {
-			  if (!this.filled > 0) {
-				  return
+			  if (!(this.filled > 0)) {
+				  return;
 			  } else {
 				  this.filled -= 1;
 				  this.unfilled.push({ level: 0 });
@@ -415,13 +687,13 @@ Once full, pustules generate Corruption, and can be popped for Choler.`,
 				  this.updateButtonLabel();
 			  }  
 		  },
-		  updateButtonLabel: function() {
+/*		  updateButtonLabel: function() {				//READY TO DELETE
 			  let newLabel = this.label;
 				  if (this.count > 0) {
 					  newLabel = newLabel + " (" + this.filled + "/" + this.count + ")";
 				  }
 			  document.getElementById(this.name + "Label").innerText = newLabel;
-		  }
+		  } */
 		},
 		{ name: "digestor",		//5
 		  label: "Digestor",
@@ -431,7 +703,11 @@ Once full, pustules generate Corruption, and can be popped for Choler.`,
 			  { name: "corruption", amount: 20, ratio: 1.2 },
 			  { name: "choler", amount: 50, ratio: 1.2 }
 		  ],
-		  actions: []
+		  actions: [],
+		  lockedBy: [
+			  { type: "res", name: "choler", amount: 10 },
+			  { type: "button", stack: "swamp", name: "pustule", amount: 2 }
+		  ]
 		},
 		{ name: "trap",			//6
 		  label: "Trap",
@@ -441,7 +717,10 @@ Once full, pustules generate Corruption, and can be popped for Choler.`,
 			  { name: "corruption", amount: 50, ratio: 1.2 },
 			  { name: "choler", amount: 20, ratio: 1.2 }
 		  ],
-		  actions: []
+		  actions: [],
+		  lockedBy: [
+			  { type: "res", name: "choler", amount: 10 }
+		  ]
 		},
 		{ name: "siren",		//7
 		  label: "Siren",
@@ -449,7 +728,10 @@ Once full, pustules generate Corruption, and can be popped for Choler.`,
 		  count: 0,
 		  costs: [],
 		  ratio: 1.2,
-		  actions: []
+		  actions: [],
+		  lockedBy: [
+			  { type: "button", name: "trap", amount: 1 }
+		  ]
 		},
 		{ name: "nodule",		//8
 		  label: "Nodule",
@@ -458,14 +740,20 @@ Once full, pustules generate Corruption, and can be popped for Choler.`,
 		  costs: [],
 		  ratio: 1.2,
 		  actions: [],
-		  isUnlocked: false
+		  isUnlocked: false,
+		  lockedBy: [
+			  { type: "res", name: "host", amount: 1 }
+		  ]
 		},
 		{ name: "corruptHost",	//9
 		  label: "Corrupt a host",
 		  type: "gather",
 		  desc: `Convert a captured native into your first corrupted Host.
 (Starts phase 2)`,
-		  actions: []
+		  actions: [],
+		  lockedBy: [
+			  { type: "res", name: "host", amount: 1 }
+		  ]
 		}
 		],
 	findEntry: function(name) {
@@ -481,6 +769,20 @@ Once full, pustules generate Corruption, and can be popped for Choler.`,
 
 
 // ---- end phase 1 buildings ---- //
+
+function findEntry(stack, name) {
+	let result = { found: false, loc: 0 }
+
+	for (let i = 0; i < stack.length; i++) {
+		if (stack[i].name == name) {
+			result.found = true;
+			result.loc = i;
+			break;
+		}
+	}
+	return result;
+}
+
 
 const resources = {};
 const resourcesBase = {
@@ -524,8 +826,8 @@ const resourcesBase = {
 				  this.current = this.max;
 			  } else {
 				  this.current = round3(totalRes);
-		  }
 			  }
+		  }
 		},
 		{ name: "sustenance", //2
 		  label: "Sustenance",
@@ -612,7 +914,7 @@ const resourcesBase = {
 			res.current = round3(totalRes);
 		}
 		this.loadResource(resCode);
-		msg("addRes completed");
+		devMsg("addRes completed");
 	},
 	canAddAnyRes: function(res) {
 		let checkType = typeof res;
@@ -732,14 +1034,79 @@ const resourcesBase = {
 
 // --- start research object --- //
 
-const research = {};
-const researchBase = {};
-	
 /*
 
+		{ name: 
+		  label: 
+		  desc: 
+		  flavor: 
+		  costs: [],
+		  purchased: 
+		  actions: [],
+		  effects: [],
+		  unlocks: []
+		}
+*/
 
 
 
+const research = {};
+const researchBase = {
+	name: "research",
+	stack: [
+		{ name: "calendar",
+		  label: "Calendar",
+		  desc: "Discover the world's cyclical cycle.",
+		  flavor: null,
+		  costs: [
+			  { name: "corruption", amount: 10 }
+		  ],
+		  purchased: false,
+		  actions: [
+			  { subLabel: "Research",
+			    type: "main",
+			    press: function(code, isMain = false) {
+					devMsg("purchasing research");
+					let cal = research.stack[code];
+					let getCosts = cal.costs;
+
+					if (resources.checkCostsByArray(getCosts, 0).result == "pass") {
+						resources.payCostsByArray(getCosts, 0);
+						calendar.activateCal();
+						cal.purchased = true;
+						buildGrid(research, research.stack, true);
+					}
+					else if (isMain == true) {
+						let target = "research" + code;
+						expandButton2(target);
+					}
+				}
+			  }
+		  ],
+		  effects: [],
+		  unlocks: []
+		},
+		{ name: "stone tools",
+		  label: "Stone tools",
+		  desc: "Improve hunting and gathering with tools made of stone.",
+		  flavor: "sometimes you just have to hit something with a rock.",
+		  costs: [
+			  { name: "corruption", amount: 15 }
+		  ],
+		  purchased: false,
+		  lockedBy: [
+			  { type: "tech", name: "calendar" }
+		  ],
+		  actions: [],
+		  effects: [],
+		  unlocks: []
+		}
+
+	
+	]
+};
+	
+/*
 
 */
 
@@ -762,11 +1129,12 @@ function loadGame() {	//runs at end of HTML load
 	Object.assign(swamp, swampBase);
 	Object.assign(resources, resourcesBase);
 	Object.assign(game, gameBase);
+	Object.assign(research, researchBase);
 	game.buildNav();
 	timing.activateBelt();
 	resources.loadResourcePanel();
 	setDevButtonsDynamic();
-	buildGrid(swamp, swamp.stack);
+	buildGrid(swamp, swamp.stack);	//need to update to define by phase when loading game/refreshing from LocalStorage
 	msg("You have awakened...");	
 }
 
@@ -806,9 +1174,25 @@ function updateLabel(stack, num) {
 	devMsg("updateLabel called with values: " + stack.name + " and " + num);
 	let newLabel = stack.stack[num].label;
 	if (stack.stack[num].count > 0) {
-		newLabel += " (" + stack.stack[num].count + ")";
+		devMsg("stack count is " + stack.stack[num].count + " and inactive count is " + stack.stack[num].inactive);
+		let act = (stack.stack[num].inactive > 0) ? stack.stack[num].count - stack.stack[num].inactive + "/" : "";
+		newLabel += " (" + act + stack.stack[num].count + ")";
 		document.getElementById(stack.name + num + "Label").innerHTML = newLabel;
 	}
+	if (stack.stack[num].costs) {
+		let AC = "";
+		devMsg("updateLabel now checking costs for button highlighting");
+		if (resources.checkCostsByArray(stack.stack[num].costs, stack.stack[num].count).result == "pass") {
+			AC = "active";
+		}
+		let target = document.getElementById(stack.name + num + "Collapsible");
+		if (target.classList.contains("active") && AC != "active") {
+			target.classList.remove("active");
+		}
+		else if (!(target.classList.contains("active")) && AC == "active") {
+			target.classList.add("active");
+		}
+	} 
 }
 
 function updateContentCosts(num) {
@@ -903,7 +1287,10 @@ const timing = {
 			case 17:
 			case 18:
 			case 19:
+				break;
 			case 20:
+				this.callBuild();
+				break;
 			case 21:
 			case 22:
 			case 23:
@@ -938,6 +1325,21 @@ const timing = {
 		
 		//update logTime
 		this.logTime = nowTime;
+	},
+	callBuild: function() {
+		devMsg("refreshing active panel via callBuild, auto-called from timing belt");
+		switch(game.activeTab) {
+			case 0: //swamp
+				buildGrid(swamp, swamp.stack, true);
+				break;
+			case 1:	//personnel
+			case 2: //settlement
+			case 3: //world
+				break;
+			case 4: //research
+				buildGrid(research, research.stack, true);
+				break;
+		}
 	}
 }
 
@@ -1072,13 +1474,16 @@ const dev = [
 		  msg("added 5 prey");
 	  }
 	},
-	{ name: "button8",
-	  label: "display swamp object",
-	  run: function() { objectParseMsg(swamp); }
-	},
+/*	{ name: "button8",
+	  label: "display pustule object",
+	  run: function() { objectParseMsg(swamp[4]); }
+	}, */
 	{ name: "button9",
-	  label: "build grid",
-	  run: function() { buildGrid(swamp, swamp.stack); }
+	  label: "build grid for swamp with open tabs",
+	  run: function() { 
+		  msg("build grid for swamp called via dev button");
+		  buildGrid(swamp, swamp.stack, true); 
+	  }
 	},
 	{ name: "button10",
 	  label: "dev mode on/off",
@@ -1119,13 +1524,26 @@ const dev = [
 	  run: function() {
 		  game.buildNav();
 	  }
+	},
+	{ name: "button15",
+	  label: "update pustule",
+	  run: function() {
+		  swamp.stack[4].special.unfilled[0].level += 1;
+		  refreshProgAll(swamp, swamp.stack);
+	  }
+	},
+	{ name: "button16",
+	  label: "unlock all buttons on current tab",
+	  run: function() { 
+		  devUnlockAll(); 
+	  }
 	}
 /*	{ name: "buttonX",
 	  label: "blank",
 	  run: function() { }
 	  
 	} */
-];
+]
 
 function setDevButtonsDynamic() {
 	let buttonBlock = "";
@@ -1136,6 +1554,33 @@ function setDevButtonsDynamic() {
 	}
 	document.getElementById("devButtons").innerHTML = buttonBlock;
 }
+
+
+function devUnlockAll() {
+	let base = "";
+	let stack = "";
+	switch(game.activeTab) {
+	case 0: //swamp
+		base = swamp;
+		stack = swamp.stack;
+		break;
+	case 1:	//personnel
+	case 2: //settlement
+	case 3: //world
+		break;
+	case 4: //research
+		base = research;
+		stack = research.stack;
+		break;
+	}
+	for (let i = 0; i < stack.length; i ++) {
+		stack[i].isUnlocked = true;
+	}
+	buildGrid(base, stack, true);	
+}
+
+
+
 
 
 //-- start interval timer --//
@@ -1159,7 +1604,7 @@ function toggleActive(e) {
 	if (activePanels) {
 		activePanels[0].classList.toggle('active'); /* hides everything */
 	} 
-	targetPanel.classList.toggle('active')
+	targetPanel.classList.toggle('active');
 }
 
 
@@ -1170,7 +1615,7 @@ function expandButton2(target) {
 	
 	if (targetContent.style.display == "block") {
 		targetContent.style.display = "none"; /* hide content DIV */
-		targetButton.style.borderBottom = "1px solid black"; /* restore border */	
+		targetButton.style.borderBottom = "1px solid #33aa33"; /* restore border */	
 		targetContent.style.maxHeight = "0";
 
 	} else {
@@ -1178,6 +1623,18 @@ function expandButton2(target) {
 		targetContent.style.maxHeight = targetContent.scrollHeight + "px";
 		targetButton.style.borderBottom = "none";
 	}
+}
+
+function expandForce(target) {
+	devMsg("expandForce called with target: " + target);
+	const targetContent = document.getElementById(target + "Content");
+	const targetButton = document.getElementById(target + "Collapsible");
+
+//	targetContent.style.transitionDuration = "0s";
+	targetContent.style.display = "block";
+	targetContent.style.maxHeight = targetContent.scrollHeight + "px";
+	targetButton.style.borderBottom = "none";
+//	targetContent.style.transitionDuration = "0.2s";
 }
 
 function devMsg(text) {
