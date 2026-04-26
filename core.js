@@ -455,6 +455,9 @@ const swampBase = {
 		  type: "gather",
 		  desc: "Attempt to catch unsuspecting creatures to use as fuel.",
 		  flavor: "",
+		  costs: [
+			  { name: "corruption", amount: 1 }
+		  ],
 //		  isUnlocked: true,
 		  actions: [
 			  { subLabel: "Ensnare",
@@ -723,7 +726,10 @@ Once full, pustules generate Corruption, and can be popped for Choler.`,
 		  count: 0,
 		  costs: [],
 		  ratio: 1.2,
-		  actions: []
+		  actions: [],
+		  lockedBy: [
+			  { type: "button", name: "trap", amount: 1 }
+		  ]
 		},
 		{ name: "nodule",		//8
 		  label: "Nodule",
@@ -732,14 +738,20 @@ Once full, pustules generate Corruption, and can be popped for Choler.`,
 		  costs: [],
 		  ratio: 1.2,
 		  actions: [],
-		  isUnlocked: false
+		  isUnlocked: false,
+		  lockedBy: [
+			  { type: "res", name: "host", amount: 1 }
+		  ]
 		},
 		{ name: "corruptHost",	//9
 		  label: "Corrupt a host",
 		  type: "gather",
 		  desc: `Convert a captured native into your first corrupted Host.
 (Starts phase 2)`,
-		  actions: []
+		  actions: [],
+		  lockedBy: [
+			  { type: "res", name: "host", amount: 1 }
+		  ]
 		}
 		],
 	findEntry: function(name) {
