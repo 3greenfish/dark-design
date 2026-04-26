@@ -149,7 +149,7 @@ function buildGrid(source, sourceArray, refresh = false) {
 function testUnlock(button) {					//FLAG THERE IS A PROBLEM SOMEWHERE IN HERE
 	if (button.isUnlocked == true) {
 		msg("WARNING, BUTTON ALREADY UNLOCKED");
-		return;
+		return true;
 	}
 //	msg("testUnlock opened");
 	let locks = button.lockedBy;
@@ -157,7 +157,7 @@ function testUnlock(button) {					//FLAG THERE IS A PROBLEM SOMEWHERE IN HERE
 
 	if (locks === undefined) {
 //		msg("warning, no locks for " + button.name);
-		return;
+		return true;
 	} 
 //	else { devMsg("length of locks for " + button.name + " is " + locks.length); }
 	
@@ -215,6 +215,8 @@ function testUnlock(button) {					//FLAG THERE IS A PROBLEM SOMEWHERE IN HERE
 	}
 	if (pass == true) {
 		return true;
+	} else { 
+		return false; 
 	}
 }
 
