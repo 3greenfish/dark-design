@@ -635,8 +635,10 @@ Once full, pustules generate Corruption, and can be popped for Choler.`,
 			  { type: "res", name: "sustenance", amount: 10 },
 			  { type: "button", stack: "swamp", name: "swell", amount: 1 }
 		  ],
-		  filled: 0,
-		  unfilled: [],
+		  special: {
+			  filled: 0,
+			  unfilled: []		//try converting this to just numbers, not objects in numbers
+		  },
 /*		  onPurchase: function() {
 			  this.unfilled.push({ level: 0 });
 			  this.count += 1;
