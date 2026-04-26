@@ -569,19 +569,19 @@ Once full, pustules generate Corruption, and can be popped for Choler.`,
 		  hasProg: true,
 		  get prog() {
 			  let result = 0;
-			  if ( this.unfilled.length > 0 ) {
+			  if ( this.special.unfilled.length > 0 ) {
 	//			  msg ("length of pustule array is " + this.unfilled.length);
-				  result = (this.unfilled[0].level / 30) * 100;
+				  result = (this.special.unfilled[0].level / 30) * 100;
 	//			  msg("current pustule level is " + result);
 			  }
 			  return result;
 		  },
 		  get count() {
 //			  console.log("getting pustule count");
-			  return this.filled + this.unfilled.length;
+			  return this.special.filled + this.special.unfilled.length;
 		  },
 		  get inactive() {
-			  return this.unfilled.length;
+			  return this.special.unfilled.length;
 		  },
 		  costs: [
 			  { name: "corruption", amount: 40, ratio: 1.2 }
@@ -600,7 +600,7 @@ Once full, pustules generate Corruption, and can be popped for Choler.`,
 					if (resources.checkCostsByArray(getCosts, current).result == "pass") {
 						resources.payCostsByArray(getCosts, current);
 
-						swamp.stack[code].unfilled.push({ level: 0 });
+						swamp.stack[code].special.unfilled.push({ level: 0 });
 
 						updateLabel(swamp, code);
 						updateContentCosts2(swamp, code);
@@ -621,7 +621,7 @@ Once full, pustules generate Corruption, and can be popped for Choler.`,
 			  { subLabel: "Pop all",
 			    type: "",
 			    press: function(code) {
-					let count = swamp.stack[code].filled;
+		//			let count = swamp.stack[code].filled;
 
 					// call pop pustule code? check for amount fillable?
 				}
@@ -1528,7 +1528,7 @@ const dev = [
 	{ name: "button15",
 	  label: "update pustule",
 	  run: function() {
-		  swamp.stack[4].unfilled[0].level += 1;
+		  swamp.stack[4].special.unfilled[0].level += 1;
 		  refreshProgAll(swamp, swamp.stack);
 	  }
 	},
