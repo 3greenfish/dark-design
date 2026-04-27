@@ -1054,7 +1054,7 @@ const resourcesBase = {
 
 let research = {};
 
-/* const researchBase = {
+/* const researchBaseOrig = {
 	name: "research",
 	stack: [
 		{ name: "calendar",
