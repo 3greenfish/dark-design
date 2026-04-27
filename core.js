@@ -1658,3 +1658,5 @@ function msg(messagetext) {
 	}
 	document.getElementById("messagebox").innerHTML = finalArray;
 }
+
+loadGame();
