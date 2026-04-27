@@ -1,4 +1,4 @@
-import { researchBase } from "tech.js";
+import { researchBase } from "./tech.js";
 
 const messageArray = [];
 let devMode = false;
