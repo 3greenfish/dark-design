@@ -1052,7 +1052,7 @@ const resourcesBase = {
 
 
 
-const research = {};
+let research = {};
 
 /* const researchBase = {
 	name: "research",
