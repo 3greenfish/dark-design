@@ -1,3 +1,5 @@
+import { researchBase } from "tech.js";
+
 const messageArray = [];
 let devMode = false;
 	// ["You have awakened in a new world, and your dark powers have corrupted a small bog. Time to fester..."];
@@ -1051,7 +1053,8 @@ const resourcesBase = {
 
 
 const research = {};
-const researchBase = {
+
+/* const researchBase = {
 	name: "research",
 	stack: [
 		{ name: "calendar",
@@ -1106,7 +1109,7 @@ const researchBase = {
 	]
 };
 	
-/*
+
 
 */
 
