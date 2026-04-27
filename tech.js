@@ -47,14 +47,6 @@ export const researchBase = {
 		  actions: [],
 		  effects: [],
 		  unlocks: []
-		}
-
-	
+		},
 	]
 };
-	
-/*
-
-*/
-
-// --- close science object --- //
