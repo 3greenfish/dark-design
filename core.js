@@ -732,7 +732,7 @@ Once full, pustules generate Corruption, and can be popped for Choler.`,
 		  ratio: 1.2,
 		  actions: [],
 		  lockedBy: [
-			  { type: "button", name: "trap", amount: 1 }
+			  { type: "button", stack: "swamp", name: "trap", amount: 1 }
 		  ]
 		},
 		{ name: "nodule",		//8
@@ -1009,7 +1009,8 @@ const resourcesBase = {
 			if (this.stack[i].isUnlocked == false) { // temp to test if identification of locked/unlocked is working
 				if (resCurrent > 0) {
 					this.stack[i].isUnlocked = true;
-					document.getElementById("res" + i + "row").classList.remove("hidden");   // unlock resource if user has any
+					let resRow = document.getElementById("res" + i + "row");
+					if (resRow) resRow.classList.remove("hidden");   // unlock resource if user has any
 				} else { 
 					continue; } // otherwise, stop the iteration and move on to the next resource
 			}
@@ -1155,6 +1156,7 @@ function getContentCosts(stack, num) {
 	
 	let prices = stack.stack[num].costs;
 	let dispCost = "";
+	if (!prices) return dispCost;
 	let count = stack.stack[num].count;
 	for (let i = 0; i < prices.length; i++) {
 		let priceName = prices[i].name;
