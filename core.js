@@ -1133,7 +1133,7 @@ function loadGame() {	//runs at end of HTML load
 	Object.assign(resources, resourcesBase);
 	Object.assign(game, gameBase);
 //	Object.assign(research, researchBase);
-	research = structuredClone(researchBase);
+//	research = structuredClone(researchBase);
 	game.buildNav();
 	timing.activateBelt();
 	resources.loadResourcePanel();
