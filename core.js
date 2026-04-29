@@ -282,7 +282,7 @@ function refreshProgAll(source, array) {
 
 // --- basic game information saved in object --- //
 
-const game = {};
+let game = {};
 class GameBase {
 	currentPhase;
 	phases;
