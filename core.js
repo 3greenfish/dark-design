@@ -1,3 +1,5 @@
+// import { researchBase } from "./tech.js";
+
 const messageArray = [];
 let devMode = false;
 	// ["You have awakened in a new world, and your dark powers have corrupted a small bog. Time to fester..."];
@@ -280,91 +282,97 @@ function refreshProgAll(source, array) {
 
 // --- basic game information saved in object --- //
 
-const game = {};
-const gameBase = {
-	currentPhase: 0,
-	phases: [
-		{ name: "swamp" },
-		{ name: "tribe" },
-		{ name: "city" },
-		{ name: "nation" },
-		{ name: "world" },
-		{ name: "space" }
-		],
-	activeTab: 0,
-	tabs: [
-		{ name: "swamp", 		//0
-		  label: "a sinister swamp",
-		  visible: true,
-		  lockAtPhase: 1,
-		  select: function() {
-/*			  game.activeTab = num;
-			  game.refreshNav();
-			  devMsg(this.name + " selected"); */
-			  buildGrid(swamp, swamp.stack);
-		  }
-		},
-		{ name: "personnel",	//1
-		  get label() {
-			  let label2 = "";
-			  switch(game.currentPhase) {
-				  case 0:
-					  label2 = "ERROR";
-					  break;
-				  case 1:
-					  label2 = "tribe";
-					  break;
-				  case 2:
-					  label2 = "residents";
-					  break;
-				  case 3:
-					  label2 = "citizens";
-					  break;
-				  case 4:
-					  label2 = "population";
-					  break;
-				  default:
-					  label2 = "error";
+let game = {};
+class GameBase {
+	currentPhase;
+	phases;
+	activeTab;
+	tabs;
+	constructor() {	
+		this.currentPhase = 0;
+		this.phases = [
+			{ name: "swamp" },
+			{ name: "tribe" },
+			{ name: "city" },
+			{ name: "nation" },
+			{ name: "world" },
+			{ name: "space" }
+			];
+		this.activeTab = 0;
+		this.tabs = [
+			{ name: "swamp", 		//0
+			  label: "a sinister swamp",
+			  visible: true,
+			  lockAtPhase: 1,
+			  select: function() {
+	/*			  game.activeTab = num;
+				  game.refreshNav();
+				  devMsg(this.name + " selected"); */
+				  buildGrid(swamp, swamp.stack);
 			  }
-			  return label2;
-		  },
-//		  label: "tribe",
-		  unlockAtPhase: 1,
-		  select: function(num) {
-/*			  game.activeTab = num;
-			  game.refreshNav();
-			  devMsg(this.name + " selected"); */
-		  }
-		},
-		{ name: "home",			//2
-		  label: "settlement",
-		  unlockAtPhase: 2,
-		  select: function(num) {
-/*			  game.activeTab = num;
-			  game.refreshNav();
-			  devMsg(this.name + " selected"); */
-		  }
-		},
-		{ name: "world",		//3
-		  label: "world", // update to start as "nearby towns"?
-		  unlockAtPhase: 3,
-		  select: function(num) {
-/*			  game.activeTab = num;
-			  game.refreshNav();
-			  devMsg(this.name + " selected"); */
-		  }
-		},
-		{ name: "research",		//4
-		  label: "research",
-		  select: function(num) {
-			  buildGrid(research, research.stack);
-/*			  game.activeTab = num;
-			  game.refreshNav();
-			  devMsg(this.name + " selected"); */
-		  }
-		}
-		],
-	buildNav: function() {
+			},
+			{ name: "personnel",	//1
+			  get label() {
+				  let label2 = "";
+				  switch(game.currentPhase) {
+					  case 0:
+						  label2 = "ERROR";
+						  break;
+					  case 1:
+						  label2 = "tribe";
+						  break;
+					  case 2:
+						  label2 = "residents";
+						  break;
+					  case 3:
+						  label2 = "citizens";
+						  break;
+					  case 4:
+						  label2 = "population";
+						  break;
+					  default:
+						  label2 = "error";
+				  }
+				  return label2;
+			  },
+	//		  label: "tribe",
+			  unlockAtPhase: 1,
+			  select: function(num) {
+	/*			  game.activeTab = num;
+				  game.refreshNav();
+				  devMsg(this.name + " selected"); */
+			  }
+			},
+			{ name: "home",			//2
+			  label: "settlement",
+			  unlockAtPhase: 2,
+			  select: function(num) {
+	/*			  game.activeTab = num;
+				  game.refreshNav();
+				  devMsg(this.name + " selected"); */
+			  }
+			},
+			{ name: "world",		//3
+			  label: "world", // update to start as "nearby towns"?
+			  unlockAtPhase: 3,
+			  select: function(num) {
+	/*			  game.activeTab = num;
+				  game.refreshNav();
+				  devMsg(this.name + " selected"); */
+			  }
+			},
+			{ name: "research",		//4
+			  label: "research",
+			  select: function(num) {
+				  buildGrid(research, research.stack);
+	/*			  game.activeTab = num;
+				  game.refreshNav();
+				  devMsg(this.name + " selected"); */
+			  }
+			}
+		];
+	}
+	buildNav() {
 		let navList = "";
 		for (let i = 0; i < this.tabs.length; i++) {
 			let tabLabel = this.tabs[i].label;
@@ -382,8 +390,8 @@ const gameBase = {
 			navList += newLabel;
 		}
 		document.getElementById("tabNav").innerHTML = navList;
-	},
-	refreshNav: function() {
+	}
+	refreshNav() {
 		for (let i = 0; i < this.tabs.length; i++) {
 			let element = document.getElementById("tab" + i);
 			if (element.classList.contains("activeTab")) {
@@ -391,14 +399,14 @@ const gameBase = {
 			}
 		}
 		document.getElementById("tab" + this.activeTab).classList.add("activeTab");
-	},
-	selectNav: function(x) {
+	}
+	selectNav(x) {
 		game.activeTab = x;
 		game.refreshNav();
 		game.tabs[x].select();
 		devMsg(game.tabs[x].name + " selected");
-	}	
-};
+	}
+}
 
 // ---- phase 1 buttons based as object ---- //
 
@@ -730,7 +738,7 @@ Once full, pustules generate Corruption, and can be popped for Choler.`,
 		  ratio: 1.2,
 		  actions: [],
 		  lockedBy: [
-			  { type: "button", name: "trap", amount: 1 }
+			  { type: "button", stack: "swamp", name: "trap", amount: 1 }
 		  ]
 		},
 		{ name: "nodule",		//8
@@ -1007,7 +1015,8 @@ const resourcesBase = {
 			if (this.stack[i].isUnlocked == false) { // temp to test if identification of locked/unlocked is working
 				if (resCurrent > 0) {
 					this.stack[i].isUnlocked = true;
-					document.getElementById("res" + i + "row").classList.remove("hidden");   // unlock resource if user has any
+					let resRow = document.getElementById("res" + i + "row");
+					if (resRow) resRow.classList.remove("hidden");   // unlock resource if user has any
 				} else { 
 					continue; } // otherwise, stop the iteration and move on to the next resource
 			}
@@ -1050,8 +1059,64 @@ const resourcesBase = {
 
 
 
-const research = {};
-const researchBase = {
+let research = {};
+class TechBase {
+	name = "research";
+	stack;
+	constructor() {
+		this.stack = [
+			{ name: "calendar",
+			  label: "Calendar",
+			  desc: "Discover the world's cyclical cycle.",
+			  flavor: null,
+			  costs: [
+				  { name: "corruption", amount: 10 }
+			  ],
+			  purchased: false,
+			  actions: [
+				  { subLabel: "Research",
+					type: "main",
+					press: function(code, isMain = false) {
+						devMsg("purchasing research");
+						let cal = research.stack[code];
+						let getCosts = cal.costs;
+	
+						if (resources.checkCostsByArray(getCosts, 0).result == "pass") {
+							resources.payCostsByArray(getCosts, 0);
+							calendar.activateCal();
+							cal.purchased = true;
+							buildGrid(research, research.stack, true);
+						}
+						else if (isMain == true) {
+							let target = "research" + code;
+							expandButton2(target);
+						}
+					}
+				  }
+			  ],
+			  effects: [],
+			  unlocks: []
+			},
+			{ name: "stone tools",
+			  label: "Stone tools",
+			  desc: "Improve hunting and gathering with tools made of stone.",
+			  flavor: "sometimes you just have to hit something with a rock.",
+			  costs: [
+				  { name: "corruption", amount: 15 }
+			  ],
+			  purchased: false,
+			  lockedBy: [
+				  { type: "tech", name: "calendar" }
+			  ],
+			  actions: [],
+			  effects: [],
+			  unlocks: []
+			}
+		]
+	}
+}
+
+/* const researchBase = {
 	name: "research",
 	stack: [
 		{ name: "calendar",
@@ -1104,11 +1169,11 @@ const researchBase = {
 
 	
 	]
-};
+}; */
 	
-/*
 
-*/
+
+
 
 // --- close science object --- //
 
@@ -1128,8 +1193,10 @@ function loadGame() {	//runs at end of HTML load
 // Object.assign(TO,FROM);
 	Object.assign(swamp, swampBase);
 	Object.assign(resources, resourcesBase);
-	Object.assign(game, gameBase);
-	Object.assign(research, researchBase);
+	game = new GameBase();
+	research = new TechBase();
+//	Object.assign(research, researchBase);
+//	research = structuredClone(researchBase);
 	game.buildNav();
 	timing.activateBelt();
 	resources.loadResourcePanel();
@@ -1151,6 +1218,7 @@ function getContentCosts(stack, num) {
 	
 	let prices = stack.stack[num].costs;
 	let dispCost = "";
+	if (!prices) return dispCost;
 	let count = stack.stack[num].count;
 	for (let i = 0; i < prices.length; i++) {
 		let priceName = prices[i].name;
@@ -1537,7 +1605,17 @@ const dev = [
 	  run: function() { 
 		  devUnlockAll(); 
 	  }
+	},
+	{ name: "button17",
+	  label: "How deep are the copies?",
+	  run: function() {
+		  let fooo = new TechBase();
+		  msg("research shows that calendar purchased is " + research.stack[0].purchased + " and fooo shows that calendar purchased is " + fooo.stack[0].purchased);
+	  }
 	}
+
+
+	
 /*	{ name: "buttonX",
 	  label: "blank",
 	  run: function() { }
@@ -1654,3 +1732,5 @@ function msg(messagetext) {
 	}
 	document.getElementById("messagebox").innerHTML = finalArray;
 }
+
+loadGame();
