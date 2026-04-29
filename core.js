@@ -1193,7 +1193,7 @@ function loadGame() {	//runs at end of HTML load
 // Object.assign(TO,FROM);
 	Object.assign(swamp, swampBase);
 	Object.assign(resources, resourcesBase);
-	game = new gameBase();
+	game = new GameBase();
 	research = new TechBase();
 //	Object.assign(research, researchBase);
 //	research = structuredClone(researchBase);
