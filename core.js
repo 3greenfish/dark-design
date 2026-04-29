@@ -1054,8 +1054,7 @@ const resourcesBase = {
 
 
 let research = {};
-
-/* const researchBaseOrig = {
+const researchBase = {
 	name: "research",
 	stack: [
 		{ name: "calendar",
@@ -1112,7 +1111,7 @@ let research = {};
 	
 
 
-*/
+
 
 // --- close science object --- //
 
@@ -1133,7 +1132,7 @@ function loadGame() {	//runs at end of HTML load
 	Object.assign(swamp, swampBase);
 	Object.assign(resources, resourcesBase);
 	Object.assign(game, gameBase);
-//	Object.assign(research, researchBase);
+	Object.assign(research, researchBase);
 //	research = structuredClone(researchBase);
 	game.buildNav();
 	timing.activateBelt();
@@ -1543,7 +1542,16 @@ const dev = [
 	  run: function() { 
 		  devUnlockAll(); 
 	  }
+	},
+	{ name: "button17",
+	  label: "How deep are the copies?",
+	  run: function() {
+		  msg("swamp is " + swamp.stack[3].count + ", and swampBase is " + swampBase.stack[3].count);
+	  }
 	}
+
+
+	
 /*	{ name: "buttonX",
 	  label: "blank",
 	  run: function() { }
