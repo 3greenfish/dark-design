@@ -297,8 +297,8 @@ class GameBase {
 			{ name: "nation" },
 			{ name: "world" },
 			{ name: "space" }
-			],
-		this.activeTab = 0,
+			];
+		this.activeTab = 0;
 		this.tabs = [
 			{ name: "swamp", 		//0
 			  label: "a sinister swamp",
@@ -370,7 +370,7 @@ class GameBase {
 				  devMsg(this.name + " selected"); */
 			  }
 			}
-		]
+		];
 	}
 	buildNav() {
 		let navList = "";
