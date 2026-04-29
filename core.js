@@ -1604,7 +1604,8 @@ const dev = [
 	{ name: "button17",
 	  label: "How deep are the copies?",
 	  run: function() {
-		  msg("swamp is " + swamp.stack[3].count + ", and swampBase is " + swampBase.stack[3].count);
+		  let fooo = new TechBase();
+		  msg("research shows that calendar purchased is " + research.stack[0].purchased + " and fooo shows that calendar purchased is " + fooo.stack[0].purchased);
 	  }
 	}
 
