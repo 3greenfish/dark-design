@@ -283,90 +283,96 @@ function refreshProgAll(source, array) {
 // --- basic game information saved in object --- //
 
 const game = {};
-const gameBase = {
-	currentPhase: 0,
-	phases: [
-		{ name: "swamp" },
-		{ name: "tribe" },
-		{ name: "city" },
-		{ name: "nation" },
-		{ name: "world" },
-		{ name: "space" }
-		],
-	activeTab: 0,
-	tabs: [
-		{ name: "swamp", 		//0
-		  label: "a sinister swamp",
-		  visible: true,
-		  lockAtPhase: 1,
-		  select: function() {
-/*			  game.activeTab = num;
-			  game.refreshNav();
-			  devMsg(this.name + " selected"); */
-			  buildGrid(swamp, swamp.stack);
-		  }
-		},
-		{ name: "personnel",	//1
-		  get label() {
-			  let label2 = "";
-			  switch(game.currentPhase) {
-				  case 0:
-					  label2 = "ERROR";
-					  break;
-				  case 1:
-					  label2 = "tribe";
-					  break;
-				  case 2:
-					  label2 = "residents";
-					  break;
-				  case 3:
-					  label2 = "citizens";
-					  break;
-				  case 4:
-					  label2 = "population";
-					  break;
-				  default:
-					  label2 = "error";
+class GameBase {
+	currentPhase;
+	phases;
+	activeTab;
+	tabs;
+	constructor() {	
+		this.currentPhase = 0;
+		this.phases = [
+			{ name: "swamp" },
+			{ name: "tribe" },
+			{ name: "city" },
+			{ name: "nation" },
+			{ name: "world" },
+			{ name: "space" }
+			],
+		this.activeTab = 0,
+		this.tabs = [
+			{ name: "swamp", 		//0
+			  label: "a sinister swamp",
+			  visible: true,
+			  lockAtPhase: 1,
+			  select: function() {
+	/*			  game.activeTab = num;
+				  game.refreshNav();
+				  devMsg(this.name + " selected"); */
+				  buildGrid(swamp, swamp.stack);
 			  }
-			  return label2;
-		  },
-//		  label: "tribe",
-		  unlockAtPhase: 1,
-		  select: function(num) {
-/*			  game.activeTab = num;
-			  game.refreshNav();
-			  devMsg(this.name + " selected"); */
-		  }
-		},
-		{ name: "home",			//2
-		  label: "settlement",
-		  unlockAtPhase: 2,
-		  select: function(num) {
-/*			  game.activeTab = num;
-			  game.refreshNav();
-			  devMsg(this.name + " selected"); */
-		  }
-		},
-		{ name: "world",		//3
-		  label: "world", // update to start as "nearby towns"?
-		  unlockAtPhase: 3,
-		  select: function(num) {
-/*			  game.activeTab = num;
-			  game.refreshNav();
-			  devMsg(this.name + " selected"); */
-		  }
-		},
-		{ name: "research",		//4
-		  label: "research",
-		  select: function(num) {
-			  buildGrid(research, research.stack);
-/*			  game.activeTab = num;
-			  game.refreshNav();
-			  devMsg(this.name + " selected"); */
-		  }
-		}
-		],
-	buildNav: function() {
+			},
+			{ name: "personnel",	//1
+			  get label() {
+				  let label2 = "";
+				  switch(game.currentPhase) {
+					  case 0:
+						  label2 = "ERROR";
+						  break;
+					  case 1:
+						  label2 = "tribe";
+						  break;
+					  case 2:
+						  label2 = "residents";
+						  break;
+					  case 3:
+						  label2 = "citizens";
+						  break;
+					  case 4:
+						  label2 = "population";
+						  break;
+					  default:
+						  label2 = "error";
+				  }
+				  return label2;
+			  },
+	//		  label: "tribe",
+			  unlockAtPhase: 1,
+			  select: function(num) {
+	/*			  game.activeTab = num;
+				  game.refreshNav();
+				  devMsg(this.name + " selected"); */
+			  }
+			},
+			{ name: "home",			//2
+			  label: "settlement",
+			  unlockAtPhase: 2,
+			  select: function(num) {
+	/*			  game.activeTab = num;
+				  game.refreshNav();
+				  devMsg(this.name + " selected"); */
+			  }
+			},
+			{ name: "world",		//3
+			  label: "world", // update to start as "nearby towns"?
+			  unlockAtPhase: 3,
+			  select: function(num) {
+	/*			  game.activeTab = num;
+				  game.refreshNav();
+				  devMsg(this.name + " selected"); */
+			  }
+			},
+			{ name: "research",		//4
+			  label: "research",
+			  select: function(num) {
+				  buildGrid(research, research.stack);
+	/*			  game.activeTab = num;
+				  game.refreshNav();
+				  devMsg(this.name + " selected"); */
+			  }
+			}
+		]
+	}
+	buildNav() {
 		let navList = "";
 		for (let i = 0; i < this.tabs.length; i++) {
 			let tabLabel = this.tabs[i].label;
@@ -384,8 +390,8 @@ const gameBase = {
 			navList += newLabel;
 		}
 		document.getElementById("tabNav").innerHTML = navList;
-	},
-	refreshNav: function() {
+	}
+	refreshNav() {
 		for (let i = 0; i < this.tabs.length; i++) {
 			let element = document.getElementById("tab" + i);
 			if (element.classList.contains("activeTab")) {
@@ -393,14 +399,14 @@ const gameBase = {
 			}
 		}
 		document.getElementById("tab" + this.activeTab).classList.add("activeTab");
-	},
-	selectNav: function(x) {
+	}
+	selectNav(x) {
 		game.activeTab = x;
 		game.refreshNav();
 		game.tabs[x].select();
 		devMsg(game.tabs[x].name + " selected");
-	}	
-};
+	}
+}
 
 // ---- phase 1 buttons based as object ---- //
 
@@ -1054,7 +1060,6 @@ const resourcesBase = {
 
 
 let research = {};
-
 class TechBase {
 	name = "research";
 	stack;
@@ -1188,7 +1193,7 @@ function loadGame() {	//runs at end of HTML load
 // Object.assign(TO,FROM);
 	Object.assign(swamp, swampBase);
 	Object.assign(resources, resourcesBase);
-	Object.assign(game, gameBase);
+	game = new gameBase();
 	research = new TechBase();
 //	Object.assign(research, researchBase);
 //	research = structuredClone(researchBase);
