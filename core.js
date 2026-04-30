@@ -988,7 +988,7 @@ class ResourcesBase {
 		}
 		msg("payCostsByArray completed");
 	}
-	findResInStac(name) {
+	findResInStack(name) {
 		let findName = name;
 		for (let i = 0; i < this.stack.length; i++) {
 			if (this.stack[i].name == findName) {
@@ -1195,13 +1195,10 @@ function findBldgInSwamp(name) {
 // -- start loading items here -- //
 
 function loadGame() {	//runs at end of HTML load
-// Object.assign(TO,FROM);
 	swamp = new SwampBase();
 	resources = new ResourcesBase();
 	game = new GameBase();
 	research = new TechBase();
-//	Object.assign(research, researchBase);
-//	research = structuredClone(researchBase);
 	game.buildNav();
 	timing.activateBelt();
 	resources.loadResourcePanel();
