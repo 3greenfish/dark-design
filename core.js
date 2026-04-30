@@ -68,7 +68,7 @@ function buildGrid(source, sourceArray, refresh = false) {
 	for (let i = 0; i < array.length; i++) {		//for every button in stack
 
 		if (array[i].isUnlocked !== true) {
-			msg("calling testUnlock with array object for " + array[i].name);
+			devMsg("calling testUnlock with array object for " + array[i].name);
 			//check whether can unlock
 			let checkValue = testUnlock(array[i]);
 			if (checkValue == true) {
@@ -148,7 +148,7 @@ function buildGrid(source, sourceArray, refresh = false) {
 	}
 }	
 
-function testUnlock(button) {					//FLAG THERE IS A PROBLEM SOMEWHERE IN HERE
+function testUnlock(button) {
 	if (button.isUnlocked == true) {
 		msg("WARNING, BUTTON ALREADY UNLOCKED");
 		return true;
