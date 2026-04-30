@@ -436,7 +436,7 @@ class GameBase {
 		 */
 
 let swamp = {};
-class SwampBase = {
+class SwampBase {
 	name = "swamp";
 	stack;
 	constructor() {
@@ -795,7 +795,7 @@ function findEntry(stack, name) {
 
 
 let resources = {};
-class ResourcesBase = {
+class ResourcesBase {
 	name = "resources object";
 	stack;
 	constructor() {
