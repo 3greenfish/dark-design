@@ -202,7 +202,7 @@ function testUnlock(button) {
 			}
 		}
 		if (locks[i].type == "button") { 
-			msg("type is button");
+			devMsg("type is button");
 			let stack = "";
 			switch (locks[i].stack) {
 				case "swamp":
