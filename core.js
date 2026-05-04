@@ -564,8 +564,8 @@ class SwampBase {
 				  }
 			  ],
 			  effects: [
-				  { stack: "resource", res: "corruption", type: "perClick", amount: 0.1, source: "swamp", button: "swell" },
-				  { stack: "resource", res: "corruption", type: "max", amount: 5, source: "swamp", button: "swell" }
+				  { effect: "corruptionPerClick", value: 0.1 },
+				  { effect: "corruptionMax", value: 5 }
 			  ],
 			  unlocks: [],
 			  lockedBy: [
@@ -638,7 +638,7 @@ class SwampBase {
 				  }
 			  ],
 			  effects: [
-				  { stack: "resource", res: "corruption", type: "max", amount: 50, source: "swamp", button: "pustule" }
+				  { effect: "corruptionMax", value: 50 }
 			  ],
 			  lockedBy: [
 				  { type: "res", name: "corruption", amount: 30 },
@@ -1186,10 +1186,28 @@ class TechBase {
 let effectsManager = {}
 class EffectsManagerBase = {
 	swampEffectsCache = [];
+	SwampEffectsCache = [];
 	researchEffectsCache = [];
 	allCachedEffects = [];
 	constructor() {}
-	getEffectStack(stack) {
+	getEffectStack(source) {
+		let stack = source.stack;
+		let buildEffects = [];
+		for (let i = 0; i < stack.length; i++) {
+			let effects = stack.effects;
+			if (!effects) { 
+				continue;
+			}
+			let stackable = (stack[i].stackable) ? true : false;
+			for (let j = 0; j < effects.length; j++) {
+				if (stackable == true) {
+					effects[j].value *= stack[i].count;
+				}			
+				buildEffects.push(effects[j]);
+			}
+		}
+		this.source.name + "Effects Cache" = buildEffects;
+		
 		//take a stack, review buttons, produce an array of effect values as objects
 		//each value is calculated based upon number of buildings, etc.
 		//store this value in the applicable effectsCache
@@ -1222,6 +1240,7 @@ function loadGame() {	//runs at end of HTML load
 	resources = new ResourcesBase();
 	game = new GameBase();
 	research = new TechBase();
+	effectsManager = new EffectsManagerBase();
 	game.buildNav();
 	timing.activateBelt();
 	resources.loadResourcePanel();
