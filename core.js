@@ -1205,7 +1205,7 @@ class EffectsManagerBase {
 				buildEffects.push(effects[j]);
 			}
 		}
-		this[source.name + "Effects Cache"] = buildEffects;
+		this[source.name + "EffectsCache"] = buildEffects;
 		
 		//take a stack, review buttons, produce an array of effect values as objects
 		//each value is calculated based upon number of buildings, etc.
