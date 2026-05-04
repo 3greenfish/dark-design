@@ -1193,7 +1193,7 @@ class EffectsManagerBase {
 		let stack = source.stack;
 		let buildEffects = [];
 		for (let i = 0; i < stack.length; i++) {
-			let effects = stack.effects;
+			let effects = stack[i].effects;
 			if (!effects) { 
 				continue;
 			}
