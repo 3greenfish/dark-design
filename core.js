@@ -1,3 +1,5 @@
+// import { researchBase } from "./tech.js";
+
 const messageArray = [];
 let devMode = false;
 	// ["You have awakened in a new world, and your dark powers have corrupted a small bog. Time to fester..."];
@@ -66,7 +68,7 @@ function buildGrid(source, sourceArray, refresh = false) {
 	for (let i = 0; i < array.length; i++) {		//for every button in stack
 
 		if (array[i].isUnlocked !== true) {
-			msg("calling testUnlock with array object for " + array[i].name);
+			devMsg("calling testUnlock with array object for " + array[i].name);
 			//check whether can unlock
 			let checkValue = testUnlock(array[i]);
 			if (checkValue == true) {
@@ -146,7 +148,7 @@ function buildGrid(source, sourceArray, refresh = false) {
 	}
 }	
 
-function testUnlock(button) {					//FLAG THERE IS A PROBLEM SOMEWHERE IN HERE
+function testUnlock(button) {
 	if (button.isUnlocked == true) {
 		msg("WARNING, BUTTON ALREADY UNLOCKED");
 		return true;
@@ -200,7 +202,7 @@ function testUnlock(button) {					//FLAG THERE IS A PROBLEM SOMEWHERE IN HERE
 			}
 		}
 		if (locks[i].type == "button") { 
-			msg("type is button");
+			devMsg("type is button");
 			let stack = "";
 			switch (locks[i].stack) {
 				case "swamp":
@@ -280,91 +282,97 @@ function refreshProgAll(source, array) {
 
 // --- basic game information saved in object --- //
 
-const game = {};
-const gameBase = {
-	currentPhase: 0,
-	phases: [
-		{ name: "swamp" },
-		{ name: "tribe" },
-		{ name: "city" },
-		{ name: "nation" },
-		{ name: "world" },
-		{ name: "space" }
-		],
-	activeTab: 0,
-	tabs: [
-		{ name: "swamp", 		//0
-		  label: "a sinister swamp",
-		  visible: true,
-		  lockAtPhase: 1,
-		  select: function() {
-/*			  game.activeTab = num;
-			  game.refreshNav();
-			  devMsg(this.name + " selected"); */
-			  buildGrid(swamp, swamp.stack);
-		  }
-		},
-		{ name: "personnel",	//1
-		  get label() {
-			  let label2 = "";
-			  switch(game.currentPhase) {
-				  case 0:
-					  label2 = "ERROR";
-					  break;
-				  case 1:
-					  label2 = "tribe";
-					  break;
-				  case 2:
-					  label2 = "residents";
-					  break;
-				  case 3:
-					  label2 = "citizens";
-					  break;
-				  case 4:
-					  label2 = "population";
-					  break;
-				  default:
-					  label2 = "error";
+let game = {};
+class GameBase {
+	currentPhase;
+	phases;
+	activeTab;
+	tabs;
+	constructor() {	
+		this.currentPhase = 0;
+		this.phases = [
+			{ name: "swamp" },
+			{ name: "tribe" },
+			{ name: "city" },
+			{ name: "nation" },
+			{ name: "world" },
+			{ name: "space" }
+			];
+		this.activeTab = 0;
+		this.tabs = [
+			{ name: "swamp", 		//0
+			  label: "a sinister swamp",
+			  visible: true,
+			  lockAtPhase: 1,
+			  select: function() {
+	/*			  game.activeTab = num;
+				  game.refreshNav();
+				  devMsg(this.name + " selected"); */
+				  buildGrid(swamp, swamp.stack);
 			  }
-			  return label2;
-		  },
-//		  label: "tribe",
-		  unlockAtPhase: 1,
-		  select: function(num) {
-/*			  game.activeTab = num;
-			  game.refreshNav();
-			  devMsg(this.name + " selected"); */
-		  }
-		},
-		{ name: "home",			//2
-		  label: "settlement",
-		  unlockAtPhase: 2,
-		  select: function(num) {
-/*			  game.activeTab = num;
-			  game.refreshNav();
-			  devMsg(this.name + " selected"); */
-		  }
-		},
-		{ name: "world",		//3
-		  label: "world", // update to start as "nearby towns"?
-		  unlockAtPhase: 3,
-		  select: function(num) {
-/*			  game.activeTab = num;
-			  game.refreshNav();
-			  devMsg(this.name + " selected"); */
-		  }
-		},
-		{ name: "research",		//4
-		  label: "research",
-		  select: function(num) {
-			  buildGrid(research, research.stack);
-/*			  game.activeTab = num;
-			  game.refreshNav();
-			  devMsg(this.name + " selected"); */
-		  }
-		}
-		],
-	buildNav: function() {
+			},
+			{ name: "personnel",	//1
+			  get label() {
+				  let label2 = "";
+				  switch(game.currentPhase) {
+					  case 0:
+						  label2 = "ERROR";
+						  break;
+					  case 1:
+						  label2 = "tribe";
+						  break;
+					  case 2:
+						  label2 = "residents";
+						  break;
+					  case 3:
+						  label2 = "citizens";
+						  break;
+					  case 4:
+						  label2 = "population";
+						  break;
+					  default:
+						  label2 = "error";
+				  }
+				  return label2;
+			  },
+	//		  label: "tribe",
+			  unlockAtPhase: 1,
+			  select: function(num) {
+	/*			  game.activeTab = num;
+				  game.refreshNav();
+				  devMsg(this.name + " selected"); */
+			  }
+			},
+			{ name: "home",			//2
+			  label: "settlement",
+			  unlockAtPhase: 2,
+			  select: function(num) {
+	/*			  game.activeTab = num;
+				  game.refreshNav();
+				  devMsg(this.name + " selected"); */
+			  }
+			},
+			{ name: "world",		//3
+			  label: "world", // update to start as "nearby towns"?
+			  unlockAtPhase: 3,
+			  select: function(num) {
+	/*			  game.activeTab = num;
+				  game.refreshNav();
+				  devMsg(this.name + " selected"); */
+			  }
+			},
+			{ name: "research",		//4
+			  label: "research",
+			  select: function(num) {
+				  buildGrid(research, research.stack);
+	/*			  game.activeTab = num;
+				  game.refreshNav();
+				  devMsg(this.name + " selected"); */
+			  }
+			}
+		];
+	}
+	buildNav() {
 		let navList = "";
 		for (let i = 0; i < this.tabs.length; i++) {
 			let tabLabel = this.tabs[i].label;
@@ -382,8 +390,8 @@ const gameBase = {
 			navList += newLabel;
 		}
 		document.getElementById("tabNav").innerHTML = navList;
-	},
-	refreshNav: function() {
+	}
+	refreshNav() {
 		for (let i = 0; i < this.tabs.length; i++) {
 			let element = document.getElementById("tab" + i);
 			if (element.classList.contains("activeTab")) {
@@ -391,14 +399,14 @@ const gameBase = {
 			}
 		}
 		document.getElementById("tab" + this.activeTab).classList.add("activeTab");
-	},
-	selectNav: function(x) {
+	}
+	selectNav(x) {
 		game.activeTab = x;
 		game.refreshNav();
 		game.tabs[x].select();
 		devMsg(game.tabs[x].name + " selected");
-	}	
-};
+	}
+}
 
 // ---- phase 1 buttons based as object ---- //
 
@@ -427,346 +435,348 @@ const gameBase = {
 
 		 */
 
-const swamp = {};
-const swampBase = {
-	name: "swamp",
-	stack: [
-		{ name: "fester",	//0
-		  label: "Fester",
-		  type: "gather",
-		  desc: "Fester in darkness to build up Corruption.",
-		  flavor: "", 
-		  isUnlocked: true,
-		  actions: [
-			  { subLabel: "Fester",
-			    type: "main", 
-			    press: function(code, isMain = false) {
-					let r = resources.findResInStack("corruption");
-					let a = resources.stack[r].gatherRate;
-					resources.addRes(r, a);
-
-					devMsg("code is " + code + ", isMain is " + isMain);
-				}
-			  }
-		  ]
-		},
-		{ name: "ensnare",	//1
-		  label: "Ensnare prey",
-		  type: "gather",
-		  desc: "Attempt to catch unsuspecting creatures to use as fuel.",
-		  flavor: "",
-		  costs: [
-			  { name: "corruption", amount: 1 }
-		  ],
-//		  isUnlocked: true,
-		  actions: [
-			  { subLabel: "Ensnare",
-			    type: "main",
-			    press: function(code, isMain = false) {
-					let r = resources.findResInStack("prey");
-					let res = resources.stack[r];
-					let ch = res.gatherChance; // FLAG FOR CALCULATION
-					if (resources.canAddAnyRes(r) == true ) {
-						if (ch >= Math.random()) {
-							let amountCaught = 1;		//FLAG FOR UPDATING BY CALCULATION
-							resources.addRes(r, amountCaught);
-							msg("Prey captured!");
-						} else {
-							msg("You have failed to capture any prey.");
+let swamp = {};
+class SwampBase {
+	name = "swamp";
+	stack;
+	constructor() {
+		this.stack = [
+			{ name: "fester",	//0
+			  label: "Fester",
+			  type: "gather",
+			  desc: "Fester in darkness to build up Corruption.",
+			  flavor: "", 
+			  isUnlocked: true,
+			  actions: [
+				  { subLabel: "Fester",
+				    type: "main", 
+				    press: function(code, isMain = false) {
+						let r = resources.findResInStack("corruption");
+						let a = resources.stack[r].gatherRate;
+						resources.addRes(r, a);
+	
+						devMsg("code is " + code + ", isMain is " + isMain);
+					}
+				  }
+			  ]
+			},
+			{ name: "ensnare",	//1
+			  label: "Ensnare prey",
+			  type: "gather",
+			  desc: "Attempt to catch unsuspecting creatures to use as fuel.",
+			  flavor: "",
+			  costs: [
+				  { name: "corruption", amount: 1 }
+			  ],
+	//		  isUnlocked: true,
+			  actions: [
+				  { subLabel: "Ensnare",
+				    type: "main",
+				    press: function(code, isMain = false) {
+						let r = resources.findResInStack("prey");
+						let res = resources.stack[r];
+						let ch = res.gatherChance; // FLAG FOR CALCULATION
+						if (resources.canAddAnyRes(r) == true ) {
+							if (ch >= Math.random()) {
+								let amountCaught = 1;		//FLAG FOR UPDATING BY CALCULATION
+								resources.addRes(r, amountCaught);
+								msg("Prey captured!");
+							} else {
+								msg("You have failed to capture any prey.");
+							}
+						}
+						else if (isMain == true) {			//expand or close button
+							devMsg("isMain is TRUE, calling expandButton2");
+							let target = "swamp" + code;
+							expandButton2(target);
 						}
 					}
-					else if (isMain == true) {			//expand or close button
-						devMsg("isMain is TRUE, calling expandButton2");
-						let target = "swamp" + code;
-						expandButton2(target);
-					}
-				}
-			  }
-		  ],
-		  lockedBy: [
-			  { type: "res", name: "corruption", amount: 1 }
-		  ]
-		},
-		{ name: "digest",	//2
-		  label: "Digest prey",
-		  type: "gather",
-		  desc: "Process captured prey to generate Sustenance.",
-		  costs: [
-			  { name: "prey", amount: 2 }
-		  ],
-		  lockedBy: [
-			  { type: "res", name: "prey", amount: 1 }
-		  ],
-		  actions: [
-			  { subLabel: "Digest prey",
-			    type: "main",
-			    press: function(code, isMain = false) {
-					devMsg("Digest button called");
-					let getCosts = swamp.stack[code].costs;
-					devMsg("loaded getCosts");					
-					if (resources.checkCostsByArray(getCosts, 0).result == "pass" && resources.canAddAnyRes("sustenance")) {
-						devMsg("checked costs, checked to add res");
-						resources.payCostsByArray(getCosts, 0);
-						let r = resources.findResInStack("sustenance");
-						let a = 1;
-						resources.addRes(r, a);
-					} else if (isMain == true) {
-						//expand or close button
-						devMsg("isMain is TRUE, calling expandButton2");
-						let target = "swamp" + code;
-						expandButton2(target);
-					}
-				}
-			  }
-		  ]
-		},
-		{ name: "swell",    //3
-		  label: "Swell",
-		  desc: "A burgeoning swamp expands Corruption limits and enhances Festering.",
-		  count: 0,
-		  costs: [
-			  { name: "corruption", amount: 10, ratio: 1.3 }
-		  ],
-		  actions: [
-			  { subLabel: "Swell by 1m^2",
-			    type: "main",
-			    press: function(code, isMain = false) {
-					devMsg("buy swell called");
-					let swell = swamp.stack[code];
-					let getCosts = swell.costs;
-					let current = swell.count;
-					devMsg("swell getCosts called");
-
-					if (resources.checkCostsByArray(getCosts, current).result == "pass") {
-						resources.payCostsByArray(getCosts, current);
-						swell.count += 1;
-
-						updateLabel(swamp, code);
-						updateContentCosts2(swamp, code);
-					}
-					else if (isMain == true) {
-						//expand or close button
-						devMsg("isMain is TRUE, calling expandButton2");
-						let target = "swamp" + code;
-						expandButton2(target);
-					}					
-				}
-			  }
-		  ],
-		  effects: [
-			  { stack: "resource", res: "corruption", type: "perClick", amount: 0.1, source: "swamp", button: "swell" },
-			  { stack: "resource", res: "corruption", type: "max", amount: 5, source: "swamp", button: "swell" }
-		  ],
-		  unlocks: [],
-		  lockedBy: [
-			  { type: "res", name: "corruption", amount: 10 }
-		  ]
-		},
-		{ name: "pustule",     //4
-		  label: "Pustule",
-		  desc: `Pustules process Sustenance into a thick bile.</p><p>
-Once full, pustules generate Corruption, and can be popped for Choler.`,
-		  hasProg: true,
-		  get prog() {
-			  let result = 0;
-			  if ( this.special.unfilled.length > 0 ) {
-	//			  msg ("length of pustule array is " + this.unfilled.length);
-				  result = (this.special.unfilled[0].level / 30) * 100;
-	//			  msg("current pustule level is " + result);
-			  }
-			  return result;
-		  },
-		  get count() {
-//			  console.log("getting pustule count");
-			  return this.special.filled + this.special.unfilled.length;
-		  },
-		  get inactive() {
-			  return this.special.unfilled.length;
-		  },
-		  costs: [
-			  { name: "corruption", amount: 40, ratio: 1.2 }
-		  ],
-//		  ratio: 1.2,
-		  actions: [
-			  { subLabel: "Grow pustule",
-			    type: "main",
-			    press: function(code, isMain = false) {
-					devMsg("buy pustule called");
-					let grow = swamp.stack[code];
-					let getCosts = grow.costs;
-					let current = grow.count;
-					devMsg("pustule getCosts called");
-
-					if (resources.checkCostsByArray(getCosts, current).result == "pass") {
-						resources.payCostsByArray(getCosts, current);
-
-						swamp.stack[code].special.unfilled.push({ level: 0 });
-
-						updateLabel(swamp, code);
-						updateContentCosts2(swamp, code);
-						refreshProgAll(swamp, swamp.stack);
-					}
-					else if (isMain == true) {
-						//expand or close button
-						devMsg("isMain is TRUE, calling expandButton2");
-						let target = "swamp" + code;
-						expandButton2(target);
-					}
-				}
-			  },
-			  { subLabel: "Pop",
-			    type: "",
-			    press: function(code) {}
-			  },
-			  { subLabel: "Pop all",
-			    type: "",
-			    press: function(code) {
-		//			let count = swamp.stack[code].filled;
-
-					// call pop pustule code? check for amount fillable?
-				}
-			  }
-		  ],
-		  effects: [
-			  { stack: "resource", res: "corruption", type: "max", amount: 50, source: "swamp", button: "pustule" }
-		  ],
-		  lockedBy: [
-			  { type: "res", name: "corruption", amount: 30 },
-			  { type: "res", name: "sustenance", amount: 10 },
-			  { type: "button", stack: "swamp", name: "swell", amount: 1 }
-		  ],
-		  special: {
-			  filled: 0,
-			  unfilled: []		//try converting this to just numbers, not objects in numbers
-		  },
-/*		  onPurchase: function() {
-			  this.unfilled.push({ level: 0 });
-			  this.count += 1;
-			  this.updateButtonLabel();
-			  this.updateRatio();
-			  updateContentCosts(1);
-		  }, */
-		  fillPus: function(x) {
-//			  msg("fillPus called with value " + x);
-			  let sus = x;    //sustenance available
-			  let spent = 0;
-			  let count = this.unfilled.length; //get total number of unfilled pustules
-			  if (count > 0) {
-				  for (let i = 0; i < count; i++) {
-					  if (sus < 1) { 
-						  break;
-					  }
-					  this.unfilled[i].level += 1;
-					  sus -= 1;
-					  spent += 1;
-					  if (this.unfilled[i].level >= 30) {
-						  this.filled += 1;
-						  this.unfilled.shift();
-						  this.updateButtonLabel();
-					  }
 				  }
-			  }
-
-			  let newCount = this.unfilled.length;
-			  let progWidth = 0;
-			  if (newCount > 0) {
-				  progWidth = (this.unfilled[0].level / 30) * 100;
-			  } 
-
-			  document.getElementById(this.name + "Progress").style.width = progWidth + "%";
-			  
-			  return spent;
-		  },
-		  popPustule: function(count) {
-			  if (!(this.filled > 0)) {
-				  return;
-			  } else {
-				  this.filled -= 1;
+			  ],
+			  lockedBy: [
+				  { type: "res", name: "corruption", amount: 1 }
+			  ]
+			},
+			{ name: "digest",	//2
+			  label: "Digest prey",
+			  type: "gather",
+			  desc: "Process captured prey to generate Sustenance.",
+			  costs: [
+				  { name: "prey", amount: 2 }
+			  ],
+			  lockedBy: [
+				  { type: "res", name: "prey", amount: 1 }
+			  ],
+			  actions: [
+				  { subLabel: "Digest prey",
+				    type: "main",
+				    press: function(code, isMain = false) {
+						devMsg("Digest button called");
+						let getCosts = swamp.stack[code].costs;
+						devMsg("loaded getCosts");					
+						if (resources.checkCostsByArray(getCosts, 0).result == "pass" && resources.canAddAnyRes("sustenance")) {
+							devMsg("checked costs, checked to add res");
+							resources.payCostsByArray(getCosts, 0);
+							let r = resources.findResInStack("sustenance");
+							let a = 1;
+							resources.addRes(r, a);
+						} else if (isMain == true) {
+							//expand or close button
+							devMsg("isMain is TRUE, calling expandButton2");
+							let target = "swamp" + code;
+							expandButton2(target);
+						}
+					}
+				  }
+			  ]
+			},
+			{ name: "swell",    //3
+			  label: "Swell",
+			  desc: "A burgeoning swamp expands Corruption limits and enhances Festering.",
+			  count: 0,
+			  costs: [
+				  { name: "corruption", amount: 10, ratio: 1.3 }
+			  ],
+			  actions: [
+				  { subLabel: "Swell by 1m^2",
+				    type: "main",
+				    press: function(code, isMain = false) {
+						devMsg("buy swell called");
+						let swell = swamp.stack[code];
+						let getCosts = swell.costs;
+						let current = swell.count;
+						devMsg("swell getCosts called");
+	
+						if (resources.checkCostsByArray(getCosts, current).result == "pass") {
+							resources.payCostsByArray(getCosts, current);
+							swell.count += 1;
+	
+							updateLabel(swamp, code);
+							updateContentCosts2(swamp, code);
+						}
+						else if (isMain == true) {
+							//expand or close button
+							devMsg("isMain is TRUE, calling expandButton2");
+							let target = "swamp" + code;
+							expandButton2(target);
+						}					
+					}
+				  }
+			  ],
+			  effects: [
+				  { stack: "resource", res: "corruption", type: "perClick", amount: 0.1, source: "swamp", button: "swell" },
+				  { stack: "resource", res: "corruption", type: "max", amount: 5, source: "swamp", button: "swell" }
+			  ],
+			  unlocks: [],
+			  lockedBy: [
+				  { type: "res", name: "corruption", amount: 10 }
+			  ]
+			},
+			{ name: "pustule",     //4
+			  label: "Pustule",
+			  desc: `Pustules process Sustenance into a thick bile.</p><p>
+	Once full, pustules generate Corruption, and can be popped for Choler.`,
+			  hasProg: true,
+			  get prog() {
+				  let result = 0;
+				  if ( this.special.unfilled.length > 0 ) {
+		//			  msg ("length of pustule array is " + this.unfilled.length);
+					  result = (this.special.unfilled[0].level / 30) * 100;
+		//			  msg("current pustule level is " + result);
+				  }
+				  return result;
+			  },
+			  get count() {
+	//			  console.log("getting pustule count");
+				  return this.special.filled + this.special.unfilled.length;
+			  },
+			  get inactive() {
+				  return this.special.unfilled.length;
+			  },
+			  costs: [
+				  { name: "corruption", amount: 40, ratio: 1.2 }
+			  ],
+	//		  ratio: 1.2,
+			  actions: [
+				  { subLabel: "Grow pustule",
+				    type: "main",
+				    press: function(code, isMain = false) {
+						devMsg("buy pustule called");
+						let grow = swamp.stack[code];
+						let getCosts = grow.costs;
+						let current = grow.count;
+						devMsg("pustule getCosts called");
+	
+						if (resources.checkCostsByArray(getCosts, current).result == "pass") {
+							resources.payCostsByArray(getCosts, current);
+	
+							swamp.stack[code].special.unfilled.push({ level: 0 });
+	
+							updateLabel(swamp, code);
+							updateContentCosts2(swamp, code);
+							refreshProgAll(swamp, swamp.stack);
+						}
+						else if (isMain == true) {
+							//expand or close button
+							devMsg("isMain is TRUE, calling expandButton2");
+							let target = "swamp" + code;
+							expandButton2(target);
+						}
+					}
+				  },
+				  { subLabel: "Pop",
+				    type: "",
+				    press: function(code) {}
+				  },
+				  { subLabel: "Pop all",
+				    type: "",
+				    press: function(code) {
+			//			let count = swamp.stack[code].filled;
+	
+						// call pop pustule code? check for amount fillable?
+					}
+				  }
+			  ],
+			  effects: [
+				  { stack: "resource", res: "corruption", type: "max", amount: 50, source: "swamp", button: "pustule" }
+			  ],
+			  lockedBy: [
+				  { type: "res", name: "corruption", amount: 30 },
+				  { type: "res", name: "sustenance", amount: 10 },
+				  { type: "button", stack: "swamp", name: "swell", amount: 1 }
+			  ],
+			  special: {
+				  filled: 0,
+				  unfilled: []		//try converting this to just numbers, not objects in numbers
+			  },
+	/*		  onPurchase: function() {
 				  this.unfilled.push({ level: 0 });
-				  resources.gatherByName("choler");
+				  this.count += 1;
 				  this.updateButtonLabel();
-			  }  
-		  },
-/*		  updateButtonLabel: function() {				//READY TO DELETE
-			  let newLabel = this.label;
-				  if (this.count > 0) {
-					  newLabel = newLabel + " (" + this.filled + "/" + this.count + ")";
+				  this.updateRatio();
+				  updateContentCosts(1);
+			  }, */
+			  fillPus: function(x) {
+	//			  msg("fillPus called with value " + x);
+				  let sus = x;    //sustenance available
+				  let spent = 0;
+				  let count = this.unfilled.length; //get total number of unfilled pustules
+				  if (count > 0) {
+					  for (let i = 0; i < count; i++) {
+						  if (sus < 1) { 
+							  break;
+						  }
+						  this.unfilled[i].level += 1;
+						  sus -= 1;
+						  spent += 1;
+						  if (this.unfilled[i].level >= 30) {
+							  this.filled += 1;
+							  this.unfilled.shift();
+							  this.updateButtonLabel();
+						  }
+					  }
 				  }
-			  document.getElementById(this.name + "Label").innerText = newLabel;
-		  } */
-		},
-		{ name: "digestor",		//5
-		  label: "Digestor",
-		  desc: "This organ automatically processes captured prey into Sustenance.",
-		  count: 0,
-		  costs: [
-			  { name: "corruption", amount: 20, ratio: 1.2 },
-			  { name: "choler", amount: 50, ratio: 1.2 }
-		  ],
-		  actions: [],
-		  lockedBy: [
-			  { type: "res", name: "choler", amount: 10 },
-			  { type: "button", stack: "swamp", name: "pustule", amount: 2 }
-		  ]
-		},
-		{ name: "trap",			//6
-		  label: "Trap",
-		  desc: "Sticky traps make it easier to catch prey, and have a small chance to capture prey automatically.",
-		  count: 0,
-		  costs: [
-			  { name: "corruption", amount: 50, ratio: 1.2 },
-			  { name: "choler", amount: 20, ratio: 1.2 }
-		  ],
-		  actions: [],
-		  lockedBy: [
-			  { type: "res", name: "choler", amount: 10 }
-		  ]
-		},
-		{ name: "siren",		//7
-		  label: "Siren",
-		  desc: "Lure in advanced lifeforms.",
-		  count: 0,
-		  costs: [],
-		  ratio: 1.2,
-		  actions: [],
-		  lockedBy: [
-			  { type: "button", name: "trap", amount: 1 }
-		  ]
-		},
-		{ name: "nodule",		//8
-		  label: "Nodule",
-		  desc: "Store additional corruption.",
-		  count: 0,
-		  costs: [],
-		  ratio: 1.2,
-		  actions: [],
-		  isUnlocked: false,
-		  lockedBy: [
-			  { type: "res", name: "host", amount: 1 }
-		  ]
-		},
-		{ name: "corruptHost",	//9
-		  label: "Corrupt a host",
-		  type: "gather",
-		  desc: `Convert a captured native into your first corrupted Host.
-(Starts phase 2)`,
-		  actions: [],
-		  lockedBy: [
-			  { type: "res", name: "host", amount: 1 }
-		  ]
-		}
-		],
-	findEntry: function(name) {
+	
+				  let newCount = this.unfilled.length;
+				  let progWidth = 0;
+				  if (newCount > 0) {
+					  progWidth = (this.unfilled[0].level / 30) * 100;
+				  } 
+	
+				  document.getElementById(this.name + "Progress").style.width = progWidth + "%";
+				  
+				  return spent;
+			  },
+			  popPustule: function(count) {
+				  if (!(this.filled > 0)) {
+					  return;
+				  } else {
+					  this.filled -= 1;
+					  this.unfilled.push({ level: 0 });
+					  resources.gatherByName("choler");
+					  this.updateButtonLabel();
+				  }  
+			  },
+	/*		  updateButtonLabel: function() {				//READY TO DELETE
+				  let newLabel = this.label;
+					  if (this.count > 0) {
+						  newLabel = newLabel + " (" + this.filled + "/" + this.count + ")";
+					  }
+				  document.getElementById(this.name + "Label").innerText = newLabel;
+			  } */
+			},
+			{ name: "digestor",		//5
+			  label: "Digestor",
+			  desc: "This organ automatically processes captured prey into Sustenance.",
+			  count: 0,
+			  costs: [
+				  { name: "corruption", amount: 20, ratio: 1.2 },
+				  { name: "choler", amount: 50, ratio: 1.2 }
+			  ],
+			  actions: [],
+			  lockedBy: [
+				  { type: "res", name: "choler", amount: 10 },
+				  { type: "button", stack: "swamp", name: "pustule", amount: 2 }
+			  ]
+			},
+			{ name: "trap",			//6
+			  label: "Trap",
+			  desc: "Sticky traps make it easier to catch prey, and have a small chance to capture prey automatically.",
+			  count: 0,
+			  costs: [
+				  { name: "corruption", amount: 50, ratio: 1.2 },
+				  { name: "choler", amount: 20, ratio: 1.2 }
+			  ],
+			  actions: [],
+			  lockedBy: [
+				  { type: "res", name: "choler", amount: 10 }
+			  ]
+			},
+			{ name: "siren",		//7
+			  label: "Siren",
+			  desc: "Lure in advanced lifeforms.",
+			  count: 0,
+			  costs: [],
+			  ratio: 1.2,
+			  actions: [],
+			  lockedBy: [
+				  { type: "button", stack: "swamp", name: "trap", amount: 1 }
+			  ]
+			},
+			{ name: "nodule",		//8
+			  label: "Nodule",
+			  desc: "Store additional corruption.",
+			  count: 0,
+			  costs: [],
+			  ratio: 1.2,
+			  actions: [],
+			  isUnlocked: false,
+			  lockedBy: [
+				  { type: "res", name: "host", amount: 1 }
+			  ]
+			},
+			{ name: "corruptHost",	//9
+			  label: "Corrupt a host",
+			  type: "gather",
+			  desc: `Convert a captured native into your first corrupted Host.
+	(Starts phase 2)`,
+			  actions: [],
+			  lockedBy: [
+				  { type: "res", name: "host", amount: 1 }
+			  ]
+			}
+			]
+	}
+	findEntry(name) {
 		let findName = name;
 		for (let i = 0; i < swamp.stack.length; i++) {
 			if (swamp.stack[i].name == findName) {
 				return i;
 			}
 		}
-	},
-	buyEntry: function(num) { }
+	}
+	buyEntry(num) { } //flag for deletion
 }
-
 
 // ---- end phase 1 buildings ---- //
 
@@ -784,123 +794,126 @@ function findEntry(stack, name) {
 }
 
 
-const resources = {};
-const resourcesBase = {
-	name: "resources object",
-	stack: [
-		{ name: "corruption", // 0
-		  label: "Corruption",
-		  current: 0,
-		  limited: true,
-		  isUnlocked: true,
-		  max: 50,
-		  overflow: 0,
-		  perTick: 0,
-		  gatherRate: 1,
-		  updateMax: function() {					//FLAG need to build into EFFECTS object arrays
-			  let swl = findBldgInSwamp("swell");
-			  let pus = findBldgInSwamp("pustule");
-			  let newMax = 50 + (swamp.stack[swl].count * 5) + (swamp.stack[pus].count * 50);
-			  this.max = newMax;
-		  }
-		},
-		{ name: "prey", // 1
-		  label: "Prey",
-		  current: 0,
-		  limited: true,
-		  isUnlocked: true,
-		  max: 25,
-		  perTick: 0,
-		  gatherChance: 0.25,
-		  gather: function() {
-			  let totalRes = this.current;
-			  let chance = this.gatherChance;
-			  if (chance >= Math.random()) {
-				  totalRes += 1;
-				  msg("you have captured prey!");
+let resources = {};
+class ResourcesBase {
+	name = "resources object";
+	stack;
+	constructor() {
+		this.stack = [
+			{ name: "corruption", // 0
+			  label: "Corruption",
+			  current: 0,
+			  limited: true,
+			  isUnlocked: true,
+			  max: 50,
+			  overflow: 0,
+			  perTick: 0,
+			  gatherRate: 1,
+			  updateMax: function() {					//FLAG need to build into EFFECTS object arrays
+				  let swl = findBldgInSwamp("swell");
+				  let pus = findBldgInSwamp("pustule");
+				  let newMax = 50 + (swamp.stack[swl].count * 5) + (swamp.stack[pus].count * 50);
+				  this.max = newMax;
 			  }
-			  else {
-				  msg("you have failed to capture any prey");
+			},
+			{ name: "prey", // 1
+			  label: "Prey",
+			  current: 0,
+			  limited: true,
+			  isUnlocked: true,
+			  max: 25,
+			  perTick: 0,
+			  gatherChance: 0.25,
+			  gather: function() {
+				  let totalRes = this.current;
+				  let chance = this.gatherChance;
+				  if (chance >= Math.random()) {
+					  totalRes += 1;
+					  msg("you have captured prey!");
+				  }
+				  else {
+					  msg("you have failed to capture any prey");
+				  }
+				  if (totalRes >= this.max) {
+					  this.current = this.max;
+				  } else {
+					  this.current = round3(totalRes);
+				  }
 			  }
-			  if (totalRes >= this.max) {
-				  this.current = this.max;
-			  } else {
-				  this.current = round3(totalRes);
+			},
+			{ name: "sustenance", //2
+			  label: "Sustenance",
+			  current: 0,
+			  limited: true,
+			  isUnlocked: false,
+			  max: 40,
+			  perTick: 0,
+			  gatherRate: 1,
+			  gatherCost: [
+				  { name: "prey", amount: 2 }
+				  ],
+			  gather: function() {
+				  let totalRes = this.current;
+	
+				  //update target resource
+				  totalRes += this.gatherRate;
+				  if (totalRes >= this.max) {
+					  this.current = this.max;
+				  } else {
+					  this.current = round3(totalRes);
+				  }
+				  resources.loadResourcePanel(); // need to clean up this code
+			  },
+			  updateGatherRate: function() {
+				  msg("sustenance rate is " + this.gatherRate + " per click. Not yet defined.");
+			  },
+			  updatePerTick: function() {
+				  this.perTick = 1; // need to define logic.
+				  msg("Amount per tick is now " + this.perTick + " per click.");
 			  }
-		  }
-		},
-		{ name: "sustenance", //2
-		  label: "Sustenance",
-		  current: 0,
-		  limited: true,
-		  isUnlocked: false,
-		  max: 40,
-		  perTick: 0,
-		  gatherRate: 1,
-		  gatherCost: [
-			  { name: "prey", amount: 2 }
-			  ],
-		  gather: function() {
-			  let totalRes = this.current;
-
-			  //update target resource
-			  totalRes += this.gatherRate;
-			  if (totalRes >= this.max) {
-				  this.current = this.max;
-			  } else {
-				  this.current = round3(totalRes);
+			},
+			{ name: "choler", //3
+			  label: "Choler",
+			  current: 0,
+			  limited: true,
+			  isUnlocked: false,
+			  max: 150,
+			  perTick: 0,
+			  gatherRate: 30,
+			  gather: function() {
+				  let totalRes = this.current;
+				  totalRes += this.gatherRate;
+	
+				  if (totalRes >= this.max) {
+					  this.current = this.max;
+				  } else {
+					  this.current = round3(totalRes);
+				  }
 			  }
-			  resources.loadResourcePanel(); // need to clean up this code
-		  },
-		  updateGatherRate: function() {
-			  msg("sustenance rate is " + this.gatherRate + " per click. Not yet defined.");
-		  },
-		  updatePerTick: function() {
-			  this.perTick = 1; // need to define logic.
-			  msg("Amount per tick is now " + this.perTick + " per click.");
-		  }
-		},
-		{ name: "choler", //3
-		  label: "Choler",
-		  current: 0,
-		  limited: true,
-		  isUnlocked: false,
-		  max: 150,
-		  perTick: 0,
-		  gatherRate: 30,
-		  gather: function() {
-			  let totalRes = this.current;
-			  totalRes += this.gatherRate;
-
-			  if (totalRes >= this.max) {
-				  this.current = this.max;
-			  } else {
-				  this.current = round3(totalRes);
-			  }
-		  }
-		},
-		{ name: "native", //4
-		  // need to build in way to change based upon phase -- native > subject > citizen > ??
-		  // try making label a function, add a switch based upon phase
-		  label: "Native",
-		  current: 0,
-		  limited: false,
-		  isUnlocked: false
-		},
-		{ name: "host", //5
-		 	// hosts are controllable by the player in phase 2
-		  label: "Hosts",
-		  current: 0,
-		  limited: false,
-		  isUnlocked: false,
-		  gatherRate: 1,
-		  gatherCost: [
-			  { name: "corruption", amount: 2000 },
-			  { name: "native", amount: 1 }
-			  ]
-		}
-	],
-	addRes: function(resCode, amount) {
+			},
+			{ name: "native", //4
+			  // need to build in way to change based upon phase -- native > subject > citizen > ??
+			  // try making label a function, add a switch based upon phase
+			  label: "Native",
+			  current: 0,
+			  limited: false,
+			  isUnlocked: false
+			},
+			{ name: "host", //5
+			 	// hosts are controllable by the player in phase 2
+			  label: "Hosts",
+			  current: 0,
+			  limited: false,
+			  isUnlocked: false,
+			  gatherRate: 1,
+			  gatherCost: [
+				  { name: "corruption", amount: 2000 },
+				  { name: "native", amount: 1 }
+				  ]
+			}
+		]
+	}
+	addRes(resCode, amount) {
 		devMsg("resources.addRes called with resCode " + resCode + " and amount " + amount);
 		let res = this.stack[resCode];
 		let totalRes = res.current;
@@ -915,15 +928,15 @@ const resourcesBase = {
 		}
 		this.loadResource(resCode);
 		devMsg("addRes completed");
-	},
-	canAddAnyRes: function(res) {
+	}
+	canAddAnyRes(res) {
 		let checkType = typeof res;
 		let resCode = (checkType == "number") ? res : resources.findResInStack(res);		
 		let targetRes = resources.stack[resCode];
 		let result = (targetRes.current < targetRes.max) ? true : false;
 		return result;
-	},
-	checkCosts: function(x) {					// FLAG for possible deletion
+	}
+	checkCosts(x) {					// FLAG for possible deletion
 		let result = { result: "fail", reason: "failed function" };
 //		if (!this.stack[x].gatherCost.length > 0) {
 		if (this.stack[x].gatherCost === undefined) {
@@ -943,8 +956,8 @@ const resourcesBase = {
 		result.result = "pass";
 		result.reason = "sufficient resources";
 		return result;	
-	},
-	checkCostsByArray: function(array, multi) {		//send resources.checkCostsByArray an array of costs to check
+	}
+	checkCostsByArray(array, multi) {		//send resources.checkCostsByArray an array of costs to check
 		let result = { result: "fail", reason: "failed function" };
 		if (array === undefined) {
 			result = { result: "pass", reason: "no costs" };
@@ -964,8 +977,8 @@ const resourcesBase = {
 		result.reason = "sufficient resources";
 		devMsg(result.result + " " + result.reason);
 		return result;
-	},
-	payCostsByArray: function(array, multi) {
+	}
+	payCostsByArray(array, multi) {
 		for (let i = 0; i < array.length; i++) {
 			let priceName = array[i].name;
 			let priceCode = resources.findResInStack(priceName);
@@ -974,20 +987,20 @@ const resourcesBase = {
 			resources.loadResource(priceCode);
 		}
 		msg("payCostsByArray completed");
-	},
-	findResInStack: function(name) {
+	}
+	findResInStack(name) {
 		let findName = name;
 		for (let i = 0; i < this.stack.length; i++) {
 			if (this.stack[i].name == findName) {
 				return i;
 			}
 		}
-	},
-	gatherByName: function(res) {
+	}
+	gatherByName(res) {
 		let code = this.findResInStack(res);
 		this.gather(code);
-	},
-	loadResource: function(resource) {
+	}
+	loadResource(resource) {
 		let resName = this.stack[resource].name;
 		let resCurrent = round3(this.stack[resource].current);
 
@@ -998,8 +1011,8 @@ const resourcesBase = {
 		
 			document.getElementById(resName + 'Max').innerText = resMax;
 		}
-	},
-	loadResourcePanel: function() {
+	}
+	loadResourcePanel() {
 		for (let i = 0; i < this.stack.length; i++) {
 			let resName = this.stack[i].name;
 			let resCurrent = round3(this.stack[i].current);
@@ -1007,7 +1020,8 @@ const resourcesBase = {
 			if (this.stack[i].isUnlocked == false) { // temp to test if identification of locked/unlocked is working
 				if (resCurrent > 0) {
 					this.stack[i].isUnlocked = true;
-					document.getElementById("res" + i + "row").classList.remove("hidden");   // unlock resource if user has any
+					let resRow = document.getElementById("res" + i + "row");
+					if (resRow) resRow.classList.remove("hidden");   // unlock resource if user has any
 				} else { 
 					continue; } // otherwise, stop the iteration and move on to the next resource
 			}
@@ -1020,8 +1034,8 @@ const resourcesBase = {
 				document.getElementById(resName + 'Max').innerText = resMax;
 			}
 		}
-	},
-	updatePerTick: function() {
+	}
+	updatePerTick() {
 		// a bunch of stuff is needed here to calculate pertick values for all resources
 		// likely a for loop
 		// the code below is specifically for pustules and sustenance only
@@ -1050,8 +1064,64 @@ const resourcesBase = {
 
 
 
-const research = {};
-const researchBase = {
+let research = {};
+class TechBase {
+	name = "research";
+	stack;
+	constructor() {
+		this.stack = [
+			{ name: "calendar",
+			  label: "Calendar",
+			  desc: "Discover the world's cyclical cycle.",
+			  flavor: null,
+			  costs: [
+				  { name: "corruption", amount: 10 }
+			  ],
+			  purchased: false,
+			  actions: [
+				  { subLabel: "Research",
+					type: "main",
+					press: function(code, isMain = false) {
+						devMsg("purchasing research");
+						let cal = research.stack[code];
+						let getCosts = cal.costs;
+	
+						if (resources.checkCostsByArray(getCosts, 0).result == "pass") {
+							resources.payCostsByArray(getCosts, 0);
+							calendar.activateCal();
+							cal.purchased = true;
+							buildGrid(research, research.stack, true);
+						}
+						else if (isMain == true) {
+							let target = "research" + code;
+							expandButton2(target);
+						}
+					}
+				  }
+			  ],
+			  effects: [],
+			  unlocks: []
+			},
+			{ name: "stone tools",
+			  label: "Stone tools",
+			  desc: "Improve hunting and gathering with tools made of stone.",
+			  flavor: "sometimes you just have to hit something with a rock.",
+			  costs: [
+				  { name: "corruption", amount: 15 }
+			  ],
+			  purchased: false,
+			  lockedBy: [
+				  { type: "tech", name: "calendar" }
+			  ],
+			  actions: [],
+			  effects: [],
+			  unlocks: []
+			}
+		]
+	}
+}
+
+/* const researchBase = {
 	name: "research",
 	stack: [
 		{ name: "calendar",
@@ -1104,11 +1174,11 @@ const researchBase = {
 
 	
 	]
-};
+}; */
 	
-/*
 
-*/
+
+
 
 // --- close science object --- //
 
@@ -1125,11 +1195,10 @@ function findBldgInSwamp(name) {
 // -- start loading items here -- //
 
 function loadGame() {	//runs at end of HTML load
-// Object.assign(TO,FROM);
-	Object.assign(swamp, swampBase);
-	Object.assign(resources, resourcesBase);
-	Object.assign(game, gameBase);
-	Object.assign(research, researchBase);
+	swamp = new SwampBase();
+	resources = new ResourcesBase();
+	game = new GameBase();
+	research = new TechBase();
 	game.buildNav();
 	timing.activateBelt();
 	resources.loadResourcePanel();
@@ -1151,6 +1220,7 @@ function getContentCosts(stack, num) {
 	
 	let prices = stack.stack[num].costs;
 	let dispCost = "";
+	if (!prices) return dispCost;
 	let count = stack.stack[num].count;
 	for (let i = 0; i < prices.length; i++) {
 		let priceName = prices[i].name;
@@ -1537,7 +1607,17 @@ const dev = [
 	  run: function() { 
 		  devUnlockAll(); 
 	  }
+	},
+	{ name: "button17",
+	  label: "How deep are the copies?",
+	  run: function() {
+		  let fooo = new TechBase();
+		  msg("research shows that calendar purchased is " + research.stack[0].purchased + " and fooo shows that calendar purchased is " + fooo.stack[0].purchased);
+	  }
 	}
+
+
+	
 /*	{ name: "buttonX",
 	  label: "blank",
 	  run: function() { }
@@ -1654,3 +1734,5 @@ function msg(messagetext) {
 	}
 	document.getElementById("messagebox").innerHTML = finalArray;
 }
+
+// loadGame();
