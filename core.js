@@ -1184,7 +1184,7 @@ class TechBase {
 
 
 let effectsManager = {}
-class EffectsManagerBase = {
+class EffectsManagerBase {
 	swampEffectsCache = [];
 	researchEffectsCache = [];
 	allCachedEffects = [];
