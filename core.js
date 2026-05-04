@@ -1186,7 +1186,6 @@ class TechBase {
 let effectsManager = {}
 class EffectsManagerBase = {
 	swampEffectsCache = [];
-	SwampEffectsCache = [];
 	researchEffectsCache = [];
 	allCachedEffects = [];
 	constructor() {}
@@ -1206,7 +1205,7 @@ class EffectsManagerBase = {
 				buildEffects.push(effects[j]);
 			}
 		}
-		this.source.name + "Effects Cache" = buildEffects;
+		this[source.name + "Effects Cache"] = buildEffects;
 		
 		//take a stack, review buttons, produce an array of effect values as objects
 		//each value is calculated based upon number of buildings, etc.
@@ -1544,7 +1543,7 @@ const calendar = {
 //-- start dev object --//
 
 const dev = [
-	{ name: "button0",
+/*	{ name: "button0",
 	  label: "activate calendar",
 	  run: function() {  
 		  calendar.activateCal();
@@ -1577,7 +1576,7 @@ const dev = [
 			  }
 		  }
 	  }
-	},
+	}, */
 	{ name: "button4",
 	  label: "add prey",
 	  run: function() {
@@ -1650,16 +1649,27 @@ const dev = [
 		  devUnlockAll(); 
 	  }
 	},
-	{ name: "button17",
+/*	{ name: "button17",
 	  label: "How deep are the copies?",
 	  run: function() {
 		  let fooo = new TechBase();
 		  msg("research shows that calendar purchased is " + research.stack[0].purchased + " and fooo shows that calendar purchased is " + fooo.stack[0].purchased);
 	  }
+	} */
+	{ name: "button18",
+	  label: "effectsManager testing",
+	  run: function() {
+		  effectsManager.getEffectStack(swamp);
+		  msg("completed getEffectStack for swamp");
+		  let bob = effectsManager.swampEffectsCache;
+		  let text = "";
+		  for ( let i = 0; i < bob.length; i++ ) {
+			  text += Object.entries(bob[i]) + "<br />";
+			  msg(i);
+		  }
+		  msg(text);
+	  }
 	}
-
-
-	
 /*	{ name: "buttonX",
 	  label: "blank",
 	  run: function() { }
