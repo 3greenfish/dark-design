@@ -150,7 +150,7 @@ function buildGrid(source, sourceArray, refresh = false) {
 
 function testUnlock(button) {
 	if (button.isUnlocked == true) {
-		msg("WARNING, BUTTON ALREADY UNLOCKED");
+		msg("WARNING, BUTTON ALREADY UNLOCKED, SOMETHING IS SERIOUSLY WRONG");
 		return true;
 	}
 //	msg("testUnlock opened");
@@ -1181,6 +1181,29 @@ class TechBase {
 
 
 // --- close science object --- //
+
+
+let effectsManager = {}
+class EffectsManagerBase = {
+	swampEffectsCache = [];
+	researchEffectsCache = [];
+	allCachedEffects = [];
+	constructor() {}
+	getEffectStack(stack) {
+		//take a stack, review buttons, produce an array of effect values as objects
+		//each value is calculated based upon number of buildings, etc.
+		//store this value in the applicable effectsCache
+	}
+	getAllCache() {
+		//grab base effects from resources object
+		//grab effects from each of the caches
+		//assemble into a final object of all properties
+	}
+	
+}
+
+
+
 
 
 function findBldgInSwamp(name) {
