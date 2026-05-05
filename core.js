@@ -1280,7 +1280,7 @@ class EffectsManagerBase {
 			if ( test === true ) {
 				this.cache[entry.effect] += entry.value;
 			} else {
-				Object.defineProperty(this.cache, entry.effect, entry.value);
+				this.cache[entry.effect] = entry.value;
 			}
 		}
 
