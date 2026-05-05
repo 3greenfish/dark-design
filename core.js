@@ -534,6 +534,7 @@ class SwampBase {
 			  label: "Swell",
 			  desc: "A burgeoning swamp expands Corruption limits and enhances Festering.",
 			  count: 0,
+			  stackable: true,
 			  costs: [
 				  { name: "corruption", amount: 10, ratio: 1.3 }
 			  ],
@@ -590,6 +591,7 @@ class SwampBase {
 	//			  console.log("getting pustule count");
 				  return this.special.filled + this.special.unfilled.length;
 			  },
+			  stackable: true,
 			  get inactive() {
 				  return this.special.unfilled.length;
 			  },
@@ -709,6 +711,7 @@ class SwampBase {
 			  label: "Digestor",
 			  desc: "This organ automatically processes captured prey into Sustenance.",
 			  count: 0,
+			  stackable: true,
 			  costs: [
 				  { name: "corruption", amount: 20, ratio: 1.2 },
 				  { name: "choler", amount: 50, ratio: 1.2 }
@@ -723,6 +726,7 @@ class SwampBase {
 			  label: "Trap",
 			  desc: "Sticky traps make it easier to catch prey, and have a small chance to capture prey automatically.",
 			  count: 0,
+			  stackable: true,
 			  costs: [
 				  { name: "corruption", amount: 50, ratio: 1.2 },
 				  { name: "choler", amount: 20, ratio: 1.2 }
@@ -739,6 +743,7 @@ class SwampBase {
 			  label: "Siren",
 			  desc: "Lure in advanced lifeforms.",
 			  count: 0,
+			  stackable: true,
 			  costs: [],
 			  ratio: 1.2,
 			  actions: [],
@@ -753,6 +758,7 @@ class SwampBase {
 			  label: "Nodule",
 			  desc: "Store additional corruption.",
 			  count: 0,
+			  stackable: true,
 			  costs: [],
 			  ratio: 1.2,
 			  actions: [],
@@ -1104,6 +1110,7 @@ class TechBase {
 				  { name: "corruption", amount: 10 }
 			  ],
 			  purchased: false,
+			  stackable: false,
 			  actions: [
 				  { subLabel: "Research",
 					type: "main",
@@ -1136,11 +1143,14 @@ class TechBase {
 				  { name: "corruption", amount: 15 }
 			  ],
 			  purchased: false,
+			  stackable: false,
 			  lockedBy: [
 				  { type: "tech", name: "calendar" }
 			  ],
 			  actions: [],
-			  effects: [],
+			  effects: [
+				  { effect: "woodcutterJobPerTick", value: 1 }
+			  ],
 			  unlocks: []
 			}
 		]
@@ -1213,7 +1223,7 @@ let effectsManager = {}
 class EffectsManagerBase {
 	swampEffectsCache = [];
 	researchEffectsCache = [];
-	allCachedEffects = [];
+	effects = {};
 	constructor() {}
 	getEffectStack(source) {
 		let stack = source.stack;
@@ -1239,8 +1249,35 @@ class EffectsManagerBase {
 	}
 	getAllCache() {
 		//grab base effects from resources object
+		let baseCache = resources.effectsBase;
+
 		//grab effects from each of the caches
+		let swampCache = effectsManager.swampEffectsCache;
+		let researchCache = effectsManager.researchEffectsCache;
+		//additional caches here
+		
+		//make a combined array
+		let combinedArray = [...baseCache, ...swampCache, ...researchCache];
+		
+		//temporary code to check what is happening
+		let text = "";
+		for ( let i = 0; i < combinedArray.length; i++ ) {
+			text += Object.entries(combinedArray[i]) + "<br />";
+			msg(i);
+		}
+		msg(text);
+
 		//assemble into a final object of all properties
+		//set effects property to {}
+
+		//FOR loop through combined array
+			//each item, check for additional calculations
+			//finalize into either property and value or two values in array
+			//check to see if property exists in effectsManager.effects
+				//if it does, add value to existing value
+				//if it does not, add property and add value
+		//should produce an effects object consisting of a variety of properties corresponding to the effects values from all buttons etc.
+
 	}
 	
 }
@@ -1686,14 +1723,18 @@ const dev = [
 	  label: "effectsManager testing",
 	  run: function() {
 		  effectsManager.getEffectStack(swamp);
-		  msg("completed getEffectStack for swamp");
-		  let bob = effectsManager.swampEffectsCache;
+		  effectsManager.getEffectStack(research);
+		  msg("completed getEffectStack for swamp and research");
+
+		  effectsManagers.getAllCache();		  
+		  
+		  /*let bob = effectsManager.swampEffectsCache;
 		  let text = "";
 		  for ( let i = 0; i < bob.length; i++ ) {
 			  text += Object.entries(bob[i]) + "<br />";
 			  msg(i);
 		  }
-		  msg(text);
+		  msg(text); */
 	  }
 	}
 /*	{ name: "buttonX",
