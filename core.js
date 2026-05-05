@@ -934,7 +934,8 @@ class ResourcesBase {
 			{ effect: "cholerPerTick", value: 0 },
 			{ effect: "cholerPerClick", value: 30 },
 			{ effect: "nativeMax", value: 10 },
-			{ effect: "hostMax", value: "nativeMax" },
+//			{ effect: "hostMax", value: "nativeMax" },
+			{ effect: "hostMax", value: 10 },
 			{ effect: "hostPerClick", value: 1 }
 		]
 
