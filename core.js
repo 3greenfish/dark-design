@@ -1258,7 +1258,7 @@ class EffectsManagerBase {
 		//additional caches here
 		
 		//make a combined array
-		let combinedArray = [...baseCache, ...swampCache /*, ...researchCache */];
+		let combinedArray = [/*...baseCache, */...swampCache /*, ...researchCache */];
 		
 		//temporary code to check what is happening
 		let text = "";
