@@ -1224,7 +1224,7 @@ let effectsManager = {}
 class EffectsManagerBase {
 	swampEffectsCache = [];
 	researchEffectsCache = [];
-	effects = {};
+	cache = {};
 	constructor() {}
 	getEffectStack(source) {
 		let stack = source.stack;
@@ -1268,9 +1268,39 @@ class EffectsManagerBase {
 		}
 		msg(text);
 
+		//clear cache object
+		this.cache = {};
+		
 		//assemble into a final object of all properties
 		//set effects property to {}
 
+		for (let j = 0; j < combinedArray.length; j++) {
+			let entry = combinedArray[j];
+			let test = (entry.effect in this.cache);
+			if ( test === true ) {
+				this.cache[entry.effect] += entry.value;
+			} else {
+				Object.defineProperty(this.cache, entry.effect, entry.value);
+			}
+		}
+
+
+
+		/* 
+let test = { try: "age" };
+
+const person = {
+  firstName: "John",
+  lastName : "Doe",
+  age      :  50
+};
+
+let result = (test.try in person);
+
+if (result == true) { person.test.try += 25 };
+*/
+
+		
 		//FOR loop through combined array
 			//each item, check for additional calculations
 			//finalize into either property and value or two values in array
@@ -1723,6 +1753,7 @@ const dev = [
 	{ name: "button18",
 	  label: "effectsManager testing",
 	  run: function() {
+		  swamp.stack[3].count++; 	//add swell
 		  effectsManager.getEffectStack(swamp);
 		  effectsManager.getEffectStack(research);
 		  msg("completed getEffectStack for swamp and research");
