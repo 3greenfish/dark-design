@@ -1261,13 +1261,13 @@ class EffectsManagerBase {
 		let combinedArray = [...baseCache, ...swampCache, ...researchCache];
 		
 		//temporary code to check what is happening
-		let text = "";
+/*		let text = "";
 		for ( let i = 0; i < combinedArray.length; i++ ) {
 			text += Object.entries(combinedArray[i]) + "<br />";
 			msg(i);
 		}
 		msg(text);
-
+*/
 		//clear cache object
 		this.cache = {};
 		
@@ -1284,6 +1284,13 @@ class EffectsManagerBase {
 			}
 		}
 
+		// temporary code to expand object.
+		let text = "";
+
+		for (let [effect, value] of Object.entries(this.cache)) {
+			text += effect + ": " + value + "<br />";
+		}
+		msg(text);
 
 
 		/* 
