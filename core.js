@@ -1254,11 +1254,11 @@ class EffectsManagerBase {
 
 		//grab effects from each of the caches
 		let swampCache = effectsManager.swampEffectsCache;
-		let researchCache = effectsManager.researchEffectsCache;
+//		let researchCache = effectsManager.researchEffectsCache;
 		//additional caches here
 		
 		//make a combined array
-		let combinedArray = [...baseCache, ...swampCache, ...researchCache];
+		let combinedArray = [...baseCache, ...swampCache /*, ...researchCache */];
 		
 		//temporary code to check what is happening
 		let text = "";
