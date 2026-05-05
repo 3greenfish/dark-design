@@ -730,6 +730,9 @@ class SwampBase {
 			  actions: [],
 			  lockedBy: [
 				  { type: "res", name: "choler", amount: 10 }
+			  ],
+			  effects: [
+				  { effect: "preyMax", value: 5 }
 			  ]
 			},
 			{ name: "siren",		//7
@@ -741,6 +744,9 @@ class SwampBase {
 			  actions: [],
 			  lockedBy: [
 				  { type: "button", stack: "swamp", name: "trap", amount: 1 }
+			  ],
+			  effects: [
+				  { effect: "nativeMax", value: 1 }
 			  ]
 			},
 			{ name: "nodule",		//8
@@ -760,6 +766,10 @@ class SwampBase {
 			  type: "gather",
 			  desc: `Convert a captured native into your first corrupted Host.
 	(Starts phase 2)`,
+			  costs: [
+				  { name: "corruption", amount: 2000, ratio: 1.01 },
+				  { name: "native", amount: 1 }		//FLAG -- do we need a ratio on any cost?
+				  ],
 			  actions: [],
 			  lockedBy: [
 				  { type: "res", name: "host", amount: 1 }
@@ -798,17 +808,15 @@ let resources = {};
 class ResourcesBase {
 	name = "resources object";
 	stack;
+	effectsBase = [];
 	constructor() {
 		this.stack = [
 			{ name: "corruption", // 0
 			  label: "Corruption",
 			  current: 0,
+			  overflow: 0,
 			  limited: true,
 			  isUnlocked: true,
-			  max: 50,
-			  overflow: 0,
-			  perTick: 0,
-			  gatherRate: 1,
 			  updateMax: function() {					//FLAG need to build into EFFECTS object arrays
 				  let swl = findBldgInSwamp("swell");
 				  let pus = findBldgInSwamp("pustule");
@@ -819,11 +827,9 @@ class ResourcesBase {
 			{ name: "prey", // 1
 			  label: "Prey",
 			  current: 0,
+			  overflow: 0,
 			  limited: true,
 			  isUnlocked: true,
-			  max: 25,
-			  perTick: 0,
-			  gatherChance: 0.25,
 			  gather: function() {
 				  let totalRes = this.current;
 				  let chance = this.gatherChance;
@@ -844,15 +850,13 @@ class ResourcesBase {
 			{ name: "sustenance", //2
 			  label: "Sustenance",
 			  current: 0,
+			  overflow: 0,
 			  limited: true,
 			  isUnlocked: false,
-			  max: 40,
-			  perTick: 0,
-			  gatherRate: 1,
-			  gatherCost: [
+			  gatherCost: [			//FLAG for deletion
 				  { name: "prey", amount: 2 }
 				  ],
-			  gather: function() {
+			  gather: function() {	//FLAG for deletion
 				  let totalRes = this.current;
 	
 				  //update target resource
@@ -864,10 +868,10 @@ class ResourcesBase {
 				  }
 				  resources.loadResourcePanel(); // need to clean up this code
 			  },
-			  updateGatherRate: function() {
+			  updateGatherRate: function() {		//FLAG for deletion
 				  msg("sustenance rate is " + this.gatherRate + " per click. Not yet defined.");
 			  },
-			  updatePerTick: function() {
+			  updatePerTick: function() {		//FLAG for deletion
 				  this.perTick = 1; // need to define logic.
 				  msg("Amount per tick is now " + this.perTick + " per click.");
 			  }
@@ -875,12 +879,10 @@ class ResourcesBase {
 			{ name: "choler", //3
 			  label: "Choler",
 			  current: 0,
+			  overflow: 0,
 			  limited: true,
 			  isUnlocked: false,
-			  max: 150,
-			  perTick: 0,
-			  gatherRate: 30,
-			  gather: function() {
+			  gather: function() { //FLAG for deletion
 				  let totalRes = this.current;
 				  totalRes += this.gatherRate;
 	
@@ -896,7 +898,7 @@ class ResourcesBase {
 			  // try making label a function, add a switch based upon phase
 			  label: "Native",
 			  current: 0,
-			  limited: false,
+			  limited: true,		//FLAG maybe this should be true?
 			  isUnlocked: false
 			},
 			{ name: "host", //5
@@ -905,13 +907,37 @@ class ResourcesBase {
 			  current: 0,
 			  limited: false,
 			  isUnlocked: false,
-			  gatherRate: 1,
 			  gatherCost: [
 				  { name: "corruption", amount: 2000 },
 				  { name: "native", amount: 1 }
 				  ]
 			}
 		]
+		this.effectsBase = [			//FLAG that some of these values may not be necessary
+			{ effect: "corruptionMax", value: 50 },
+			{ effect: "corruptionPerTick", value: 0 },
+			{ effect: "corruptionPerClick", value: 1 },
+			{ effect: "preyMax", value: 25 },
+			{ effect: "preyPerTick", value: 0 },
+			{ effect: "preyPerClickChance", value: 0.25 },
+			{ effect: "prerPerTickChance", value: 0.1 },
+			{ effect: "sustenanceMax", value: 40 },
+			{ effect: "sustenancePerTick", value: 0 },
+			{ effect: "sustenancePerClick", value: 1 },
+			{ effect: "cholerMax", value: 150 },
+			{ effect: "cholerPerTick", value: 0 },
+			{ effect: "cholerPerClick", value: 30 },
+			{ effect: "nativeMax", value: 10 },
+			{ effect: "hostMax", value: "nativeMax" },
+			{ effect: "hostPerClick", value: 1 }
+		]
+
+
+		
+//			{ effect: "", value: },
+
+
+		
 	}
 	addRes(resCode, amount) {
 		devMsg("resources.addRes called with resCode " + resCode + " and amount " + amount);
