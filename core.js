@@ -452,7 +452,7 @@ class SwampBase {
 				    type: "main", 
 				    press: function(code, isMain = false) {
 						let r = resources.findResInStack("corruption");
-						let a = resources.stack[r].gatherRate;
+						let a = effectsManager.cache.corruptionPerClick;
 						resources.addRes(r, a);
 	
 						devMsg("code is " + code + ", isMain is " + isMain);
@@ -475,7 +475,7 @@ class SwampBase {
 				    press: function(code, isMain = false) {
 						let r = resources.findResInStack("prey");
 						let res = resources.stack[r];
-						let ch = res.gatherChance; // FLAG FOR CALCULATION
+						let ch = effectsManager.cache.preyPerClickChance; // FLAG FOR CALCULATION
 						if (resources.canAddAnyRes(r) == true ) {
 							if (ch >= Math.random()) {
 								let amountCaught = 1;		//FLAG FOR UPDATING BY CALCULATION
@@ -822,13 +822,13 @@ class ResourcesBase {
 			  current: 0,
 			  overflow: 0,
 			  limited: true,
-			  isUnlocked: true,
+			  isUnlocked: true /*,
 			  updateMax: function() {					//FLAG need to build into EFFECTS object arrays
 				  let swl = findBldgInSwamp("swell");
 				  let pus = findBldgInSwamp("pustule");
 				  let newMax = 50 + (swamp.stack[swl].count * 5) + (swamp.stack[pus].count * 50);
 				  this.max = newMax;
-			  }
+			  } */
 			},
 			{ name: "prey", // 1
 			  label: "Prey",
@@ -838,7 +838,7 @@ class ResourcesBase {
 			  isUnlocked: true,
 			  gather: function() {
 				  let totalRes = this.current;
-				  let chance = this.gatherChance;
+				  let chance = effectsManager[this.name + "PerClickChance"];
 				  if (chance >= Math.random()) {
 					  totalRes += 1;
 					  msg("you have captured prey!");
@@ -846,8 +846,10 @@ class ResourcesBase {
 				  else {
 					  msg("you have failed to capture any prey");
 				  }
-				  if (totalRes >= this.max) {
-					  this.current = this.max;
+
+				  let thisMax = effectsManager.cache[this.name + "Max"];
+				  if (totalRes >= thisMax) {
+					  this.current = thisMax;
 				  } else {
 					  this.current = round3(totalRes);
 				  }
@@ -1040,7 +1042,7 @@ class ResourcesBase {
 		document.getElementById(resName + 'Current').innerText = resCurrent;
 	
 		if (this.stack[resource].limited) {
-			let resMax = "/" + this.stack[resource].max;
+			let resMax = "/" + effectsManager.cache[resName + "Max"];
 		
 			document.getElementById(resName + 'Max').innerText = resMax;
 		}
@@ -1062,7 +1064,7 @@ class ResourcesBase {
 			document.getElementById(resName + 'Current').innerText = resCurrent;
 		
 			if (this.stack[i].limited == true) {
-				let resMax = "/" + this.stack[i].max;
+				let resMax = "/" + effectsManager.cache[resName + "Max"];
 			
 				document.getElementById(resName + 'Max').innerText = resMax;
 			}
