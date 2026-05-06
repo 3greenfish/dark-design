@@ -1321,6 +1321,11 @@ if (result == true) { person.test.try += 25 };
 		//should produce an effects object consisting of a variety of properties corresponding to the effects values from all buttons etc.
 
 	}
+	cacheCycle() {
+		effectsManager.getEffectStack(swamp);
+		effectsManager.getEffectStack(research);
+		effectsManager.getAllCache();
+	}
 	
 }
 
@@ -1468,6 +1473,7 @@ const timing = {
 				break;
 			case 1:
 				devMsg("beltstep 1");
+				effectsManager.cacheCycle();
 				break;
 			case 2:
 			//	msg("beltstep 2");
@@ -1479,7 +1485,7 @@ const timing = {
 			//	msg("beltstep 4");
 				break;
 			case 5:
-			//	msg("beltstep 5");
+				effectsManager.cacheCycle();
 				break;
 			case 6:
 			//	msg("beltstep 6");
@@ -1490,10 +1496,15 @@ const timing = {
 				calendar.updateCal();
 				break;
 			case 9:
+				effectsManager.cacheCycle();
+				break;
 			case 10:
 			case 11:
 			case 12:
+				break;
 			case 13:
+				effectsManager.cacheCycle();
+				break;
 			case 14:
 			case 15:
 				break;
@@ -1501,6 +1512,8 @@ const timing = {
 				calendar.updateCal();
 				break;
 			case 17:
+				effectsManager.cacheCycle();
+				break;
 			case 18:
 			case 19:
 				break;
@@ -1508,6 +1521,8 @@ const timing = {
 				this.callBuild();
 				break;
 			case 21:
+				effectsManager.cacheCycle();
+				break;
 			case 22:
 			case 23:
 				break;
@@ -1515,10 +1530,15 @@ const timing = {
 				calendar.updateCal();
 				break;
 			case 25:
+				effectsManager.cacheCycle();
+				break;
 			case 26:
 			case 27:
 			case 28:
+				break;
 			case 29:
+				effectsManager.cacheCycle();
+				break;
 			case 30:
 			case 31:
 				break;
@@ -1526,10 +1546,15 @@ const timing = {
 				calendar.updateCal();
 				break;
 			case 33:
+				effectsManager.cacheCycle();
+				break;
 			case 34:
 			case 35:
 			case 36:
+				break;
 			case 37:
+				effectsManager.cacheCycle();
+				break;
 			case 38:
 			case 39:
 				break;
