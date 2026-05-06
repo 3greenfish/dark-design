@@ -443,7 +443,7 @@ class SwampBase {
 		this.stack = [
 			{ name: "fester",	//0
 			  label: "Fester",
-			  type: "gather",
+			  type: "gather",		//FLAG for POSSIBLE DELETION -- do we need types on these buttons right now?
 			  desc: "Fester in darkness to build up Corruption.",
 			  flavor: "", 
 			  isUnlocked: true,
@@ -952,12 +952,12 @@ class ResourcesBase {
 		devMsg("resources.addRes called with resCode " + resCode + " and amount " + amount);
 		let res = this.stack[resCode];
 		let totalRes = res.current;
-		let max = res.max;
+		let max = effectsManager.cache[res.name + "Max"];
 
 		totalRes += amount;
 
 		if (totalRes >= max) {
-			res.current = res.max;
+			res.current = max;
 		} else {
 			res.current = round3(totalRes);
 		}
@@ -968,7 +968,8 @@ class ResourcesBase {
 		let checkType = typeof res;
 		let resCode = (checkType == "number") ? res : resources.findResInStack(res);		
 		let targetRes = resources.stack[resCode];
-		let result = (targetRes.current < targetRes.max) ? true : false;
+		let targetMax = effectsManager[targetRes.name + "Max"];
+		let result = (targetRes.current < targetMax) ? true : false;
 		return result;
 	}
 	checkCosts(x) {					// FLAG for possible deletion
@@ -1350,6 +1351,7 @@ function loadGame() {	//runs at end of HTML load
 	game = new GameBase();
 	research = new TechBase();
 	effectsManager = new EffectsManagerBase();
+	effectsManager.cacheCycle();
 	game.buildNav();
 	timing.activateBelt();
 	resources.loadResourcePanel();
