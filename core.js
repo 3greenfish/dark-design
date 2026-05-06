@@ -582,7 +582,7 @@ class SwampBase {
 				  let result = 0;
 				  if ( this.special.unfilled.length > 0 ) {
 		//			  msg ("length of pustule array is " + this.unfilled.length);
-					  result = (this.special.unfilled[0].level / 30) * 100;
+					  result = (this.special.unfilled[0] / 30) * 100;
 		//			  msg("current pustule level is " + result);
 				  }
 				  return result;
@@ -612,7 +612,7 @@ class SwampBase {
 						if (resources.checkCostsByArray(getCosts, current).result == "pass") {
 							resources.payCostsByArray(getCosts, current);
 	
-							swamp.stack[code].special.unfilled.push({ level: 0 });
+							swamp.stack[code].special.unfilled.push(0);
 	
 							updateLabel(swamp, code);
 							updateContentCosts2(swamp, code);
@@ -626,9 +626,21 @@ class SwampBase {
 						}
 					}
 				  },
+				  { subLabel: "Fill Pustules",
+				    type: "",
+				    press: function(code) {
+/*						let spent = */ 
+						swamp.stack[code].fillPus(code);
+/*						let spentArray = [{ name: "sustenance", value: spent };
+						resources.payCostsByArray(spentArray); */
+						refreshProgAll(swamp, swamp.stack);
+					}
+				  },
 				  { subLabel: "Pop",
 				    type: "",
-				    press: function(code) {}
+				    press: function(code) {
+						swamp.stack[code].popPustule(1);
+					}
 				  },
 				  { subLabel: "Pop all",
 				    type: "",
@@ -658,35 +670,36 @@ class SwampBase {
 				  this.updateRatio();
 				  updateContentCosts(1);
 			  }, */
-			  fillPus: function(x) {
+			  fillPus: function(code) {
 	//			  msg("fillPus called with value " + x);
-				  let sus = x;    //sustenance available
+				  let sus = resources.findResInStack("sustenance").current;    //sustenance available
 				  let spent = 0;
-				  let count = this.unfilled.length; //get total number of unfilled pustules
+				  let array = this.special.unfilled;
+				  let count = array.length; //get total number of unfilled pustules
 				  if (count > 0) {
 					  for (let i = 0; i < count; i++) {
 						  if (sus < 1) { 
 							  break;
 						  }
-						  this.unfilled[i].level += 1;
+						  array[i] += 1;
 						  sus -= 1;
 						  spent += 1;
-						  if (this.unfilled[i].level >= 30) {
+						  if (array[i] >= 30) {
 							  this.filled += 1;
-							  this.unfilled.shift();
-							  this.updateButtonLabel();
+							  array.shift();
+//							  this.updateButtonLabel();
 						  }
 					  }
 				  }
 	
-				  let newCount = this.unfilled.length;
+				/*  let newCount = array.length;
 				  let progWidth = 0;
 				  if (newCount > 0) {
-					  progWidth = (this.unfilled[0].level / 30) * 100;
+					  progWidth = (array[0] / 30) * 100;
 				  } 
 	
-				  document.getElementById(this.name + "Progress").style.width = progWidth + "%";
-				  
+				  document.getElementById("swamp" + code + "Progress").style.width = progWidth + "%";
+				  */
 				  return spent;
 			  },
 			  popPustule: function(count) {
@@ -694,9 +707,12 @@ class SwampBase {
 					  return;
 				  } else {
 					  this.filled -= 1;
-					  this.unfilled.push({ level: 0 });
-					  resources.gatherByName("choler");
-					  this.updateButtonLabel();
+					  this.special.unfilled.push(0);
+					  let res = resources.findResInStack("choler");
+					  let amt = effectsManager.cache["cholerPerClick"];
+					  resources.addRes(res, amt);
+//					  resources.gatherByName("choler");
+//					  this.updateButtonLabel();
 				  }  
 			  },
 	/*		  updateButtonLabel: function() {				//READY TO DELETE
@@ -1289,15 +1305,6 @@ class EffectsManagerBase {
 			}
 		}
 
-		// temporary code to expand object.
-		let text = "";
-
-		for (let [effect, value] of Object.entries(this.cache)) {
-			text += effect + ": " + value + "<br />";
-		}
-		msg(text);
-
-
 		/* 
 let test = { try: "age" };
 
@@ -1771,7 +1778,7 @@ const dev = [
 	{ name: "button15",
 	  label: "update pustule",
 	  run: function() {
-		  swamp.stack[4].special.unfilled[0].level += 1;
+		  swamp.stack[4].special.unfilled[0] += 1;
 		  refreshProgAll(swamp, swamp.stack);
 	  }
 	},
@@ -1789,22 +1796,19 @@ const dev = [
 	  }
 	} */
 	{ name: "button18",
-	  label: "effectsManager testing",
+	  label: "effectsManager cacheCycle",
 	  run: function() {
-		  swamp.stack[3].count++; 	//add swell
-		  effectsManager.getEffectStack(swamp);
-		  effectsManager.getEffectStack(research);
-		  msg("completed getEffectStack for swamp and research");
-
-		  effectsManager.getAllCache();		  
-		  
-		  /*let bob = effectsManager.swampEffectsCache;
+		  effectsManager.cacheCycle();
+	  }
+	},
+	{ name: "button19",
+	  label: "print effects",
+	  run: function() {
 		  let text = "";
-		  for ( let i = 0; i < bob.length; i++ ) {
-			  text += Object.entries(bob[i]) + "<br />";
-			  msg(i);
+		  for (let [effect, value] of Object.entries(effectsManager.cache)) {
+			  text += effect + ": " + value + "<br />";
 		  }
-		  msg(text); */
+		  msg(text);
 	  }
 	}
 /*	{ name: "buttonX",
@@ -1813,6 +1817,8 @@ const dev = [
 	  
 	} */
 ]
+
+
 
 function setDevButtonsDynamic() {
 	let buttonBlock = "";
