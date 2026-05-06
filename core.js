@@ -1236,10 +1236,12 @@ class EffectsManagerBase {
 			}
 			let stackable = (stack[i].stackable) ? true : false;
 			for (let j = 0; j < effects.length; j++) {
+				let newEffect = {};
+				newEffect.effect = effects[j].effect;
 				if (stackable == true) {
-					effects[j].value *= stack[i].count;
-				}			
-				buildEffects.push(effects[j]);
+					newEffect.value = effects[j].value * stack[i].count;
+				} else { newEffect.value = effects[j].value; }
+				buildEffects.push(newEffect);
 			}
 		}
 		this[source.name + "EffectsCache"] = buildEffects;
