@@ -1088,14 +1088,29 @@ class ResourcesBase {
 		}
 	}
 	loadResPanelNew() {
+		let output = "";
 		let source = resources.stack;
-		
+		for (let i = 0; i < source.length; i++) {
+			if () {
+			
+			}
+		}
 	}
 		
 
 
 
-/* function buildGrid(source, sourceArray, refresh = false) {
+/* 
+
+			<div class="resource" id="res0row">
+				<div class="resourceName" id="resCorruption">Corruption:</div>
+				<div class="resourceValue" id="corruptionCurrent"></div>
+				<div class="resourceMax" id="corruptionMax"></div>
+				<div class="resourcePer" id="corruptionPer"></div>
+			</div>
+
+
+function buildGrid(source, sourceArray, refresh = false) {
 	let output = "";
 		
 	for (let i = 0; i < array.length; i++) {		//for every button in stack
