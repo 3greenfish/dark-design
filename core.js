@@ -789,7 +789,7 @@ class SwampBase {
 			  desc: `Convert a captured native into your first corrupted Host.
 	(Starts phase 2)`,
 			  get count() {
-				  referCount = resources.stack[resources.findResInStack("host")].current;
+				  let referCount = resources.stack[resources.findResInStack("host")].current;
 				  return referCount;
 			  },
 			  costs: [
@@ -940,7 +940,7 @@ class ResourcesBase {
 				  { name: "native", amount: 1 }
 				  ]
 			}
-		]
+		];
 		this.effectsBase = [			//FLAG that some of these values may not be necessary
 			{ effect: "corruptionMax", value: 50 },
 			{ effect: "corruptionPerTick", value: 0 },
@@ -959,13 +959,10 @@ class ResourcesBase {
 //			{ effect: "hostMax", value: "nativeMax" },
 			{ effect: "hostMax", value: 10 },
 			{ effect: "hostPerClick", value: 1 }
-		]
-
+		];
 
 		
 //			{ effect: "", value: },
-
-
 		
 	}
 	addRes(resCode, amount) {
@@ -1121,7 +1118,7 @@ class ResourcesBase {
 				<div class="resourceValue" id="${name}Current">${current}</div>
 				<div class="resourceMax" id="${name}Max">${max}</div>
 				<div class="resourcePer" id="${name}Per">${per}</div>
-			</div>`
+			</div>`;
 
 			output += newRes;
 		}
@@ -1380,7 +1377,7 @@ class TechBase {
 // --- close science object --- //
 
 
-let effectsManager = {}
+let effectsManager = {};
 class EffectsManagerBase {
 	swampEffectsCache = [];
 	researchEffectsCache = [];
@@ -1969,8 +1966,7 @@ const dev = [
 	  run: function() { }
 	  
 	} */
-]
-
+];
 
 
 function setDevButtonsDynamic() {
