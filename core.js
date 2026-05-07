@@ -1098,7 +1098,7 @@ class ResourcesBase {
 
 			if (res.isUnlocked !== true) {
 				msg(typeof res.current);
-				if (res.current > 0 && typeof res.current == "Number") {
+				if (res.current > 0 && typeof res.current == "number") {
 					msg("unlocking now");
 					res.isUnlocked = true;
 				} else { 
