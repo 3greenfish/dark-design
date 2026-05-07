@@ -1097,7 +1097,7 @@ class ResourcesBase {
 			if (res.hidden) { continue; }
 
 			if (res.isUnlocked !== true) {
-				msg(typeof res);
+				msg(typeof res.current);
 				if (res.current > 0 && (typeof res.current) == "Number") {
 					msg("unlocking now");
 					res.isUnlocked = true;
@@ -1950,6 +1950,11 @@ const dev = [
 	{ name: "button20",
 	  label: "loadResPanelNew",
 	  run: function() {
+		  let stack = resources.stack;
+		  for (let i = 0; i < stack.length; i++) {
+			  stack[i].current += 1;
+			  msg(i);
+		  }
 		  resources.loadResPanelNew();
 	  }
 	  
