@@ -1087,6 +1087,142 @@ class ResourcesBase {
 			}
 		}
 	}
+	loadResPanelNew() {
+		let output = "";
+		let source = resources.stack;
+		for (let i = 0; i < source.length; i++) {
+			let res = source[i];
+
+			//hidden resources either never appear in panel, or are closed out after no longer being relevant
+			if (res.hidden) { continue; }
+
+			if (res.isUnlocked !== true) {
+				msg(typeof res);
+				if (res.current > 0 && (typeof res.current) == "Number") {
+					msg("unlocking now");
+					res.isUnlocked = true;
+				} else { 
+					continue; 
+				}
+			}
+
+			let name = res.label;
+			let max = (effectsManager[res.name + "Max"]) ? effectsManager[res.name + "Max"] : "";
+			let current = res.current + res.overflow;
+			let per = (effectsManager[res.name + "PerTick"]) ? (effectsManager[res.name + "PerTick"] * 4) + "/s" : "";
+
+			let newRes = `<div class="resource" id="res${i}row">
+				<div class="resourceName" id="res${name}">${name}:</div>
+				<div class="resourceValue" id="${name}Current">${current}</div>
+				<div class="resourceMax" id="${name}Max">${current}</div>
+				<div class="resourcePer" id="${name}Per">${current}</div>
+			</div>`
+
+			output += newRes;
+		}
+		document.getElementById("leftblock").innerHTML = output;
+	}
+		
+
+
+
+/* 
+
+			<div class="resource" id="res0row">
+				<div class="resourceName" id="resCorruption">Corruption:</div>
+				<div class="resourceValue" id="corruptionCurrent"></div>
+				<div class="resourceMax" id="corruptionMax"></div>
+				<div class="resourcePer" id="corruptionPer"></div>
+			</div>
+
+
+function buildGrid(source, sourceArray, refresh = false) {
+	let output = "";
+		
+	for (let i = 0; i < array.length; i++) {		//for every button in stack
+
+		if (array[i].isUnlocked !== true) {
+			devMsg("calling testUnlock with array object for " + array[i].name);
+			//check whether can unlock
+			let checkValue = testUnlock(array[i]);
+			if (checkValue == true) {
+				array[i].isUnlocked = true;
+			}
+		}
+		
+		if (array[i].purchased == true || array[i].isUnlocked !== true) { 
+			continue; 
+		}
+		// IF test to check if hidden or blocked, then continue FOR loop.
+		
+		let label = array[i].label;		//this is what shows in the label, will need to be updated for counts
+		if (array[i].count > 0) {
+			let act = (array[i].inactive > 0) ? array[i].count - array[i].inactive + "/" : "";
+			label = label + " (" + act + array[i].count + ")";
+		}					//FLAG -- make this into a separate function that accounts for active/inactive buildings		
+		let identifier = source.name + i;
+		let desc = array[i].desc;		//gets description from stack
+		let cost = "";
+
+		let AC = ""; //variable to flag active class
+		if (array[i].costs) {
+			devMsg("BuildGrid reached getContentCosts");
+			let costs = getContentCosts(source, i);
+			cost = `
+					<hr>
+						<div class="costs" id="${identifier}Costs">
+							${costs}
+						</div>`;
+			if (resources.checkCostsByArray(array[i].costs, array[i].count).result == "pass") {
+				AC = "active";
+			}
+		} 
+
+		let actionsArray = array[i].actions;
+		let actions = "";
+		for (let a = 0; a < actionsArray.length; a++) {
+			let sub = actionsArray[a].subLabel;
+			let buttonCode = `${source.name}.stack[${i}].actions[${a}].press(${i})`;
+			actions += `<div class="button" onClick="${buttonCode}">${sub}</div>`;
+		}
+
+		let mainActionCode = `${source.name}.stack[${i}].actions[0].press(${i},true)`;
+		let flavor = (array[i].flavor) ? `<div class="flavor">` + array[i].flavor + "</div>" : "";
+
+		let newButton = `
+				<div class="buttonContainer">
+					<div class="collapsible ${AC}" id="${identifier}Collapsible">
+						<div class="buttonLabel" data-target="${identifier}" id="${identifier}Label" onClick="${mainActionCode}">${label}</div><div class="notch" data-target="${identifier}" onClick="expandButton2('${identifier}')">&#9776;</div>
+						<div class="buttonBarContainer">
+							<div id="${identifier}Progress"></div>
+						</div>
+					</div>
+					<div class="content" id="${identifier}Content">
+						<p>${desc}</p>
+						${cost}
+						${actions}
+						${flavor}
+					</div>
+				</div>`;
+		columns[currentColumn] += newButton;
+		currentColumn += 1;
+		if (currentColumn >= numColumns) { 
+			currentColumn = 0;
+		}
+	}
+
+	for (let c = 0; c < columns.length; c++) {
+		columns[c] += `</div>`;
+		output += columns[c];
+	}
+	document.getElementById("fillGrid").innerHTML = output;
+	refreshProgAll(source, sourceArray);
+	if (refresh == true) {
+		reopenTabs(source, openArray);
+	}
+}	*/
+		
+
 	updatePerTick() {
 		// a bunch of stuff is needed here to calculate pertick values for all resources
 		// likely a for loop
@@ -1361,7 +1497,7 @@ function loadGame() {	//runs at end of HTML load
 	effectsManager.cacheCycle();
 	game.buildNav();
 	timing.activateBelt();
-	resources.loadResourcePanel();
+//	resources.loadResourcePanel();
 	setDevButtonsDynamic();
 	buildGrid(swamp, swamp.stack);	//need to update to define by phase when loading game/refreshing from LocalStorage
 	msg("You have awakened...");	
@@ -1810,6 +1946,13 @@ const dev = [
 		  }
 		  msg(text);
 	  }
+	},
+	{ name: "button20",
+	  label: "loadResPanelNew",
+	  run: function() {
+		  resources.loadResPanelNew();
+	  }
+	  
 	}
 /*	{ name: "buttonX",
 	  label: "blank",
