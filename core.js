@@ -1110,13 +1110,14 @@ class ResourcesBase {
 				}
 			}
 
-			let name = res.label;
-			let max = (effectsManager.cache[res.name + "Max"]) ? "/" + effectsManager.cache[res.name + "Max"] : "";
+			let name = res.name;
+			let label = res.label;
+			let max = (effectsManager.cache[name + "Max"]) ? "/" + effectsManager.cache[name + "Max"] : "";
 			let current = (res.overflow > 0) ? res.current + res.overflow : res.current;
-			let per = (effectsManager.cache[res.name + "PerTick"]) ? (effectsManager.cache[res.name + "PerTick"] * 4) + "/s" : "";
+			let per = (effectsManager.cache[name + "PerTick"]) ? (effectsManager.cache[name + "PerTick"] * 4) + "/s" : "";
 
 			let newRes = `<div class="resource" id="res${i}row">
-				<div class="resourceName" id="res${name}">${name}:</div>
+				<div class="resourceName" id="res${name}">${label}:</div>
 				<div class="resourceValue" id="${name}Current">${current}</div>
 				<div class="resourceMax" id="${name}Max">${max}</div>
 				<div class="resourcePer" id="${name}Per">${per}</div>
