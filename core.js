@@ -1091,10 +1091,33 @@ class ResourcesBase {
 		let output = "";
 		let source = resources.stack;
 		for (let i = 0; i < source.length; i++) {
-			if () {
-			
+			let res = source[i];
+
+			//hidden resources either never appear in panel, or are closed out after no longer being relevant
+			if (res.hidden) { continue; }
+
+			if (res.isUnlocked !== true) {
+				if (res.current > 0 && (typeof res) == "Number") {
+					msg(typeof res);
+					res.isUnlocked = true;
+				} else { continue; }
 			}
+
+			let name = res.label;
+			let max = (effectsManager[res.name + "Max"]) ? effectsManager[res.name + "Max"] : "";
+			let current = res.current + res.overflow;
+			let per = (effectsManager[res.name + "PerTick"]) ? (effectsManager[res.name + "PerTick"] * 4) + "/s" : "";
+
+			let newRes = `<div class="resource" id="res${i}row">
+				<div class="resourceName" id="res${name}">${name}:</div>
+				<div class="resourceValue" id="${name}Current">${current}</div>
+				<div class="resourceMax" id="${name}Max">${current}</div>
+				<div class="resourcePer" id="${name}Per">${current}</div>
+			</div>`
+
+			output += newRes;
 		}
+		document.getElementById("leftGrid").innerHTML = output;
 	}
 		
 
