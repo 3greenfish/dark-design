@@ -1097,10 +1097,13 @@ class ResourcesBase {
 			if (res.hidden) { continue; }
 
 			if (res.isUnlocked !== true) {
-				if (res.current > 0 && (typeof res) == "Number") {
-					msg(typeof res);
+				msg(typeof res);
+				if (res.current > 0 && (typeof res.current) == "Number") {
+					msg("unlocking now");
 					res.isUnlocked = true;
-				} else { continue; }
+				} else { 
+					continue; 
+				}
 			}
 
 			let name = res.label;
@@ -1117,7 +1120,7 @@ class ResourcesBase {
 
 			output += newRes;
 		}
-		document.getElementById("leftGrid").innerHTML = output;
+		document.getElementById("leftblock").innerHTML = output;
 	}
 		
 
@@ -1494,7 +1497,7 @@ function loadGame() {	//runs at end of HTML load
 	effectsManager.cacheCycle();
 	game.buildNav();
 	timing.activateBelt();
-	resources.loadResourcePanel();
+//	resources.loadResourcePanel();
 	setDevButtonsDynamic();
 	buildGrid(swamp, swamp.stack);	//need to update to define by phase when loading game/refreshing from LocalStorage
 	msg("You have awakened...");	
@@ -1943,6 +1946,13 @@ const dev = [
 		  }
 		  msg(text);
 	  }
+	},
+	{ name: "button20",
+	  label: "loadResPanelNew",
+	  run: function() {
+		  resources.loadResPanelNew();
+	  }
+	  
 	}
 /*	{ name: "buttonX",
 	  label: "blank",
