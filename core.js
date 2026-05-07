@@ -788,6 +788,10 @@ class SwampBase {
 			  type: "gather",
 			  desc: `Convert a captured native into your first corrupted Host.
 	(Starts phase 2)`,
+			  get count() {
+				  referCount = resources.stack[resources.findResInStack("host")].current;
+				  return referCount;
+			  },
 			  costs: [
 				  { name: "corruption", amount: 2000, ratio: 1.01 },
 				  { name: "native", amount: 1 }		//FLAG -- do we need a ratio on any cost?
@@ -944,7 +948,7 @@ class ResourcesBase {
 			{ effect: "preyMax", value: 25 },
 			{ effect: "preyPerTick", value: 0 },
 			{ effect: "preyPerClickChance", value: 0.25 },
-			{ effect: "prerPerTickChance", value: 0.1 },
+			{ effect: "preyPerTickChance", value: 0.1 },
 			{ effect: "sustenanceMax", value: 40 },
 			{ effect: "sustenancePerTick", value: 0 },
 			{ effect: "sustenancePerClick", value: 1 },
