@@ -672,7 +672,7 @@ class SwampBase {
 			  }, */
 			  fillPus: function(code) {
 	//			  msg("fillPus called with value " + x);
-				  let sus = resources.findResInStack("sustenance").current;    //sustenance available
+				  let sus = resources.stack[resources.findResInStack("sustenance")].current;    //sustenance available
 				  let spent = 0;
 				  let array = this.special.unfilled;
 				  let count = array.length; //get total number of unfilled pustules
