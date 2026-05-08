@@ -690,7 +690,11 @@ class SwampBase {
 //							  this.updateButtonLabel();
 						  }
 					  }
-					  resources.payCostsByArray({ name: "sustenance", amount: spent }, 0);
+					  msg("current is " + sus + ", spent is " + spent + ", count is " + count);
+					  let finalCost = {}
+					  finalCost.name = "sustenance";
+					  finalCost.amount = spent;
+					  resources.payCostsByArray([finalCost], 0);
 				  }
 	
 				/*  let newCount = array.length;
