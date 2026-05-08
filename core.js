@@ -985,7 +985,7 @@ class ResourcesBase {
 		let checkType = typeof res;
 		let resCode = (checkType == "number") ? res : resources.findResInStack(res);		
 		let targetRes = resources.stack[resCode];
-		let targetMax = effectsManager[targetRes.name + "Max"];
+		let targetMax = effectsManager.cache[targetRes.name + "Max"];
 		let result = (targetRes.current < targetMax) ? true : false;
 		return result;
 	}
