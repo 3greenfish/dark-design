@@ -676,13 +676,13 @@ class SwampBase {
 				  let spent = 0;
 				  let array = this.special.unfilled;
 				  let count = array.length; //get total number of unfilled pustules
+				  msg("current is " + sus + ", spent is " + spent + ", count is " + count);
 				  if (count > 0) {
 					  for (let i = 0; i < count; i++) {
-						  if (sus < 1) { 
+						  if (spent + 1 > sus) { 
 							  break;
 						  }
 						  array[i] += 1;
-						  sus -= 1;
 						  spent += 1;
 						  if (array[i] >= 30) {
 							  this.filled += 1;
@@ -690,6 +690,7 @@ class SwampBase {
 //							  this.updateButtonLabel();
 						  }
 					  }
+					  resources.payCostsByArray({ name: "sustenance", amount: spent }, 0);
 				  }
 	
 				/*  let newCount = array.length;
@@ -732,7 +733,14 @@ class SwampBase {
 				  { name: "corruption", amount: 20, ratio: 1.2 },
 				  { name: "choler", amount: 50, ratio: 1.2 }
 			  ],
-			  actions: [],
+			  actions: [
+				  { subLabel: "",
+				   type: "",
+				   press: function(code, isMain = false) {
+					   
+				   }
+				  }
+			  ],
 			  lockedBy: [
 				  { type: "res", name: "choler", amount: 10 },
 				  { type: "button", stack: "swamp", name: "pustule", amount: 2 }
@@ -747,12 +755,21 @@ class SwampBase {
 				  { name: "corruption", amount: 50, ratio: 1.2 },
 				  { name: "choler", amount: 20, ratio: 1.2 }
 			  ],
-			  actions: [],
+			  actions: [
+				  { subLabel: "",
+				   type: "",
+				   press: function(code, isMain = false) {
+					   
+				   }
+				  }
+			  ],
 			  lockedBy: [
 				  { type: "res", name: "choler", amount: 10 }
 			  ],
 			  effects: [
-				  { effect: "preyMax", value: 5 }
+				  { effect: "preyMax", value: 5 },
+				  { effect: "preyPerClickChance", value: 0.05 },
+				  { effect: "preyPerTickChance", value: 0.05 }
 			  ]
 			},
 			{ name: "siren",		//7
@@ -762,7 +779,14 @@ class SwampBase {
 			  stackable: true,
 			  costs: [],
 			  ratio: 1.2,
-			  actions: [],
+			  actions: [
+				  { subLabel: "",
+				   type: "",
+				   press: function(code, isMain = false) {
+					   
+				   }
+				  }
+			  ],
 			  lockedBy: [
 				  { type: "button", stack: "swamp", name: "trap", amount: 1 }
 			  ],
@@ -777,7 +801,14 @@ class SwampBase {
 			  stackable: true,
 			  costs: [],
 			  ratio: 1.2,
-			  actions: [],
+			  actions: [
+				  { subLabel: "",
+				   type: "",
+				   press: function(code, isMain = false) {
+					   
+				   }
+				  }
+			  ],
 			  isUnlocked: false,
 			  lockedBy: [
 				  { type: "res", name: "host", amount: 1 }
@@ -796,7 +827,14 @@ class SwampBase {
 				  { name: "corruption", amount: 2000, ratio: 1.01 },
 				  { name: "native", amount: 1 }		//FLAG -- do we need a ratio on any cost?
 				  ],
-			  actions: [],
+			  actions: [
+				  { subLabel: "",
+				   type: "",
+				   press: function(code, isMain = false) {
+					   
+				   }
+				  }
+			  ],
 			  lockedBy: [
 				  { type: "res", name: "host", amount: 1 }
 			  ]
@@ -1110,7 +1148,7 @@ class ResourcesBase {
 			let name = res.name;
 			let label = res.label;
 			let max = (effectsManager.cache[name + "Max"]) ? "/" + effectsManager.cache[name + "Max"] : "";
-			let current = (res.overflow > 0) ? res.current + res.overflow : res.current;
+			let current = (res.overflow > 0) ? round3(res.current + res.overflow) : round3(res.current);
 			let per = (effectsManager.cache[name + "PerTick"]) ? (effectsManager.cache[name + "PerTick"] * 4) + "/s" : "";
 
 			let newRes = `<div class="resource" id="res${i}row">
