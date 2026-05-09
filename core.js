@@ -904,10 +904,10 @@ class ResourcesBase {
 			  current: 0,
 			  overflow: 0,
 			  limited: true,
-			  isUnlocked: true,
-			  gather: function() {
+			  isUnlocked: true 
+/*,			  gather: function() {		//FLAG for deletion
 				  let totalRes = this.current;
-				  let chance = effectsManager[this.name + "PerClickChance"];
+				  let chance = effectsManager.cache[this.name + "PerClickChance"];
 				  if (chance >= Math.random()) {
 					  totalRes += 1;
 					  msg("you have captured prey!");
@@ -922,7 +922,7 @@ class ResourcesBase {
 				  } else {
 					  this.current = round3(totalRes);
 				  }
-			  }
+			  } */
 			},
 			{ name: "sustenance", //2
 			  label: "Sustenance",
@@ -1281,7 +1281,7 @@ function buildGrid(source, sourceArray, refresh = false) {
 			if (res.isUnlocked == false || res.hidden == true) {
 				continue;
 			}
-			let perTick = effectsManager[res.name + "PerTick"];
+			let perTick = effectsManager.cache[res.name + "PerTick"];
 			if (!perTick) {
 				continue;
 			}
