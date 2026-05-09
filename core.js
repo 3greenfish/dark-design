@@ -682,7 +682,8 @@ class SwampBase {
 			  ],
 			  effects: [
 				  { effect: "corruptionMax", value: 50 },
-				  { effect: "corruptionPerTick", value: 0.25, type: "active" }
+				  { effect: "corruptionPerTick", value: 0.25, type: "active" },
+				  { effect: "sustenancePerTickReserve", value: 1, type: "inactive" }
 			  ],
 			  lockedBy: [
 				  { type: "res", name: "corruption", amount: 30 },
@@ -974,7 +975,7 @@ class ResourcesBase {
 			  current: 0,
 			  overflow: 0,
 			  limited: true,
-			  isUnlocked: false,
+			  isUnlocked: false /*,
 			  gatherCost: [			//FLAG for deletion
 				  { name: "prey", amount: 2 }
 				  ],
@@ -992,8 +993,8 @@ class ResourcesBase {
 			  },
 			  updateGatherRate: function() {		//FLAG for deletion
 				  msg("sustenance rate is " + this.gatherRate + " per click. Not yet defined.");
-			  } 
-			 /*,			  updatePerTick: function() {		//FLAG for deletion
+			  },
+			  updatePerTick: function() {		//FLAG for deletion
 				  this.perTick = 1; // need to define logic.
 				  msg("Amount per tick is now " + this.perTick + " per click.");
 			  } */
@@ -1032,7 +1033,7 @@ class ResourcesBase {
 			  gatherCost: [
 				  { name: "corruption", amount: 2000 },
 				  { name: "native", amount: 1 }
-				  ]
+			  ]
 			}
 		];
 		this.effectsBase = [			//FLAG that some of these values may not be necessary
@@ -1449,8 +1450,10 @@ class EffectsManagerBase {
 						case "active":
 							newEffect.value = effects[j].value * stack[i].active;
 							break;
+						case "inactive":
+							newEffect.value = effects[j].value * (stack[i].count - stack[i].active);
 						default:
-							msg("effect type not found");
+							msg("effect type " + type + "not found");
 							break;
 					}
 				} else if (stackable == true) {
