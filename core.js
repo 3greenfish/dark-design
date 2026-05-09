@@ -1265,10 +1265,11 @@ class ResourcesBase {
 		this.stack[2].current = this.stack[2].current + perTickValue - subtract; */ 	// FLAG FOR DELETION
 	}
 	perTickChance(res) {
+		msg("called pertickchance for " + res.name);
 		let chance = (effectsManager.cache[res.name + "PerTickChance"]) ? effectsManager.cache[res.name + "PerTickChance"] : 0;
 		let value = 0;
 		if (chance > 0 ) {
-			if (ch >= Math.random()) {
+			if (chance >= Math.random()) {
 				let max = effectsManager.cache[res.name + "PerClickChanceMax"];
 				value = randomInt(1, max);
 				if (game.currentPhase == 0 && res.name == "prey") {
