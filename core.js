@@ -464,7 +464,7 @@ class SwampBase {
 			{ name: "ensnare",	//1
 			  label: "Ensnare prey",
 			  type: "gather",
-			  desc: "Attempt to catch unsuspecting creatures to use as fuel.",
+			  desc: "Attempt to catch unsuspecting creatures to use as fuel. Burn corruption to improve your odds.",
 			  flavor: "",
 			  costs: [
 				  { name: "corruption", amount: 1 }
@@ -475,13 +475,15 @@ class SwampBase {
 				    type: "main",
 				    press: function(code, isMain = false) {
 						let r = resources.findResInStack("prey");
-						let res = resources.stack[r];
-						let ch = effectsManager.cache.preyPerClickChance; // FLAG FOR CALCULATION
+	//					let res = resources.stack[r];
+						let ch = effectsManager.cache.preyPerClickChance;
+						// FLAG for ADDITION -- if chance exceeds 100%, log overage as bonus to amount caught
 						if (resources.canAddAnyRes(r) == true ) {
 							if (ch >= Math.random()) {
-								let amountCaught = 1;		//FLAG FOR UPDATING BY CALCULATION
+								let maxPrey = effectsManager.cache.preyPerClickChanceMax;
+								let amountCaught = randomInt(1, maxPrey);		//FLAG FOR UPDATING BY CALCULATION
 								resources.addRes(r, amountCaught);
-								msg("Prey captured!");
+								msg("Captured " + amountCaught + " prey!");
 							} else {
 								msg("You have failed to capture any prey.");
 							}
@@ -490,6 +492,26 @@ class SwampBase {
 							devMsg("isMain is TRUE, calling expandButton2");
 							let target = "swamp" + code;
 							expandButton2(target);
+						}
+					}
+				  },
+				  { subLabel: "Burn corruption to ensnare",
+			   		type: "",
+					press: function(code, isMain = false) {
+						let getCosts = swamp.stack[code].costs;
+						let r = resources.findResInStack("prey");
+						if (resources.checkCostsByArray(getCosts,0).result == "pass" && resources.canAddAnyRes(r) == true ) {
+							resources.payCostsByArray(getCosts,0);
+							let ch = effectsManager.cache.preyPerClickChance * 2;
+							// FLAG for ADDITION -- if chance exceeds 100%, log overage as bonus to amount caught
+							if (ch >= Math.random()) {
+								let maxPrey = effectsManager.cache.preyPerClickChanceMax * 2;
+								let amountCaught = randomInt(1, maxPrey);
+								resources.addRes(r, amountCaught);
+								msg("Captured " + amountCaught + " prey!");
+							} else {
+								msg("You have failed to capture any prey.");
+							}
 						}
 					}
 				  }
@@ -996,6 +1018,7 @@ class ResourcesBase {
 			{ effect: "corruptionPerClick", value: 1 },
 			{ effect: "preyMax", value: 25 },
 			{ effect: "preyPerTick", value: 0 },
+			{ effect: "preyPerClickChanceMax", value: 1 },
 			{ effect: "preyPerClickChance", value: 0.25 },
 			{ effect: "preyPerTickChance", value: 0.1 },
 			{ effect: "sustenanceMax", value: 40 },
@@ -1586,6 +1609,10 @@ function round3(number) {
 	let numNum = Math.round(number * 1000);
 	numNum = numNum / 1000;
 	return numNum;
+}
+
+function randomInt(min, max) {
+	return Math.floor(Math.random() * (max - min + 1) ) + min;
 }
 
 function getContentCosts(stack, num) {
