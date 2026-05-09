@@ -1465,7 +1465,7 @@ class EffectsManagerBase {
 						case "active":
 							newEffect.value = effects[j].value * stack[i].active;
 							break;
-						case: default
+						default:
 							msg("effect type not found");
 							break;
 					}
