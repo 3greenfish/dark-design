@@ -83,7 +83,8 @@ function buildGrid(source, sourceArray, refresh = false) {
 		
 		let label = array[i].label;		//this is what shows in the label, will need to be updated for counts
 		if (array[i].count > 0) {
-			let act = (array[i].inactive > 0) ? array[i].count - array[i].inactive + "/" : "";
+//			let act = (array[i].inactive > 0) ? array[i].count - array[i].inactive + "/" : "";
+			let act = ("active" in array[i]) ? array[i].active + "/" : "";
 			label = label + " (" + act + array[i].count + ")";
 		}					//FLAG -- make this into a separate function that accounts for active/inactive buildings		
 		let identifier = source.name + i;
@@ -587,11 +588,13 @@ class SwampBase {
 				  }
 				  return result;
 			  },
-			  get count() {
+			  count: 0,
+/*			  get count() {				//FLAG for deletion
 	//			  console.log("getting pustule count");
 				  return this.special.filled + this.special.unfilled.length;
-			  },
+			  }, */ 
 			  stackable: true,
+			  active: 0,
 			  get inactive() {
 				  return this.special.unfilled.length;
 			  },
@@ -613,6 +616,7 @@ class SwampBase {
 							resources.payCostsByArray(getCosts, current);
 	
 							swamp.stack[code].special.unfilled.push(0);
+							swamp.stack[code].count += 1;
 	
 							updateLabel(swamp, code);
 							updateContentCosts2(swamp, code);
@@ -634,12 +638,14 @@ class SwampBase {
 /*						let spentArray = [{ name: "sustenance", value: spent };
 						resources.payCostsByArray(spentArray); */
 						refreshProgAll(swamp, swamp.stack);
+						updateLabel(swamp, code);
 					}
 				  },
 				  { subLabel: "Pop",
 				    type: "",
 				    press: function(code) {
 						swamp.stack[code].popPustule(1);
+						updateLabel(swamp, code);
 					}
 				  },
 				  { subLabel: "Pop all",
@@ -652,7 +658,8 @@ class SwampBase {
 				  }
 			  ],
 			  effects: [
-				  { effect: "corruptionMax", value: 50 }
+				  { effect: "corruptionMax", value: 50 },
+				  { effect: "corruptionPerTick", value: 0.25, type: "active" }
 			  ],
 			  lockedBy: [
 				  { type: "res", name: "corruption", amount: 30 },
@@ -685,7 +692,7 @@ class SwampBase {
 						  array[i] += 1;
 						  spent += 1;
 						  if (array[i] >= 30) {
-							  this.filled += 1;
+							  this.active += 1;
 							  array.shift();
 //							  this.updateButtonLabel();
 						  }
@@ -1452,7 +1459,15 @@ class EffectsManagerBase {
 			for (let j = 0; j < effects.length; j++) {
 				let newEffect = {};
 				newEffect.effect = effects[j].effect;
-				if (stackable == true) {
+				if ("type" in effects[j]) {
+					let type = effects[j].type;
+					switch (type) {
+						case "active" {
+							newEffect.value = effects[j].value * stack[i].active;
+							break;
+						}
+					}
+				} else if (stackable == true) {
 					newEffect.value = effects[j].value * stack[i].count;
 				} else { newEffect.value = effects[j].value; }
 				buildEffects.push(newEffect);
@@ -1536,7 +1551,7 @@ if (result == true) { person.test.try += 25 };
 
 
 
-function findBldgInSwamp(name) {
+function findBldgInSwamp(name) { 	//FLAG for deletion
 	let findName = name;
 	for (let i = 0; i < swamp.stack.length; i++) {
 		if (swamp.stack[i].name == findName) {
@@ -1600,8 +1615,14 @@ function updateLabel(stack, num) {
 	devMsg("updateLabel called with values: " + stack.name + " and " + num);
 	let newLabel = stack.stack[num].label;
 	if (stack.stack[num].count > 0) {
-		devMsg("stack count is " + stack.stack[num].count + " and inactive count is " + stack.stack[num].inactive);
-		let act = (stack.stack[num].inactive > 0) ? stack.stack[num].count - stack.stack[num].inactive + "/" : "";
+
+//		let actCheck = ("active" in stack.stack[num]);
+//		let inact = stack.stack[num].count - stack.stack[num].active;
+//		devMsg("stack count is " + stack.stack[num].count + " and inactive count is " + stack.stack[num].inactive);
+//		let act = (stack.stack[num].inactive > 0) ? stack.stack[num].count - stack.stack[num].inactive + "/" : "";
+//		let act = (actCheck === true) ? stack.stack[num].active + "/" : "";
+
+		let act = ("active" in stack.stack[num]) ? stack.stack[num].active + "/" : "";
 		newLabel += " (" + act + stack.stack[num].count + ")";
 		document.getElementById(stack.name + num + "Label").innerHTML = newLabel;
 	}
@@ -1621,7 +1642,7 @@ function updateLabel(stack, num) {
 	} 
 }
 
-function updateContentCosts(num) {
+function updateContentCosts(num) {		//FLAG -- is anything calling for this? if not, delete
 	//msg("updateContentCosts called");
 	let prices = swamp.stack[num].costs;
 	let dispCost = "";
