@@ -705,24 +705,24 @@ class SwampBase {
 				  let sus = resources.stack[resources.findResInStack("sustenance")].current;    //sustenance available
 				  let spent = 0;
 				  let array = this.special.unfilled;
-				  let count = array.length; //get total number of unfilled pustules
-				  msg("current is " + sus + ", spent is " + spent + ", count is " + count);
+//				  let count = array.length; //get total number of unfilled pustules
+				  msg("current is " + sus + ", spent is " + spent + ", count is " + array.length);
 				  msg("array is " + array.toString());
-				  if (count > 0) {
-					  for (let i = 0; i < count; i++) {
+				  if (array.length > 0) {
+					  for (let i = 0; i < array.length; i++) {
 						  if (spent + 1 > sus) { 
 							  break;
 						  }
 						  array[i] += 1;
 						  spent += 1;
 					  }
-					  for (let j = 0; j < count; i++) {
+					  for (let j = 0; j < array.length; j++) {
 						  if (array[j] >= 30) {
 							  this.active += 1;
 							  array.shift();
 						  }
 					  }
-					  msg("current is " + sus + ", spent is " + spent + ", count is " + count);
+					  msg("current is " + sus + ", spent is " + spent + ", count is " + array.length);
 					  let finalCost = {};
 					  finalCost.name = "sustenance";
 					  finalCost.amount = spent;
