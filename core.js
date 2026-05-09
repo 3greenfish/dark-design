@@ -1043,7 +1043,7 @@ class ResourcesBase {
 			{ effect: "preyPerTick", value: 0 },
 			{ effect: "preyPerClickChanceMax", value: 1 },
 			{ effect: "preyPerClickChance", value: 0.25 },
-			{ effect: "preyPerTickChance", value: 0.1 },
+//			{ effect: "preyPerTickChance", value: 0.1 },
 			{ effect: "sustenanceMax", value: 40 },
 			{ effect: "sustenancePerTick", value: 0 },
 			{ effect: "sustenancePerClick", value: 1 },
