@@ -1091,10 +1091,10 @@ class ResourcesBase {
 			}
 		}
 	}
-	gatherByName(res) {
-		let code = this.findResInStack(res);
-		this.gather(code);
-	}
+	// gatherByName(res) {							//FLAG for DELETION
+	//	let code = this.findResInStack(res);
+	//	this.gather(code);
+	//	}
 	loadResource(resource) {
 		let resName = this.stack[resource].name;
 		let resCurrent = round3(this.stack[resource].current);
@@ -1107,7 +1107,7 @@ class ResourcesBase {
 			document.getElementById(resName + 'Max').innerText = resMax;
 		}
 	}
-	loadResourcePanel() {
+	loadResourcePanel() {			//FLAG for deletion
 		for (let i = 0; i < this.stack.length; i++) {
 			let resName = this.stack[i].name;
 			let resCurrent = round3(this.stack[i].current);
@@ -1140,9 +1140,9 @@ class ResourcesBase {
 			if (res.hidden) { continue; }
 
 			if (res.isUnlocked !== true) {
-				msg(typeof res.current);
+//				msg(typeof res.current);
 				if (res.current > 0 && typeof res.current == "number") {
-					msg("unlocking now");
+//					msg("unlocking now");
 					res.isUnlocked = true;
 				} else { 
 					continue; 
@@ -1268,13 +1268,28 @@ function buildGrid(source, sourceArray, refresh = false) {
 		
 
 	updatePerTick() {
+		let resPool = resources.stack;
+		for (let i = 0; i < resPool.length; i++ ) {
+			let res = resPool[i];
+			if (res.isUnlocked == false || res.hidden == true) {
+				continue;
+			}
+			let perTick = effectsManager[res.name + "PerTick"];
+			if (!perTick) {
+				continue;
+			}
+			resources.addRes(i, perTick);
+		}
+
+
+		
 		// a bunch of stuff is needed here to calculate pertick values for all resources
 		// likely a for loop
 		// the code below is specifically for pustules and sustenance only
-		let perTickValue = 0;
+/*		let perTickValue = 0;
 		let availableSus = this.stack[2].current + perTickValue;
 		let subtract = swamp.stack[1].fillPus(availableSus);
-		this.stack[2].current = this.stack[2].current + perTickValue - subtract;
+		this.stack[2].current = this.stack[2].current + perTickValue - subtract; */ 	// FLAG FOR DELETION
 	}
 } // --- close resources object --- //
 
@@ -1541,6 +1556,7 @@ function loadGame() {	//runs at end of HTML load
 	effectsManager.cacheCycle();
 	game.buildNav();
 	timing.activateBelt();
+	resources.loadResPanelNew();
 //	resources.loadResourcePanel();
 	setDevButtonsDynamic();
 	buildGrid(swamp, swamp.stack);	//need to update to define by phase when loading game/refreshing from LocalStorage
@@ -1655,6 +1671,10 @@ const timing = {
 			this.beltStep = 1;
 		}
 
+		//call functions every tick
+		resources.updatePerTick();
+		resources.loadResPanelNew();
+
 		//call functions based upon belt value - SWITCH FUNCTION
 
 		switch(this.beltStep) {
@@ -1688,6 +1708,8 @@ const timing = {
 				effectsManager.cacheCycle();
 				break;
 			case 10:
+				this.callBuild();
+				break;
 			case 11:
 			case 12:
 				break;
@@ -1729,6 +1751,8 @@ const timing = {
 				effectsManager.cacheCycle();
 				break;
 			case 30:
+				this.callBuild();
+				break;
 			case 31:
 				break;
 			case 32:
@@ -1750,6 +1774,7 @@ const timing = {
 			case 40:
 				// msg("beltStep collected" + this.beltStep);
 				calendar.updateCal();
+				this.callBuild();
 				break;
 		}
 		
@@ -1994,11 +2019,6 @@ const dev = [
 	{ name: "button20",
 	  label: "loadResPanelNew",
 	  run: function() {
-		  let stack = resources.stack;
-		  for (let i = 0; i < stack.length; i++) {
-			  stack[i].current += 1;
-			  msg(i);
-		  }
 		  resources.loadResPanelNew();
 	  }
 	  
@@ -2051,15 +2071,13 @@ function devUnlockAll() {
 
 //-- start interval timer --//
 //-- this should probably be an object --//
-
-let gameTimer = setInterval(tick, calendar.runSpeed);		// FLAG for deletion after full integration with belt
-
-function tick() {
+//let gameTimer = setInterval(tick, calendar.runSpeed);		// FLAG for deletion after full integration with belt
+// 	function tick() {
 //	msg("tick");
 //	resources.updatePerTick();
-	resources.loadResourcePanel();
+//	resources.loadResourcePanel();
 //	calendar.updateCal();
-}
+//	}
 
 //-- end interval timer --//
 
