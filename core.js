@@ -605,6 +605,7 @@ class SwampBase {
 				  let result = 0;
 				  if ( this.special.unfilled.length > 0 ) {
 		//			  msg ("length of pustule array is " + this.unfilled.length);
+					  msg("unfilled status is " + this.special.unfilled.toString());
 					  result = (this.special.unfilled[0] / 30) * 100;
 		//			  msg("current pustule level is " + result);
 				  }
@@ -706,6 +707,7 @@ class SwampBase {
 				  let array = this.special.unfilled;
 				  let count = array.length; //get total number of unfilled pustules
 				  msg("current is " + sus + ", spent is " + spent + ", count is " + count);
+				  msg("array is " + array.toString());
 				  if (count > 0) {
 					  for (let i = 0; i < count; i++) {
 						  if (spent + 1 > sus) { 
