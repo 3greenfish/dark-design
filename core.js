@@ -801,7 +801,8 @@ class SwampBase {
 			  effects: [
 				  { effect: "preyMax", value: 5 },
 				  { effect: "preyPerClickChance", value: 0.05 },
-				  { effect: "preyPerTickChance", value: 0.05 }
+				  { effect: "preyPerTickChance", value: 0.05 },
+				  { effect: "preyPerClickChanceMax", value: 1 }
 			  ]
 			},
 			{ name: "digestor",		//6
@@ -991,11 +992,11 @@ class ResourcesBase {
 			  },
 			  updateGatherRate: function() {		//FLAG for deletion
 				  msg("sustenance rate is " + this.gatherRate + " per click. Not yet defined.");
-			  },
-			  updatePerTick: function() {		//FLAG for deletion
+			  } 
+			 /*,			  updatePerTick: function() {		//FLAG for deletion
 				  this.perTick = 1; // need to define logic.
 				  msg("Amount per tick is now " + this.perTick + " per click.");
-			  }
+			  } */
 			},
 			{ name: "choler", //3
 			  label: "Choler",
@@ -1083,9 +1084,9 @@ class ResourcesBase {
 		let result = (targetRes.current < targetMax) ? true : false;
 		return result;
 	}
-	checkCosts(x) {					// FLAG for possible deletion
+/*	checkCosts(x) {					// FLAG for possible deletion
 		let result = { result: "fail", reason: "failed function" };
-//		if (!this.stack[x].gatherCost.length > 0) {
+//		if (!this.stack[x].gatherCost.length > 0) 
 		if (this.stack[x].gatherCost === undefined) {
 			result = { result: "pass", reason: "no costs" };
 			return result;
@@ -1103,7 +1104,7 @@ class ResourcesBase {
 		result.result = "pass";
 		result.reason = "sufficient resources";
 		return result;	
-	}
+	} */
 	checkCostsByArray(array, multi) {		//send resources.checkCostsByArray an array of costs to check
 		let result = { result: "fail", reason: "failed function" };
 		if (array === undefined) {
@@ -1218,118 +1219,38 @@ class ResourcesBase {
 		}
 		document.getElementById("leftblock").innerHTML = output;
 	}
-		
 
-
-
-/* 
-
-			<div class="resource" id="res0row">
+/* 			<div class="resource" id="res0row">
 				<div class="resourceName" id="resCorruption">Corruption:</div>
 				<div class="resourceValue" id="corruptionCurrent"></div>
 				<div class="resourceMax" id="corruptionMax"></div>
 				<div class="resourcePer" id="corruptionPer"></div>
-			</div>
-
-
-function buildGrid(source, sourceArray, refresh = false) {
-	let output = "";
-		
-	for (let i = 0; i < array.length; i++) {		//for every button in stack
-
-		if (array[i].isUnlocked !== true) {
-			devMsg("calling testUnlock with array object for " + array[i].name);
-			//check whether can unlock
-			let checkValue = testUnlock(array[i]);
-			if (checkValue == true) {
-				array[i].isUnlocked = true;
-			}
-		}
-		
-		if (array[i].purchased == true || array[i].isUnlocked !== true) { 
-			continue; 
-		}
-		// IF test to check if hidden or blocked, then continue FOR loop.
-		
-		let label = array[i].label;		//this is what shows in the label, will need to be updated for counts
-		if (array[i].count > 0) {
-			let act = (array[i].inactive > 0) ? array[i].count - array[i].inactive + "/" : "";
-			label = label + " (" + act + array[i].count + ")";
-		}					//FLAG -- make this into a separate function that accounts for active/inactive buildings		
-		let identifier = source.name + i;
-		let desc = array[i].desc;		//gets description from stack
-		let cost = "";
-
-		let AC = ""; //variable to flag active class
-		if (array[i].costs) {
-			devMsg("BuildGrid reached getContentCosts");
-			let costs = getContentCosts(source, i);
-			cost = `
-					<hr>
-						<div class="costs" id="${identifier}Costs">
-							${costs}
-						</div>`;
-			if (resources.checkCostsByArray(array[i].costs, array[i].count).result == "pass") {
-				AC = "active";
-			}
-		} 
-
-		let actionsArray = array[i].actions;
-		let actions = "";
-		for (let a = 0; a < actionsArray.length; a++) {
-			let sub = actionsArray[a].subLabel;
-			let buttonCode = `${source.name}.stack[${i}].actions[${a}].press(${i})`;
-			actions += `<div class="button" onClick="${buttonCode}">${sub}</div>`;
-		}
-
-		let mainActionCode = `${source.name}.stack[${i}].actions[0].press(${i},true)`;
-		let flavor = (array[i].flavor) ? `<div class="flavor">` + array[i].flavor + "</div>" : "";
-
-		let newButton = `
-				<div class="buttonContainer">
-					<div class="collapsible ${AC}" id="${identifier}Collapsible">
-						<div class="buttonLabel" data-target="${identifier}" id="${identifier}Label" onClick="${mainActionCode}">${label}</div><div class="notch" data-target="${identifier}" onClick="expandButton2('${identifier}')">&#9776;</div>
-						<div class="buttonBarContainer">
-							<div id="${identifier}Progress"></div>
-						</div>
-					</div>
-					<div class="content" id="${identifier}Content">
-						<p>${desc}</p>
-						${cost}
-						${actions}
-						${flavor}
-					</div>
-				</div>`;
-		columns[currentColumn] += newButton;
-		currentColumn += 1;
-		if (currentColumn >= numColumns) { 
-			currentColumn = 0;
-		}
-	}
-
-	for (let c = 0; c < columns.length; c++) {
-		columns[c] += `</div>`;
-		output += columns[c];
-	}
-	document.getElementById("fillGrid").innerHTML = output;
-	refreshProgAll(source, sourceArray);
-	if (refresh == true) {
-		reopenTabs(source, openArray);
-	}
-}	*/
-		
+			</div> */
 
 	updatePerTick() {
 		let resPool = resources.stack;
 		for (let i = 0; i < resPool.length; i++ ) {
 			let res = resPool[i];
+			//confirm resource is unlocked and not hidden
 			if (res.isUnlocked == false || res.hidden == true) {
 				continue;
 			}
-			let perTick = effectsManager.cache[res.name + "PerTick"];
-			if (!perTick) {
+			//get amount generated
+			let perTick = (effectsManager.cache[res.name + "PerTick"]) ? effectsManager.cache[res.name + "PerTick"] : 0;
+/*			if (!perTick) {
 				continue;
-			}
+			} */
+
+			//check against chances to randomly generate resource
+			let luckPerTick = resources.perTickChance(res);
+			perTick += luckPerTick;
+
+			//reserve res for consumption and conversion
+			let avail = res.current + perTick;
+			//TODO: check cache for "perTickReserve" or something similar. Add to reserve under each resource. Once consumption, conversion, and possibly crafting are done, return unused reserves.
+
+
+			
 			resources.addRes(i, perTick);
 		}
 
@@ -1343,6 +1264,23 @@ function buildGrid(source, sourceArray, refresh = false) {
 		let subtract = swamp.stack[1].fillPus(availableSus);
 		this.stack[2].current = this.stack[2].current + perTickValue - subtract; */ 	// FLAG FOR DELETION
 	}
+	perTickChance(res) {
+		let chance = (effectsManager.cache[res.name + "PerTickChance"]) ? effectsManager.cache[res.name + "PerTickChance"] : 0;
+		let value = 0;
+		if (chance > 0 ) {
+			if (ch >= Math.random()) {
+				let max = effectsManager.cache[res.name + "PerClickChanceMax"];
+				value = randomInt(1, max);
+				if (game.currentPhase == 0 && res.name == "prey") {
+					msg("Your traps have captured " + value + " prey.");
+				}
+			}
+		}
+		return value;
+	}
+
+
+	
 } // --- close resources object --- //
 
 // --- start research object --- //
@@ -1372,7 +1310,7 @@ class TechBase {
 			{ name: "calendar",
 			  label: "Calendar",
 			  desc: "Discover the world's cyclical cycle.",
-			  flavor: null,
+			  flavor: "now we can invent the weekend",
 			  costs: [
 				  { name: "corruption", amount: 10 }
 			  ],
