@@ -715,10 +715,11 @@ class SwampBase {
 						  }
 						  array[i] += 1;
 						  spent += 1;
-						  if (array[i] >= 30) {
+					  }
+					  for (let j = 0; j < count; i++) {
+						  if (array[j] >= 30) {
 							  this.active += 1;
 							  array.shift();
-//							  this.updateButtonLabel();
 						  }
 					  }
 					  msg("current is " + sus + ", spent is " + spent + ", count is " + count);
