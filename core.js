@@ -698,7 +698,7 @@ class SwampBase {
 						  }
 					  }
 					  msg("current is " + sus + ", spent is " + spent + ", count is " + count);
-					  let finalCost = {}
+					  let finalCost = {};
 					  finalCost.name = "sustenance";
 					  finalCost.amount = spent;
 					  resources.payCostsByArray([finalCost], 0);
@@ -715,13 +715,13 @@ class SwampBase {
 				  return spent;
 			  },
 			  popPustule: function(count) {
-				  if (!(this.filled > 0)) {
+				  if (this.active < 1) {
 					  return;
 				  } else {
-					  this.filled -= 1;
+					  this.active -= 1;
 					  this.special.unfilled.push(0);
 					  let res = resources.findResInStack("choler");
-					  let amt = effectsManager.cache["cholerPerClick"];
+					  let amt = effectsManager.cache.cholerPerClick;
 					  resources.addRes(res, amt);
 //					  resources.gatherByName("choler");
 //					  this.updateButtonLabel();
@@ -850,7 +850,7 @@ class SwampBase {
 				  { type: "res", name: "host", amount: 1 }
 			  ]
 			}
-			]
+			];
 	}
 	findEntry(name) {
 		let findName = name;
@@ -866,7 +866,7 @@ class SwampBase {
 // ---- end phase 1 buildings ---- //
 
 function findEntry(stack, name) {
-	let result = { found: false, loc: 0 }
+	let result = { found: false, loc: 0 };
 
 	for (let i = 0; i < stack.length; i++) {
 		if (stack[i].name == name) {
@@ -1462,10 +1462,12 @@ class EffectsManagerBase {
 				if ("type" in effects[j]) {
 					let type = effects[j].type;
 					switch (type) {
-						case "active" {
+						case "active":
 							newEffect.value = effects[j].value * stack[i].active;
 							break;
-						}
+						case: default
+							msg("effect type not found");
+							break;
 					}
 				} else if (stackable == true) {
 					newEffect.value = effects[j].value * stack[i].count;
