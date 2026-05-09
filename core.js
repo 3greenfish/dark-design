@@ -760,7 +760,51 @@ class SwampBase {
 				  document.getElementById(this.name + "Label").innerText = newLabel;
 			  } */
 			},
-			{ name: "digestor",		//5
+			{ name: "trap",			//5
+			  label: "Trap",
+			  desc: "Sticky traps make it easier to catch prey, and have a small chance to capture prey automatically.",
+			  count: 0,
+			  stackable: true,
+			  costs: [
+				  { name: "corruption", amount: 50, ratio: 1.2 },
+				  { name: "choler", amount: 20, ratio: 1.2 }
+			  ],
+			  actions: [
+				  { subLabel: "Build a trap",
+				    type: "",
+				    press: function(code, isMain = false) {
+					   	devMsg("buy trap called");
+						let grow = swamp.stack[code];
+						let getCosts = grow.costs;
+						let current = grow.count;
+
+						if (resources.checkCostsByArray(getCosts, current).result == "pass") {
+							resources.payCostsByArray(getCosts, current);
+	
+							swamp.stack[code].count += 1;
+	
+							updateLabel(swamp, code);
+							updateContentCosts2(swamp, code);
+						}
+						else if (isMain == true) {
+							//expand or close button
+							devMsg("isMain is TRUE, calling expandButton2");
+							let target = "swamp" + code;
+							expandButton2(target);
+						}
+					}
+				  }
+			  ],
+			  lockedBy: [
+				  { type: "res", name: "choler", amount: 10 }
+			  ],
+			  effects: [
+				  { effect: "preyMax", value: 5 },
+				  { effect: "preyPerClickChance", value: 0.05 },
+				  { effect: "preyPerTickChance", value: 0.05 }
+			  ]
+			},
+			{ name: "digestor",		//6
 			  label: "Digestor",
 			  desc: "This organ automatically processes captured prey into Sustenance.",
 			  count: 0,
@@ -779,33 +823,8 @@ class SwampBase {
 			  ],
 			  lockedBy: [
 				  { type: "res", name: "choler", amount: 10 },
-				  { type: "button", stack: "swamp", name: "pustule", amount: 2 }
-			  ]
-			},
-			{ name: "trap",			//6
-			  label: "Trap",
-			  desc: "Sticky traps make it easier to catch prey, and have a small chance to capture prey automatically.",
-			  count: 0,
-			  stackable: true,
-			  costs: [
-				  { name: "corruption", amount: 50, ratio: 1.2 },
-				  { name: "choler", amount: 20, ratio: 1.2 }
-			  ],
-			  actions: [
-				  { subLabel: "",
-				   type: "",
-				   press: function(code, isMain = false) {
-					   
-				   }
-				  }
-			  ],
-			  lockedBy: [
-				  { type: "res", name: "choler", amount: 10 }
-			  ],
-			  effects: [
-				  { effect: "preyMax", value: 5 },
-				  { effect: "preyPerClickChance", value: 0.05 },
-				  { effect: "preyPerTickChance", value: 0.05 }
+				  { type: "button", stack: "swamp", name: "pustule", amount: 2 },
+				  { type: "button", stack: "swamp", name: "trap", amount: 1 }
 			  ]
 			},
 			{ name: "siren",		//7
