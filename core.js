@@ -1266,7 +1266,7 @@ class ResourcesBase {
 		this.stack[2].current = this.stack[2].current + perTickValue - subtract; */ 	// FLAG FOR DELETION
 	}
 	perTickChance(res) {
-		msg("called pertickchance for " + res.name);
+		console.log("called pertickchance for " + res.name);
 		let chance = (effectsManager.cache[res.name + "PerTickChance"]) ? effectsManager.cache[res.name + "PerTickChance"] : 0;
 		let value = 0;
 		if (chance > 0 ) {
@@ -1452,6 +1452,7 @@ class EffectsManagerBase {
 							break;
 						case "inactive":
 							newEffect.value = effects[j].value * (stack[i].count - stack[i].active);
+							break;
 						default:
 							msg("effect type " + type + "not found");
 							break;
