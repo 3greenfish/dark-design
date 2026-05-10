@@ -1542,16 +1542,16 @@ class EffectsManagerBase {
 						case "multi":			//consume multiple resource reserves, add another resource
 							break;
 						case "call":			//call a special function
-							let newConversion = {};
+							let newConversionA = {};
 							
-							newConversion.effect = effects[j].effect;
-							newConversion.value = effects[j].value;
-							newConversion.con = effects[j].con;
-							newConversion.sourceName = effects[j].sourceAmount;
-							newConversion.numUnits = multi;
-							newConversion.call = effects[j].call;
+							newConversionA.effect = effects[j].effect;
+							newConversionA.value = effects[j].value;
+							newConversionA.con = effects[j].con;
+							newConversionA.sourceName = effects[j].sourceAmount;
+							newConversionA.numUnits = multi;
+							newConversionA.call = effects[j].call;
 
-							tempCon.push(newConversion);
+							tempCon.push(newConversionA);
 							
 							break;
 						default:
