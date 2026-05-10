@@ -684,8 +684,10 @@ class SwampBase {
 				  { effect: "corruptionMax", value: 50 },
 				  { effect: "corruptionPerTick", value: 0.25, type: "active" },
 				  { effect: "sustenancePerTickReserve", value: 0.25, type: "inactive" },
-				  { effect: "sustenancePerTick", value: 0.25, con: "call", 
-				    call: function() {
+				  { effect: "sustenancePerTick", value: 0.25, con: "call", type: "inactive",
+				    call: function(multi) {
+						msg("called the call in the consumption effect");
+						swamp[findEntry(swamp, "pustule").loc].fillPus(this.value);
 					}
 				  }
 			  ],
@@ -705,9 +707,11 @@ class SwampBase {
 				  this.updateRatio();
 				  updateContentCosts(1);
 			  }, */
-			  fillPus: function(code) {
+			  fillPus: function(unit) {
 	//			  msg("fillPus called with value " + x);
-				  let sus = resources.stack[resources.findResInStack("sustenance")].current;    //sustenance available
+				  let x = resources.findResInStack("sustenance");
+				  let sus = resources.stack[x].reserve;    //sustenance available
+
 				  let spent = 0;
 				  let array = this.special.unfilled;
 //				  let count = array.length; //get total number of unfilled pustules
@@ -715,11 +719,11 @@ class SwampBase {
 				  msg("array is " + array.toString());
 				  if (array.length > 0) {
 					  for (let i = 0; i < array.length; i++) {
-						  if (spent + 1 > sus) { 
+						  if (spent + unit > sus) { 
 							  break;
 						  }
-						  array[i] += 1;
-						  spent += 1;
+						  array[i] += unit;
+						  spent += unit;
 					  }
 					  for (let j = 0; j < array.length; j++) {
 						  if (array[j] >= 30) {
@@ -728,10 +732,9 @@ class SwampBase {
 						  }
 					  }
 					  msg("current is " + sus + ", spent is " + spent + ", count is " + array.length);
-					  let finalCost = {};
-					  finalCost.name = "sustenance";
-					  finalCost.amount = spent;
-					  resources.payCostsByArray([finalCost], 0);
+					  msg("reserves before payment: " + resources.stack[x].reserve);
+					  resources.stack[x].reserve -= spent;
+					  msg("reserves after payment: " + resources.stack[x].reserve);
 				  }
 	
 				/*  let newCount = array.length;
@@ -1545,7 +1548,7 @@ class EffectsManagerBase {
 							newConversion.value = effects[j].value;
 							newConversion.con = effects[j].con;
 							newConversion.sourceName = effects[j].sourceAmount;
-							newConversion.units = multi;
+							newConversion.numUnits = multi;
 							newConversion.call = effects[j].call;
 
 							tempCon.push(newConversion);
@@ -1587,6 +1590,8 @@ class EffectsManagerBase {
 			}
 		}
 		this[source.name + "EffectsCache"] = buildEffects;
+		this[source.name + "ConversionCache"] = tempCon;
+		
 		
 		//take a stack, review buttons, produce an array of effect values as objects
 		//each value is calculated based upon number of buildings, etc.
