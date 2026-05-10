@@ -888,7 +888,7 @@ class SwampBase {
 			  effects: [
 				  { effect: "nativeMax", value: 1 },
 				  { effect: "nativePerTickChance", value: 0.05 },
-				  { effect: "preyPerTickChance", value: 0.1 }
+				  { effect: "preyPerTickChance", value: 0.1 },
 				  { effect: "preyMax", value: 10 },
 				  { effect: "preyPerClickChanceMax", value: 3 }
 			  ]
