@@ -568,7 +568,7 @@ class SwampBase {
 						devMsg("buy swell called");
 						let priceCheck = resources.buyCycle(swamp, code, isMain);
 						if (priceCheck.result == "pass") {
-							swell.count += 1;
+							swamp.stack[code].count += 1;
 							updateLabel(swamp, code);
 //							updateContentCosts2(swamp, code);
 						}
@@ -1189,7 +1189,7 @@ class ResourcesBase {
 		}
 		devMsg("payCostsByArray completed");
 	}
-	buyCycle (stack, code, isMain, checkAdd) {		//consider adding "checkAdd" value to incorporate canAddAnyRes
+	buyCycle(stack, code, isMain) {		//consider adding "checkAdd" value to incorporate canAddAnyRes
 		//multi is the current count to pass for ratio checks
 		let bld = stack.stack[code];
 		let getCosts = bld.costs;
