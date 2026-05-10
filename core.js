@@ -566,7 +566,14 @@ class SwampBase {
 				    type: "main",
 				    press: function(code, isMain = false) {
 						devMsg("buy swell called");
-						let swell = swamp.stack[code];
+						let priceCheck = resources.buyCycle(swamp, code, isMain);
+						if (priceCheck.result == "pass") {
+							swell.count += 1;
+							updateLabel(swamp, code);
+//							updateContentCosts2(swamp, code);
+						}
+	
+/*						let swell = swamp.stack[code];
 						let getCosts = swell.costs;
 						let current = swell.count;
 						devMsg("swell getCosts called");
@@ -583,7 +590,7 @@ class SwampBase {
 							devMsg("isMain is TRUE, calling expandButton2");
 							let target = "swamp" + code;
 							expandButton2(target);
-						}					
+						}		*/			
 					}
 				  }
 			  ],
@@ -782,6 +789,7 @@ class SwampBase {
 				    type: "",
 				    press: function(code, isMain = false) {
 					   	devMsg("buy trap called");
+	
 						let grow = swamp.stack[code];
 						let getCosts = grow.costs;
 						let current = grow.count;
@@ -860,7 +868,8 @@ class SwampBase {
 			},
 			{ name: "siren",		//7
 			  label: "Siren",
-			  desc: "Lure in advanced lifeforms.",
+			  desc: "Improve your ability to capture prey, and lure in advanced lifeforms.",
+			  flavor: "It's creepy how that fungus is throbbing, but it has a very sexy singing voice.",
 			  count: 0,
 			  stackable: true,
 			  costs: [],
@@ -874,10 +883,14 @@ class SwampBase {
 				  }
 			  ],
 			  lockedBy: [
-				  { type: "button", stack: "swamp", name: "trap", amount: 1 }
+				  { type: "button", stack: "swamp", name: "trap", amount: 5 }
 			  ],
 			  effects: [
-				  { effect: "nativeMax", value: 1 }
+				  { effect: "nativeMax", value: 1 },
+				  { effect: "nativePerTickChance", value: 0.05 },
+				  { effect: "preyPerTickChance", value: 0.1 }
+				  { effect: "preyMax", value: 10 },
+				  { effect: "preyPerClickChanceMax", value: 3 }
 			  ]
 			},
 			{ name: "nodule",		//8
@@ -885,12 +898,18 @@ class SwampBase {
 			  desc: "Store additional corruption.",
 			  count: 0,
 			  stackable: true,
-			  costs: [],
+			  costs: [
+				  { name: "corruption", amount: 100, ratio: 1.2 },
+				  { name: "sustenance", amount: 10, ratio: 1.2 },
+				  { name: "choler", amount: 5, ratio: 1.2 }
+				  
+				 // { name: "native", amount: 1 }
+			  ],
 			  ratio: 1.2,
 			  actions: [
-				  { subLabel: "",
-				   type: "",
-				   press: function(code, isMain = false) {
+				  { subLabel: "Grow a nodule",
+				    type: "",
+				    press: function(code, isMain = false) {
 					   
 				   }
 				  }
@@ -926,7 +945,7 @@ class SwampBase {
 				  }
 			  ],
 			  lockedBy: [
-				  { type: "res", name: "host", amount: 1 }
+				  { type: "res", name: "native", amount: 1 }
 			  ]
 			}
 			];
@@ -1168,7 +1187,53 @@ class ResourcesBase {
 			resources.stack[priceCode].current -= value;
 			resources.loadResource(priceCode);
 		}
-		msg("payCostsByArray completed");
+		devMsg("payCostsByArray completed");
+	}
+	buyCycle (stack, code, isMain, checkAdd) {		//consider adding "checkAdd" value to incorporate canAddAnyRes
+		//multi is the current count to pass for ratio checks
+		let bld = stack.stack[code];
+		let getCosts = bld.costs;
+		let current = bld.count || 0;
+		
+		let check = resources.checkCostsByArray(getCosts, current);
+		
+		if (check.result == "pass" && check.reason !== "no costs") {
+			resources.payCostsByArray(getCosts, current);
+			updateContentCosts2(stack, code);
+		}
+		else if (check.result == "fail" && isMain == true) {
+			let target = stack.name + code;
+			expandButton2(target);
+		}
+		return check;
+
+		
+
+/*
+						let grow = swamp.stack[code];
+						let getCosts = grow.costs;
+						let current = grow.count;
+	
+						if (resources.checkCostsByArray(getCosts, current).result == "pass") {
+							resources.payCostsByArray(getCosts, current);
+	
+							swamp.stack[code].special.unfilled.push(0);
+							swamp.stack[code].count += 1;
+	
+							updateLabel(swamp, code);
+							updateContentCosts2(swamp, code);
+							refreshProgAll(swamp, swamp.stack);
+						}
+						else if (isMain == true) {
+							//expand or close button
+							devMsg("isMain is TRUE, calling expandButton2");
+							let target = "swamp" + code;
+							expandButton2(target);
+						} */
+
+
+
+		
 	}
 	findResInStack(name) {
 		let findName = name;
