@@ -683,7 +683,7 @@ class SwampBase {
 			  effects: [
 				  { effect: "corruptionMax", value: 50 },
 				  { effect: "corruptionPerTick", value: 0.25, type: "active" },
-				  { effect: "sustenancePerTickReserve", value: 1, type: "inactive" }
+				  { effect: "sustenancePerTickReserve", value: 0.25, type: "inactive" }
 			  ],
 			  lockedBy: [
 				  { type: "res", name: "corruption", amount: 30 },
@@ -1447,6 +1447,7 @@ class EffectsManagerBase {
 	swampEffectsCache = [];
 	researchEffectsCache = [];
 	cache = {};
+	
 	constructor() {}
 	getEffectStack(source) {
 		let stack = source.stack;
@@ -1469,6 +1470,10 @@ class EffectsManagerBase {
 						case "inactive":
 							newEffect.value = effects[j].value * (stack[i].count - stack[i].active);
 							break;
+						case "call": //i don't think this will work at all
+							break;
+						case "promise":
+							break;														
 						default:
 							msg("effect type " + type + "not found");
 							break;
