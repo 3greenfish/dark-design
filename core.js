@@ -1498,7 +1498,7 @@ class EffectsManagerBase {
 				let newEffect = {};
 				newEffect.effect = effects[j].effect;
 				let getValue = effects[j].value;
-				if (stackable && !("type" in effects[j]) {
+				if (stackable && !("type" in effects[j])) {
 					effects[j].type = "stack";
 				}
 				let multi = 1;
