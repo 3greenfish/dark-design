@@ -433,7 +433,17 @@ class GameBase {
 				}
 			  }
 		 
+BASIC DESIGN FOR MAIN PRESS, using buyCycle
+					press: function(code, isMain = false) {
+						let priceCheck = resources.buyCycle(swamp, code, isMain);
+						if (priceCheck.result == "pass") {
+							swamp.stack[code].count += 1;
+							// **special actions here**
 
+							updateLabel(swamp, code); //if has count
+							updateContentCosts2(swamp, code); //if has ratio
+							refreshProgAll(swamp, swamp.stack); //if has progress
+						}
 		 */
 
 let swamp = {};
@@ -565,15 +575,14 @@ class SwampBase {
 				  { subLabel: "Swell by 1m^2",
 				    type: "main",
 				    press: function(code, isMain = false) {
-						devMsg("buy swell called");
 						let priceCheck = resources.buyCycle(swamp, code, isMain);
 						if (priceCheck.result == "pass") {
 							swamp.stack[code].count += 1;
 							updateLabel(swamp, code);
-//							updateContentCosts2(swamp, code);
+							updateContentCosts2(swamp, code);
 						}
 	
-/*						let swell = swamp.stack[code];
+/*						let swell = swamp.stack[code];		//FLAG FOR DELETION
 						let getCosts = swell.costs;
 						let current = swell.count;
 						devMsg("swell getCosts called");
@@ -636,7 +645,17 @@ class SwampBase {
 				  { subLabel: "Grow pustule",
 				    type: "main",
 				    press: function(code, isMain = false) {
-						devMsg("buy pustule called");
+						let priceCheck = resources.buyCycle(swamp, code, isMain);
+						if (priceCheck.result == "pass") {
+							swamp.stack[code].count += 1;
+							swamp.stack[code].special.unfilled.push(0);
+
+							updateLabel(swamp, code);
+							updateContentCosts2(swamp, code);
+							refreshProgAll(swamp, swamp.stack);
+						}
+
+	/*					devMsg("buy pustule called");
 						let grow = swamp.stack[code];
 						let getCosts = grow.costs;
 						let current = grow.count;
@@ -657,7 +676,7 @@ class SwampBase {
 							devMsg("isMain is TRUE, calling expandButton2");
 							let target = "swamp" + code;
 							expandButton2(target);
-						}
+						} */
 					}
 				  },
 				  { subLabel: "Fill Pustules",
@@ -788,7 +807,15 @@ class SwampBase {
 				  { subLabel: "Build a trap",
 				    type: "",
 				    press: function(code, isMain = false) {
-					   	devMsg("buy trap called");
+						let priceCheck = resources.buyCycle(swamp, code, isMain);
+						if (priceCheck.result == "pass") {
+							swamp.stack[code].count += 1;
+	
+							updateLabel(swamp, code); //if has count
+							updateContentCosts2(swamp, code); //if has ratio
+						}
+						
+/*						devMsg("buy trap called");
 	
 						let grow = swamp.stack[code];
 						let getCosts = grow.costs;
@@ -807,7 +834,7 @@ class SwampBase {
 							devMsg("isMain is TRUE, calling expandButton2");
 							let target = "swamp" + code;
 							expandButton2(target);
-						}
+						} */
 					}
 				  }
 			  ],
@@ -834,7 +861,15 @@ class SwampBase {
 				  { subLabel: "Grow a digestor",
 				    type: "",
 				    press: function(code, isMain = false) {
-					   	devMsg("buy digestor called");
+						let priceCheck = resources.buyCycle(swamp, code, isMain);
+						if (priceCheck.result == "pass") {
+							swamp.stack[code].count += 1;
+
+							updateLabel(swamp, code); //if has count
+							updateContentCosts2(swamp, code); //if has ratio
+
+						}				  
+/*						devMsg("buy digestor called");
 						let grow = swamp.stack[code];
 						let getCosts = grow.costs;
 						let current = grow.count;
@@ -852,7 +887,7 @@ class SwampBase {
 							devMsg("isMain is TRUE, calling expandButton2");
 							let target = "swamp" + code;
 							expandButton2(target);
-						}   
+						} */
 				    }
 				  }
 			  ],
@@ -872,13 +907,21 @@ class SwampBase {
 			  flavor: "It's creepy how that fungus is throbbing, but it has a very sexy singing voice.",
 			  count: 0,
 			  stackable: true,
-			  costs: [],
+			  costs: [
+				  { name: "corruption", amount: 500, ratio: 1.2 }
+			  ],
 			  ratio: 1.2,
 			  actions: [
 				  { subLabel: "",
-				   type: "",
-				   press: function(code, isMain = false) {
-					   
+				    type: "",
+				    press: function(code, isMain = false) {
+					    let priceCheck = resources.buyCycle(swamp, code, isMain);
+						if (priceCheck.result == "pass") {
+							swamp.stack[code].count += 1;
+
+							updateLabel(swamp, code); //if has count
+							updateContentCosts2(swamp, code); //if has ratio
+						}					   
 				   }
 				  }
 			  ],
@@ -909,8 +952,14 @@ class SwampBase {
 			  actions: [
 				  { subLabel: "Grow a nodule",
 				    type: "",
-				    press: function(code, isMain = false) {
-					   
+					press: function(code, isMain = false) {
+						let priceCheck = resources.buyCycle(swamp, code, isMain);
+						if (priceCheck.result == "pass") {
+							swamp.stack[code].count += 1;
+
+							updateLabel(swamp, code); //if has count
+							updateContentCosts2(swamp, code); //if has ratio
+						}					   
 				   }
 				  }
 			  ],
@@ -938,9 +987,17 @@ class SwampBase {
 				  ],
 			  actions: [
 				  { subLabel: "",
-				   type: "",
-				   press: function(code, isMain = false) {
-					   
+				   	type: "",
+				   	press: function(code, isMain = false) {
+						let priceCheck = resources.buyCycle(swamp, code, isMain);
+						if (priceCheck.result == "pass") {
+							resources.addRes(resources.findResInStack("host"), 1);
+
+							// SPECIAL ACTIONS HERE - START PHASE 2
+	
+							updateLabel(swamp, code); //if has count
+							updateContentCosts2(swamp, code); //if has ratio**
+						}
 				   }
 				  }
 			  ],
@@ -1199,7 +1256,6 @@ class ResourcesBase {
 		
 		if (check.result == "pass" && check.reason !== "no costs") {
 			resources.payCostsByArray(getCosts, current);
-			updateContentCosts2(stack, code);
 		}
 		else if (check.result == "fail" && isMain == true) {
 			let target = stack.name + code;
