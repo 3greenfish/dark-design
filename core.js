@@ -1585,12 +1585,12 @@ class EffectsManagerBase {
 					newEffect.value = getValue * stack[i].count;
 				} else { newEffect.value = getValue; } */
 
-				newEffect.value = getValue * multi;
+				newEffect.value = effects[j].value * multi;
 				buildEffects.push(newEffect);
 			}
 		}
 		this[source.name + "EffectsCache"] = buildEffects;
-		this[source.name + "ConversionCache"] = tempCon;
+		if (tempCon.length > 0) { this[source.name + "ConversionCache"] = tempCon; }
 		
 		
 		//take a stack, review buttons, produce an array of effect values as objects
