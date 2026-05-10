@@ -541,7 +541,7 @@ class SwampBase {
 							devMsg("checked costs, checked to add res");
 							resources.payCostsByArray(getCosts, 0);
 							let r = resources.findResInStack("sustenance");
-							let a = 1;
+							let a = effectsManager.cache.sustenancePerClick;
 							resources.addRes(r, a);
 						} else if (isMain == true) {
 							//expand or close button
@@ -683,7 +683,11 @@ class SwampBase {
 			  effects: [
 				  { effect: "corruptionMax", value: 50 },
 				  { effect: "corruptionPerTick", value: 0.25, type: "active" },
-				  { effect: "sustenancePerTickReserve", value: 0.25, type: "inactive" }
+				  { effect: "sustenancePerTickReserve", value: 0.25, type: "inactive" },
+				  { effect: "sustenancePerTick", value: 0.25, con: "call", 
+				    call: function() {
+					}
+				  }
 			  ],
 			  lockedBy: [
 				  { type: "res", name: "corruption", amount: 30 },
@@ -813,20 +817,42 @@ class SwampBase {
 			  stackable: true,
 			  costs: [
 				  { name: "corruption", amount: 20, ratio: 1.2 },
-				  { name: "choler", amount: 50, ratio: 1.2 }
+				  { name: "choler", amount: 40, ratio: 1.2 }
 			  ],
 			  actions: [
-				  { subLabel: "",
-				   type: "",
-				   press: function(code, isMain = false) {
-					   
-				   }
+				  { subLabel: "Grow a digestor",
+				    type: "",
+				    press: function(code, isMain = false) {
+					   	devMsg("buy digestor called");
+						let grow = swamp.stack[code];
+						let getCosts = grow.costs;
+						let current = grow.count;
+
+						if (resources.checkCostsByArray(getCosts, current).result == "pass") {
+							resources.payCostsByArray(getCosts, current);
+	
+							swamp.stack[code].count += 1;
+	
+							updateLabel(swamp, code);
+							updateContentCosts2(swamp, code);
+						}
+						else if (isMain == true) {
+							//expand or close button
+							devMsg("isMain is TRUE, calling expandButton2");
+							let target = "swamp" + code;
+							expandButton2(target);
+						}   
+				    }
 				  }
 			  ],
 			  lockedBy: [
 				  { type: "res", name: "choler", amount: 10 },
 				  { type: "button", stack: "swamp", name: "pustule", amount: 2 },
 				  { type: "button", stack: "swamp", name: "trap", amount: 1 }
+			  ],
+			  effects: [
+				  { effect: "preyPerTickReserve", value: 0.25 },
+				  { effect: "sustenancePerTick", value: 0.5, con: "basic", sourceName: "prey", sourceAmount: 0.25 }
 			  ]
 			},
 			{ name: "siren",		//7
@@ -869,6 +895,10 @@ class SwampBase {
 			  isUnlocked: false,
 			  lockedBy: [
 				  { type: "res", name: "host", amount: 1 }
+			  ],
+			  effects: [
+				  { effect: "sustenancePerTickConsumption", value: 0.5 },		//consider basing these on active nodules
+				  { effect: "corruptionMax", value: 100 }
 			  ]
 			},
 			{ name: "corruptHost",	//9
@@ -950,7 +980,7 @@ class ResourcesBase {
 			  current: 0,
 			  overflow: 0,
 			  limited: true,
-			  isUnlocked: true 
+			  isUnlocked: false 
 /*,			  gather: function() {		//FLAG for deletion
 				  let totalRes = this.current;
 				  let chance = effectsManager.cache[this.name + "PerClickChance"];
@@ -1021,7 +1051,7 @@ class ResourcesBase {
 			  // try making label a function, add a switch based upon phase
 			  label: "Native",
 			  current: 0,
-			  limited: true,		//FLAG maybe this should be true?
+			  limited: true,
 			  isUnlocked: false
 			},
 			{ name: "host", //5
@@ -1445,13 +1475,16 @@ class TechBase {
 let effectsManager = {};
 class EffectsManagerBase {
 	swampEffectsCache = [];
+	swampConversionCache = [];
 	researchEffectsCache = [];
 	cache = {};
+	conversionCache = [];
 	
 	constructor() {}
 	getEffectStack(source) {
 		let stack = source.stack;
 		let buildEffects = [];
+		let tempCon = [];
 		for (let i = 0; i < stack.length; i++) {
 			let effects = stack[i].effects;
 			if (!effects) { 
@@ -1461,26 +1494,95 @@ class EffectsManagerBase {
 			for (let j = 0; j < effects.length; j++) {
 				let newEffect = {};
 				newEffect.effect = effects[j].effect;
+				let getValue = effects[j].value;
+				if (stackable && !("type" in effects[j]) {
+					effects[j].type = "stack";
+				}
+				let multi = 1;
+
 				if ("type" in effects[j]) {
 					let type = effects[j].type;
 					switch (type) {
 						case "active":
-							newEffect.value = effects[j].value * stack[i].active;
+							multi = stack[i].active;
 							break;
 						case "inactive":
-							newEffect.value = effects[j].value * (stack[i].count - stack[i].active);
+							multi = stack[i].count - stack[i].active;
 							break;
-						case "call": //i don't think this will work at all
+						case "stack":
+							multi = stack[i].count;
 							break;
-						case "promise":
-							break;														
+						case "nostack":
+							break;
+						default:
+							msg("effect type " + type + "not found");
+							break;
+					}
+				}
+
+				if ("con" in effects[j]) {
+					newEffect.effect += "Conversion";
+					let con = effects[j].con;
+					switch (con) {
+						case "basic":			//consume one resource reserve, add another resource
+							let newConversion = {};
+							
+							newConversion.effect = effects[j].effect;
+							newConversion.value = effects[j].value;
+							newConversion.con = effects[j].con;
+							newConversion.sourceName = effects[j].sourceAmount;
+							newConversion.units = multi;
+
+							tempCon.push(newConversion);
+
+							break;
+						case "multi":			//consume multiple resource reserves, add another resource
+							break;
+						case "call":			//call a special function
+							let newConversion = {};
+							
+							newConversion.effect = effects[j].effect;
+							newConversion.value = effects[j].value;
+							newConversion.con = effects[j].con;
+							newConversion.sourceName = effects[j].sourceAmount;
+							newConversion.units = multi;
+							newConversion.call = effects[j].call;
+
+							tempCon.push(newConversion);
+							
+							break;
+						default:
+							msg("conversion type " + con + " not found");
+							break;
+					}
+				}
+				
+/*				  { effect: "preyPerTickReserve", value: 0.25 },
+				  { effect: "sustenancePerTickConversion", value: 0.5, con: "basic", sourceName: "prey", sourceAmount: 0.25 }
+*/
+				
+
+/*				if ("type" in effects[j]) {
+					let type = effects[j].type;
+					switch (type) {
+						case "active":
+							newEffect.value = getValue * stack[i].active;
+							break;
+						case "inactive":
+							newEffect.value = getValue * (stack[i].count - stack[i].active);
+							break;
+						case "stack":
+							newEffect.value = getValue * stack[i].count;
+							break;
 						default:
 							msg("effect type " + type + "not found");
 							break;
 					}
 				} else if (stackable == true) {
-					newEffect.value = effects[j].value * stack[i].count;
-				} else { newEffect.value = effects[j].value; }
+					newEffect.value = getValue * stack[i].count;
+				} else { newEffect.value = getValue; } */
+
+				newEffect.value = getValue * multi;
 				buildEffects.push(newEffect);
 			}
 		}
