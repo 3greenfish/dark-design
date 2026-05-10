@@ -1207,7 +1207,10 @@ class ResourcesBase {
 			let label = res.label;
 			let max = (effectsManager.cache[name + "Max"]) ? "/" + effectsManager.cache[name + "Max"] : "";
 			let current = (res.overflow > 0) ? round3(res.current + res.overflow) : round3(res.current);
-			let per = (effectsManager.cache[name + "PerTick"]) ? (effectsManager.cache[name + "PerTick"] * 4) + "/s" : "";
+			let perTick = effectsManager.cache[name + "PerTick"] || 0;
+			let reserve = effectsManager.cache[name + "PerTickReserve"] || 0;
+			let per = (perTick == 0 && reserve == 0) ? "": ((perTick - reserve) * 4) + "/s";
+//		(effectsManager.cache[name + "PerTick"]) ? ((effectsManager.cache[name + "PerTick"] - reserve) * 4) + "/s" : "";
 
 			let newRes = `<div class="resource" id="res${i}row">
 				<div class="resourceName" id="res${name}">${label}:</div>
@@ -1250,6 +1253,19 @@ class ResourcesBase {
 			let avail = res.current + perTick;
 			//TODO: check cache for "perTickReserve" or something similar. Add to reserve under each resource. Once consumption, conversion, and possibly crafting are done, return unused reserves.
 
+			let reserve = effectsManager.cache[res.name + "PerTickReserve"] || 0;
+			if (reserve > avail) {
+				reserve = avail;
+			}
+			
+			res.reserve = reserve;
+			perTick -= reserve;
+
+
+			
+
+			
+
 
 			
 			resources.addRes(i, perTick);
@@ -1266,7 +1282,7 @@ class ResourcesBase {
 		this.stack[2].current = this.stack[2].current + perTickValue - subtract; */ 	// FLAG FOR DELETION
 	}
 	perTickChance(res) {
-		console.log("called pertickchance for " + res.name);
+//		console.log("called pertickchance for " + res.name);
 		let chance = (effectsManager.cache[res.name + "PerTickChance"]) ? effectsManager.cache[res.name + "PerTickChance"] : 0;
 		let value = 0;
 		if (chance > 0 ) {
