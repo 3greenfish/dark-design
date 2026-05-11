@@ -710,12 +710,11 @@ class SwampBase {
 				  { effect: "corruptionMax", value: 50 },
 				  { effect: "corruptionPerTick", value: 0.25, type: "active" },
 				  { effect: "sustenancePerTickReserve", value: 0.25, type: "inactive" },
-				  { effect: "sustenancePerTick", value: 0.25, sourceName: "sustenance", sourceAmount: 0.25, con: "call", type: "inactive",
-				    call: function() {
-						msg("numUnits is " + this.numUnits + " and value is " + this.value);
-						if (this.numUnits > 0 ) {
-							swamp.stack[findEntry(swamp.stack, "pustule").loc].fillPus(this.value);
-						}
+				  { effect: "pustulePerTick", value: 0.25, sourceName: "sustenance", sourceAmount: 0.25, con: "call", type: "inactive", call: function() {
+					  msg("numUnits is " + this.numUnits + " and value is " + this.value);
+					  if (this.numUnits > 0 ) {
+						  swamp.stack[findEntry(swamp.stack, "pustule").loc].fillPus(this.value);
+					  }
 					}
 				  }
 			  ],
@@ -1385,7 +1384,11 @@ class ResourcesBase {
 			let current = (res.overflow > 0) ? round3(res.current + res.overflow) : round3(res.current);
 			let perTick = effectsManager.cache[name + "PerTick"] || 0;
 			let reserve = effectsManager.cache[name + "PerTickReserve"] || 0;
-			let per = (perTick == 0 && reserve == 0) ? "": ((perTick - reserve) * 4) + "/s";
+			let consumption = effectsManager.cache[name + "PerTickConsumption"] || 0;
+			let conversion = effectsManager.cache[name + "PerTickConversion"] || 0;
+			let con = consumption + conversion;
+			
+			let per = (perTick == 0 && reserve == 0 && con == 0 ) ? "": ((perTick - reserve + con) * 4) + "/s";
 //		(effectsManager.cache[name + "PerTick"]) ? ((effectsManager.cache[name + "PerTick"] - reserve) * 4) + "/s" : "";
 
 			let newRes = `<div class="resource" id="res${i}row">
@@ -2027,8 +2030,8 @@ function updateContentCosts(num) {		//FLAG -- is anything calling for this? if n
 
 const timing = {
 	logTime: 0,
-	beltSpeed: 1000,
-//	beltSpeed: 250,
+//	beltSpeed: 1000,
+	beltSpeed: 250,
 	beltStep: 0,
 	activateBelt: function() {
 		//call upon initialization
