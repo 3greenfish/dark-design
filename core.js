@@ -1469,11 +1469,15 @@ class ResourcesBase {
 					effect.call();
 					break;
 				case "basic":
+					//check if multi is zero, exit
+					if (effect.numUnits == 0) {
+						continue;
+					}
+
 					//find reserve
 					msg("called basic conversion");
 					let source = resources.stack[resources.findResInStack(effect.sourceName)];
 					msg("source is " + source.name);
-
 
 					//calculate whether full amount is available
 					let fullCall = effect.sourceAmount * effect.numUnits;
@@ -1493,7 +1497,7 @@ class ResourcesBase {
 					let newRes = resources.findResInStack(generateName);
 					let amountAdded = called * effect.value;
 
-					resources.addRes(newRes, amountAdded);					
+					resources.addRes(newRes, amountAdded);		
 					break;
 				default:
 					msg("hit default, something went wrong")
@@ -1757,6 +1761,11 @@ class EffectsManagerBase {
 					let con = effects[j].con;
 					switch (con) {
 						case "basic":			//consume one resource reserve, add another resource
+							//check if multi is zero, don't add to conversion stack
+							if (multi === 0) {
+								continue;
+							}
+	
 							let newConversion = {};
 							
 							newConversion.effect = effects[j].effect;
