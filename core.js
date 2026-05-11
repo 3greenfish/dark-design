@@ -1485,9 +1485,9 @@ class ResourcesBase {
 
 					//generate conversion resources
 					//need code here
-					let searchNum = effect.effect.search("perTickConversion");
-					msg("search result is " + searchNum);
-					let generateName = effect.effect.slice(0, effect.effect.search("PerTickConversion"));
+//					let searchNum = effect.effect.search("perTickConversion");
+//					msg("search result is " + searchNum);
+					let generateName = effect.effect.slice(0, effect.effect.search("PerTick"));
 					msg("generated name " + generateName);
 
 					let newRes = resources.findResInStack(generateName);
