@@ -712,7 +712,7 @@ class SwampBase {
 				  { effect: "sustenancePerTickReserve", value: 0.25, type: "inactive" },
 				  { effect: "sustenancePerTick", value: 0.25, sourceName: "sustenance", sourceAmount: 0.25, con: "call", type: "inactive",
 				    call: function() {
-						msg("called the call in the consumption effect");
+					//	msg("called the call in the consumption effect");
 						if (this.numUnits > 0 ) {
 							swamp[findEntry(swamp, "pustule").loc].fillPus(this.value);
 						}
@@ -1470,11 +1470,12 @@ class ResourcesBase {
 					break;
 				case "basic":
 					//find reserve
+					msg("called basic conversion");
 					let source = resources.findResInStack(effect.sourceName);
 
 					//calculate whether full amount is available
 					let fullCall = effect.sourceAmount * effect.numUnits;
-					let called = (fullCall <= source.reserve) ? effect.numUnits : Math.floor(source.reserve/effect.sourceAmount);
+					let called = (fullCall <= source.reserve) ? effect.numUnits : Math.floor((source.reserve / effect.sourceAmount));
 
 					//withdraw appropriate amount from reserve
 					let calledAmount = called * effect.sourceAmount;
@@ -1491,6 +1492,7 @@ class ResourcesBase {
 					resources.addRes(newRes, amountAdded);					
 					break;
 				default:
+					msg("hit default, something went wrong")
 					break;
 			}
 
@@ -2012,7 +2014,8 @@ function updateContentCosts(num) {		//FLAG -- is anything calling for this? if n
 
 const timing = {
 	logTime: 0,
-	beltSpeed: 250,
+	beltSpeed: 1000,
+//	beltSpeed: 250,
 	beltStep: 0,
 	activateBelt: function() {
 		//call upon initialization
