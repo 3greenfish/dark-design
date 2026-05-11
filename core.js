@@ -712,9 +712,9 @@ class SwampBase {
 				  { effect: "sustenancePerTickReserve", value: 0.25, type: "inactive" },
 				  { effect: "sustenancePerTick", value: 0.25, sourceName: "sustenance", sourceAmount: 0.25, con: "call", type: "inactive",
 				    call: function() {
-					//	msg("called the call in the consumption effect");
+						msg("numUnits is " + this.numUnits + " and value is " + this.value);
 						if (this.numUnits > 0 ) {
-							swamp[findEntry(swamp, "pustule").loc].fillPus(this.value);
+							swamp.stack[findEntry(swamp, "pustule").loc].fillPus(this.value);
 						}
 					}
 				  }
@@ -1532,9 +1532,10 @@ class ResourcesBase {
 		//restore unused reserves
 		for (let i = 0; i < resPool.length; i++ ) {
 			let res = resPool[i];
-			let reserve = res.reserve || 0;
-			if (reserve > 0) {
-				resources.addRes(res.name, reserve);
+			let restore = res.reserve || 0;
+			if (restore > 0) {
+				msg(res.name + " reserve is currently at " + restore + ", restoring resources");
+				resources.addRes(res.name, restore);
 			}
 		}
 
