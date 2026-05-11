@@ -736,7 +736,7 @@ class SwampBase {
 				  updateContentCosts(1);
 			  }, */
 			  fillPus: function(unit) {
-	//			  msg("fillPus called with value " + x);
+				  msg("fillPus called with value " + unit);
 				  let x = resources.findResInStack("sustenance");
 				  let sus = resources.stack[x].reserve;    //sustenance available
 
@@ -1488,9 +1488,6 @@ class ResourcesBase {
 					source.reserve -= calledAmount;
 
 					//generate conversion resources
-					//need code here
-//					let searchNum = effect.effect.search("perTickConversion");
-//					msg("search result is " + searchNum);
 					let generateName = effect.effect.slice(0, effect.effect.search("PerTick"));
 					msg("generated name " + generateName);
 
@@ -1530,9 +1527,10 @@ class ResourcesBase {
 		}
 
 		//restore unused reserves
-		for (let i = 0; i < resPool.length; i++ ) {
-			let res = resPool[i];
+		for (let m = 0; m < resPool.length; m++ ) {
+			let res = resPool[m];
 			let restore = res.reserve || 0;
+			msg("restore amount is at " + restore);
 			if (restore > 0) {
 				msg(res.name + " reserve is currently at " + restore + ", restoring resources");
 				resources.addRes(res.name, restore);
