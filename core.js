@@ -1482,7 +1482,13 @@ class ResourcesBase {
 
 					//generate conversion resources
 					//need code here
-					
+					let generateName = effect.effect.slice(0, effect.effect.search("perTickConversion"));
+					msg("generated name " + generateName);
+
+					newRes = resources.findResInStack(generateName);
+					amountAdded = called * effect.value;
+
+					resources.addRes(newRes, amountAdded);					
 					break;
 				default:
 					break;
