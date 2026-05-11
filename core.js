@@ -1471,7 +1471,9 @@ class ResourcesBase {
 				case "basic":
 					//find reserve
 					msg("called basic conversion");
-					let source = resources.findResInStack(effect.sourceName);
+					let source = resources.stack[resources.findResInStack(effect.sourceName)];
+					msg("source is " + source.name);
+
 
 					//calculate whether full amount is available
 					let fullCall = effect.sourceAmount * effect.numUnits;
