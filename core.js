@@ -710,10 +710,12 @@ class SwampBase {
 				  { effect: "corruptionMax", value: 50 },
 				  { effect: "corruptionPerTick", value: 0.25, type: "active" },
 				  { effect: "sustenancePerTickReserve", value: 0.25, type: "inactive" },
-				  { effect: "sustenancePerTick", value: 0.25, con: "call", type: "inactive",
-				    call: function(multi) {
+				  { effect: "sustenancePerTick", value: 0.25, sourceName: "sustenance", sourceAmount: 0.25, con: "call", type: "inactive",
+				    call: function() {
 						msg("called the call in the consumption effect");
-						swamp[findEntry(swamp, "pustule").loc].fillPus(this.value);
+						if (this.numUnits > 0 ) {
+							swamp[findEntry(swamp, "pustule").loc].fillPus(this.value);
+						}
 					}
 				  }
 			  ],
@@ -940,6 +942,7 @@ class SwampBase {
 			  label: "Nodule",
 			  desc: "Store additional corruption.",
 			  count: 0,
+			  active: 0,
 			  stackable: true,
 			  costs: [
 				  { name: "corruption", amount: 100, ratio: 1.2 },
@@ -956,11 +959,30 @@ class SwampBase {
 						let priceCheck = resources.buyCycle(swamp, code, isMain);
 						if (priceCheck.result == "pass") {
 							swamp.stack[code].count += 1;
+							swamp.stack[code].active += 1;
 
 							updateLabel(swamp, code); //if has count
 							updateContentCosts2(swamp, code); //if has ratio
 						}					   
 				   }
+				  },
+				  { subLabel: "deflate",
+				    type: "",
+				    press: function(code) {
+						let nodules = swamp.stack[code];
+						if (nodules.count > 0 && nodules.active > 0) {
+							nodules.active -= 1;
+						}
+					}
+				  },
+				  { subLabel: "inflate",
+				    type: "",
+				    press: function(code) {
+						let nodules = swamp.stack[code];
+						if (nodules.active < nodules.count) {
+							nodules.active += 1;
+						}
+					}
 				  }
 			  ],
 			  isUnlocked: false,
@@ -968,8 +990,8 @@ class SwampBase {
 				  { type: "res", name: "host", amount: 1 }
 			  ],
 			  effects: [
-				  { effect: "sustenancePerTickConsumption", value: 0.5 },		//consider basing these on active nodules
-				  { effect: "corruptionMax", value: 100 }
+				  { effect: "sustenancePerTickConsumption", value: 0.5, type: "active" },
+				  { effect: "corruptionMax", value: 100, type: "active" }
 			  ]
 			},
 			{ name: "corruptHost",	//9
@@ -1407,7 +1429,9 @@ class ResourcesBase {
 			let avail = res.current + perTick;
 			//TODO: check cache for "perTickReserve" or something similar. Add to reserve under each resource. Once consumption, conversion, and possibly crafting are done, return unused reserves.
 
-			let reserve = effectsManager.cache[res.name + "PerTickReserve"] || 0;
+			let consumption = effectsManager.cache[res.name + "Consumption"] || 0;
+			let reserveRequest = effectsManager.cache[res.name + "PerTickReserve"] || 0;
+			let reserve = consumption + reserveRequest;
 			if (reserve > avail) {
 				reserve = avail;
 			}
@@ -1415,16 +1439,88 @@ class ResourcesBase {
 			res.reserve = reserve;
 			perTick -= reserve;
 
-
-			
-
-			
-
-
-			
 			resources.addRes(i, perTick);
 		}
 
+		//handle consumption
+		for (let j = 0; j < resPool.length; j++) {
+			let res = resPool[j];
+			//confirm resource is unlocked and not hidden
+			if (res.isUnlocked == false || res.hidden == true) {
+				continue;
+			}			
+			//get amount consumed
+			let perTick = effectsManager.cache[res.name + "PerTickConsumption"] || 0;
+
+			if (res.reserve - perTick > 0) {
+				res.reserve -= perTick;
+			}
+			else {
+				res.reserve = 0;
+			}	
+		}
+		//handle conversion
+		let conv = effectsManager.conversionCache;
+		for (let k = 0; k < conv.length; k++) {
+			let effect = conv[k];
+			let type = effect.con;
+			switch(type) {
+				case "call":
+					effect.call();
+					break;
+				case "basic:
+					//find reserve
+					let source = resources.findResInStack(effect.sourceName);
+
+					//calculate whether full amount is available
+					let fullCall = effect.sourceAmount * effect.numUnits;
+					let called = (fullCall <= source.reserve) ? effect.numUnits : Math.floor(source.reserve/effect.sourceAmount);
+
+					//withdraw appropriate amount from reserve
+					let calledAmount = called * effect.sourceAmount;
+					source.reserve -= calledAmount;
+
+					//generate conversion resources
+					//need code here
+					
+					break;
+				default:
+					break;
+			}
+
+
+				/*	
+				
+							newConversion.effect = effects[j].effect;
+							newConversion.value = effects[j].value;
+							newConversion.con = effects[j].con;
+							newConversion.sourceName = effects[j].sourceName;
+							newConversion.sourceAmount = effects[j].sourceAmount;
+							newConversion.numUnits = multi;
+							 
+				effect: "sustenancePerTick", value: 0.25, con: "call", type: "inactive",
+				    call: function(multi) 
+
+
+							newConversionA.effect = effects[j].effect;
+							newConversionA.value = effects[j].value;
+							newConversionA.con = effects[j].con;
+							newConversionA.sourceName = effects[j].sourceAmount;
+							newConversionA.numUnits = multi;
+							newConversionA.call = effects[j].call; 
+							
+							
+							*/
+		}
+
+		//restore unused reserves
+		for (let i = 0; i < resPool.length; i++ ) {
+			let res = resPool[i];
+			let reserve = res.reserve || 0;
+			if (reserve > 0) {
+				resources.addRes(res.name, reserve);
+			}
+		}
 
 		
 		// a bunch of stuff is needed here to calculate pertick values for all resources
@@ -1654,8 +1750,9 @@ class EffectsManagerBase {
 							newConversion.effect = effects[j].effect;
 							newConversion.value = effects[j].value;
 							newConversion.con = effects[j].con;
-							newConversion.sourceName = effects[j].sourceAmount;
-							newConversion.units = multi;
+							newConversion.sourceName = effects[j].sourceName;
+							newConversion.sourceAmount = effects[j].sourceAmount;
+							newConversion.numUnits = multi;
 
 							tempCon.push(newConversion);
 
@@ -1668,7 +1765,8 @@ class EffectsManagerBase {
 							newConversionA.effect = effects[j].effect;
 							newConversionA.value = effects[j].value;
 							newConversionA.con = effects[j].con;
-							newConversionA.sourceName = effects[j].sourceAmount;
+							newConversionA.sourceName = effects[j].sourceName;
+							newConversionA.sourceAmount = effects[j].sourceAmount;
 							newConversionA.numUnits = multi;
 							newConversionA.call = effects[j].call;
 
@@ -1754,6 +1852,9 @@ class EffectsManagerBase {
 			}
 		}
 
+		//combine conversion caches
+		this.conversionCache = [...swampConversionCache];
+		
 		/* 
 let test = { try: "age" };
 
