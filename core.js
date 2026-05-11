@@ -714,7 +714,7 @@ class SwampBase {
 				    call: function() {
 						msg("numUnits is " + this.numUnits + " and value is " + this.value);
 						if (this.numUnits > 0 ) {
-							swamp.stack[findEntry(swamp, "pustule").loc].fillPus(this.value);
+							swamp.stack[findEntry(swamp.stack, "pustule").loc].fillPus(this.value);
 						}
 					}
 				  }
@@ -1029,7 +1029,7 @@ class SwampBase {
 			}
 			];
 	}
-	findEntry(name) {
+	findEntry(name) {			//flag for deletion
 		let findName = name;
 		for (let i = 0; i < swamp.stack.length; i++) {
 			if (swamp.stack[i].name == findName) {
@@ -1500,6 +1500,7 @@ class ResourcesBase {
 					msg("hit default, something went wrong")
 					break;
 			}
+			msg("reached end of switch");
 
 
 				/*	
