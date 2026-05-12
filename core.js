@@ -941,7 +941,7 @@ class SwampBase {
 						}
 					}
 				  },
-				  { subLabel: "Boost with choler",
+				  { subLabel: "remove boost",
 				    type: "",
 				    press: function(code, isMain = false) {
 						let bld = swamp.stack[code];
