@@ -273,7 +273,7 @@ function refreshProg(source, code) {
 		return;
 	}
 	let progWidth = source.stack[code].prog;
-	document.getElementById(source.name + i + "Progress").style.width = progWidth + "%";
+	document.getElementById(source.name + code + "Progress").style.width = progWidth + "%";
 }
 
 function refreshProgAll(source, array) {
@@ -734,8 +734,7 @@ class SwampBase {
 				  { type: "button", stack: "swamp", name: "swell", amount: 1 }
 			  ],
 			  special: {
-				  filled: 0,
-				  unfilled: []		//try converting this to just numbers, not objects in numbers
+				  unfilled: []
 			  },
 	/*		  onPurchase: function() {
 				  this.unfilled.push({ level: 0 });
@@ -745,15 +744,12 @@ class SwampBase {
 				  updateContentCosts(1);
 			  }, */
 			  fillPus: function(unit) {
-				  msg("fillPus called with value " + unit);
 				  let x = resources.findResInStack("sustenance");
 				  let sus = resources.stack[x].reserve;    //sustenance available
 
 				  let spent = 0;
 				  let array = this.special.unfilled;
-//				  let count = array.length; //get total number of unfilled pustules
-				  msg("current is " + sus + ", spent is " + spent + ", count is " + array.length);
-				  msg("array is " + array.toString());
+//				  devMsg("current is " + sus + ", spent is " + spent + ", count is " + array.length + ", array is " + array.toString());
 				  if (array.length > 0) {
 					  for (let i = 0; i < array.length; i++) {
 						  if (spent + unit > sus) { 
@@ -768,10 +764,10 @@ class SwampBase {
 							  array.shift();
 						  }
 					  }
-					  msg("current is " + sus + ", spent is " + spent + ", count is " + array.length);
-					  msg("reserves before payment: " + resources.stack[x].reserve);
+//					  msg("current is " + sus + ", spent is " + spent + ", count is " + array.length);
+//					  msg("reserves before payment: " + resources.stack[x].reserve);
 					  resources.stack[x].reserve -= spent;
-					  msg("reserves after payment: " + resources.stack[x].reserve);
+//					  msg("reserves after payment: " + resources.stack[x].reserve);
 				  }
 	
 				/*  let newCount = array.length;
@@ -917,13 +913,14 @@ class SwampBase {
 			  desc: "Improve your ability to capture prey, and lure in advanced lifeforms.",
 			  flavor: "It's creepy how that fungus is throbbing, but it has a very sexy singing voice.",
 			  count: 0,
+			  active: 0,
 			  stackable: true,
 			  costs: [
 				  { name: "corruption", amount: 500, ratio: 1.2 }
 			  ],
 			  ratio: 1.2,
 			  actions: [
-				  { subLabel: "",
+				  { subLabel: "Grow a siren",
 				    type: "",
 				    press: function(code, isMain = false) {
 					    let priceCheck = resources.buyCycle(swamp, code, isMain);
@@ -934,6 +931,24 @@ class SwampBase {
 							updateContentCosts2(swamp, code); //if has ratio
 						}					   
 				   }
+				  },
+				  { subLabel: "Boost with choler",
+				    type: "",
+				    press: function(code, isMain = false) {
+						let bld = swamp.stack[code];
+						if (bld.active < bld.count) {
+							bld.active += 1;
+						}
+					}
+				  },
+				  { subLabel: "Boost with choler",
+				    type: "",
+				    press: function(code, isMain = false) {
+						let bld = swamp.stack[code];
+						if (bld.count > 0 && bld.active > 0) {
+							bld.active -= 1;
+						}
+					}
 				  }
 			  ],
 			  lockedBy: [
@@ -944,7 +959,9 @@ class SwampBase {
 				  { effect: "nativePerTickChance", value: 0.05 },
 				  { effect: "preyPerTickChance", value: 0.1 },
 				  { effect: "preyMax", value: 10 },
-				  { effect: "preyPerClickChanceMax", value: 3 }
+				  { effect: "preyPerClickChanceMax", value: 3 },
+				  { effect: "cholerPerTickConsumption", value: 0.05, type: "active" },
+				  { effect: "nativePerTickChance", value: 0.05, type: "active" }
 			  ]
 			},
 			{ name: "nodule",		//8
@@ -1192,6 +1209,7 @@ class ResourcesBase {
 			{ effect: "cholerPerTick", value: 0 },
 			{ effect: "cholerPerClick", value: 30 },
 			{ effect: "nativeMax", value: 10 },
+			{ effect: "nativePerClickChanceMax", value: 1 },
 //			{ effect: "hostMax", value: "nativeMax" },
 			{ effect: "hostMax", value: 10 },
 			{ effect: "hostPerClick", value: 1 }
@@ -1568,6 +1586,8 @@ class ResourcesBase {
 				value = randomInt(1, max);
 				if (game.currentPhase == 0 && res.name == "prey") {
 					msg("Your traps have captured " + value + " prey.");
+				} else if (game.currentPhase == 0 && res.name = "native") {
+					msg("Your traps have captured " + value + " native.");
 				}
 			}
 		}
