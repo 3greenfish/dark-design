@@ -268,6 +268,14 @@ function reopenTabs(source, array) {
 	}
 }
 
+function refreshProg(source, code) {
+	if (document.getElementById(source.name + code + "Collapsible") == null) {
+		return;
+	}
+	let progWidth = source.stack[code].prog;
+	document.getElementById(source.name + i + "Progress").style.width = progWidth + "%";
+}
+
 function refreshProgAll(source, array) {
 	for (let i = 0; i < array.length; i ++) {
 		if (array[i].hidden == true || array[i].hasProg !== true || array[i].blocked == true ) { 
@@ -713,7 +721,9 @@ class SwampBase {
 				  { effect: "pustulePerTick", value: 0.25, sourceName: "sustenance", sourceAmount: 0.25, con: "call", type: "inactive", call: function() {
 					  msg("numUnits is " + this.numUnits + " and value is " + this.value);
 					  if (this.numUnits > 0 ) {
-						  swamp.stack[findEntry(swamp.stack, "pustule").loc].fillPus(this.value);
+						  let code = findEntry(swamp.stack, "pustule").loc;
+						  swamp.stack[code].fillPus(this.value);
+						  refreshProg(swamp, code);
 					  }
 					}
 				  }
@@ -899,7 +909,7 @@ class SwampBase {
 			  ],
 			  effects: [
 				  { effect: "preyPerTickReserve", value: 0.25 },
-				  { effect: "sustenancePerTick", value: 0.5, con: "basic", sourceName: "prey", sourceAmount: 0.25 }
+				  { effect: "sustenancePerTick", value: 0.5, con: "basic", sourceName: "prey", sourceAmount: 0.25, creates: "sustenance" }
 			  ]
 			},
 			{ name: "siren",		//7
@@ -986,7 +996,7 @@ class SwampBase {
 			  ],
 			  isUnlocked: false,
 			  lockedBy: [
-				  { type: "res", name: "host", amount: 1 }
+				  { type: "res", name: "native", amount: 1 }
 			  ],
 			  effects: [
 				  { effect: "sustenancePerTickConsumption", value: 0.5, type: "active" },
@@ -1336,7 +1346,7 @@ class ResourcesBase {
 			document.getElementById(resName + 'Max').innerText = resMax;
 		}
 	}
-	loadResourcePanel() {			//FLAG for deletion
+/*	loadResourcePanel() {			//FLAG for deletion
 		for (let i = 0; i < this.stack.length; i++) {
 			let resName = this.stack[i].name;
 			let resCurrent = round3(this.stack[i].current);
@@ -1358,7 +1368,7 @@ class ResourcesBase {
 				document.getElementById(resName + 'Max').innerText = resMax;
 			}
 		}
-	}
+	} */
 	loadResPanelNew() {
 		let output = "";
 		let source = resources.stack;
@@ -1374,6 +1384,7 @@ class ResourcesBase {
 //					msg("unlocking now");
 					res.isUnlocked = true;
 				} else { 
+					console.log("trying to unlock " + res.name + ", type is " + typeof res.current);
 					continue; 
 				}
 			}
@@ -1382,13 +1393,12 @@ class ResourcesBase {
 			let label = res.label;
 			let max = (effectsManager.cache[name + "Max"]) ? "/" + effectsManager.cache[name + "Max"] : "";
 			let current = (res.overflow > 0) ? round3(res.current + res.overflow) : round3(res.current);
-			let perTick = effectsManager.cache[name + "PerTick"] || 0;
-			let reserve = effectsManager.cache[name + "PerTickReserve"] || 0;
-			let consumption = effectsManager.cache[name + "PerTickConsumption"] || 0;
-			let conversion = effectsManager.cache[name + "PerTickConversion"] || 0;
-			let con = consumption + conversion;
+			let perTick = effectsManager.cache[name + "PerTick"] || 0;			//generation
+			let reserve = effectsManager.cache[name + "PerTickReserve"] || 0;	//reserve for converting into other res, consumption
+			let cons = effectsManager.cache[name + "PerTickConsumption"] || 0;	//straight consumption (e.g., food)
+			let conv = effectsManager.cache[name + "PerTickConversion"] || 0;	//generation by converting other resources
 			
-			let per = (perTick == 0 && reserve == 0 && con == 0 ) ? "": ((perTick - reserve + con) * 4) + "/s";
+			let per = (perTick == 0 && reserve == 0 && cons == 0 && conv == 0 ) ? "": ((perTick - reserve - con + conv) * 4) + "/s";
 //		(effectsManager.cache[name + "PerTick"]) ? ((effectsManager.cache[name + "PerTick"] - reserve) * 4) + "/s" : "";
 
 			let newRes = `<div class="resource" id="res${i}row">
@@ -1432,7 +1442,7 @@ class ResourcesBase {
 			let avail = res.current + perTick;
 			//TODO: check cache for "perTickReserve" or something similar. Add to reserve under each resource. Once consumption, conversion, and possibly crafting are done, return unused reserves.
 
-			let consumption = effectsManager.cache[res.name + "Consumption"] || 0;
+			let consumption = effectsManager.cache[res.name + "PerTickConsumption"] || 0;
 			let reserveRequest = effectsManager.cache[res.name + "PerTickReserve"] || 0;
 			let reserve = consumption + reserveRequest;
 			if (reserve > avail) {
@@ -1478,9 +1488,8 @@ class ResourcesBase {
 					}
 
 					//find reserve
-					msg("called basic conversion");
+					devMsg("called basic conversion");
 					let source = resources.stack[resources.findResInStack(effect.sourceName)];
-					msg("source is " + source.name);
 
 					//calculate whether full amount is available
 					let fullCall = effect.sourceAmount * effect.numUnits;
@@ -1491,10 +1500,7 @@ class ResourcesBase {
 					source.reserve -= calledAmount;
 
 					//generate conversion resources
-					let generateName = effect.effect.slice(0, effect.effect.search("PerTick"));
-					msg("generated name " + generateName);
-
-					let newRes = resources.findResInStack(generateName);
+					let newRes = resources.findResInStack(effect.creates);
 					let amountAdded = called * effect.value;
 
 					resources.addRes(newRes, amountAdded);		
@@ -1503,9 +1509,9 @@ class ResourcesBase {
 					msg("hit default, something went wrong")
 					break;
 			}
-			msg("reached end of switch");
 
-
+			
+			//			msg("reached end of switch");
 				/*	
 				
 							newConversion.effect = effects[j].effect;
@@ -1530,11 +1536,13 @@ class ResourcesBase {
 							*/
 		}
 
+		//FLAG -- CRAFTING GOES HERE
+		
 		//restore unused reserves
 		for (let m = 0; m < resPool.length; m++ ) {
 			let res = resPool[m];
 			let restore = res.reserve || 0;
-			msg("restore amount is at " + restore);
+//			msg("restore amount is at " + restore);
 			if (restore > 0) {
 				msg(res.name + " reserve is currently at " + restore + ", restoring resources");
 				resources.addRes(res.name, restore);
@@ -1777,6 +1785,7 @@ class EffectsManagerBase {
 							newConversion.sourceName = effects[j].sourceName;
 							newConversion.sourceAmount = effects[j].sourceAmount;
 							newConversion.numUnits = multi;
+							newConversion.creates = effects[j].creates;
 
 							tempCon.push(newConversion);
 
@@ -1804,7 +1813,7 @@ class EffectsManagerBase {
 				}
 				
 /*				  { effect: "preyPerTickReserve", value: 0.25 },
-				  { effect: "sustenancePerTickConversion", value: 0.5, con: "basic", sourceName: "prey", sourceAmount: 0.25 }
+				  { effect: "sustenancePerTickConversion", value: 0.5, con: "basic", sourceName: "prey", sourceAmount: 0.25, creates: "sustenance" }
 */
 				
 
@@ -2041,6 +2050,9 @@ const timing = {
 		//msg(this.logTime);
 		//msg("logTime is " + this.logTime + ", and is ... " + typeof this.logTime);
 		this.beltTimer = setInterval(this.belt.bind(this), timing.beltSpeed);
+	},
+	pauseBelt: function() {
+		clearInterval(this.beltTimer);
 	},
 	belt: function() {
 		//msg("belt function called");
@@ -2311,14 +2323,14 @@ const dev = [
 		  }
 	  }
 	}, */
-	{ name: "button4",
+/*	{ name: "button4",
 	  label: "add prey",
 	  run: function() {
 		  resources.stack[1].current += 5;
 		  resources.loadResource(1);
 		  msg("added 5 prey");
 	  }
-	},
+	}, */
 /*	{ name: "button8",
 	  label: "display pustule object",
 	  run: function() { objectParseMsg(swamp[4]); }
@@ -2342,14 +2354,14 @@ const dev = [
 		  }
 	  }
 	},
-	{ name: "button11",
+/*	{ name: "button11",
 	  label: "canAddAnyRes - name",
 	  run: function() {
 		  let result = resources.canAddAnyRes("prey");
 		  devMsg("called canAddAnyRes with resource prey by name, result: " + result);
 	  }
 	  
-	},
+	}, */
 	{ name: "button12",
 	  label: "canAddAnyRes - number",
 	  run: function() {
@@ -2410,6 +2422,19 @@ const dev = [
 	  label: "loadResPanelNew",
 	  run: function() {
 		  resources.loadResPanelNew();
+	  } 
+	},
+	{ name: "button21",
+	  label: "pause game",
+	  run: function() {
+		  timing.pauseBelt();
+	  }
+	  
+	},
+	{ name: "button22",
+	  label: "unpause game",
+	  run: function() {
+		  timing.activateBelt();
 	  }
 	  
 	}
