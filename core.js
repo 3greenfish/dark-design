@@ -719,7 +719,7 @@ class SwampBase {
 				  { effect: "corruptionPerTick", value: 0.25, type: "active" },
 				  { effect: "sustenancePerTickReserve", value: 0.25, type: "inactive" },
 				  { effect: "pustulePerTick", value: 0.25, sourceName: "sustenance", sourceAmount: 0.25, con: "call", type: "inactive", call: function() {
-					  msg("numUnits is " + this.numUnits + " and value is " + this.value);
+//					  msg("numUnits is " + this.numUnits + " and value is " + this.value);
 					  if (this.numUnits > 0 ) {
 						  let code = findEntry(swamp.stack, "pustule").loc;
 						  swamp.stack[code].fillPus(this.value);
