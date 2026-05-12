@@ -1586,7 +1586,7 @@ class ResourcesBase {
 				value = randomInt(1, max);
 				if (game.currentPhase == 0 && res.name == "prey") {
 					msg("Your traps have captured " + value + " prey.");
-				} else if (game.currentPhase == 0 && res.name = "native") {
+				} else if (game.currentPhase == 0 && res.name == "native") {
 					msg("Your traps have captured " + value + " native.");
 				}
 			}
