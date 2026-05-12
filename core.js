@@ -1416,7 +1416,7 @@ class ResourcesBase {
 			let cons = effectsManager.cache[name + "PerTickConsumption"] || 0;	//straight consumption (e.g., food)
 			let conv = effectsManager.cache[name + "PerTickConversion"] || 0;	//generation by converting other resources
 			
-			let per = (perTick == 0 && reserve == 0 && cons == 0 && conv == 0 ) ? "": ((perTick - reserve - con + conv) * 4) + "/s";
+			let per = (perTick == 0 && reserve == 0 && cons == 0 && conv == 0 ) ? "": ((perTick - reserve - cons + conv) * 4) + "/s";
 //		(effectsManager.cache[name + "PerTick"]) ? ((effectsManager.cache[name + "PerTick"] - reserve) * 4) + "/s" : "";
 
 			let newRes = `<div class="resource" id="res${i}row">
