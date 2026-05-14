@@ -629,7 +629,7 @@ class SwampBase {
 				  let result = 0;
 				  if ( this.special.unfilled.length > 0 ) {
 		//			  msg ("length of pustule array is " + this.unfilled.length);
-					  msg("unfilled status is " + this.special.unfilled.toString());
+		//			  msg("unfilled status is " + this.special.unfilled.toString());
 					  result = (this.special.unfilled[0] / 30) * 100;
 		//			  msg("current pustule level is " + result);
 				  }
@@ -1584,10 +1584,10 @@ class ResourcesBase {
 			if (chance >= Math.random()) {
 				let max = effectsManager.cache[res.name + "PerClickChanceMax"];
 				value = randomInt(1, max);
-				if (game.currentPhase == 0 && res.name == "prey") {
+				if (game.currentPhase == 0 && res.name == "prey" && effectsManager.cache["preyPerTickChance"] > 0.35) {
 					msg("Your traps have captured " + value + " prey.");
 				} else if (game.currentPhase == 0 && res.name == "native") {
-					msg("Your traps have captured " + value + " native.");
+					msg("Your traps have captured an advanced lifeform! This native could make an excellent host.");
 				}
 			}
 		}
