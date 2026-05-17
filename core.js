@@ -1359,7 +1359,7 @@ class ResourcesBase {
 
 		if (!target) {
 			if (resource.isUnlocked !== true && resCurrent > 0) {
-				loadResPanelNew();
+				resources.loadResPanelNew();
 			} else {
 				msg("something went wrong in loadResource");
 				return;
