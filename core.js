@@ -1355,8 +1355,17 @@ class ResourcesBase {
 	loadResource(resource) {
 		let resName = this.stack[resource].name;
 		let resCurrent = round3(this.stack[resource].current);
+		let target = document.getElementById(resName + "Current");
 
-		document.getElementById(resName + 'Current').innerText = resCurrent;
+		if (!target) {
+			if (resource.isUnlocked !== true && resCurrent > 0) {
+				loadResPanelNew();
+			} else {
+				msg("something went wrong in loadResource");
+				return;
+			}
+		}
+		target.innerText = resCurrent;
 	
 		if (this.stack[resource].limited) {
 			let resMax = "/" + effectsManager.cache[resName + "Max"];
