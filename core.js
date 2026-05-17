@@ -1462,7 +1462,7 @@ class ResourcesBase {
 			} */
 
 			//check against chances to randomly generate resource
-			let luckPerTick = resources.perTickChance(res);
+			let luckPerTick = resources.perTickChance(res) || 0;
 			perTick += luckPerTick;
 
 			//reserve res for consumption and conversion
