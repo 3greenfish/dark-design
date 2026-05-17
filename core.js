@@ -1354,16 +1354,21 @@ class ResourcesBase {
 	//	}
 	loadResource(resource) {
 		let resName = this.stack[resource].name;
+		msg("resName is " + resName);
 		let resCurrent = round3(this.stack[resource].current);
+		msg("resCurrent is " + resCurrent);
 		let target = document.getElementById(resName + "Current");
+
+		let targetTest = (target) ? true : false;
+		msg("target is found? " + targetTest);
 
 		if (!target) {
 			if (resource.isUnlocked !== true && resCurrent > 0) {
 				resources.loadResPanelNew();
 			} else {
 				msg("something went wrong in loadResource");
-				return;
 			}
+			return;
 		}
 		target.innerText = resCurrent;
 	
