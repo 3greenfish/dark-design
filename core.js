@@ -2448,7 +2448,7 @@ const dev = [
 	  }
 	},
 	{ name: "button20",
-	  label: "loadResPanelNew",
+	  label: "loadResPanelNew (TEST)",
 	  run: function() {
 		  resources.loadResPanelNew();
 	  } 
