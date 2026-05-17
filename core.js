@@ -1411,7 +1411,7 @@ class ResourcesBase {
 //					msg("unlocking now");
 					res.isUnlocked = true;
 				} else { 
-					console.log("trying to unlock " + res.name + ", type is " + typeof res.current);
+					//console.log("trying to unlock " + res.name + ", type is " + typeof res.current);
 					continue; 
 				}
 			}
