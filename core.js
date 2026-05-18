@@ -1598,7 +1598,7 @@ class ResourcesBase {
 	perTickChance(res) {
 		let chance = (effectsManager.cache[res.name + "PerTickChance"]) ? effectsManager.cache[res.name + "PerTickChance"] : 0;
 		let value = 0;
-		console.log("called pertickchance for " + res.name + " and chance is currently " + chance);
+//		console.log("called pertickchance for " + res.name + " and chance is currently " + chance);
 		if (chance > 0 ) {
 			if (chance >= Math.random()) {
 				let max = effectsManager.cache[res.name + "PerClickChanceMax"];
