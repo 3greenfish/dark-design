@@ -1368,7 +1368,7 @@ class ResourcesBase {
 			if (resource.isUnlocked !== true && resCurrent > 0) {
 				resources.loadResPanelNew();
 			} else {
-				msg("something went wrong in loadResource");
+				// msg("something went wrong in loadResource");		//FLAG for further testing, need to figure out how to make this all properly account for when things are not visible but are being unlocked. Perhaps review split on visual load vs. background updates???
 			}
 			return;
 		}
