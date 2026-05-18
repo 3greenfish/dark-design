@@ -1592,14 +1592,15 @@ class ResourcesBase {
 		this.stack[2].current = this.stack[2].current + perTickValue - subtract; */ 	// FLAG FOR DELETION
 	}
 	perTickChance(res) {
-//		console.log("called pertickchance for " + res.name);
 		let chance = (effectsManager.cache[res.name + "PerTickChance"]) ? effectsManager.cache[res.name + "PerTickChance"] : 0;
 		let value = 0;
+		console.log("called pertickchance for " + res.name + " and chance is currently " + chance);
 		if (chance > 0 ) {
 			if (chance >= Math.random()) {
 				let max = effectsManager.cache[res.name + "PerClickChanceMax"];
 				value = randomInt(1, max);
-				if (game.currentPhase == 0 && res.name == "prey" && effectsManager.cache["preyPerTickChance"] > 0.35) {
+				
+				if (game.currentPhase == 0 && res.name == "prey" && effectsManager.cache["preyPerTickChance"] < 0.35) {
 					msg("Your traps have captured " + value + " prey.");
 				} else if (game.currentPhase == 0 && res.name == "native") {
 					msg("Your traps have captured an advanced lifeform! This native could make an excellent host.");
@@ -2472,6 +2473,16 @@ const dev = [
 		  timing.activateBelt();
 	  }
 	  
+	},
+	{ name: "button23",
+	  label: "Show all resources",
+	  run: function() {
+		  let resPool = resources.stack;
+		  for (let i = 0; i < resPool.length; i++) {
+			  resPool[i].isUnlocked = true;
+		  }
+		  resources.loadResPanelNew();
+	  }
 	}
 /*	{ name: "buttonX",
 	  label: "blank",
