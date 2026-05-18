@@ -1354,13 +1354,13 @@ class ResourcesBase {
 	//	}
 	loadResource(resource) {
 		let resName = this.stack[resource].name;
-		msg("resName is " + resName);
+//		msg("resName is " + resName);
 		let resCurrent = round3(this.stack[resource].current);
-		msg("resCurrent is " + resCurrent);
+//		msg("resCurrent is " + resCurrent);
 		let target = document.getElementById(resName + "Current");
 
 		let targetTest = (target) ? true : false;
-		msg("target is found? " + targetTest);
+//		msg("target is found? " + targetTest);
 
 		if (!target) {
 			if (resource.isUnlocked !== true && resCurrent > 0) {
@@ -1577,7 +1577,8 @@ class ResourcesBase {
 //			msg("restore amount is at " + restore);
 			if (restore > 0) {
 				msg(res.name + " reserve is currently at " + restore + ", restoring resources");
-				resources.addRes(res.name, restore);
+				resources.addRes(m, restore);
+				res.reserve = 0;
 			}
 		}
 
