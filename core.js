@@ -1606,7 +1606,7 @@ class ResourcesBase {
 				
 				if (game.currentPhase == 0 && res.name == "prey" && effectsManager.cache["preyPerTickChance"] < 0.35) {
 					msg("Your traps have captured " + value + " prey.");
-				} else if (game.currentPhase == 0 && res.name == "native") {
+				} else if (game.currentPhase == 0 && res.name == "native" && res.current <= 1) {
 					msg("Your traps have captured an advanced lifeform! This native could make an excellent host.");
 				}
 			}
