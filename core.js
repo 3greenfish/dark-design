@@ -905,7 +905,8 @@ class SwampBase {
 			  ],
 			  effects: [
 				  { effect: "preyPerTickReserve", value: 0.25 },
-				  { effect: "sustenancePerTick", value: 0.5, con: "basic", sourceName: "prey", sourceAmount: 0.25, creates: "sustenance" }
+				  { effect: "sustenancePerTick", value: 0.5, con: "basic", sourceName: "prey", sourceAmount: 0.25, creates: "sustenance" },
+				  { effect: "sustenanceMax", value: 10 }
 			  ]
 			},
 			{ name: "siren",		//7
@@ -1017,7 +1018,8 @@ class SwampBase {
 			  ],
 			  effects: [
 				  { effect: "sustenancePerTickConsumption", value: 0.5, type: "active" },
-				  { effect: "corruptionMax", value: 100, type: "active" }
+				  { effect: "corruptionMax", value: 100, type: "active" },
+				  { effect: "sustenanceMax", value: 25, type: "active" }
 			  ]
 			},
 			{ name: "corruptHost",	//9
@@ -1453,13 +1455,14 @@ class ResourcesBase {
 			</div> */
 
 	updatePerTick() {
+		console.time();
 		let resPool = resources.stack;
 		for (let i = 0; i < resPool.length; i++ ) {
 			let res = resPool[i];
 			//confirm resource is unlocked and not hidden
-			if (res.isUnlocked == false || res.hidden == true) {
+/*			if (res.isUnlocked == false || res.hidden == true) {
 				continue;
-			}
+			} */
 			//get amount generated
 			let perTick = (effectsManager.cache[res.name + "PerTick"]) ? effectsManager.cache[res.name + "PerTick"] : 0;
 /*			if (!perTick) {
@@ -1491,9 +1494,9 @@ class ResourcesBase {
 		for (let j = 0; j < resPool.length; j++) {
 			let res = resPool[j];
 			//confirm resource is unlocked and not hidden
-			if (res.isUnlocked == false || res.hidden == true) {
+/*			if (res.isUnlocked == false || res.hidden == true) {
 				continue;
-			}			
+			} */
 			//get amount consumed
 			let perTick = effectsManager.cache[res.name + "PerTickConsumption"] || 0;
 
@@ -1590,6 +1593,7 @@ class ResourcesBase {
 		let availableSus = this.stack[2].current + perTickValue;
 		let subtract = swamp.stack[1].fillPus(availableSus);
 		this.stack[2].current = this.stack[2].current + perTickValue - subtract; */ 	// FLAG FOR DELETION
+	console.timeEnd();
 	}
 	perTickChance(res) {
 		let chance = (effectsManager.cache[res.name + "PerTickChance"]) ? effectsManager.cache[res.name + "PerTickChance"] : 0;
