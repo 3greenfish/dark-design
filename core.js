@@ -83,7 +83,7 @@ function buildGrid(source, sourceArray, refresh = false) {
 		if (array[i].count > 0) {
 			let act = ("active" in array[i]) ? array[i].active + "/" : "";
 			label = label + " (" + act + array[i].count + ")";
-		}					//FLAG -- make this into a separate function that accounts for active/inactive buildings		
+		}		
 		let identifier = source.name + i;
 		let desc = array[i].desc;		//gets description from stack
 		let cost = "";
@@ -897,15 +897,6 @@ class SwampBase {
 			}
 			];
 	}
-	findEntry(name) {			//flag for deletion
-		let findName = name;
-		for (let i = 0; i < swamp.stack.length; i++) {
-			if (swamp.stack[i].name == findName) {
-				return i;
-			}
-		}
-	}
-	buyEntry(num) { } //flag for deletion
 }
 
 // ---- end phase 1 buildings ---- //
@@ -1534,19 +1525,6 @@ class EffectsManagerBase {
 	
 }
 
-
-
-
-
-function findBldgInSwamp(name) { 	//FLAG for deletion
-	let findName = name;
-	for (let i = 0; i < swamp.stack.length; i++) {
-		if (swamp.stack[i].name == findName) {
-			return i;
-		}
-	}
-}
-
 // -- start loading items here -- //
 
 function loadGame() {	//runs at end of HTML load
@@ -1626,7 +1604,7 @@ function updateLabel(stack, num) {
 	} 
 }
 
-function updateContentCosts(num) {		//FLAG -- is anything calling for this? if not, delete
+/* function updateContentCosts(num) {		//FLAG -- is anything calling for this? if not, delete
 	//msg("updateContentCosts called");
 	let prices = swamp.stack[num].costs;
 	let dispCost = "";
@@ -1638,7 +1616,7 @@ function updateContentCosts(num) {		//FLAG -- is anything calling for this? if n
 		dispCost += "<div class=\"bldgCostPriceName\">" + label + ":</div><div class=\"bldgCostRes\">" + value + "</div>";
 	}
 	document.getElementById("buy-" + num + "-Costs").innerHTML = dispCost;
-}
+} */
 
 // -- end button management and purchase code --//
 
