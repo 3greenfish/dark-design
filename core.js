@@ -1019,7 +1019,8 @@ class SwampBase {
 			  effects: [
 				  { effect: "sustenancePerTickConsumption", value: 0.5, type: "active" },
 				  { effect: "corruptionMax", value: 100, type: "active" },
-				  { effect: "sustenanceMax", value: 25, type: "active" }
+				  { effect: "sustenanceMax", value: 25, type: "active" },
+				  { effect: "cholerMax", value: 20, type: "active" }
 			  ]
 			},
 			{ name: "corruptHost",	//9
