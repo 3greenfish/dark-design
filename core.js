@@ -1037,7 +1037,7 @@ class SwampBase {
 				  { name: "native", amount: 1 }		//FLAG -- do we need a ratio on any cost?
 				  ],
 			  actions: [
-				  { subLabel: "",
+				  { subLabel: "Corrupt a host",
 				   	type: "",
 				   	press: function(code, isMain = false) {
 						let priceCheck = resources.buyCycle(swamp, code, isMain);
