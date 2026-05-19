@@ -796,7 +796,7 @@ class SwampBase {
 			  ],
 			  effects: [
 				  { effect: "nativeMax", value: 1 },
-				  { effect: "nativePerTickChance", value: 0.05 },
+				  { effect: "nativePerTickChance", value: 0.005 },
 				  { effect: "preyPerTickChance", value: 0.1 },
 				  { effect: "preyMax", value: 10 },
 				  { effect: "preyPerClickChanceMax", value: 3 },
@@ -1953,14 +1953,12 @@ const dev = [
 	  run: function() {
 		  timing.pauseBelt();
 	  }
-	  
 	},
 	{ name: "button22",
 	  label: "unpause game",
 	  run: function() {
 		  timing.activateBelt();
 	  }
-	  
 	},
 	{ name: "button23",
 	  label: "Show all resources",
