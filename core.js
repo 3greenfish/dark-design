@@ -37,12 +37,7 @@ function objectParseMsg(ob) {
 						<div class="button" data-target="pop-all" onClick="buttonManager(event)">Pop all</div>
 					</div>
 				</div>
-
-
-
 */
-
-
 
 function buildGrid(source, sourceArray, refresh = false) {
 	let output = "";
