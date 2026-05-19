@@ -4,8 +4,6 @@ const messageArray = [];
 let devMode = false;
 	// ["You have awakened in a new world, and your dark powers have corrupted a small bog. Time to fester..."];
 
-let resStatus = "visible"; // FLAG temporary variable for dev button testing of hidden attributes.
-
 // TESTING NEW OBJECT and LOCAL STORAGE //
 
 function objectParseMsg(ob) {
@@ -83,7 +81,6 @@ function buildGrid(source, sourceArray, refresh = false) {
 		
 		let label = array[i].label;		//this is what shows in the label, will need to be updated for counts
 		if (array[i].count > 0) {
-//			let act = (array[i].inactive > 0) ? array[i].count - array[i].inactive + "/" : "";
 			let act = ("active" in array[i]) ? array[i].active + "/" : "";
 			label = label + " (" + act + array[i].count + ")";
 		}					//FLAG -- make this into a separate function that accounts for active/inactive buildings		
@@ -159,13 +156,10 @@ function testUnlock(button) {
 	let pass = true;
 
 	if (locks === undefined) {
-//		msg("warning, no locks for " + button.name);
 		return true;
 	} 
-//	else { devMsg("length of locks for " + button.name + " is " + locks.length); }
 	
 	for (let i = 0; i < locks.length; i++) {
-//		msg("calling locks for " + button.name);
 		if (locks[i].opened === true) { 
 			continue; 
 		}
@@ -209,10 +203,6 @@ function testUnlock(button) {
 				case "swamp":
 					stack = swamp.stack;
 					break;
-/*				case "research":
-					stack = research.stack;
-					break; */
-					//FLAG -- separate code for checking research
 			}
 
 			let location = findEntry(stack, locks[i].name);
@@ -227,12 +217,6 @@ function testUnlock(button) {
 			}
 		}
 	}
-/*				SHOULD NOT BE NECESSARY GIVEN THAT IT MATCHES VALUE OF PASS
-	if (pass == true) {
-		return true;
-	} else { 
-		return false; 
-	} */
 	return pass;
 }
 
@@ -314,9 +298,6 @@ class GameBase {
 			  visible: true,
 			  lockAtPhase: 1,
 			  select: function() {
-	/*			  game.activeTab = num;
-				  game.refreshNav();
-				  devMsg(this.name + " selected"); */
 				  buildGrid(swamp, swamp.stack);
 			  }
 			},
@@ -344,39 +325,29 @@ class GameBase {
 				  }
 				  return label2;
 			  },
-	//		  label: "tribe",
 			  unlockAtPhase: 1,
 			  select: function(num) {
-	/*			  game.activeTab = num;
-				  game.refreshNav();
-				  devMsg(this.name + " selected"); */
+				  msg("need to build out tribe object");
 			  }
 			},
 			{ name: "home",			//2
 			  label: "settlement",
 			  unlockAtPhase: 2,
 			  select: function(num) {
-	/*			  game.activeTab = num;
-				  game.refreshNav();
-				  devMsg(this.name + " selected"); */
+				  msg("need to build out town object");
 			  }
 			},
 			{ name: "world",		//3
 			  label: "world", // update to start as "nearby towns"?
 			  unlockAtPhase: 3,
 			  select: function(num) {
-	/*			  game.activeTab = num;
-				  game.refreshNav();
-				  devMsg(this.name + " selected"); */
+				  msg("need to build out world object");
 			  }
 			},
 			{ name: "research",		//4
 			  label: "research",
 			  select: function(num) {
 				  buildGrid(research, research.stack);
-	/*			  game.activeTab = num;
-				  game.refreshNav();
-				  devMsg(this.name + " selected"); */
 			  }
 			}
 		];
@@ -386,7 +357,6 @@ class GameBase {
 		for (let i = 0; i < this.tabs.length; i++) {
 			let tabLabel = this.tabs[i].label;
 			let activeFlag = "";
-	//		let action = `game.tabs[${i}].select(${i})`;
 			let action = `game.selectNav(${i})`;
 			if (this.activeTab == i) {
 				activeFlag = `class="activeTab"`;
@@ -493,13 +463,12 @@ class SwampBase {
 				    type: "main",
 				    press: function(code, isMain = false) {
 						let r = resources.findResInStack("prey");
-	//					let res = resources.stack[r];
 						let ch = effectsManager.cache.preyPerClickChance;
 						// FLAG for ADDITION -- if chance exceeds 100%, log overage as bonus to amount caught
 						if (resources.canAddAnyRes(r) == true ) {
 							if (ch >= Math.random()) {
 								let maxPrey = effectsManager.cache.preyPerClickChanceMax;
-								let amountCaught = randomInt(1, maxPrey);		//FLAG FOR UPDATING BY CALCULATION
+								let amountCaught = randomInt(1, maxPrey);
 								resources.addRes(r, amountCaught);
 								msg("Captured " + amountCaught + " prey!");
 							} else {
@@ -589,25 +558,6 @@ class SwampBase {
 							updateLabel(swamp, code);
 							updateContentCosts2(swamp, code);
 						}
-	
-/*						let swell = swamp.stack[code];		//FLAG FOR DELETION
-						let getCosts = swell.costs;
-						let current = swell.count;
-						devMsg("swell getCosts called");
-	
-						if (resources.checkCostsByArray(getCosts, current).result == "pass") {
-							resources.payCostsByArray(getCosts, current);
-							swell.count += 1;
-	
-							updateLabel(swamp, code);
-							updateContentCosts2(swamp, code);
-						}
-						else if (isMain == true) {
-							//expand or close button
-							devMsg("isMain is TRUE, calling expandButton2");
-							let target = "swamp" + code;
-							expandButton2(target);
-						}		*/			
 					}
 				  }
 			  ],
@@ -628,27 +578,19 @@ class SwampBase {
 			  get prog() {
 				  let result = 0;
 				  if ( this.special.unfilled.length > 0 ) {
-		//			  msg ("length of pustule array is " + this.unfilled.length);
-		//			  msg("unfilled status is " + this.special.unfilled.toString());
 					  result = (this.special.unfilled[0] / 30) * 100;
-		//			  msg("current pustule level is " + result);
 				  }
 				  return result;
 			  },
 			  count: 0,
-/*			  get count() {				//FLAG for deletion
-	//			  console.log("getting pustule count");
-				  return this.special.filled + this.special.unfilled.length;
-			  }, */ 
 			  stackable: true,
 			  active: 0,
-			  get inactive() {
+			  get inactive() {				//FLAG for deletion
 				  return this.special.unfilled.length;
 			  },
 			  costs: [
 				  { name: "corruption", amount: 40, ratio: 1.2 }
 			  ],
-	//		  ratio: 1.2,
 			  actions: [
 				  { subLabel: "Grow pustule",
 				    type: "main",
@@ -662,40 +604,6 @@ class SwampBase {
 							updateContentCosts2(swamp, code);
 							refreshProgAll(swamp, swamp.stack);
 						}
-
-	/*					devMsg("buy pustule called");
-						let grow = swamp.stack[code];
-						let getCosts = grow.costs;
-						let current = grow.count;
-						devMsg("pustule getCosts called");
-	
-						if (resources.checkCostsByArray(getCosts, current).result == "pass") {
-							resources.payCostsByArray(getCosts, current);
-	
-							swamp.stack[code].special.unfilled.push(0);
-							swamp.stack[code].count += 1;
-	
-							updateLabel(swamp, code);
-							updateContentCosts2(swamp, code);
-							refreshProgAll(swamp, swamp.stack);
-						}
-						else if (isMain == true) {
-							//expand or close button
-							devMsg("isMain is TRUE, calling expandButton2");
-							let target = "swamp" + code;
-							expandButton2(target);
-						} */
-					}
-				  },
-				  { subLabel: "Fill Pustules",
-				    type: "",
-				    press: function(code) {
-/*						let spent = */ 
-						swamp.stack[code].fillPus(code);
-/*						let spentArray = [{ name: "sustenance", value: spent };
-						resources.payCostsByArray(spentArray); */
-						refreshProgAll(swamp, swamp.stack);
-						updateLabel(swamp, code);
 					}
 				  },
 				  { subLabel: "Pop",
@@ -736,13 +644,6 @@ class SwampBase {
 			  special: {
 				  unfilled: []
 			  },
-	/*		  onPurchase: function() {
-				  this.unfilled.push({ level: 0 });
-				  this.count += 1;
-				  this.updateButtonLabel();
-				  this.updateRatio();
-				  updateContentCosts(1);
-			  }, */
 			  fillPus: function(unit) {
 				  let x = resources.findResInStack("sustenance");
 				  let sus = resources.stack[x].reserve;    //sustenance available
@@ -764,20 +665,8 @@ class SwampBase {
 							  array.shift();
 						  }
 					  }
-//					  msg("current is " + sus + ", spent is " + spent + ", count is " + array.length);
-//					  msg("reserves before payment: " + resources.stack[x].reserve);
 					  resources.stack[x].reserve -= spent;
-//					  msg("reserves after payment: " + resources.stack[x].reserve);
-				  }
-	
-				/*  let newCount = array.length;
-				  let progWidth = 0;
-				  if (newCount > 0) {
-					  progWidth = (array[0] / 30) * 100;
-				  } 
-	
-				  document.getElementById("swamp" + code + "Progress").style.width = progWidth + "%";
-				  */
+				  }	
 				  return spent;
 			  },
 			  popPustule: function(count) {
@@ -789,17 +678,8 @@ class SwampBase {
 					  let res = resources.findResInStack("choler");
 					  let amt = effectsManager.cache.cholerPerClick;
 					  resources.addRes(res, amt);
-//					  resources.gatherByName("choler");
-//					  this.updateButtonLabel();
 				  }  
-			  },
-	/*		  updateButtonLabel: function() {				//READY TO DELETE
-				  let newLabel = this.label;
-					  if (this.count > 0) {
-						  newLabel = newLabel + " (" + this.filled + "/" + this.count + ")";
-					  }
-				  document.getElementById(this.name + "Label").innerText = newLabel;
-			  } */
+			  }
 			},
 			{ name: "trap",			//5
 			  label: "Trap",
@@ -821,27 +701,6 @@ class SwampBase {
 							updateLabel(swamp, code); //if has count
 							updateContentCosts2(swamp, code); //if has ratio
 						}
-						
-/*						devMsg("buy trap called");
-	
-						let grow = swamp.stack[code];
-						let getCosts = grow.costs;
-						let current = grow.count;
-
-						if (resources.checkCostsByArray(getCosts, current).result == "pass") {
-							resources.payCostsByArray(getCosts, current);
-	
-							swamp.stack[code].count += 1;
-	
-							updateLabel(swamp, code);
-							updateContentCosts2(swamp, code);
-						}
-						else if (isMain == true) {
-							//expand or close button
-							devMsg("isMain is TRUE, calling expandButton2");
-							let target = "swamp" + code;
-							expandButton2(target);
-						} */
 					}
 				  }
 			  ],
@@ -874,27 +733,7 @@ class SwampBase {
 
 							updateLabel(swamp, code); //if has count
 							updateContentCosts2(swamp, code); //if has ratio
-
-						}				  
-/*						devMsg("buy digestor called");
-						let grow = swamp.stack[code];
-						let getCosts = grow.costs;
-						let current = grow.count;
-
-						if (resources.checkCostsByArray(getCosts, current).result == "pass") {
-							resources.payCostsByArray(getCosts, current);
-	
-							swamp.stack[code].count += 1;
-	
-							updateLabel(swamp, code);
-							updateContentCosts2(swamp, code);
 						}
-						else if (isMain == true) {
-							//expand or close button
-							devMsg("isMain is TRUE, calling expandButton2");
-							let target = "swamp" + code;
-							expandButton2(target);
-						} */
 				    }
 				  }
 			  ],
@@ -1097,13 +936,7 @@ class ResourcesBase {
 			  current: 0,
 			  overflow: 0,
 			  limited: true,
-			  isUnlocked: true /*,
-			  updateMax: function() {					//FLAG need to build into EFFECTS object arrays
-				  let swl = findBldgInSwamp("swell");
-				  let pus = findBldgInSwamp("pustule");
-				  let newMax = 50 + (swamp.stack[swl].count * 5) + (swamp.stack[pus].count * 50);
-				  this.max = newMax;
-			  } */
+			  isUnlocked: true
 			},
 			{ name: "prey", // 1
 			  label: "Prey",
@@ -1111,53 +944,13 @@ class ResourcesBase {
 			  overflow: 0,
 			  limited: true,
 			  isUnlocked: false 
-/*,			  gather: function() {		//FLAG for deletion
-				  let totalRes = this.current;
-				  let chance = effectsManager.cache[this.name + "PerClickChance"];
-				  if (chance >= Math.random()) {
-					  totalRes += 1;
-					  msg("you have captured prey!");
-				  }
-				  else {
-					  msg("you have failed to capture any prey");
-				  }
-
-				  let thisMax = effectsManager.cache[this.name + "Max"];
-				  if (totalRes >= thisMax) {
-					  this.current = thisMax;
-				  } else {
-					  this.current = round3(totalRes);
-				  }
-			  } */
 			},
 			{ name: "sustenance", //2
 			  label: "Sustenance",
 			  current: 0,
 			  overflow: 0,
 			  limited: true,
-			  isUnlocked: false /*,
-			  gatherCost: [			//FLAG for deletion
-				  { name: "prey", amount: 2 }
-				  ],
-			  gather: function() {	//FLAG for deletion
-				  let totalRes = this.current;
-	
-				  //update target resource
-				  totalRes += this.gatherRate;
-				  if (totalRes >= this.max) {
-					  this.current = this.max;
-				  } else {
-					  this.current = round3(totalRes);
-				  }
-				  resources.loadResourcePanel(); // need to clean up this code
-			  },
-			  updateGatherRate: function() {		//FLAG for deletion
-				  msg("sustenance rate is " + this.gatherRate + " per click. Not yet defined.");
-			  },
-			  updatePerTick: function() {		//FLAG for deletion
-				  this.perTick = 1; // need to define logic.
-				  msg("Amount per tick is now " + this.perTick + " per click.");
-			  } */
+			  isUnlocked: false
 			},
 			{ name: "choler", //3
 			  label: "Choler",
@@ -1165,7 +958,7 @@ class ResourcesBase {
 			  overflow: 0,
 			  limited: true,
 			  isUnlocked: false,
-			  gather: function() { //FLAG for deletion
+	/*		  gather: function() { //FLAG for deletion
 				  let totalRes = this.current;
 				  totalRes += this.gatherRate;
 	
@@ -1174,7 +967,7 @@ class ResourcesBase {
 				  } else {
 					  this.current = round3(totalRes);
 				  }
-			  }
+			  } */
 			},
 			{ name: "native", //4
 			  // need to build in way to change based upon phase -- native > subject > citizen > ??
@@ -1204,7 +997,6 @@ class ResourcesBase {
 			{ effect: "preyPerTick", value: 0 },
 			{ effect: "preyPerClickChanceMax", value: 1 },
 			{ effect: "preyPerClickChance", value: 0.25 },
-//			{ effect: "preyPerTickChance", value: 0.1 },
 			{ effect: "sustenanceMax", value: 40 },
 			{ effect: "sustenancePerTick", value: 0 },
 			{ effect: "sustenancePerClick", value: 1 },
@@ -1213,14 +1005,9 @@ class ResourcesBase {
 			{ effect: "cholerPerClick", value: 30 },
 			{ effect: "nativeMax", value: 10 },
 			{ effect: "nativePerClickChanceMax", value: 1 },
-//			{ effect: "hostMax", value: "nativeMax" },
 			{ effect: "hostMax", value: 10 },
 			{ effect: "hostPerClick", value: 1 }
 		];
-
-		
-//			{ effect: "", value: },
-		
 	}
 	addRes(resCode, amount) {
 		devMsg("resources.addRes called with resCode " + resCode + " and amount " + amount);
@@ -1246,27 +1033,6 @@ class ResourcesBase {
 		let result = (targetRes.current < targetMax) ? true : false;
 		return result;
 	}
-/*	checkCosts(x) {					// FLAG for possible deletion
-		let result = { result: "fail", reason: "failed function" };
-//		if (!this.stack[x].gatherCost.length > 0) 
-		if (this.stack[x].gatherCost === undefined) {
-			result = { result: "pass", reason: "no costs" };
-			return result;
-		}
-		let prices = this.stack[x].gatherCost;
-		for (let i = 0; i < prices.length; i++) {
-			let priceName = prices[i].name;
-			let priceCode = resources.findResInStack(priceName);
-			let value = prices[i].amount;
-			if (value > resources.stack[priceCode].current) {
-				result.reason = "insufficient " + priceName;
-				return result;
-			}
-		}
-		result.result = "pass";
-		result.reason = "sufficient resources";
-		return result;	
-	} */
 	checkCostsByArray(array, multi) {		//send resources.checkCostsByArray an array of costs to check
 		let result = { result: "fail", reason: "failed function" };
 		if (array === undefined) {
@@ -1314,34 +1080,6 @@ class ResourcesBase {
 			expandButton2(target);
 		}
 		return check;
-
-		
-
-/*
-						let grow = swamp.stack[code];
-						let getCosts = grow.costs;
-						let current = grow.count;
-	
-						if (resources.checkCostsByArray(getCosts, current).result == "pass") {
-							resources.payCostsByArray(getCosts, current);
-	
-							swamp.stack[code].special.unfilled.push(0);
-							swamp.stack[code].count += 1;
-	
-							updateLabel(swamp, code);
-							updateContentCosts2(swamp, code);
-							refreshProgAll(swamp, swamp.stack);
-						}
-						else if (isMain == true) {
-							//expand or close button
-							devMsg("isMain is TRUE, calling expandButton2");
-							let target = "swamp" + code;
-							expandButton2(target);
-						} */
-
-
-
-		
 	}
 	findResInStack(name) {
 		let findName = name;
@@ -1351,10 +1089,6 @@ class ResourcesBase {
 			}
 		}
 	}
-	// gatherByName(res) {							//FLAG for DELETION
-	//	let code = this.findResInStack(res);
-	//	this.gather(code);
-	//	}
 	loadResource(resource) {
 		let resName = this.stack[resource].name;
 //		msg("resName is " + resName);
@@ -1381,29 +1115,6 @@ class ResourcesBase {
 			document.getElementById(resName + 'Max').innerText = resMax;
 		}
 	}
-/*	loadResourcePanel() {			//FLAG for deletion
-		for (let i = 0; i < this.stack.length; i++) {
-			let resName = this.stack[i].name;
-			let resCurrent = round3(this.stack[i].current);
-
-			if (this.stack[i].isUnlocked == false) { // temp to test if identification of locked/unlocked is working
-				if (resCurrent > 0) {
-					this.stack[i].isUnlocked = true;
-					let resRow = document.getElementById("res" + i + "row");
-					if (resRow) resRow.classList.remove("hidden");   // unlock resource if user has any
-				} else { 
-					continue; } // otherwise, stop the iteration and move on to the next resource
-			}
-			
-			document.getElementById(resName + 'Current').innerText = resCurrent;
-		
-			if (this.stack[i].limited == true) {
-				let resMax = "/" + effectsManager.cache[resName + "Max"];
-			
-				document.getElementById(resName + 'Max').innerText = resMax;
-			}
-		}
-	} */
 	loadResPanelNew() {
 		let output = "";
 		let source = resources.stack;
@@ -1434,8 +1145,6 @@ class ResourcesBase {
 			let conv = effectsManager.cache[name + "PerTickConversion"] || 0;	//generation by converting other resources
 			
 			let per = (perTick == 0 && reserve == 0 && cons == 0 && conv == 0 ) ? "": ((perTick - reserve - cons + conv) * 4) + "/s";
-//		(effectsManager.cache[name + "PerTick"]) ? ((effectsManager.cache[name + "PerTick"] - reserve) * 4) + "/s" : "";
-
 			let newRes = `<div class="resource" id="res${i}row">
 				<div class="resourceName" id="res${name}">${label}:</div>
 				<div class="resourceValue" id="${name}Current">${current}</div>
@@ -1447,14 +1156,6 @@ class ResourcesBase {
 		}
 		document.getElementById("leftblock").innerHTML = output;
 	}
-
-/* 			<div class="resource" id="res0row">
-				<div class="resourceName" id="resCorruption">Corruption:</div>
-				<div class="resourceValue" id="corruptionCurrent"></div>
-				<div class="resourceMax" id="corruptionMax"></div>
-				<div class="resourcePer" id="corruptionPer"></div>
-			</div> */
-
 	updatePerTick() {
 		console.time();
 		let resPool = resources.stack;
@@ -1545,31 +1246,6 @@ class ResourcesBase {
 					msg("hit default, something went wrong")
 					break;
 			}
-
-			
-			//			msg("reached end of switch");
-				/*	
-				
-							newConversion.effect = effects[j].effect;
-							newConversion.value = effects[j].value;
-							newConversion.con = effects[j].con;
-							newConversion.sourceName = effects[j].sourceName;
-							newConversion.sourceAmount = effects[j].sourceAmount;
-							newConversion.numUnits = multi;
-							 
-				effect: "sustenancePerTick", value: 0.25, con: "call", type: "inactive",
-				    call: function(multi) 
-
-
-							newConversionA.effect = effects[j].effect;
-							newConversionA.value = effects[j].value;
-							newConversionA.con = effects[j].con;
-							newConversionA.sourceName = effects[j].sourceAmount;
-							newConversionA.numUnits = multi;
-							newConversionA.call = effects[j].call; 
-							
-							
-							*/
 		}
 
 		//FLAG -- CRAFTING GOES HERE
@@ -1590,10 +1266,6 @@ class ResourcesBase {
 		// a bunch of stuff is needed here to calculate pertick values for all resources
 		// likely a for loop
 		// the code below is specifically for pustules and sustenance only
-/*		let perTickValue = 0;
-		let availableSus = this.stack[2].current + perTickValue;
-		let subtract = swamp.stack[1].fillPus(availableSus);
-		this.stack[2].current = this.stack[2].current + perTickValue - subtract; */ 	// FLAG FOR DELETION
 	console.timeEnd();
 	}
 	perTickChance(res) {
@@ -1698,66 +1370,7 @@ class TechBase {
 	}
 }
 
-/* const researchBase = {
-	name: "research",
-	stack: [
-		{ name: "calendar",
-		  label: "Calendar",
-		  desc: "Discover the world's cyclical cycle.",
-		  flavor: null,
-		  costs: [
-			  { name: "corruption", amount: 10 }
-		  ],
-		  purchased: false,
-		  actions: [
-			  { subLabel: "Research",
-			    type: "main",
-			    press: function(code, isMain = false) {
-					devMsg("purchasing research");
-					let cal = research.stack[code];
-					let getCosts = cal.costs;
-
-					if (resources.checkCostsByArray(getCosts, 0).result == "pass") {
-						resources.payCostsByArray(getCosts, 0);
-						calendar.activateCal();
-						cal.purchased = true;
-						buildGrid(research, research.stack, true);
-					}
-					else if (isMain == true) {
-						let target = "research" + code;
-						expandButton2(target);
-					}
-				}
-			  }
-		  ],
-		  effects: [],
-		  unlocks: []
-		},
-		{ name: "stone tools",
-		  label: "Stone tools",
-		  desc: "Improve hunting and gathering with tools made of stone.",
-		  flavor: "sometimes you just have to hit something with a rock.",
-		  costs: [
-			  { name: "corruption", amount: 15 }
-		  ],
-		  purchased: false,
-		  lockedBy: [
-			  { type: "tech", name: "calendar" }
-		  ],
-		  actions: [],
-		  effects: [],
-		  unlocks: []
-		}
-
-	
-	]
-}; */
-	
-
-
-
-
-// --- close science object --- //
+// --- close tech object --- //
 
 
 let effectsManager = {};
@@ -1852,32 +1465,6 @@ class EffectsManagerBase {
 							break;
 					}
 				}
-				
-/*				  { effect: "preyPerTickReserve", value: 0.25 },
-				  { effect: "sustenancePerTickConversion", value: 0.5, con: "basic", sourceName: "prey", sourceAmount: 0.25, creates: "sustenance" }
-*/
-				
-
-/*				if ("type" in effects[j]) {
-					let type = effects[j].type;
-					switch (type) {
-						case "active":
-							newEffect.value = getValue * stack[i].active;
-							break;
-						case "inactive":
-							newEffect.value = getValue * (stack[i].count - stack[i].active);
-							break;
-						case "stack":
-							newEffect.value = getValue * stack[i].count;
-							break;
-						default:
-							msg("effect type " + type + "not found");
-							break;
-					}
-				} else if (stackable == true) {
-					newEffect.value = getValue * stack[i].count;
-				} else { newEffect.value = getValue; } */
-
 				newEffect.value = effects[j].value * multi;
 				buildEffects.push(newEffect);
 			}
@@ -1928,22 +1515,8 @@ class EffectsManagerBase {
 
 		//combine conversion caches
 		this.conversionCache = [...this.swampConversionCache];
-		
-		/* 
-let test = { try: "age" };
 
-const person = {
-  firstName: "John",
-  lastName : "Doe",
-  age      :  50
-};
 
-let result = (test.try in person);
-
-if (result == true) { person.test.try += 25 };
-*/
-
-		
 		//FOR loop through combined array
 			//each item, check for additional calculations
 			//finalize into either property and value or two values in array
@@ -2033,13 +1606,6 @@ function updateLabel(stack, num) {
 	devMsg("updateLabel called with values: " + stack.name + " and " + num);
 	let newLabel = stack.stack[num].label;
 	if (stack.stack[num].count > 0) {
-
-//		let actCheck = ("active" in stack.stack[num]);
-//		let inact = stack.stack[num].count - stack.stack[num].active;
-//		devMsg("stack count is " + stack.stack[num].count + " and inactive count is " + stack.stack[num].inactive);
-//		let act = (stack.stack[num].inactive > 0) ? stack.stack[num].count - stack.stack[num].inactive + "/" : "";
-//		let act = (actCheck === true) ? stack.stack[num].active + "/" : "";
-
 		let act = ("active" in stack.stack[num]) ? stack.stack[num].active + "/" : "";
 		newLabel += " (" + act + stack.stack[num].count + ")";
 		document.getElementById(stack.name + num + "Label").innerHTML = newLabel;
@@ -2330,52 +1896,6 @@ const calendar = {
 //-- start dev object --//
 
 const dev = [
-/*	{ name: "button0",
-	  label: "activate calendar",
-	  run: function() {  
-		  calendar.activateCal();
-	  }
-	},
-	{ name: "button1",
-	  label: "force calendar days",
-	  run: function() {
-		let devForceDay = calendar.daysPerSeason - 5;
-		msg("updateCalDev triggered, days set to " + devForceDay);
-		calendar.day = devForceDay;
-		calendar.calDisplay();
-	  }
-	},
-	{ name: "button3",
-	  label: "hide/show all resources",
-	  run: function() {
-		  //---- save this code for reference for future panel changes --//
-		  let resRows = document.getElementsByClassName("resource");
-		  if (resStatus == "visible") {
-			  for (let i = 0; i < resRows.length; i++) {
-				  resRows[i].classList.add("hidden");
-				  resStatus = "invisible";
-			  }
-		  } else {
-			  for (let i = 0; i < resources.stack.length; i++) {
-				  resources.stack[i].isUnlocked = false;
-				  // resRows[i].classList.add("hidden");
-				  resStatus = "visible";
-			  }
-		  }
-	  }
-	}, */
-/*	{ name: "button4",
-	  label: "add prey",
-	  run: function() {
-		  resources.stack[1].current += 5;
-		  resources.loadResource(1);
-		  msg("added 5 prey");
-	  }
-	}, */
-/*	{ name: "button8",
-	  label: "display pustule object",
-	  run: function() { objectParseMsg(swamp[4]); }
-	}, */
 	{ name: "button9",
 	  label: "build grid for swamp with open tabs",
 	  run: function() { 
@@ -2395,14 +1915,6 @@ const dev = [
 		  }
 	  }
 	},
-/*	{ name: "button11",
-	  label: "canAddAnyRes - name",
-	  run: function() {
-		  let result = resources.canAddAnyRes("prey");
-		  devMsg("called canAddAnyRes with resource prey by name, result: " + result);
-	  }
-	  
-	}, */
 	{ name: "button12",
 	  label: "canAddAnyRes - number",
 	  run: function() {
@@ -2436,13 +1948,6 @@ const dev = [
 		  devUnlockAll(); 
 	  }
 	},
-/*	{ name: "button17",
-	  label: "How deep are the copies?",
-	  run: function() {
-		  let fooo = new TechBase();
-		  msg("research shows that calendar purchased is " + research.stack[0].purchased + " and fooo shows that calendar purchased is " + fooo.stack[0].purchased);
-	  }
-	} */
 	{ name: "button18",
 	  label: "effectsManager cacheCycle",
 	  run: function() {
@@ -2604,5 +2109,3 @@ function msg(messagetext) {
 	}
 	document.getElementById("messagebox").innerHTML = finalArray;
 }
-
-// loadGame();
