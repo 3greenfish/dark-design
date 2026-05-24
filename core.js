@@ -272,10 +272,10 @@ function refreshProgAll(source, array) {
 
 let game = {};
 class GameBase {
-	currentPhase;
+/*	currentPhase;
 	phases;
 	activeTab;
-	tabs;
+	tabs; */
 	constructor() {	
 		this.currentPhase = 0;
 		this.phases = [
@@ -421,9 +421,10 @@ BASIC DESIGN FOR MAIN PRESS, using buyCycle
 
 let swamp = {};
 class SwampBase {
-	name = "swamp";
-	stack;
+/*	name = "swamp";
+	stack; */
 	constructor() {
+		this.name = "swamp";
 		this.stack = [
 			{ name: "fester",	//0
 			  label: "Fester",
@@ -912,10 +913,11 @@ function findEntry(stack, name) {
 
 let resources = {};
 class ResourcesBase {
-	name = "resources object";
+/*	name = "resources object";
 	stack;
-	effectsBase = [];
+	effectsBase = []; */
 	constructor() {
+		this.name = "resources";
 		this.stack = [
 			{ name: "corruption", // 0
 			  label: "Corruption",
@@ -1297,9 +1299,10 @@ class ResourcesBase {
 
 let research = {};
 class TechBase {
-	name = "research";
-	stack;
+/*	name = "research";
+	stack; */
 	constructor() {
+		this.name = "research";
 		this.stack = [
 			{ name: "calendar",
 			  label: "Calendar",
@@ -1361,13 +1364,18 @@ class TechBase {
 
 let effectsManager = {};
 class EffectsManagerBase {
-	swampEffectsCache = [];
+/*	swampEffectsCache = [];
 	swampConversionCache = [];
 	researchEffectsCache = [];
 	cache = {};
-	conversionCache = [];
-	
-	constructor() {}
+	conversionCache = []; */
+	constructor() {
+		this.swampEffectsCache = [];
+		this.swampConversionCache = [];
+		this.researchEffectsCache = [];
+		this.cache = {};
+		this.conversionCache = [];
+	}
 	getEffectStack(source) {
 		let stack = source.stack;
 		let buildEffects = [];
