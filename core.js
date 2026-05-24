@@ -1231,7 +1231,7 @@ class ResourcesBase {
 					resources.addRes(newRes, amountAdded);		
 					break;
 				default:
-					msg("hit default, something went wrong")
+					msg("hit default, something went wrong");
 					break;
 			}
 		}
@@ -1355,7 +1355,7 @@ class TechBase {
 			  ],
 			  unlocks: []
 			}
-		]
+		];
 	}
 }
 
@@ -1786,7 +1786,7 @@ const timing = {
 				break;
 		}
 	}
-}
+};
 
 
 // -- calendar object --//
