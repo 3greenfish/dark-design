@@ -322,6 +322,7 @@ class GameBase {
 			  },
 			  unlockAtPhase: 1,
 			  select: function(num) {
+				  jobs.buildJobsPanel();
 				  msg("need to build out tribe object");
 			  }
 			},
@@ -900,7 +901,7 @@ class SwampBase {
 // ---- start jobs object ---- //
 
 let jobs = {};
-class jobsBase {
+class JobsBase {
 	constructor() {
 		this.name = "jobs";
 		this.stack = [
@@ -908,7 +909,7 @@ class jobsBase {
 			  label: "unassigned",
 			  desc: "Unassigned workers perform no work. Hosts generate additional corruption and help reduce suspicion.",
 			  active: 0,
-			  activeHosts: 0,
+			  activeHost: 0,
 			  isUnlocked: true,
 			  lockedBy: [],
 			  effects: [
@@ -918,22 +919,99 @@ class jobsBase {
 			},
 			{ name: "gatherer",
 			  label: "gatherer",
-			  desc: "",
+			  desc: "Gatherers collect 1.1 food per second.",
 			  active: 0,
-			  activeHosts: 0,
+			  activeHost: 0,
+			  canAssign: true,
 			  isUnlocked: true,
 			  lockedBy: [],
 			  effects: [
-				  { effect: "foodJobPerTick", value: 1.1, type: "job" }
+				  { effect: "foodJobPerTick", value: 0.275, type: "job" }
 			  ]
 			},
-			
+			{ name: "hunter",
+			  label: "hunter",
+			  desc: "Hunters bring in 0.4 food/second.",
+			  active: 0,
+			  activeHost: 0,
+			  isUnlocked: true,
+			  lockedBy: [],
+			  effects: [
+				  { effect: "foodJobPerTick", value: 0.1, type: "job" },
+				  { effect: "foodJobPerTickChance", value: 0.02, type: "job" },
+				  { effect: "foodJobPerClickMax", value: 1, type: "job" }
+			  ]
+			},
+			{ name: "leader",
+			  label: "elder",
+			  desc: "Elders generate knowledge and direct your population's activities.",
+			  active: 0,
+			  activeHost: 0,
+			  isUnlocked: true,
+			  lockedBy: [],
+			  effects: [
+				  { effect: "knowledgePerTick", value: 0.1, type: "job" }
+			  ]
+			}
 		];
 	}
 	addRemoveJob(jobCode, value, type) {
 		// jobCode is job in stack. value is +1, -1, +5, -5, etc. type is N for native or H for Host
 	}
-	
+	buildJobsPanel(refresh = false) {
+		let output = "";
+		let array = jobs.stack;
+
+		// could do multiple columns here
+
+		let openArray = (refresh == true) ? logOpenTabs(jobs, jobs.stack) : "";
+
+		for (let i = 0; i < array.length; i++) {
+			//check if blocked
+			if (array[i].isBlocked === true) {
+				continue;
+			}			
+			//check whether can unlock
+			if (array[i].isUnlocked !== true) {
+				if (testUnlock(array[i]) == true) {
+					array[i].isUnlocked = true;
+				} else { 
+					continue; 
+				}
+			}
+			let name = arry[i].name;
+			let newRow = "";
+			let label = array[i].label;
+			let desc = array[i].desc;
+			let ident = "job" + i;
+			let jobs = array[i].active + array[i].activeHost;
+			let max = (effectsManager.cache[name + "JobMax"]) ? "/" + effectsManager.cache[name + "JobMax"] : "";
+			let nat = array[i].active;
+			let hst = array[i].activeHost;
+
+			newRow = `
+			<div class="jobContainer">
+				<div class="jobCollapsible" id="${ident}Collapsible">
+					<div class="jobLabel" id="${ident}Label" onClick="expandButton2('${ident}')">${label} &#9776;</div>
+					<div class="jobCount" id="${ident}JobCount">${jobs}${max}</div>
+					<div class="nativeCount" id="${ident}NativeCount">Native: ${nat}</div>
+					<div class="assignButton" id="${ident}Remove" onClick="jobs.addRemoveJob(${i},-1,'N')">-</div>
+					<div class="assignButton" id="${ident}Add" onClick="jobs.addRemoveJob(${i},1,'N')">+</div>
+					<div class="hostCount" id="${ident}HostCount"> | Host: ${hst}</div>
+					<div class="assignButton" id="${ident}Remove" onClick="jobs.addRemoveJob(${i},-1,'H')">-</div>
+					<div class="assignButton" id="${ident}Add" onClick="jobs.addRemoveJob(${i},1,'H')">+</div>
+				</div>
+				<div class="content" id="${ident}Content">
+					<p>${desc}</p>
+				</div>
+			</div>`;
+			output += newRow;
+		}
+		document.getElementById("fillGrid").innerHTML = output;
+		if (refresh == true) {
+			reopenTabs(source, openArray);
+		}
+	} // end buildJobsPanel
 }
 
 // ---- end jobs object ---- //
@@ -941,39 +1019,8 @@ class jobsBase {
 
 /* 
 function buildGrid(source, sourceArray, refresh = false) {
-	let output = "";
-	let numColumns = 3; // FLAG -- plan to change this to check settings once screen size is evaluated //
-	let columns = [];
-	let currentColumn = 0;
-	let array = [];
-	
-	for (let c = 0; c < numColumns; c++) {
-		columns[c] = `<div class="buttonColumn" id="buttonColumn${c}">`;
-	}
-
-	if (!sourceArray) {
-		array = [{ label: "no source array" },{ label: "have a button anyway" }];
-	} else {
-		array = sourceArray;
-	}
-
-	let openArray = (refresh == true) ? logOpenTabs(source, sourceArray) : "";
 		
 	for (let i = 0; i < array.length; i++) {		//for every button in stack
-
-		if (array[i].isUnlocked !== true) {
-			devMsg("calling testUnlock with array object for " + array[i].name);
-			//check whether can unlock
-			let checkValue = testUnlock(array[i]);
-			if (checkValue == true) {
-				array[i].isUnlocked = true;
-			}
-		}
-		
-		if (array[i].purchased == true || array[i].isUnlocked !== true) { 
-			continue; 
-		}
-		// IF test to check if hidden or blocked, then continue FOR loop.
 		
 		let label = array[i].label;		//this is what shows in the label, will need to be updated for counts
 		if (array[i].count > 0) {
@@ -1688,6 +1735,7 @@ function loadGame() {	//runs at end of HTML load
 	swamp = new SwampBase();
 	resources = new ResourcesBase();
 	game = new GameBase();
+	jobs = new JobsBase();
 	research = new TechBase();
 	effectsManager = new EffectsManagerBase();
 	effectsManager.cacheCycle();
