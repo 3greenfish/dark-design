@@ -897,6 +897,160 @@ class SwampBase {
 
 // ---- end phase 1 buildings ---- //
 
+// ---- start jobs object ---- //
+
+let jobs = {};
+class jobsBase {
+	constructor() {
+		this.name = "jobs";
+		this.stack = [
+			{ name: "unassigned",
+			  label: "unassigned",
+			  desc: "Unassigned workers perform no work. Hosts generate additional corruption and help reduce suspicion.",
+			  active: 0,
+			  activeHosts: 0,
+			  isUnlocked: true,
+			  lockedBy: [],
+			  effects: [
+				  { effect: "corruptionPerTick", value: 0.001, type: "host" },
+				  { effect: "suspicionSuppression", value: 0.01, type: "host" }
+			  ]
+			},
+			{ name: "gatherer",
+			  label: "gatherer",
+			  desc: "",
+			  active: 0,
+			  activeHosts: 0,
+			  isUnlocked: true,
+			  lockedBy: [],
+			  effects: [
+				  { effect: "foodJobPerTick", value: 1.1, type: "job" }
+			  ]
+			},
+			
+		];
+	}
+	addRemoveJob(jobCode, value, type) {
+		// jobCode is job in stack. value is +1, -1, +5, -5, etc. type is N for native or H for Host
+	}
+	
+}
+
+// ---- end jobs object ---- //
+
+
+/* 
+function buildGrid(source, sourceArray, refresh = false) {
+	let output = "";
+	let numColumns = 3; // FLAG -- plan to change this to check settings once screen size is evaluated //
+	let columns = [];
+	let currentColumn = 0;
+	let array = [];
+	
+	for (let c = 0; c < numColumns; c++) {
+		columns[c] = `<div class="buttonColumn" id="buttonColumn${c}">`;
+	}
+
+	if (!sourceArray) {
+		array = [{ label: "no source array" },{ label: "have a button anyway" }];
+	} else {
+		array = sourceArray;
+	}
+
+	let openArray = (refresh == true) ? logOpenTabs(source, sourceArray) : "";
+		
+	for (let i = 0; i < array.length; i++) {		//for every button in stack
+
+		if (array[i].isUnlocked !== true) {
+			devMsg("calling testUnlock with array object for " + array[i].name);
+			//check whether can unlock
+			let checkValue = testUnlock(array[i]);
+			if (checkValue == true) {
+				array[i].isUnlocked = true;
+			}
+		}
+		
+		if (array[i].purchased == true || array[i].isUnlocked !== true) { 
+			continue; 
+		}
+		// IF test to check if hidden or blocked, then continue FOR loop.
+		
+		let label = array[i].label;		//this is what shows in the label, will need to be updated for counts
+		if (array[i].count > 0) {
+			let act = ("active" in array[i]) ? array[i].active + "/" : "";
+			label = label + " (" + act + array[i].count + ")";
+		}		
+		let identifier = source.name + i;
+		let desc = array[i].desc;		//gets description from stack
+		let cost = "";
+
+		let AC = ""; //variable to flag active class
+		if (array[i].costs) {
+			devMsg("BuildGrid reached getContentCosts");
+			let costs = getContentCosts(source, i);
+			cost = `
+					<hr>
+						<div class="costs" id="${identifier}Costs">
+							${costs}
+						</div>`;
+			if (resources.checkCostsByArray(array[i].costs, array[i].count).result == "pass") {
+				AC = "active";
+			}
+		} 
+
+		let actionsArray = array[i].actions;
+		let actions = "";
+		for (let a = 0; a < actionsArray.length; a++) {
+			let sub = actionsArray[a].subLabel;
+			let buttonCode = `${source.name}.stack[${i}].actions[${a}].press(${i})`;
+			actions += `<div class="button" onClick="${buttonCode}">${sub}</div>`;
+		}
+
+		let mainActionCode = `${source.name}.stack[${i}].actions[0].press(${i},true)`;
+		let flavor = (array[i].flavor) ? `<div class="flavor">` + array[i].flavor + "</div>" : "";
+
+		let newButton = `
+				<div class="buttonContainer">
+					<div class="collapsible ${AC}" id="${identifier}Collapsible">
+						<div class="buttonLabel" data-target="${identifier}" id="${identifier}Label" onClick="${mainActionCode}">${label}</div><div class="notch" data-target="${identifier}" onClick="expandButton2('${identifier}')">&#9776;</div>
+						<div class="buttonBarContainer">
+							<div id="${identifier}Progress"></div>
+						</div>
+					</div>
+					<div class="content" id="${identifier}Content">
+						<p>${desc}</p>
+						${cost}
+						${actions}
+						${flavor}
+					</div>
+				</div>`;
+		columns[currentColumn] += newButton;
+		currentColumn += 1;
+		if (currentColumn >= numColumns) { 
+			currentColumn = 0;
+		}
+	}
+
+	for (let c = 0; c < columns.length; c++) {
+		columns[c] += `</div>`;
+		output += columns[c];
+	}
+	document.getElementById("fillGrid").innerHTML = output;
+	refreshProgAll(source, sourceArray);
+	if (refresh == true) {
+		reopenTabs(source, openArray);
+	}
+}
+
+*/ 
+
+
+
+
+
+
+
+
 function findEntry(stack, name) {
 	let result = { found: false, loc: 0 };
 
