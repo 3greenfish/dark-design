@@ -162,14 +162,14 @@ function testUnlock(button) {
 			let throwArray = [];
 			throwArray[0] = locks[i];
 //			msg(throwArray.toString());
-			let bob = Object.values(throwArray[0]);
-			let bobtext = bob.toString();
+//			let bob = Object.values(throwArray[0]);
+//			let bobtext = bob.toString();
 //			msg("bobtext is " + bobtext + " and length is now " + throwArray.length);
 			if (resources.checkCostsByArray(throwArray, 0).result == "pass") {
 //				msg("check costs for " + button.name + " lock " + i + "has passed successfully");
 				locks[i].opened = true;
-				let newbob = Object.values(locks[i]);
-				let newbobtext = newbob.toString();
+//				let newbob = Object.values(locks[i]);
+//				let newbobtext = newbob.toString();
 //				msg("new bobtext is " + newbobtext);
 			} else { 
 //				msg("check costs for " + button.name + " lock " + i + "has failed");
@@ -1084,7 +1084,7 @@ class ResourcesBase {
 //		msg("resCurrent is " + resCurrent);
 		let target = document.getElementById(resName + "Current");
 
-		let targetTest = (target) ? true : false;
+//		let targetTest = (target) ? true : false;
 //		msg("target is found? " + targetTest);
 
 		if (!target) {
@@ -1389,7 +1389,7 @@ class EffectsManagerBase {
 			for (let j = 0; j < effects.length; j++) {
 				let newEffect = {};
 				newEffect.effect = effects[j].effect;
-				let getValue = effects[j].value;
+//				let getValue = effects[j].value;
 				if (stackable && !("type" in effects[j])) {
 					effects[j].type = "stack";
 				}
@@ -2031,15 +2031,15 @@ function devUnlockAll() {
 
 //-- end interval timer --//
 
-function toggleActive(e) {
+/* function toggleActive(e) {
 	const targetPanelId = e.target.getAttribute('data-target');
 	const targetPanel = document.getElementById(targetPanelId);
 	const activePanels = document.getElementsByClassName('active');
 	if (activePanels) {
-		activePanels[0].classList.toggle('active'); /* hides everything */
+		activePanels[0].classList.toggle('active'); // hides everything
 	} 
 	targetPanel.classList.toggle('active');
-}
+} */
 
 
 function expandButton2(target) {
