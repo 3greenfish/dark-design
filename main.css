@@ -323,6 +323,10 @@ nav {
 	display: block;
 }
 
+.jobContainer div {
+	display: inline-block;
+}
+
 .jobCollapsible {
 	background-color: #003300;
 	color: #00ff00;
