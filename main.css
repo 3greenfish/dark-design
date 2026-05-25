@@ -242,7 +242,7 @@ nav {
 	display: inline-block;
 }	
 
-.buttonBarContainer {
+.buttonBarContainer {	/* for progress bars */
 	width: 100%;
 	margin: 0;
 	padding: 0;
@@ -312,6 +312,27 @@ nav {
 	-webkit-user-select: none;
 	-ms-user-select: none;
 }
+
+.jobContainer {
+	display: block;
+}
+
+.jobCollapsible {
+	background-color: #003300;
+	color: #00ff00;
+	cursor: pointer;
+	padding: 0px;
+	margin-top: 10px;
+/*	width: 199px; */
+	border: 1px solid #33aa33;
+	text-align: left;
+	outline: none;
+	user-select: none;
+	-webkit-user-select: none;
+	-ms-user-select: none;
+}
+
+
 
 
 /* -- right-side styles go here -- */
