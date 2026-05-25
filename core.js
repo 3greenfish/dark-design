@@ -134,6 +134,7 @@ function buildGrid(source, sourceArray, refresh = false) {
 		columns[c] += `</div>`;
 		output += columns[c];
 	}
+	document.getElementById("fillNotGrid").innerHTML = "";
 	document.getElementById("fillGrid").innerHTML = output;
 	refreshProgAll(source, sourceArray);
 	if (refresh == true) {
