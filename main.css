@@ -380,6 +380,29 @@ nav {
 	width: 100px;
 }
 
+.jobContent {
+	padding: 0px;
+	display: none;
+	overflow: hidden;
+	background-color: #003300;
+	color: #00ff00;
+	width: 169px;
+/*	border-top: 1px dotted #33aa33;
+	border-bottom: 1px solid #33aa33;
+	border-left: 1px solid #33aa33;
+	border-right: 1px solid #33aa33; */
+/*	border-radius: 0 0 10px 10px; */
+	max-height: 0;
+/*	transition: max-height 0.2s ease-out; */
+	font-size: 80%;
+/*	position: absolute;
+	top: 48px;
+	z-index: 5; */
+	user-select: none;
+	-webkit-user-select: none;
+	-ms-user-select: none;
+}
+
 .highlightText {
 	color: #ddff00;
 }
