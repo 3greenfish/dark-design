@@ -176,6 +176,12 @@ nav {
 	background-color: #002200;
 	display: flex;
 }
+
+.buttonMap3 {
+	background-color: #002200;
+	display: block;	
+}
+
 .buttonColumn {
 	width: 200px;
 	display: inline-block;
