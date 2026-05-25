@@ -372,7 +372,7 @@ nav {
 	border: 1px solid #33aa33;
 	background-color: #105010;
 	text-align: center;
-	vertical-align: middle;
+/*	vertical-align: middle; */
 }
 .hostCount {
 	margin: 0px;
