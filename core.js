@@ -958,12 +958,28 @@ class JobsBase {
 	}
 	addRemoveJob(jobCode, value, type) {
 		// jobCode is job in stack. value is +1, -1, +5, -5, etc. type is N for native or H for Host
+		let jobName = jobs.stack[jobCode];
+
+		msg("calling addRemoveJob for " + jobName + ", with value " + value + " and type " + type);
 	}
 	buildJobsPanel(refresh = false) {
 		let output = "";
 		let array = jobs.stack;
 
-		// could do multiple columns here
+		let totalNat = resources.stack[resources.findResInStack("native")].current;
+		let totalHost = resources.stack[resources.findResInStack("host")].current;
+		let hostString = (totalHost === 1) ? "is a host" : "are hosts";
+
+		//calculate corruption costs		FLAG to build this into effects manager
+		let reassignCost = 10;
+
+		output += `<div class="jobContainer">
+					<div class="jobCollapsible" id="$jobPanelCollapsible">
+						<p>Your civilization currently has a population of <span class="highlightText" id="totalNatives">${totalNat}</span>, of which <span class="highlightText" id="totalHosts">${totalHost}</span> ${hostString}.<br />
+						You may reassign workers by spending <span id="reassignCost">${reassignCost}</span> corruption, but doing so risks raising suspicion. Reassigning hosts is free.<br />
+						Corrupt the leaders of your civilization to reduce costs.</p>
+			</div>
+		</div>`;
 
 		let openArray = (refresh == true) ? logOpenTabs(jobs, jobs.stack) : "";
 
@@ -1002,7 +1018,7 @@ class JobsBase {
 					<div class="assignButton" id="${ident}Remove" onClick="jobs.addRemoveJob(${i},-1,'H')">-</div>
 					<div class="assignButton" id="${ident}Add" onClick="jobs.addRemoveJob(${i},1,'H')">+</div>
 				</div>
-				<div class="content" id="${ident}Content">
+				<div class="jobContent" id="${ident}Content">
 					<p>${desc}</p>
 				</div>
 			</div>`;
