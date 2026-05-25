@@ -958,7 +958,7 @@ class JobsBase {
 	}
 	addRemoveJob(jobCode, value, type) {
 		// jobCode is job in stack. value is +1, -1, +5, -5, etc. type is N for native or H for Host
-		let jobName = jobs.stack[jobCode];
+		let jobName = jobs.stack[jobCode].name;
 
 		msg("calling addRemoveJob for " + jobName + ", with value " + value + " and type " + type);
 	}
@@ -975,9 +975,8 @@ class JobsBase {
 
 		output += `<div class="jobContainer">
 					<div class="jobCollapsible" id="$jobPanelCollapsible">
-						<p>Your civilization currently has a population of <span class="highlightText" id="totalNatives">${totalNat}</span>, of which <span class="highlightText" id="totalHosts">${totalHost}</span> ${hostString}.<br />
-						You may reassign workers by spending <span id="reassignCost">${reassignCost}</span> corruption, but doing so risks raising suspicion. Reassigning hosts is free.<br />
-						Corrupt the leaders of your civilization to reduce costs.</p>
+						<p>Your civilization currently has a population of <span class="highlightText" id="totalNatives">${totalNat}</span>, of which <span class="highlightText" id="totalHosts">${totalHost}</span> ${hostString}. You may reassign workers by spending <span class="highlightText" id="reassignCost">${reassignCost}</span> corruption, but doing so risks raising suspicion. Reassigning hosts is free. Corrupt the leaders of your civilization to reduce costs.<br />
+						Hosts spend 50% of their time generating corruption, reducing their productivity at other tasks, but unlike other workers, hosts continue to work when the game is idle.</p>
 			</div>
 		</div>`;
 
@@ -1009,7 +1008,7 @@ class JobsBase {
 			newRow = `
 			<div class="jobContainer">
 				<div class="jobCollapsible" id="${ident}Collapsible">
-					<div class="jobLabel" id="${ident}Label" onClick="expandButton2('${ident}')">${label} &#9776;</div>
+					<div class="jobLabel" id="${ident}Label" onClick="expandButton3('${ident}')"> &#9776;${label}</div>
 					<div class="jobCount" id="${ident}JobCount">${jobs}${max}</div>
 					<div class="nativeCount" id="${ident}NativeCount">Native: ${nat}</div>
 					<div class="assignButton" id="${ident}Remove" onClick="jobs.addRemoveJob(${i},-1,'N')">-</div>
@@ -2276,6 +2275,21 @@ function expandButton2(target) {
 		targetContent.style.display = "block";
 		targetContent.style.maxHeight = targetContent.scrollHeight + "px";
 		targetButton.style.borderBottom = "none";
+	}
+}
+
+function expandButton3(target) {
+	devMsg("expandButton3 called with target: " + target);
+	const targetContent = document.getElementById(target + "Content");
+	const targetButton = document.getElementById(target + "Collapsible");
+	
+	if (targetContent.style.display == "block") {
+		targetContent.style.display = "none"; /* hide content DIV */
+		targetContent.style.maxHeight = "0";
+
+	} else {
+		targetContent.style.display = "block";
+		targetContent.style.maxHeight = targetContent.scrollHeight + "px";
 	}
 }
 
