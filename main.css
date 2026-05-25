@@ -337,6 +337,7 @@ nav {
 	user-select: none;
 	-webkit-user-select: none;
 	-ms-user-select: none;
+	vertical-align: middle;
 }
 
 .jobCollapsible div {
@@ -353,28 +354,29 @@ nav {
 
 .jobCount {
 	margin: 0px;
-	padding: 8px 0px 0px 0px;
+	padding: 0px 0px 0px 0px;
 	width: 100px;
 	border: 1px solid red;
 }
 
 .nativeCount {
 	margin: 0px;
-	padding: 8px 0px 0px 0px;
+	padding: 0px 0px 0px 0px;
 	width: 100px;
 	border: 1px solid green;
 }
 .assignButton {
 	margin: 0px;
-	padding: 8px 0px 0px 0px;
+	padding: 0px 0px 0px 0px;
 	width: 25px;
 	border: 1px solid #33aa33;
+	background-color: #105010;
 	text-align: center;
 	vertical-align: middle;
 }
 .hostCount {
 	margin: 0px;
-	padding: 8px 0px 0px 0px;
+	padding: 0px 0px 0px 0px;
 	width: 100px;
 }
 
