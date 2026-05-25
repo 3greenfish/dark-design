@@ -979,7 +979,7 @@ class JobsBase {
 					continue; 
 				}
 			}
-			let name = arry[i].name;
+			let name = array[i].name;
 			let newRow = "";
 			let label = array[i].label;
 			let desc = array[i].desc;
@@ -1009,7 +1009,7 @@ class JobsBase {
 		}
 		document.getElementById("fillGrid").innerHTML = output;
 		if (refresh == true) {
-			reopenTabs(source, openArray);
+			reopenTabs(jobs, openArray);
 		}
 	} // end buildJobsPanel
 }
