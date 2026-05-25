@@ -1007,7 +1007,8 @@ class JobsBase {
 			</div>`;
 			output += newRow;
 		}
-		document.getElementById("fillGrid").innerHTML = output;
+		document.getElementById("fillGrid").innerHTML = "";
+		document.getElementById("fillNotGrid").innerHTML = output;
 		if (refresh == true) {
 			reopenTabs(jobs, openArray);
 		}
