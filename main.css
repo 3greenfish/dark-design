@@ -323,24 +323,60 @@ nav {
 	display: block;
 }
 
-.jobContainer div {
-	display: inline-block;
-}
-
 .jobCollapsible {
 	background-color: #003300;
 	color: #00ff00;
 	cursor: pointer;
 	padding: 0px;
 	margin-top: 10px;
-/*	width: 199px; */
-	border: 1px solid #33aa33;
+	margin-left: 5px;
+	width: 100%;
+/*	border: 1px solid #33aa33; */
 	text-align: left;
 	outline: none;
 	user-select: none;
 	-webkit-user-select: none;
 	-ms-user-select: none;
 }
+
+.jobCollapsible div {
+	display: inline-block;
+}
+
+.jobLabel {		/* currently same styles as buttonLabel, may be able to reuse styles */
+	width: 164px;
+	border: none; /*1px solid black; */
+	margin: 0px;
+	padding: 10px 0px 10px 10px;
+	display: inline-block;
+}
+
+.jobCount {
+	margin: 0px;
+	padding: 8px 0px 0px 0px;
+	width: 25px;
+	border: 1px solid red;
+}
+
+.nativeCount {
+	margin: 0px;
+	padding: 8px 0px 0px 0px;
+	width: 50px;
+	border: 1px solid green;
+}
+.assignButton {
+	margin: 0px;
+	padding: 8px 0px 0px 0px;
+	width: 25px;
+	border: 1px solid #33aa33;
+}
+.hostCount {
+	margin: 0px;
+	padding: 8px 0px 0px 0px;
+	width: 50px;
+}
+
+
 
 
 
