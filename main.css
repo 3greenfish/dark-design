@@ -328,10 +328,9 @@ nav {
 	color: #00ff00;
 	cursor: pointer;
 	padding: 0px;
-	margin-top: 10px;
+	margin-top: 5px;
 	margin-left: 5px;
 	width: 100%;
-/*	border: 1px solid #33aa33; */
 	text-align: left;
 	outline: none;
 	user-select: none;
@@ -346,7 +345,7 @@ nav {
 
 .jobLabel {		/* currently same styles as buttonLabel, may be able to reuse styles */
 	width: 125px;
-	border: 1px solid black;
+/*	border: 1px solid black; */
 	margin: 0px;
 	padding: 5px 0px 5px 5px;
 	display: inline-block;
@@ -356,14 +355,16 @@ nav {
 	margin: 0px;
 	padding: 0px 0px 0px 0px;
 	width: 100px;
-	border: 1px solid red;
+	color: #ddff00;
+/*	border: 1px solid red; */
 }
 
 .nativeCount {
 	margin: 0px;
 	padding: 0px 0px 0px 0px;
 	width: 100px;
-	border: 1px solid green;
+	color: #ddff00;
+/*	border: 1px solid green; */
 }
 .assignButton {
 	margin: 0px;
@@ -378,6 +379,7 @@ nav {
 	margin: 0px;
 	padding: 0px 0px 0px 0px;
 	width: 100px;
+	color: #ddff00;
 }
 
 .jobContent {
@@ -386,18 +388,9 @@ nav {
 	overflow: hidden;
 	background-color: #003300;
 	color: #00ff00;
-/*	width: 169px; */
-/*	border-top: 1px dotted #33aa33;
-	border-bottom: 1px solid #33aa33;
-	border-left: 1px solid #33aa33;
-	border-right: 1px solid #33aa33; */
-/*	border-radius: 0 0 10px 10px; */
+	margin-left: 5px;
 	max-height: 0;
-/*	transition: max-height 0.2s ease-out; */
 	font-size: 80%;
-/*	position: absolute;
-	top: 48px;
-	z-index: 5; */
 	user-select: none;
 	-webkit-user-select: none;
 	-ms-user-select: none;
