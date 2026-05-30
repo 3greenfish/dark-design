@@ -226,7 +226,13 @@ function refreshGrid(source, sourceArray, refresh = false) {
 				AC = "active";
 			}
 		}
-		
+		let currentState = document.getElementById(ident + "Collapsible").classList.contains("active");
+		if (AC == "active" && currentState === false) {
+			document.getElementById(ident + "Collapsible").classList.add("active")
+		}
+		if (AC !== "active" && currentState === true) {
+			document.getElementById(ident + "Collapsible").classList.remove("active")
+		}
 
 
 
