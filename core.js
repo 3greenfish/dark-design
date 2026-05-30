@@ -197,9 +197,8 @@ function buildGrid(source, sourceArray, refresh = false) {
 	}
 }	
 
-function refreshGrid(source, sourceArray, refresh = false) {
-	let array = sourceArray;
-
+function refreshGrid(source, array, refresh = false) {
+	msg("called refreshGrid");
 	for (let i = 0; i < array.length; i++) {		//for every button in stack
 		let ident = source.name + i;
 		if (array[i].purchased == true || array[i].isUnlocked !== true || array[i].isBlocked == true) { 
@@ -232,82 +231,12 @@ function refreshGrid(source, sourceArray, refresh = false) {
 		}
 		if (AC !== "active" && currentState === true) {
 			document.getElementById(ident + "Collapsible").classList.remove("active")
+		}	//only two checks are necessary, as other options will display correctly
+
+		if (array[i].hasProg === true) { 
+			let progWidth = array[i].prog;
+			document.getElementById(ident + "Progress").style.width = progWidth + "%";
 		}
-
-
-
-
-		
-
-		/* 
-		elements that need to be refreshed:
-			x	label (for counts)
-			x	costs
-			active class
-			eventually actions but not now.
-		*/
-		
-		let identifier = source.name + i;
-		let desc = array[i].desc;		//gets description from stack
-		let cost = "";
-
-		let AC = ""; //variable to flag active class
-		if (array[i].costs) {
-			devMsg("BuildGrid reached getContentCosts");
-			let costs = getContentCosts(source, i);
-
-			document.getElementById(ident + "Costs").innerHTML = costs;
-			
-			if (resources.checkCostsByArray(array[i].costs, array[i].count).result == "pass") {
-				AC = "active";
-			}
-
-
-			
-		} 
-
-		let actionsArray = array[i].actions;
-		let actions = "";
-		for (let a = 0; a < actionsArray.length; a++) {
-			let sub = actionsArray[a].subLabel;
-			let buttonCode = `${source.name}.stack[${i}].actions[${a}].press(${i})`;
-			actions += `<div class="button" onClick="${buttonCode}">${sub}</div>`;
-		}
-
-		let mainActionCode = `${source.name}.stack[${i}].actions[0].press(${i},true)`;
-		let flavor = (array[i].flavor) ? `<div class="flavor">` + array[i].flavor + "</div>" : "";
-
-		let newButton = `
-				<div class="buttonContainer">
-					<div class="collapsible ${AC}" id="${identifier}Collapsible">
-						<div class="buttonLabel" data-target="${identifier}" id="${identifier}Label" onClick="${mainActionCode}">${label}</div><div class="notch" data-target="${identifier}" onClick="expandButton2('${identifier}')">&#9776;</div>
-						<div class="buttonBarContainer">
-							<div id="${identifier}Progress"></div>
-						</div>
-					</div>
-					<div class="content" id="${identifier}Content">
-						<p>${desc}</p>
-						${cost}
-						${actions}
-						${flavor}
-					</div>
-				</div>`;
-		columns[currentColumn] += newButton;
-		currentColumn += 1;
-		if (currentColumn >= numColumns) { 
-			currentColumn = 0;
-		}
-	}
-
-	for (let c = 0; c < columns.length; c++) {
-		columns[c] += `</div>`;
-		output += columns[c];
-	}
-	document.getElementById("fillNotGrid").innerHTML = "";
-	document.getElementById("fillGrid").innerHTML = output;
-	refreshProgAll(source, sourceArray);
-	if (refresh == true) {
-		reopenTabs(source, openArray);
 	}
 }
 
@@ -467,7 +396,7 @@ class GameBase {
 			  visible: true,
 			  lockAtPhase: 1,
 			  select: function() {
-				  buildGrid(swamp, swamp.stack);
+				  buildCycle(swamp, swamp.stack);
 			  }
 			},
 			{ name: "personnel",	//1
@@ -517,7 +446,7 @@ class GameBase {
 			{ name: "research",		//4
 			  label: "research",
 			  select: function(num) {
-				  buildGrid(research, research.stack);
+				  buildCycle(research, research.stack);
 			  }
 			}
 		];
@@ -1716,7 +1645,7 @@ class TechBase {
 							resources.payCostsByArray(getCosts, 0);
 							calendar.activateCal();
 							cal.purchased = true;
-							buildGrid(research, research.stack, true);
+							buildCycle(research, research.stack, true);
 						}
 						else if (isMain == true) {
 							let target = "research" + code;
@@ -2167,14 +2096,14 @@ const timing = {
 		devMsg("refreshing active panel via callBuild, auto-called from timing belt");
 		switch(game.activeTab) {
 			case 0: //swamp
-				buildGrid(swamp, swamp.stack, true);
+				buildCycle(swamp, swamp.stack, true);
 				break;
 			case 1:	//personnel
 			case 2: //settlement
 			case 3: //world
 				break;
 			case 4: //research
-				buildGrid(research, research.stack, true);
+				buildCycle(research, research.stack, true);
 				break;
 		}
 	}
@@ -2273,7 +2202,7 @@ const dev = [
 	  label: "build grid for swamp with open tabs",
 	  run: function() { 
 		  msg("build grid for swamp called via dev button");
-		  buildGrid(swamp, swamp.stack, true); 
+		  buildCycle(swamp, swamp.stack, true);
 	  }
 	},
 	{ name: "button10",
@@ -2404,7 +2333,7 @@ function devUnlockAll() {
 	for (let i = 0; i < stack.length; i ++) {
 		stack[i].isUnlocked = true;
 	}
-	buildGrid(base, stack, true);	
+	buildCycle(base, stack, true);	
 }
 
 
