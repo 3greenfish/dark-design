@@ -39,6 +39,61 @@ function objectParseMsg(ob) {
 				</div>
 */
 
+function buildCycle(source, sourceArray, refresh = false) {
+	let array = [];
+	if (!sourceArray) {
+		devMsg("no source array to call");
+		return;
+	} else {
+		array = sourceArray;
+	}
+
+	let refreshStatus = testStackUnlock(source, array);
+
+	if (refreshStatus) {
+		buildGrid(source, array, refresh);	
+	}
+	else {
+		refreshGrid(source, array);
+	}
+	
+/*
+			devMsg("refreshing active panel via callBuild, auto-called from timing belt");
+		switch(game.activeTab) {
+			case 0: //swamp
+				buildGrid(swamp, swamp.stack, true);
+				break;
+			case 1:	//personnel
+			case 2: //settlement
+			case 3: //world
+				break;
+			case 4: //research
+				buildGrid(research, research.stack, true);
+				break;
+		}
+
+	*/	
+}
+
+
+function testStackUnlock(source, sourceArray) {
+	let array = sourceArray;
+	let refreshRequired = false;
+	for (let i = 0; i < array.length; i++) {		//for every button in stack
+		if (array[i].isUnlocked !== true) {
+			devMsg("calling testUnlock with array object for " + array[i].name);
+			//check whether can unlock
+			let checkValue = testUnlock(array[i]);
+			if (checkValue == true) {
+				array[i].isUnlocked = true;
+				refreshRequired = true;
+			}
+		}
+	}
+	return refreshRequired;	
+}
+
+
 function buildGrid(source, sourceArray, refresh = false) {
 	let output = "";
 	let numColumns = 3; // FLAG -- plan to change this to check settings once screen size is evaluated //
