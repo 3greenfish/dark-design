@@ -205,7 +205,7 @@ function refreshGrid(source, array, refresh = false) {
 			continue; 
 		}
 
-		if (document.getElementById(ident + "Collapsibile") == null) {
+		if (document.getElementById(ident + "Collapsible") == null) {
 			msg("probably an issue in refreshGrid");
 			continue;
 		}
