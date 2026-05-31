@@ -206,7 +206,7 @@ function buildGrid(source, sourceArray, refresh = false) {
 }	
 
 function refreshGrid(source, array, refresh = false) {
-	msg("called refreshGrid");
+//	msg("called refreshGrid");
 	for (let i = 0; i < array.length; i++) {		//for every button in stack
 		let ident = source.name + i;
 		if (array[i].purchased == true || array[i].isUnlocked !== true || array[i].isBlocked == true) { 
@@ -235,10 +235,10 @@ function refreshGrid(source, array, refresh = false) {
 		}
 		let currentState = document.getElementById(ident + "Collapsible").classList.contains("active");
 		if (AC == "active" && currentState === false) {
-			document.getElementById(ident + "Collapsible").classList.add("active")
+			document.getElementById(ident + "Collapsible").classList.add("active");
 		}
 		if (AC !== "active" && currentState === true) {
-			document.getElementById(ident + "Collapsible").classList.remove("active")
+			document.getElementById(ident + "Collapsible").classList.remove("active");
 		}	//only two checks are necessary, as other options will display correctly
 
 		if (array[i].hasProg === true) { 
@@ -318,6 +318,14 @@ function testUnlock(button) {
 				} else {
 					pass = false;
 				}
+			} else {
+				pass = false;
+			}
+		}
+		if (locks[i].type == "phase" {
+			devMsg("type is phase");
+			if (game.currentPhase >= locks[i].phase) {
+				locks[i].opened = true;
 			} else {
 				pass = false;
 			}
@@ -512,6 +520,40 @@ class GameBase {
 		game.refreshNav();
 		game.tabs[x].select();
 		devMsg(game.tabs[x].name + " selected");
+	}
+	newPhase(x) {
+		game.currentPhase = x;	//update phase for tracking purposes
+		game.buildNav();		//update navigation in case tabs are newly open or blocked
+
+		switch(x) {
+			case 1:		//transition from swamp to tribe
+				//move to jobs tab
+				game.selectNav(1);
+				//hide swamp buttons
+				let blockThese = [ "fester", "ensnare", "digest", "swell", "pustule", "trap", "digestor", "siren", "nodule", "corruptHost" ];
+				game.blockEntries(swamp.stack, blockThese);
+				//add effects -- nativemax, hostmax
+				//add resources -- food, natives
+				//auto-assign jobs
+				//unlock suspicion
+				
+				break;
+			case 2:		//transition to add settlement
+				break;
+			case 3:
+				break;
+		}
+	}
+	blockEntries(stack, listing) {			//take a stack, and a listing of entries, and set those entries to be blocked
+		for (let i = 0; i < listing.length; i++) {
+			let findings = findEntry(stack, listing[i]);
+			if (findings.found) {
+				stack[findings.loc].isBlocked = true;
+			} else {
+				msg("blocking buttons isn't working for " + listing[i]);
+				continue;
+			}
+		}
 	}
 }
 
@@ -924,13 +966,13 @@ class SwampBase {
 				  { type: "button", stack: "swamp", name: "trap", amount: 5 }
 			  ],
 			  effects: [
-				  { effect: "nativeMax", value: 1 },
-				  { effect: "nativePerTickChance", value: 0.005 },
+//				  { effect: "nativeMax", value: 1 },
+				  { effect: "nativePerTickChance", value: 0.0001 },
 				  { effect: "preyPerTickChance", value: 0.1 },
-				  { effect: "preyMax", value: 10 },
+				  { effect: "preyMax", value: 5 },
 				  { effect: "preyPerClickChanceMax", value: 3 },
 				  { effect: "cholerPerTickConsumption", value: 0.05, type: "active" },
-				  { effect: "nativePerTickChance", value: 0.05, type: "active" }
+				  { effect: "nativePerTickChance", value: 0.0004, type: "active" }
 			  ]
 			},
 			{ name: "nodule",		//8
@@ -994,7 +1036,7 @@ class SwampBase {
 			{ name: "corruptHost",	//9
 			  label: "Corrupt a host",
 			  type: "gather",
-			  desc: `Convert a captured native into your first corrupted Host.
+			  desc: `Sacrifice your swamp to convert a captured native into your first corrupted Host.
 	(Starts phase 2)`,
 			  get count() {
 				  let referCount = resources.stack[resources.findResInStack("host")].current;
@@ -1023,8 +1065,37 @@ class SwampBase {
 			  lockedBy: [
 				  { type: "res", name: "native", amount: 1 }
 			  ]
+			},
+			{ name: "swamp",		//10
+			  label: "A sinister swamp",
+			  desc: "The seat of your power. Generates a small amount of corruption.",
+			  count: 0,
+			  actions: [
+				  { subLabel: "",
+				    press: function(code, isMain = false) {
+						let target = "swamp" + code;
+						expandButton2(target);
+					}
+				  },
+				  { subLabel: "Fester",
+				    type: "", 
+				    press: function(code, isMain = false) {
+						let r = resources.findResInStack("corruption");
+						let a = effectsManager.cache.corruptionPerClick;
+						resources.addRes(r, a);
+					}
+				  }
+			  ],
+			  lockedBy: [
+				  { type: "phase", phase: 1 }
+			  ],
+			  effects: [
+				  { effect: "corruptionMax", value: 200 },
+				  { effect: "corruptionPerClick", value: 2 },
+				  { effect: "corruptionPerTick", value: 0.2 }
+			  ]
 			}
-			];
+		];
 	}
 }
 
@@ -1340,7 +1411,7 @@ class ResourcesBase {
 			{ effect: "cholerMax", value: 150 },
 			{ effect: "cholerPerTick", value: 0 },
 			{ effect: "cholerPerClick", value: 30 },
-			{ effect: "nativeMax", value: 10 },
+			{ effect: "nativeMax", value: 1 },
 			{ effect: "nativePerClickChanceMax", value: 1 },
 			{ effect: "hostMax", value: 10 },
 			{ effect: "hostPerClick", value: 1 }
@@ -1892,7 +1963,7 @@ function loadGame() {	//runs at end of HTML load
 	resources.loadResPanelNew();
 //	resources.loadResourcePanel();
 	setDevButtonsDynamic();
-	buildGrid(swamp, swamp.stack);	//need to update to define by phase when loading game/refreshing from LocalStorage
+	buildCycle(swamp, swamp.stack, false, true);	//need to update to define by phase when loading game/refreshing from LocalStorage
 	msg("You have awakened...");	
 }
 
