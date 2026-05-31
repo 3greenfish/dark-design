@@ -2405,9 +2405,10 @@ const dev = [
 		  swampy[5].count = 6;
 		  swampy[6].count = 10;
 		  swampy[7].count = 2;
-		  swampy[8].count = 10;
 		  swampy[8].isUnlocked = true;
-		  resources[resources.findResInStack("native")].current = 1;
+		  swampy[8].count = 10;
+		  swampy[8].active = 10;
+		  resources.stack[resources.findResInStack("native")].current = 1;
 	  }
 	  
 	}
