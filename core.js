@@ -532,7 +532,7 @@ class GameBase {
 				//hide swamp buttons
 				let blockThese = [ "fester", "ensnare", "digest", "swell", "pustule", "trap", "digestor", "siren", "nodule", "corruptHost" ];
 				game.blockEntries(swamp.stack, blockThese);
-				swamp.stack[findEntry(swamp.stack, "swamp")].count = 1;
+				swamp.stack[findEntry(swamp.stack, "swamp").loc].count = 1;
 				//add effects -- nativemax, hostmax
 				//add resources -- food, natives
 				//auto-assign jobs
