@@ -1053,6 +1053,7 @@ class SwampBase {
 						let priceCheck = resources.buyCycle(swamp, code, isMain);
 						if (priceCheck.result == "pass") {
 							resources.addRes(resources.findResInStack("host"), 1);
+							game.newPhase(1);
 
 							// SPECIAL ACTIONS HERE - START PHASE 2
 	
