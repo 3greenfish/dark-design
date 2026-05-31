@@ -39,7 +39,7 @@ function objectParseMsg(ob) {
 				</div>
 */
 
-function buildCycle(source, sourceArray, refresh = false) {
+function buildCycle(source, sourceArray, refresh = false, full = false) {
 	let array = [];
 	if (!sourceArray) {
 		devMsg("no source array to call");
@@ -48,9 +48,9 @@ function buildCycle(source, sourceArray, refresh = false) {
 		array = sourceArray;
 	}
 
-	let refreshStatus = testStackUnlock(source, array);
+	let needBuild = testStackUnlock(source, array);
 
-	if (refreshStatus) {
+	if (needBuild || full) {
 		buildGrid(source, array, refresh);	
 	}
 	else {
@@ -396,7 +396,7 @@ class GameBase {
 			  visible: true,
 			  lockAtPhase: 1,
 			  select: function() {
-				  buildCycle(swamp, swamp.stack);
+				  buildCycle(swamp, swamp.stack, false, true);
 			  }
 			},
 			{ name: "personnel",	//1
@@ -446,7 +446,7 @@ class GameBase {
 			{ name: "research",		//4
 			  label: "research",
 			  select: function(num) {
-				  buildCycle(research, research.stack);
+				  buildCycle(research, research.stack, false, true);
 			  }
 			}
 		];
@@ -2202,7 +2202,7 @@ const dev = [
 	  label: "build grid for swamp with open tabs",
 	  run: function() { 
 		  msg("build grid for swamp called via dev button");
-		  buildCycle(swamp, swamp.stack, true);
+		  buildCycle(swamp, swamp.stack, true, true);
 	  }
 	},
 	{ name: "button10",
@@ -2333,7 +2333,7 @@ function devUnlockAll() {
 	for (let i = 0; i < stack.length; i ++) {
 		stack[i].isUnlocked = true;
 	}
-	buildCycle(base, stack, true);	
+	buildCycle(base, stack, true, true);	
 }
 
 
