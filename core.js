@@ -1090,9 +1090,9 @@ class SwampBase {
 				  { type: "phase", phase: 1 }
 			  ],
 			  effects: [
-				  { effect: "corruptionMax", value: 200 },
-				  { effect: "corruptionPerClick", value: 2 },
-				  { effect: "corruptionPerTick", value: 0.2 }
+				  { effect: "corruptionMax", value: 200, type: "stack" },
+				  { effect: "corruptionPerClick", value: 1, type: "stack" },
+				  { effect: "corruptionPerTick", value: 0.2, type: "stack" }
 			  ]
 			}
 		];
