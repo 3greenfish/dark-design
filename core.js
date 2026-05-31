@@ -1803,7 +1803,7 @@ class EffectsManagerBase {
 		let tempCon = [];
 		for (let i = 0; i < stack.length; i++) {
 			let effects = stack[i].effects;
-			if (!effects) { 
+			if (!effects || stack[i].isBlocked) { 
 				continue;
 			}
 			let stackable = (stack[i].stackable) ? true : false;
