@@ -51,10 +51,18 @@ function buildCycle(source, sourceArray, refresh = false, full = false) {
 	let needBuild = testStackUnlock(source, array);
 
 	if (needBuild || full) {
-		buildGrid(source, array, refresh);	
+		if (game.activeTab == 1) {
+			jobs.buildJobsPanel();
+		} else {
+			buildGrid(source, array, refresh);
+		}
 	}
 	else {
-		refreshGrid(source, array);
+		if (game.activeTab == 1) {
+			jobs.buildJobsPanel();		//FLAG need code to refresh jobs panel
+		} else {
+			refreshGrid(source, array);
+		}
 	}
 	
 /*
@@ -393,7 +401,7 @@ class GameBase {
 		this.tabs = [
 			{ name: "swamp", 		//0
 			  label: "a sinister swamp",
-			  visible: true,
+			  isUnlocked: true,
 			  lockAtPhase: 1,
 			  select: function() {
 				  buildCycle(swamp, swamp.stack, false, true);
@@ -410,7 +418,7 @@ class GameBase {
 						  label2 = "tribe";
 						  break;
 					  case 2:
-						  label2 = "residents";
+						  label2 = "workers";
 						  break;
 					  case 3:
 						  label2 = "citizens";
@@ -423,6 +431,7 @@ class GameBase {
 				  }
 				  return label2;
 			  },
+			  isUnlocked: false,
 			  unlockAtPhase: 1,
 			  select: function(num) {
 				  jobs.buildJobsPanel();
@@ -431,6 +440,7 @@ class GameBase {
 			},
 			{ name: "home",			//2
 			  label: "settlement",
+			  isUnlocked: false,
 			  unlockAtPhase: 2,
 			  select: function(num) {
 				  msg("need to build out town object");
@@ -438,6 +448,7 @@ class GameBase {
 			},
 			{ name: "world",		//3
 			  label: "world", // update to start as "nearby towns"?
+			  isUnlocked: false,
 			  unlockAtPhase: 3,
 			  select: function(num) {
 				  msg("need to build out world object");
@@ -445,15 +456,30 @@ class GameBase {
 			},
 			{ name: "research",		//4
 			  label: "research",
+			  isUnlocked: false,
+			  unlockAtPhase: 1,
 			  select: function(num) {
 				  buildCycle(research, research.stack, false, true);
 			  }
 			}
 		];
 	}
+	checkNav() {
+		for (let i = 0; i < this.tabs.length; i++) {
+			if (this.tabs[i].isUnlocked == true) {
+				continue;
+			} else if (this.currentPhase >= this.tabs[i].unlockAtPhase) {
+				this.tabs[i].isUnlocked = true;
+			}
+		}
+	}
 	buildNav() {
+		this.checkNav();
 		let navList = "";
 		for (let i = 0; i < this.tabs.length; i++) {
+			if (this.tabs[i].isUnlocked !== true || this.tabs[i].isBlocked) {
+				continue;
+			}
 			let tabLabel = this.tabs[i].label;
 			let activeFlag = "";
 			let action = `game.selectNav(${i})`;
@@ -471,6 +497,9 @@ class GameBase {
 	}
 	refreshNav() {
 		for (let i = 0; i < this.tabs.length; i++) {
+			if (this.tabs[i].isUnlocked !== true || this.tabs[i].isBlocked) {
+				continue;
+			}
 			let element = document.getElementById("tab" + i);
 			if (element.classList.contains("activeTab")) {
 				element.classList.remove("activeTab");
