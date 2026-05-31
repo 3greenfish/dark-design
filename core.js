@@ -532,6 +532,7 @@ class GameBase {
 				//hide swamp buttons
 				let blockThese = [ "fester", "ensnare", "digest", "swell", "pustule", "trap", "digestor", "siren", "nodule", "corruptHost" ];
 				game.blockEntries(swamp.stack, blockThese);
+				swamp.stack[findEntry(swamp.stack, "swamp")].count = 1;
 				//add effects -- nativemax, hostmax
 				//add resources -- food, natives
 				//auto-assign jobs
@@ -1531,7 +1532,9 @@ class ResourcesBase {
 			let res = source[i];
 
 			//hidden resources either never appear in panel, or are closed out after no longer being relevant
-			if (res.hidden) { continue; }
+			if (res.hidden || res.isBlocked) {
+				continue;
+			}
 
 			if (res.isUnlocked !== true) {
 //				msg(typeof res.current);
@@ -1571,6 +1574,9 @@ class ResourcesBase {
 		for (let i = 0; i < resPool.length; i++ ) {
 			let res = resPool[i];
 			//confirm resource is unlocked and not hidden
+			if (res.isBlocked == true) {
+				continue;
+			}
 /*			if (res.isUnlocked == false || res.hidden == true) {
 				continue;
 			} */
