@@ -2394,6 +2394,20 @@ const dev = [
 		  }
 		  resources.loadResPanelNew();
 	  }
+	},
+	{ name: "button24",
+	  label: "buildout phase 1",
+	  run: function() {
+		  let swampy = swamp.stack;
+		  swampy[3].count = 10;
+		  swampy[4].count = 18;
+		  swampy[4].active = 18;
+		  swampy[5].count = 6;
+		  swampy[6].count = 10;
+		  swampy[7].count = 2;
+		  swampy[8].count = 10;
+	  }
+	  
 	}
 /*	{ name: "buttonX",
 	  label: "blank",
