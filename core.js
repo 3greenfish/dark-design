@@ -123,16 +123,16 @@ function buildGrid(source, sourceArray, refresh = false) {
 		
 	for (let i = 0; i < array.length; i++) {		//for every button in stack
 
-		if (array[i].isUnlocked !== true) {
+	/*	if (array[i].isUnlocked !== true) {
 			devMsg("calling testUnlock with array object for " + array[i].name);
 			//check whether can unlock
 			let checkValue = testUnlock(array[i]);
 			if (checkValue == true) {
 				array[i].isUnlocked = true;
 			}
-		}
+		}	*/
 		
-		if (array[i].purchased == true || array[i].isUnlocked !== true) { 
+		if (array[i].purchased == true || array[i].isUnlocked !== true || array[i].isBlocked == true) { 
 			continue; 
 		}
 		// IF test to check if hidden or blocked, then continue FOR loop.
@@ -2406,6 +2406,8 @@ const dev = [
 		  swampy[6].count = 10;
 		  swampy[7].count = 2;
 		  swampy[8].count = 10;
+		  swampy[8].isUnlocked = true;
+		  resources[resources.findResInStack("native")].current = 1;
 	  }
 	  
 	}
