@@ -322,7 +322,7 @@ function testUnlock(button) {
 				pass = false;
 			}
 		}
-		if (locks[i].type == "phase" {
+		if (locks[i].type == "phase") {
 			devMsg("type is phase");
 			if (game.currentPhase >= locks[i].phase) {
 				locks[i].opened = true;
