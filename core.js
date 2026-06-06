@@ -2431,10 +2431,13 @@ const dev = [
 		  swampy[5].count = 6;
 		  swampy[6].count = 10;
 		  swampy[7].count = 2;
+		  swampy[4].isUnlocked = true;
+		  swampy[6].isUnlocked = true;
 		  swampy[8].isUnlocked = true;
 		  swampy[8].count = 10;
 		  swampy[8].active = 10;
 		  resources.stack[resources.findResInStack("native")].current = 1;
+		  resources.addRes(resources.findResInStack("corruption"), 1000);
 	  }
 	  
 	}
