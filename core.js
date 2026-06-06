@@ -1229,10 +1229,10 @@ class JobsBase {
 			<div class="jobContainer">
 				<div class="jobCollapsible" id="${ident}Collapsible">
 					<div class="jobLabel" id="${ident}Label" onClick="expandButton3('${ident}')"> &#9776;${label}</div>
-					<div class="jobCount" id="${ident}JobCount">${jobs}${max}</div>
+					<div class="jobCount" id="${ident}JobCount">${jobs}${maxDisp}</div>
 					<div class="nativeCount" id="${ident}NativeCount">Native: ${nat}</div>
 					${natRemButt}
-					${nataddButt}
+					${natAddButt}
 /*					<div class="assignButton" id="${ident}Remove" onClick="jobs.addRemoveJob(${i},-1,'N')">-</div>
 					<div class="assignButton" id="${ident}Add" onClick="jobs.addRemoveJob(${i},1,'N')">+</div> */
 					<div class="hostCount" id="${ident}HostCount"> | Host: ${hst}</div>
