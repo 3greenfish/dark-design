@@ -536,6 +536,14 @@ class GameBase {
 				//add effects -- nativemax, hostmax
 				//add resources -- food, natives
 				//auto-assign jobs
+				//temp code here:
+				let jobby = jobs.stack;
+				for (let i = 0; i < jobby.length; i++ ) {
+					jobby[i].active = randomInt(1,5);
+				}
+				let hostjob = randomInt(0, (jobby.length - 1));
+				jobby[hostJob].activeHost = 1;
+				
 				//unlock suspicion
 				
 				break;
@@ -1225,6 +1233,13 @@ class JobsBase {
 			let hstRemButt = (hst > 0 && array[i].canAssign === true) ? `<div class="assignButton" id="${ident}RemoveHost" onClick="jobs.addRemoveJob(${i},-1,'H')">-</div>` : `<div class="frozenButton" id="${ident}RemoveHost" onClick="">x</div>`;
 			let hstAddButt = (array[0].activeHost > 0 && array[i].canAssign && openJob) ? `<div class="assignButton" id="${ident}AddHost" onClick="jobs.addRemoveJob(${i},1,'H')">+</div>` : `<div class="frozenButton" id="${ident}AddHost" onClick="">+</div>`;
 
+/*					<div class="assignButton" id="${ident}Remove" onClick="jobs.addRemoveJob(${i},-1,'N')">-</div>
+					<div class="assignButton" id="${ident}Add" onClick="jobs.addRemoveJob(${i},1,'N')">+</div> */
+/*					<div class="assignButton" id="${ident}RemoveHost" onClick="jobs.addRemoveJob(${i},-1,'H')">-</div>
+					<div class="assignButton" id="${ident}AddHost" onClick="jobs.addRemoveJob(${i},1,'H')">+</div> */
+
+
+			
 			newRow = `
 			<div class="jobContainer">
 				<div class="jobCollapsible" id="${ident}Collapsible">
@@ -1233,13 +1248,9 @@ class JobsBase {
 					<div class="nativeCount" id="${ident}NativeCount">Native: ${nat}</div>
 					${natRemButt}
 					${natAddButt}
-/*					<div class="assignButton" id="${ident}Remove" onClick="jobs.addRemoveJob(${i},-1,'N')">-</div>
-					<div class="assignButton" id="${ident}Add" onClick="jobs.addRemoveJob(${i},1,'N')">+</div> */
 					<div class="hostCount" id="${ident}HostCount"> | Host: ${hst}</div>
 					${hstRemButt}
 					${hstAddButt}
-/*					<div class="assignButton" id="${ident}RemoveHost" onClick="jobs.addRemoveJob(${i},-1,'H')">-</div>
-					<div class="assignButton" id="${ident}AddHost" onClick="jobs.addRemoveJob(${i},1,'H')">+</div> */
 				</div>
 				<div class="jobContent" id="${ident}Content">
 					<p>${desc}</p>
