@@ -1209,12 +1209,12 @@ class JobsBase {
 			let ident = "job" + i;
 			let jobs = array[i].active + array[i].activeHost;
 			let max = (effectsManager.cache[name + "JobMax"]) ? effectsManager.cache[name + "JobMax"] : "";
-			let maxDisp = (typeof max == number) ? "/" + max : "";
+			let maxDisp = (typeof max == "number") ? "/" + max : "";
 			let nat = array[i].active;
 			let hst = array[i].activeHost;
 
 			let openJob = true;
-			if (typeof max == number) {
+			if (typeof max == "number") {
 				if (jobs >= max) {
 					openJob = false;
 				}
@@ -2437,6 +2437,14 @@ const dev = [
 		  swampy[8].count = 10;
 		  swampy[8].active = 10;
 		  resources.stack[resources.findResInStack("native")].current = 1;
+		  resources.addRes(resources.findResInStack("corruption"), 1000);
+	  }
+	  
+	},
+	{ name: "button25",
+	  label: "add corruption",
+	  run: function() {
+		  let swampy = swamp.stack;
 		  resources.addRes(resources.findResInStack("corruption"), 1000);
 	  }
 	  
