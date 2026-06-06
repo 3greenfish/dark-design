@@ -1115,6 +1115,7 @@ class JobsBase {
 			  desc: "Unassigned workers perform no work. Hosts generate additional corruption and help reduce suspicion.",
 			  active: 0,
 			  activeHost: 0,
+			  canAssign: false,
 			  isUnlocked: true,
 			  lockedBy: [],
 			  effects: [
@@ -1139,6 +1140,7 @@ class JobsBase {
 			  desc: "Hunters bring in 0.4 food/second.",
 			  active: 0,
 			  activeHost: 0,
+			  canAssign: true,
 			  isUnlocked: true,
 			  lockedBy: [],
 			  effects: [
@@ -1152,6 +1154,7 @@ class JobsBase {
 			  desc: "Elders generate knowledge and direct your population's activities.",
 			  active: 0,
 			  activeHost: 0,
+			  canAssign: false,
 			  isUnlocked: true,
 			  lockedBy: [],
 			  effects: [
@@ -1205,9 +1208,22 @@ class JobsBase {
 			let desc = array[i].desc;
 			let ident = "job" + i;
 			let jobs = array[i].active + array[i].activeHost;
-			let max = (effectsManager.cache[name + "JobMax"]) ? "/" + effectsManager.cache[name + "JobMax"] : "";
+			let max = (effectsManager.cache[name + "JobMax"]) ? effectsManager.cache[name + "JobMax"] : "";
+			let maxDisp = (typeof max == number) ? "/" + max : "";
 			let nat = array[i].active;
 			let hst = array[i].activeHost;
+
+			let openJob = true;
+			if (typeof max == number) {
+				if (jobs >= max) {
+					openJob = false;
+				}
+			}
+
+			let natRemButt = (nat > 0 && array[i].canAssign === true) ? `<div class="assignButton" id="${ident}Remove" onClick="jobs.addRemoveJob(${i},-1,'N')">-</div>` : `<div class="frozenButton" id="${ident}Remove" onClick="">x</div>`;
+			let natAddButt = (array[0].active > 0 && array[i].canAssign && openJob) ? `<div class="assignButton" id="${ident}Add" onClick="jobs.addRemoveJob(${i},1,'N')">+</div>` : `<div class="frozenButton" id="${ident}Add" onClick="">+</div>`;
+			let hstRemButt = (hst > 0 && array[i].canAssign === true) ? `<div class="assignButton" id="${ident}RemoveHost" onClick="jobs.addRemoveJob(${i},-1,'H')">-</div>` : `<div class="frozenButton" id="${ident}RemoveHost" onClick="">x</div>`;
+			let hstAddButt = (array[0].activeHost > 0 && array[i].canAssign && openJob) ? `<div class="assignButton" id="${ident}AddHost" onClick="jobs.addRemoveJob(${i},1,'H')">+</div>` : `<div class="frozenButton" id="${ident}AddHost" onClick="">+</div>`;
 
 			newRow = `
 			<div class="jobContainer">
@@ -1215,11 +1231,15 @@ class JobsBase {
 					<div class="jobLabel" id="${ident}Label" onClick="expandButton3('${ident}')"> &#9776;${label}</div>
 					<div class="jobCount" id="${ident}JobCount">${jobs}${max}</div>
 					<div class="nativeCount" id="${ident}NativeCount">Native: ${nat}</div>
-					<div class="assignButton" id="${ident}Remove" onClick="jobs.addRemoveJob(${i},-1,'N')">-</div>
-					<div class="assignButton" id="${ident}Add" onClick="jobs.addRemoveJob(${i},1,'N')">+</div>
+					${natRemButt}
+					${nataddButt}
+/*					<div class="assignButton" id="${ident}Remove" onClick="jobs.addRemoveJob(${i},-1,'N')">-</div>
+					<div class="assignButton" id="${ident}Add" onClick="jobs.addRemoveJob(${i},1,'N')">+</div> */
 					<div class="hostCount" id="${ident}HostCount"> | Host: ${hst}</div>
-					<div class="assignButton" id="${ident}Remove" onClick="jobs.addRemoveJob(${i},-1,'H')">-</div>
-					<div class="assignButton" id="${ident}Add" onClick="jobs.addRemoveJob(${i},1,'H')">+</div>
+					${hstRemButt}
+					${hstAddButt}
+/*					<div class="assignButton" id="${ident}RemoveHost" onClick="jobs.addRemoveJob(${i},-1,'H')">-</div>
+					<div class="assignButton" id="${ident}AddHost" onClick="jobs.addRemoveJob(${i},1,'H')">+</div> */
 				</div>
 				<div class="jobContent" id="${ident}Content">
 					<p>${desc}</p>
