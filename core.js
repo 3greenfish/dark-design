@@ -533,15 +533,20 @@ class GameBase {
 				let blockThese = [ "fester", "ensnare", "digest", "swell", "pustule", "trap", "digestor", "siren", "nodule", "corruptHost" ];
 				game.blockEntries(swamp.stack, blockThese);
 				swamp.stack[findEntry(swamp.stack, "swamp").loc].count = 1;
+				resources.effectsBase.push({ effect: "nativeMax", value: 19 });
 				//add effects -- nativemax, hostmax
 				//add resources -- food, natives
 				//auto-assign jobs
 				//temp code here:
 				let jobby = jobs.stack;
+				let totalNatives = 0;
 				for (let i = 0; i < jobby.length; i++ ) {
 					jobby[i].active = randomInt(1,5);
+					totalNatives += jobby[i].active;
 				}
-				let hostjob = randomInt(0, (jobby.length - 1));
+				
+				
+				let hostJob = randomInt(0, (jobby.length - 1));
 				jobby[hostJob].activeHost = 1;
 				
 				//unlock suspicion
