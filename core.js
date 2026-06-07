@@ -1227,7 +1227,7 @@ class JobsBase {
 		switch(stage) {
 			case 1:
 				let getElders = jobs.stack[findEntry(jobs.stack, "leader")];
-				let hsts = getElders.activeHost;
+				let hsts = getElders.activeHost || 0;
 				let totalElders = getElders.active + hsts;
 				leaderBonus = baseCost * (hsts/totalElders);				
 				break;
@@ -1301,12 +1301,10 @@ class JobsBase {
 /*					<div class="assignButton" id="${ident}RemoveHost" onClick="jobs.addRemoveJob(${i},-1,'H')">-</div>
 					<div class="assignButton" id="${ident}AddHost" onClick="jobs.addRemoveJob(${i},1,'H')">+</div> */
 
-
-			
 			newRow = `
 			<div class="jobContainer">
 				<div class="jobCollapsible" id="${ident}Collapsible">
-					<div class="jobLabel" id="${ident}Label" onClick="expandButton3('${ident}')"> &#9776;${label}</div>
+					<div class="jobLabel" id="${ident}Label" onClick="expandButton3('${ident}')"> &#9776; ${label}</div>
 					<div class="countBlock highlightText" id="${ident}JobCount">${jobs}${maxDisp}</div>
 					<div class="countBlock">Native: <span class="highlightText" id="${ident}NativeCount">${nat}</span></div>
 					${natRemButt}
