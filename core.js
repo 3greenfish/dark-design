@@ -1252,11 +1252,11 @@ class JobsBase {
 			<div class="jobContainer">
 				<div class="jobCollapsible" id="${ident}Collapsible">
 					<div class="jobLabel" id="${ident}Label" onClick="expandButton3('${ident}')"> &#9776;${label}</div>
-					<div class="jobCount" id="${ident}JobCount">${jobs}${maxDisp}</div>
-					<div class="nativeCount" id="${ident}NativeCount">Native: ${nat}</div>
+					<div class="countBlock highlightText" id="${ident}JobCount">${jobs}${maxDisp}</div>
+					<div class="countBlock">Native: <span class="highlightText" id="${ident}NativeCount">${nat}</span></div>
 					${natRemButt}
 					${natAddButt}
-					<div class="hostCount" id="${ident}HostCount"> | Host: ${hst}</div>
+					<div class="countBlock"> | Host: <span class="highlightText" id="${ident}HostCount">${hst}</span></div>
 					${hstRemButt}
 					${hstAddButt}
 				</div>
