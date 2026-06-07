@@ -359,13 +359,13 @@ nav {
 /*	border: 1px solid red; */
 }
 
-.nativeCount {
+.countBlock {
 	margin: 0px;
 	padding: 0px 0px 0px 0px;
 	width: 100px;
-	color: #ddff00;
-/*	border: 1px solid green; */
+	color: #00ff00;
 }
+
 .assignButton {
 	margin: 0px;
 	padding: 0px 0px 0px 0px;
@@ -384,13 +384,6 @@ nav {
 	background-color: #050505;
 	text-align: center;
 	color: #333333;
-}
-
-.hostCount {
-	margin: 0px;
-	padding: 0px 0px 0px 0px;
-	width: 100px;
-	color: #ddff00;
 }
 
 .jobContent {
