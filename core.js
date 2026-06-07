@@ -529,6 +529,7 @@ class GameBase {
 			case 1:		//transition from swamp to tribe
 				//auto-assign jobs
 				//temp code here:
+				resources.effectsBase.push({ effect: "nativeMax", value: 19 });
 				let jobby = jobs.stack;
 				let totalNatives = 0;
 				for (let i = 0; i < jobby.length; i++ ) {
@@ -541,7 +542,7 @@ class GameBase {
 				let hostJob = randomInt(0, (jobby.length - 1));
 				jobby[hostJob].activeHost = 1;
 
-				resources.stack[findResInStack("native")].current = totalNatives;
+				resources.stack[resources.findResInStack("native")].current = totalNatives;
 
 				//move to jobs tab
 				game.selectNav(1);
@@ -549,7 +550,6 @@ class GameBase {
 				let blockThese = [ "fester", "ensnare", "digest", "swell", "pustule", "trap", "digestor", "siren", "nodule", "corruptHost" ];
 				game.blockEntries(swamp.stack, blockThese);
 				swamp.stack[findEntry(swamp.stack, "swamp").loc].count = 1;
-				resources.effectsBase.push({ effect: "nativeMax", value: 19 });
 				//add effects -- nativemax, hostmax
 				//add resources -- food, natives
 				//unlock suspicion
