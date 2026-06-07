@@ -530,6 +530,7 @@ class GameBase {
 				//auto-assign jobs
 				//temp code here:
 				resources.effectsBase.push({ effect: "nativeMax", value: 19 });
+				resources.effectsBase.push({ effect: "hostMax", value: 19 });
 				let jobby = jobs.stack;
 				let totalNatives = 0;
 				for (let i = 0; i < jobby.length; i++ ) {
@@ -538,18 +539,19 @@ class GameBase {
 					totalNatives += rando;
 				}
 				
-				
-				let hostJob = randomInt(0, (jobby.length - 1));
-				jobby[hostJob].activeHost = 1;
-
-				resources.stack[resources.findResInStack("native")].current = totalNatives;
-
 				//move to jobs tab
 				game.selectNav(1);
 				//hide swamp buttons
 				let blockThese = [ "fester", "ensnare", "digest", "swell", "pustule", "trap", "digestor", "siren", "nodule", "corruptHost" ];
 				game.blockEntries(swamp.stack, blockThese);
 				swamp.stack[findEntry(swamp.stack, "swamp").loc].count = 1;
+
+				effectsManager.cacheCycle();
+
+				let hostJob = randomInt(0, (jobby.length - 1));
+				jobby[hostJob].activeHost = 1;
+				resources.stack[resources.findResInStack("native")].current = totalNatives;
+
 				//add effects -- nativemax, hostmax
 				//add resources -- food, natives
 				//unlock suspicion
@@ -1184,6 +1186,59 @@ class JobsBase {
 		let jobName = jobs.stack[jobCode].name;
 
 		msg("calling addRemoveJob for " + jobName + ", with value " + value + " and type " + type);
+
+		 
+	}
+	corruptNative(jobCode) {
+		if (jobs.stack[jobCode].active <= 0) {
+			return false;
+		}
+		let currentCount = resources.stack[resources.findResInStack("host")].current;
+		let costs = [
+				  { name: "corruption", amount: 2000, ratio: 1.01 }	//,
+//				  { name: "native", amount: 1 }	
+		];
+
+		if (resources.checkCostsByArray(costs, currentCount).result == "pass") {
+			resources.payCostsByArray(costs, currentCount);
+			resources.stack[resources.findResInStack("host")].current += 1;
+			jobs.stack[jobCode].active -= 1;
+			jobs.stack[jobCode].activeHost += 1;
+			//FLAG add pay for suspicion here
+		}
+		
+		//
+		
+	}
+	calcCorruptSuspicion(jobCode) {
+		//determine suspicion
+	}
+	calcReassignCost() {
+		/*reassignment cost varies based upon 
+		stage
+		number/percentage of leaders controlled
+		*/
+		let baseCost = 10;
+		let stage = game.currentPhase;
+		let leaderBonus = 0;
+		let suspicion = 0;			//FLAG for later incorporation of variable suspicion
+		let suspicionFactor = 1 + (suspicion * 0.05);
+
+		switch(stage) {
+			case 1:
+				let getElders = jobs.stack[findEntry(jobs.stack, "leader")];
+				let hsts = getElders.activeHost;
+				let totalElders = getElders.active + hsts;
+				leaderBonus = baseCost * (hsts/totalElders);				
+				break;
+			case 2:
+				break;
+			default:
+				msg("called switch in calcReassignCost for stage " + stage);
+				break;
+		}
+		let cost = round3((baseCost * suspicionFactor) - leaderBonus);
+		return cost;
 	}
 	buildJobsPanel(refresh = false) {
 		let output = "";
@@ -1194,7 +1249,7 @@ class JobsBase {
 		let hostString = (totalHost === 1) ? "is a host" : "are hosts";
 
 		//calculate corruption costs		FLAG to build this into effects manager
-		let reassignCost = 10;
+		let reassignCost = jobs.calcReassignCost();
 
 		output += `<div class="jobContainer">
 					<div class="jobCollapsible" id="$jobPanelCollapsible">
@@ -1262,6 +1317,7 @@ class JobsBase {
 				</div>
 				<div class="jobContent" id="${ident}Content">
 					<p>${desc}</p>
+					<div class="button" onClick="jobs.corruptNative(${i})">Corrupt a ${label}</div>
 				</div>
 			</div>`;
 			output += newRow;
@@ -1436,6 +1492,12 @@ class ResourcesBase {
 				  { name: "corruption", amount: 2000 },
 				  { name: "native", amount: 1 }
 			  ]
+			},
+			{ name: "food", //6
+			  label: "Food",
+			  current: 0,
+			  limited: true,
+			  isUnlocked: false
 			}
 		];
 		this.effectsBase = [			//FLAG that some of these values may not be necessary
@@ -1454,8 +1516,9 @@ class ResourcesBase {
 			{ effect: "cholerPerClick", value: 30 },
 			{ effect: "nativeMax", value: 1 },
 			{ effect: "nativePerClickChanceMax", value: 1 },
-			{ effect: "hostMax", value: 10 },
-			{ effect: "hostPerClick", value: 1 }
+			{ effect: "hostMax", value: 1 },
+			{ effect: "hostPerClick", value: 1 },
+			{ effect: "foodMax", value: 20 }
 		];
 	}
 	addRes(resCode, amount) {
