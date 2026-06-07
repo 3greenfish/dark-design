@@ -39,6 +39,69 @@ function objectParseMsg(ob) {
 				</div>
 */
 
+function buildCycle(source, sourceArray, refresh = false, full = false) {
+	let array = [];
+	if (!sourceArray) {
+		devMsg("no source array to call");
+		return;
+	} else {
+		array = sourceArray;
+	}
+
+	let needBuild = testStackUnlock(source, array);
+
+	if (needBuild || full) {
+		if (game.activeTab == 1) {
+			jobs.buildJobsPanel();
+		} else {
+			buildGrid(source, array, refresh);
+		}
+	}
+	else {
+		if (game.activeTab == 1) {
+			jobs.buildJobsPanel();		//FLAG need code to refresh jobs panel
+		} else {
+			refreshGrid(source, array);
+		}
+	}
+	
+/*
+			devMsg("refreshing active panel via callBuild, auto-called from timing belt");
+		switch(game.activeTab) {
+			case 0: //swamp
+				buildGrid(swamp, swamp.stack, true);
+				break;
+			case 1:	//personnel
+			case 2: //settlement
+			case 3: //world
+				break;
+			case 4: //research
+				buildGrid(research, research.stack, true);
+				break;
+		}
+
+	*/	
+}
+
+
+function testStackUnlock(source, sourceArray) {
+	let array = sourceArray;
+	let refreshRequired = false;
+	for (let i = 0; i < array.length; i++) {		//for every button in stack
+		if (array[i].isUnlocked !== true) {
+			devMsg("calling testUnlock with array object for " + array[i].name);
+			//check whether can unlock
+			let checkValue = testUnlock(array[i]);
+			if (checkValue == true) {
+				array[i].isUnlocked = true;
+				refreshRequired = true;
+			}
+		}
+	}
+	return refreshRequired;	
+}
+
+
 function buildGrid(source, sourceArray, refresh = false) {
 	let output = "";
 	let numColumns = 3; // FLAG -- plan to change this to check settings once screen size is evaluated //
@@ -60,16 +123,16 @@ function buildGrid(source, sourceArray, refresh = false) {
 		
 	for (let i = 0; i < array.length; i++) {		//for every button in stack
 
-		if (array[i].isUnlocked !== true) {
+	/*	if (array[i].isUnlocked !== true) {
 			devMsg("calling testUnlock with array object for " + array[i].name);
 			//check whether can unlock
 			let checkValue = testUnlock(array[i]);
 			if (checkValue == true) {
 				array[i].isUnlocked = true;
 			}
-		}
+		}	*/
 		
-		if (array[i].purchased == true || array[i].isUnlocked !== true) { 
+		if (array[i].purchased == true || array[i].isUnlocked !== true || array[i].isBlocked == true) { 
 			continue; 
 		}
 		// IF test to check if hidden or blocked, then continue FOR loop.
@@ -134,12 +197,60 @@ function buildGrid(source, sourceArray, refresh = false) {
 		columns[c] += `</div>`;
 		output += columns[c];
 	}
+	document.getElementById("fillNotGrid").innerHTML = "";
 	document.getElementById("fillGrid").innerHTML = output;
 	refreshProgAll(source, sourceArray);
 	if (refresh == true) {
 		reopenTabs(source, openArray);
 	}
 }	
+
+function refreshGrid(source, array, refresh = false) {
+//	msg("called refreshGrid");
+	for (let i = 0; i < array.length; i++) {		//for every button in stack
+		let ident = source.name + i;
+		if (array[i].purchased == true || array[i].isUnlocked !== true || array[i].isBlocked == true) { 
+			continue; 
+		}
+
+		if (document.getElementById(ident + "Collapsible") == null) {
+			msg("probably an issue in refreshGrid");
+			continue;
+		}
+
+		let label = array[i].label;		//this is what shows in the label, will need to be updated for counts
+		if (array[i].count > 0) {
+			let act = ("active" in array[i]) ? array[i].active + "/" : "";
+			label = label + " (" + act + array[i].count + ")";
+			document.getElementById(ident + "Label").innerText = label;
+		}
+		let AC = "";
+		if (array[i].costs) {
+			let costs = getContentCosts(source, i);
+			document.getElementById(ident + "Costs").innerHTML = costs;
+			
+			if (resources.checkCostsByArray(array[i].costs, array[i].count).result == "pass") {
+				AC = "active";
+			}
+		}
+		let currentState = document.getElementById(ident + "Collapsible").classList.contains("active");
+		if (AC == "active" && currentState === false) {
+			document.getElementById(ident + "Collapsible").classList.add("active");
+		}
+		if (AC !== "active" && currentState === true) {
+			document.getElementById(ident + "Collapsible").classList.remove("active");
+		}	//only two checks are necessary, as other options will display correctly
+
+		if (array[i].hasProg === true) { 
+			let progWidth = array[i].prog;
+			document.getElementById(ident + "Progress").style.width = progWidth + "%";
+		}
+	}
+}
+
+
+
+
 
 function testUnlock(button) {
 	if (button.isUnlocked == true) {
@@ -162,14 +273,14 @@ function testUnlock(button) {
 			let throwArray = [];
 			throwArray[0] = locks[i];
 //			msg(throwArray.toString());
-			let bob = Object.values(throwArray[0]);
-			let bobtext = bob.toString();
+//			let bob = Object.values(throwArray[0]);
+//			let bobtext = bob.toString();
 //			msg("bobtext is " + bobtext + " and length is now " + throwArray.length);
 			if (resources.checkCostsByArray(throwArray, 0).result == "pass") {
 //				msg("check costs for " + button.name + " lock " + i + "has passed successfully");
 				locks[i].opened = true;
-				let newbob = Object.values(locks[i]);
-				let newbobtext = newbob.toString();
+//				let newbob = Object.values(locks[i]);
+//				let newbobtext = newbob.toString();
 //				msg("new bobtext is " + newbobtext);
 			} else { 
 //				msg("check costs for " + button.name + " lock " + i + "has failed");
@@ -207,6 +318,14 @@ function testUnlock(button) {
 				} else {
 					pass = false;
 				}
+			} else {
+				pass = false;
+			}
+		}
+		if (locks[i].type == "phase") {
+			devMsg("type is phase");
+			if (game.currentPhase >= locks[i].phase) {
+				locks[i].opened = true;
 			} else {
 				pass = false;
 			}
@@ -272,10 +391,10 @@ function refreshProgAll(source, array) {
 
 let game = {};
 class GameBase {
-	currentPhase;
+/*	currentPhase;
 	phases;
 	activeTab;
-	tabs;
+	tabs; */
 	constructor() {	
 		this.currentPhase = 0;
 		this.phases = [
@@ -290,10 +409,10 @@ class GameBase {
 		this.tabs = [
 			{ name: "swamp", 		//0
 			  label: "a sinister swamp",
-			  visible: true,
+			  isUnlocked: true,
 			  lockAtPhase: 1,
 			  select: function() {
-				  buildGrid(swamp, swamp.stack);
+				  buildCycle(swamp, swamp.stack, false, true);
 			  }
 			},
 			{ name: "personnel",	//1
@@ -307,7 +426,7 @@ class GameBase {
 						  label2 = "tribe";
 						  break;
 					  case 2:
-						  label2 = "residents";
+						  label2 = "workers";
 						  break;
 					  case 3:
 						  label2 = "citizens";
@@ -320,13 +439,16 @@ class GameBase {
 				  }
 				  return label2;
 			  },
+			  isUnlocked: false,
 			  unlockAtPhase: 1,
 			  select: function(num) {
+				  jobs.buildJobsPanel();
 				  msg("need to build out tribe object");
 			  }
 			},
 			{ name: "home",			//2
 			  label: "settlement",
+			  isUnlocked: false,
 			  unlockAtPhase: 2,
 			  select: function(num) {
 				  msg("need to build out town object");
@@ -334,6 +456,7 @@ class GameBase {
 			},
 			{ name: "world",		//3
 			  label: "world", // update to start as "nearby towns"?
+			  isUnlocked: false,
 			  unlockAtPhase: 3,
 			  select: function(num) {
 				  msg("need to build out world object");
@@ -341,15 +464,30 @@ class GameBase {
 			},
 			{ name: "research",		//4
 			  label: "research",
+			  isUnlocked: false,
+			  unlockAtPhase: 1,
 			  select: function(num) {
-				  buildGrid(research, research.stack);
+				  buildCycle(research, research.stack, false, true);
 			  }
 			}
 		];
 	}
+	checkNav() {
+		for (let i = 0; i < this.tabs.length; i++) {
+			if (this.tabs[i].isUnlocked == true) {
+				continue;
+			} else if (this.currentPhase >= this.tabs[i].unlockAtPhase) {
+				this.tabs[i].isUnlocked = true;
+			}
+		}
+	}
 	buildNav() {
+		this.checkNav();
 		let navList = "";
 		for (let i = 0; i < this.tabs.length; i++) {
+			if (this.tabs[i].isUnlocked !== true || this.tabs[i].isBlocked) {
+				continue;
+			}
 			let tabLabel = this.tabs[i].label;
 			let activeFlag = "";
 			let action = `game.selectNav(${i})`;
@@ -367,6 +505,9 @@ class GameBase {
 	}
 	refreshNav() {
 		for (let i = 0; i < this.tabs.length; i++) {
+			if (this.tabs[i].isUnlocked !== true || this.tabs[i].isBlocked) {
+				continue;
+			}
 			let element = document.getElementById("tab" + i);
 			if (element.classList.contains("activeTab")) {
 				element.classList.remove("activeTab");
@@ -379,6 +520,59 @@ class GameBase {
 		game.refreshNav();
 		game.tabs[x].select();
 		devMsg(game.tabs[x].name + " selected");
+	}
+	newPhase(x) {
+		game.currentPhase = x;	//update phase for tracking purposes
+		game.buildNav();		//update navigation in case tabs are newly open or blocked
+
+		switch(x) {
+			case 1:		//transition from swamp to tribe
+				//auto-assign jobs
+				//temp code here:
+				resources.effectsBase.push({ effect: "nativeMax", value: 19 });
+				resources.effectsBase.push({ effect: "hostMax", value: 19 });
+				let jobby = jobs.stack;
+				let totalNatives = 0;
+				for (let i = 0; i < jobby.length; i++ ) {
+					let rando = randomInt(1,5);
+					jobby[i].active = rando;
+					totalNatives += rando;
+				}
+				
+				//move to jobs tab
+				game.selectNav(1);
+				//hide swamp buttons
+				let blockThese = [ "fester", "ensnare", "digest", "swell", "pustule", "trap", "digestor", "siren", "nodule", "corruptHost" ];
+				game.blockEntries(swamp.stack, blockThese);
+				swamp.stack[findEntry(swamp.stack, "swamp").loc].count = 1;
+
+				effectsManager.cacheCycle();
+
+				let hostJob = randomInt(0, (jobby.length - 1));
+				jobby[hostJob].activeHost = 1;
+				resources.stack[resources.findResInStack("native")].current = totalNatives;
+
+				//add effects -- nativemax, hostmax
+				//add resources -- food, natives
+				//unlock suspicion
+				
+				break;
+			case 2:		//transition to add settlement
+				break;
+			case 3:
+				break;
+		}
+	}
+	blockEntries(stack, listing) {			//take a stack, and a listing of entries, and set those entries to be blocked
+		for (let i = 0; i < listing.length; i++) {
+			let findings = findEntry(stack, listing[i]);
+			if (findings.found) {
+				stack[findings.loc].isBlocked = true;
+			} else {
+				msg("blocking buttons isn't working for " + listing[i]);
+				continue;
+			}
+		}
 	}
 }
 
@@ -421,9 +615,10 @@ BASIC DESIGN FOR MAIN PRESS, using buyCycle
 
 let swamp = {};
 class SwampBase {
-	name = "swamp";
-	stack;
+/*	name = "swamp";
+	stack; */
 	constructor() {
+		this.name = "swamp";
 		this.stack = [
 			{ name: "fester",	//0
 			  label: "Fester",
@@ -790,13 +985,13 @@ class SwampBase {
 				  { type: "button", stack: "swamp", name: "trap", amount: 5 }
 			  ],
 			  effects: [
-				  { effect: "nativeMax", value: 1 },
-				  { effect: "nativePerTickChance", value: 0.005 },
+//				  { effect: "nativeMax", value: 1 },
+				  { effect: "nativePerTickChance", value: 0.0001 },
 				  { effect: "preyPerTickChance", value: 0.1 },
-				  { effect: "preyMax", value: 10 },
+				  { effect: "preyMax", value: 5 },
 				  { effect: "preyPerClickChanceMax", value: 3 },
 				  { effect: "cholerPerTickConsumption", value: 0.05, type: "active" },
-				  { effect: "nativePerTickChance", value: 0.05, type: "active" }
+				  { effect: "nativePerTickChance", value: 0.0004, type: "active" }
 			  ]
 			},
 			{ name: "nodule",		//8
@@ -860,7 +1055,7 @@ class SwampBase {
 			{ name: "corruptHost",	//9
 			  label: "Corrupt a host",
 			  type: "gather",
-			  desc: `Convert a captured native into your first corrupted Host.
+			  desc: `Sacrifice your swamp to convert a captured native into your first corrupted Host.
 	(Starts phase 2)`,
 			  get count() {
 				  let referCount = resources.stack[resources.findResInStack("host")].current;
@@ -877,6 +1072,7 @@ class SwampBase {
 						let priceCheck = resources.buyCycle(swamp, code, isMain);
 						if (priceCheck.result == "pass") {
 							resources.addRes(resources.findResInStack("host"), 1);
+							game.newPhase(1);
 
 							// SPECIAL ACTIONS HERE - START PHASE 2
 	
@@ -889,12 +1085,332 @@ class SwampBase {
 			  lockedBy: [
 				  { type: "res", name: "native", amount: 1 }
 			  ]
+			},
+			{ name: "swamp",		//10
+			  label: "A sinister swamp",
+			  desc: "The seat of your power. Generates a small amount of corruption.",
+			  count: 0,
+			  actions: [
+				  { subLabel: "",
+				    press: function(code, isMain = false) {
+						let target = "swamp" + code;
+						expandButton2(target);
+					}
+				  },
+				  { subLabel: "Fester",
+				    type: "", 
+				    press: function(code, isMain = false) {
+						let r = resources.findResInStack("corruption");
+						let a = effectsManager.cache.corruptionPerClick;
+						resources.addRes(r, a);
+					}
+				  }
+			  ],
+			  lockedBy: [
+				  { type: "phase", phase: 1 }
+			  ],
+			  effects: [
+				  { effect: "corruptionMax", value: 200, type: "stack" },
+				  { effect: "corruptionPerClick", value: 1, type: "stack" },
+				  { effect: "corruptionPerTick", value: 0.2, type: "stack" }
+			  ]
 			}
-			];
+		];
 	}
 }
 
 // ---- end phase 1 buildings ---- //
+
+// ---- start jobs object ---- //
+
+let jobs = {};
+class JobsBase {
+	constructor() {
+		this.name = "jobs";
+		this.stack = [
+			{ name: "unassigned",
+			  label: "unassigned",
+			  desc: "Unassigned workers perform no work. Hosts generate additional corruption and help reduce suspicion.",
+			  active: 0,
+			  activeHost: 0,
+			  canAssign: false,
+			  isUnlocked: true,
+			  lockedBy: [],
+			  effects: [
+				  { effect: "corruptionPerTick", value: 0.001, type: "host" },
+				  { effect: "suspicionSuppression", value: 0.01, type: "host" }
+			  ]
+			},
+			{ name: "gatherer",
+			  label: "gatherer",
+			  desc: "Gatherers collect 1.1 food per second.",
+			  active: 0,
+			  activeHost: 0,
+			  canAssign: true,
+			  isUnlocked: true,
+			  lockedBy: [],
+			  effects: [
+				  { effect: "foodJobPerTick", value: 0.275, type: "job" }
+			  ]
+			},
+			{ name: "hunter",
+			  label: "hunter",
+			  desc: "Hunters bring in 0.4 food/second.",
+			  active: 0,
+			  activeHost: 0,
+			  canAssign: true,
+			  isUnlocked: true,
+			  lockedBy: [],
+			  effects: [
+				  { effect: "foodJobPerTick", value: 0.1, type: "job" },
+				  { effect: "foodJobPerTickChance", value: 0.02, type: "job" },
+				  { effect: "foodJobPerClickMax", value: 1, type: "job" }
+			  ]
+			},
+			{ name: "leader",
+			  label: "elder",
+			  desc: "Elders generate knowledge and direct your population's activities.",
+			  active: 0,
+			  activeHost: 0,
+			  canAssign: false,
+			  isUnlocked: true,
+			  lockedBy: [],
+			  effects: [
+				  { effect: "knowledgePerTick", value: 0.1, type: "job" }
+			  ]
+			}
+		];
+	}
+	addRemoveJob(jobCode, value, type) {
+		// jobCode is job in stack. value is +1, -1, +5, -5, etc. type is N for native or H for Host
+		let jobName = jobs.stack[jobCode].name;
+
+		msg("calling addRemoveJob for " + jobName + ", with value " + value + " and type " + type);
+
+		 
+	}
+	corruptNative(jobCode) {
+		if (jobs.stack[jobCode].active <= 0) {
+			return false;
+		}
+		let currentCount = resources.stack[resources.findResInStack("host")].current;
+		let costs = [
+				  { name: "corruption", amount: 2000, ratio: 1.01 }	//,
+//				  { name: "native", amount: 1 }	
+		];
+
+		if (resources.checkCostsByArray(costs, currentCount).result == "pass") {
+			resources.payCostsByArray(costs, currentCount);
+			resources.stack[resources.findResInStack("host")].current += 1;
+			jobs.stack[jobCode].active -= 1;
+			jobs.stack[jobCode].activeHost += 1;
+			//FLAG add pay for suspicion here
+		}
+		
+		//
+		
+	}
+	calcCorruptSuspicion(jobCode) {
+		//determine suspicion
+	}
+	calcReassignCost() {
+		/*reassignment cost varies based upon 
+		stage
+		number/percentage of leaders controlled
+		*/
+		let baseCost = 10;
+		let stage = game.currentPhase;
+		let leaderBonus = 0;
+		let suspicion = 0;			//FLAG for later incorporation of variable suspicion
+		let suspicionFactor = 1 + (suspicion * 0.05);
+
+		switch(stage) {
+			case 1:
+				let getElders = jobs.stack[findEntry(jobs.stack, "leader")];
+				let hsts = getElders.activeHost || 0;
+				let totalElders = getElders.active + hsts;
+				leaderBonus = baseCost * (hsts/totalElders);				
+				break;
+			case 2:
+				break;
+			default:
+				msg("called switch in calcReassignCost for stage " + stage);
+				break;
+		}
+		let cost = round3((baseCost * suspicionFactor) - leaderBonus);
+		return cost;
+	}
+	buildJobsPanel(refresh = false) {
+		let output = "";
+		let array = jobs.stack;
+
+		let totalNat = resources.stack[resources.findResInStack("native")].current;
+		let totalHost = resources.stack[resources.findResInStack("host")].current;
+		let hostString = (totalHost === 1) ? "is a host" : "are hosts";
+
+		//calculate corruption costs		FLAG to build this into effects manager
+		let reassignCost = jobs.calcReassignCost();
+
+		output += `<div class="jobContainer">
+					<div class="jobCollapsible" id="$jobPanelCollapsible">
+						<p>Your civilization currently has a population of <span class="highlightText" id="totalNatives">${totalNat}</span>, of which <span class="highlightText" id="totalHosts">${totalHost}</span> ${hostString}. You may reassign workers by spending <span class="highlightText" id="reassignCost">${reassignCost}</span> corruption, but doing so risks raising suspicion. Reassigning hosts is free. Corrupt the leaders of your civilization to reduce costs.<br />
+						Hosts spend 50% of their time generating corruption, reducing their productivity at other tasks, but unlike other workers, hosts continue to work when the game is idle.</p>
+			</div>
+		</div>`;
+
+		let openArray = (refresh == true) ? logOpenTabs(jobs, jobs.stack) : "";
+
+		for (let i = 0; i < array.length; i++) {
+			//check if blocked
+			if (array[i].isBlocked === true) {
+				continue;
+			}			
+			//check whether can unlock
+			if (array[i].isUnlocked !== true) {
+				if (testUnlock(array[i]) == true) {
+					array[i].isUnlocked = true;
+				} else { 
+					continue; 
+				}
+			}
+			let name = array[i].name;
+			let newRow = "";
+			let label = array[i].label;
+			let desc = array[i].desc;
+			let ident = "job" + i;
+			let jobs = array[i].active + array[i].activeHost;
+			let max = (effectsManager.cache[name + "JobMax"]) ? effectsManager.cache[name + "JobMax"] : "";
+			let maxDisp = (typeof max == "number") ? "/" + max : "";
+			let nat = array[i].active;
+			let hst = array[i].activeHost;
+
+			let openJob = true;
+			if (typeof max == "number") {
+				if (jobs >= max) {
+					openJob = false;
+				}
+			}
+
+			let natRemButt = (nat > 0 && array[i].canAssign === true) ? `<div class="assignButton" id="${ident}Remove" onClick="jobs.addRemoveJob(${i},-1,'N')">-</div>` : `<div class="frozenButton" id="${ident}Remove" onClick="">x</div>`;
+			let natAddButt = (array[0].active > 0 && array[i].canAssign && openJob) ? `<div class="assignButton" id="${ident}Add" onClick="jobs.addRemoveJob(${i},1,'N')">+</div>` : `<div class="frozenButton" id="${ident}Add" onClick="">+</div>`;
+			let hstRemButt = (hst > 0 && array[i].canAssign === true) ? `<div class="assignButton" id="${ident}RemoveHost" onClick="jobs.addRemoveJob(${i},-1,'H')">-</div>` : `<div class="frozenButton" id="${ident}RemoveHost" onClick="">x</div>`;
+			let hstAddButt = (array[0].activeHost > 0 && array[i].canAssign && openJob) ? `<div class="assignButton" id="${ident}AddHost" onClick="jobs.addRemoveJob(${i},1,'H')">+</div>` : `<div class="frozenButton" id="${ident}AddHost" onClick="">+</div>`;
+
+/*					<div class="assignButton" id="${ident}Remove" onClick="jobs.addRemoveJob(${i},-1,'N')">-</div>
+					<div class="assignButton" id="${ident}Add" onClick="jobs.addRemoveJob(${i},1,'N')">+</div> */
+/*					<div class="assignButton" id="${ident}RemoveHost" onClick="jobs.addRemoveJob(${i},-1,'H')">-</div>
+					<div class="assignButton" id="${ident}AddHost" onClick="jobs.addRemoveJob(${i},1,'H')">+</div> */
+
+			newRow = `
+			<div class="jobContainer">
+				<div class="jobCollapsible" id="${ident}Collapsible">
+					<div class="jobLabel" id="${ident}Label" onClick="expandButton3('${ident}')"> &#9776; ${label}</div>
+					<div class="countBlock highlightText" id="${ident}JobCount">${jobs}${maxDisp}</div>
+					<div class="countBlock">Native: <span class="highlightText" id="${ident}NativeCount">${nat}</span></div>
+					${natRemButt}
+					${natAddButt}
+					<div class="countBlock"> | Host: <span class="highlightText" id="${ident}HostCount">${hst}</span></div>
+					${hstRemButt}
+					${hstAddButt}
+				</div>
+				<div class="jobContent" id="${ident}Content">
+					<p>${desc}</p>
+					<div class="button" onClick="jobs.corruptNative(${i})">Corrupt a ${label}</div>
+				</div>
+			</div>`;
+			output += newRow;
+		}
+		document.getElementById("fillGrid").innerHTML = "";
+		document.getElementById("fillNotGrid").innerHTML = output;
+		if (refresh == true) {
+			reopenTabs(jobs, openArray);
+		}
+	} // end buildJobsPanel
+}
+
+// ---- end jobs object ---- //
+
+
+/* 
+function buildGrid(source, sourceArray, refresh = false) {
+		
+	for (let i = 0; i < array.length; i++) {		//for every button in stack
+		
+		let label = array[i].label;		//this is what shows in the label, will need to be updated for counts
+		if (array[i].count > 0) {
+			let act = ("active" in array[i]) ? array[i].active + "/" : "";
+			label = label + " (" + act + array[i].count + ")";
+		}		
+		let identifier = source.name + i;
+		let desc = array[i].desc;		//gets description from stack
+		let cost = "";
+
+		let AC = ""; //variable to flag active class
+		if (array[i].costs) {
+			devMsg("BuildGrid reached getContentCosts");
+			let costs = getContentCosts(source, i);
+			cost = `
+					<hr>
+						<div class="costs" id="${identifier}Costs">
+							${costs}
+						</div>`;
+			if (resources.checkCostsByArray(array[i].costs, array[i].count).result == "pass") {
+				AC = "active";
+			}
+		} 
+
+		let actionsArray = array[i].actions;
+		let actions = "";
+		for (let a = 0; a < actionsArray.length; a++) {
+			let sub = actionsArray[a].subLabel;
+			let buttonCode = `${source.name}.stack[${i}].actions[${a}].press(${i})`;
+			actions += `<div class="button" onClick="${buttonCode}">${sub}</div>`;
+		}
+
+		let mainActionCode = `${source.name}.stack[${i}].actions[0].press(${i},true)`;
+		let flavor = (array[i].flavor) ? `<div class="flavor">` + array[i].flavor + "</div>" : "";
+
+		let newButton = `
+				<div class="buttonContainer">
+					<div class="collapsible ${AC}" id="${identifier}Collapsible">
+						<div class="buttonLabel" data-target="${identifier}" id="${identifier}Label" onClick="${mainActionCode}">${label}</div><div class="notch" data-target="${identifier}" onClick="expandButton2('${identifier}')">&#9776;</div>
+						<div class="buttonBarContainer">
+							<div id="${identifier}Progress"></div>
+						</div>
+					</div>
+					<div class="content" id="${identifier}Content">
+						<p>${desc}</p>
+						${cost}
+						${actions}
+						${flavor}
+					</div>
+				</div>`;
+		columns[currentColumn] += newButton;
+		currentColumn += 1;
+		if (currentColumn >= numColumns) { 
+			currentColumn = 0;
+		}
+	}
+
+	for (let c = 0; c < columns.length; c++) {
+		columns[c] += `</div>`;
+		output += columns[c];
+	}
+	document.getElementById("fillGrid").innerHTML = output;
+	refreshProgAll(source, sourceArray);
+	if (refresh == true) {
+		reopenTabs(source, openArray);
+	}
+}
+
+*/ 
+
+
+
+
+
+
+
 
 function findEntry(stack, name) {
 	let result = { found: false, loc: 0 };
@@ -912,10 +1428,11 @@ function findEntry(stack, name) {
 
 let resources = {};
 class ResourcesBase {
-	name = "resources object";
+/*	name = "resources object";
 	stack;
-	effectsBase = [];
+	effectsBase = []; */
 	constructor() {
+		this.name = "resources";
 		this.stack = [
 			{ name: "corruption", // 0
 			  label: "Corruption",
@@ -973,6 +1490,12 @@ class ResourcesBase {
 				  { name: "corruption", amount: 2000 },
 				  { name: "native", amount: 1 }
 			  ]
+			},
+			{ name: "food", //6
+			  label: "Food",
+			  current: 0,
+			  limited: true,
+			  isUnlocked: false
 			}
 		];
 		this.effectsBase = [			//FLAG that some of these values may not be necessary
@@ -989,10 +1512,11 @@ class ResourcesBase {
 			{ effect: "cholerMax", value: 150 },
 			{ effect: "cholerPerTick", value: 0 },
 			{ effect: "cholerPerClick", value: 30 },
-			{ effect: "nativeMax", value: 10 },
+			{ effect: "nativeMax", value: 1 },
 			{ effect: "nativePerClickChanceMax", value: 1 },
-			{ effect: "hostMax", value: 10 },
-			{ effect: "hostPerClick", value: 1 }
+			{ effect: "hostMax", value: 1 },
+			{ effect: "hostPerClick", value: 1 },
+			{ effect: "foodMax", value: 20 }
 		];
 	}
 	addRes(resCode, amount) {
@@ -1082,7 +1606,7 @@ class ResourcesBase {
 //		msg("resCurrent is " + resCurrent);
 		let target = document.getElementById(resName + "Current");
 
-		let targetTest = (target) ? true : false;
+//		let targetTest = (target) ? true : false;
 //		msg("target is found? " + targetTest);
 
 		if (!target) {
@@ -1108,7 +1632,9 @@ class ResourcesBase {
 			let res = source[i];
 
 			//hidden resources either never appear in panel, or are closed out after no longer being relevant
-			if (res.hidden) { continue; }
+			if (res.hidden || res.isBlocked) {
+				continue;
+			}
 
 			if (res.isUnlocked !== true) {
 //				msg(typeof res.current);
@@ -1148,6 +1674,9 @@ class ResourcesBase {
 		for (let i = 0; i < resPool.length; i++ ) {
 			let res = resPool[i];
 			//confirm resource is unlocked and not hidden
+			if (res.isBlocked == true) {
+				continue;
+			}
 /*			if (res.isUnlocked == false || res.hidden == true) {
 				continue;
 			} */
@@ -1229,7 +1758,7 @@ class ResourcesBase {
 					resources.addRes(newRes, amountAdded);		
 					break;
 				default:
-					msg("hit default, something went wrong")
+					msg("hit default, something went wrong");
 					break;
 			}
 		}
@@ -1297,9 +1826,10 @@ class ResourcesBase {
 
 let research = {};
 class TechBase {
-	name = "research";
-	stack;
+/*	name = "research";
+	stack; */
 	constructor() {
+		this.name = "research";
 		this.stack = [
 			{ name: "calendar",
 			  label: "Calendar",
@@ -1322,7 +1852,7 @@ class TechBase {
 							resources.payCostsByArray(getCosts, 0);
 							calendar.activateCal();
 							cal.purchased = true;
-							buildGrid(research, research.stack, true);
+							buildCycle(research, research.stack, true);
 						}
 						else if (isMain == true) {
 							let target = "research" + code;
@@ -1352,7 +1882,7 @@ class TechBase {
 			  ],
 			  unlocks: []
 			}
-		]
+		];
 	}
 }
 
@@ -1361,27 +1891,32 @@ class TechBase {
 
 let effectsManager = {};
 class EffectsManagerBase {
-	swampEffectsCache = [];
+/*	swampEffectsCache = [];
 	swampConversionCache = [];
 	researchEffectsCache = [];
 	cache = {};
-	conversionCache = [];
-	
-	constructor() {}
+	conversionCache = []; */
+	constructor() {
+		this.swampEffectsCache = [];
+		this.swampConversionCache = [];
+		this.researchEffectsCache = [];
+		this.cache = {};
+		this.conversionCache = [];
+	}
 	getEffectStack(source) {
 		let stack = source.stack;
 		let buildEffects = [];
 		let tempCon = [];
 		for (let i = 0; i < stack.length; i++) {
 			let effects = stack[i].effects;
-			if (!effects) { 
+			if (!effects || stack[i].isBlocked) { 
 				continue;
 			}
 			let stackable = (stack[i].stackable) ? true : false;
 			for (let j = 0; j < effects.length; j++) {
 				let newEffect = {};
 				newEffect.effect = effects[j].effect;
-				let getValue = effects[j].value;
+//				let getValue = effects[j].value;
 				if (stackable && !("type" in effects[j])) {
 					effects[j].type = "stack";
 				}
@@ -1526,6 +2061,7 @@ function loadGame() {	//runs at end of HTML load
 	swamp = new SwampBase();
 	resources = new ResourcesBase();
 	game = new GameBase();
+	jobs = new JobsBase();
 	research = new TechBase();
 	effectsManager = new EffectsManagerBase();
 	effectsManager.cacheCycle();
@@ -1534,7 +2070,7 @@ function loadGame() {	//runs at end of HTML load
 	resources.loadResPanelNew();
 //	resources.loadResourcePanel();
 	setDevButtonsDynamic();
-	buildGrid(swamp, swamp.stack);	//need to update to define by phase when loading game/refreshing from LocalStorage
+	buildCycle(swamp, swamp.stack, false, true);	//need to update to define by phase when loading game/refreshing from LocalStorage
 	msg("You have awakened...");	
 }
 
@@ -1767,18 +2303,18 @@ const timing = {
 		devMsg("refreshing active panel via callBuild, auto-called from timing belt");
 		switch(game.activeTab) {
 			case 0: //swamp
-				buildGrid(swamp, swamp.stack, true);
+				buildCycle(swamp, swamp.stack, true);
 				break;
 			case 1:	//personnel
 			case 2: //settlement
 			case 3: //world
 				break;
 			case 4: //research
-				buildGrid(research, research.stack, true);
+				buildCycle(research, research.stack, true);
 				break;
 		}
 	}
-}
+};
 
 
 // -- calendar object --//
@@ -1873,7 +2409,7 @@ const dev = [
 	  label: "build grid for swamp with open tabs",
 	  run: function() { 
 		  msg("build grid for swamp called via dev button");
-		  buildGrid(swamp, swamp.stack, true); 
+		  buildCycle(swamp, swamp.stack, true, true);
 	  }
 	},
 	{ name: "button10",
@@ -1964,6 +2500,34 @@ const dev = [
 		  }
 		  resources.loadResPanelNew();
 	  }
+	},
+	{ name: "button24",
+	  label: "buildout phase 1",
+	  run: function() {
+		  let swampy = swamp.stack;
+		  swampy[3].count = 10;
+		  swampy[4].count = 18;
+		  swampy[4].active = 18;
+		  swampy[5].count = 6;
+		  swampy[6].count = 10;
+		  swampy[7].count = 2;
+		  swampy[4].isUnlocked = true;
+		  swampy[6].isUnlocked = true;
+		  swampy[8].isUnlocked = true;
+		  swampy[8].count = 10;
+		  swampy[8].active = 10;
+		  resources.stack[resources.findResInStack("native")].current = 1;
+		  resources.addRes(resources.findResInStack("corruption"), 1000);
+	  }
+	  
+	},
+	{ name: "button25",
+	  label: "add corruption",
+	  run: function() {
+		  let swampy = swamp.stack;
+		  resources.addRes(resources.findResInStack("corruption"), 1000);
+	  }
+	  
 	}
 /*	{ name: "buttonX",
 	  label: "blank",
@@ -2004,7 +2568,7 @@ function devUnlockAll() {
 	for (let i = 0; i < stack.length; i ++) {
 		stack[i].isUnlocked = true;
 	}
-	buildGrid(base, stack, true);	
+	buildCycle(base, stack, true, true);	
 }
 
 
@@ -2023,15 +2587,15 @@ function devUnlockAll() {
 
 //-- end interval timer --//
 
-function toggleActive(e) {
+/* function toggleActive(e) {
 	const targetPanelId = e.target.getAttribute('data-target');
 	const targetPanel = document.getElementById(targetPanelId);
 	const activePanels = document.getElementsByClassName('active');
 	if (activePanels) {
-		activePanels[0].classList.toggle('active'); /* hides everything */
+		activePanels[0].classList.toggle('active'); // hides everything
 	} 
 	targetPanel.classList.toggle('active');
-}
+} */
 
 
 function expandButton2(target) {
@@ -2048,6 +2612,21 @@ function expandButton2(target) {
 		targetContent.style.display = "block";
 		targetContent.style.maxHeight = targetContent.scrollHeight + "px";
 		targetButton.style.borderBottom = "none";
+	}
+}
+
+function expandButton3(target) {
+	devMsg("expandButton3 called with target: " + target);
+	const targetContent = document.getElementById(target + "Content");
+	const targetButton = document.getElementById(target + "Collapsible");
+	
+	if (targetContent.style.display == "block") {
+		targetContent.style.display = "none"; /* hide content DIV */
+		targetContent.style.maxHeight = "0";
+
+	} else {
+		targetContent.style.display = "block";
+		targetContent.style.maxHeight = targetContent.scrollHeight + "px";
 	}
 }
 

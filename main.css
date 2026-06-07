@@ -176,6 +176,12 @@ nav {
 	background-color: #002200;
 	display: flex;
 }
+
+.buttonMap3 {
+	background-color: #002200;
+	display: block;	
+}
+
 .buttonColumn {
 	width: 200px;
 	display: inline-block;
@@ -242,7 +248,7 @@ nav {
 	display: inline-block;
 }	
 
-.buttonBarContainer {
+.buttonBarContainer {	/* for progress bars */
 	width: 100%;
 	margin: 0;
 	padding: 0;
@@ -312,6 +318,93 @@ nav {
 	-webkit-user-select: none;
 	-ms-user-select: none;
 }
+
+.jobContainer {
+	display: block;
+}
+
+.jobCollapsible {
+	background-color: #003300;
+	color: #00ff00;
+	cursor: pointer;
+	padding: 0px;
+	margin-top: 5px;
+	margin-left: 5px;
+	width: 100%;
+	text-align: left;
+	outline: none;
+	user-select: none;
+	-webkit-user-select: none;
+	-ms-user-select: none;
+	vertical-align: middle;
+}
+
+.jobCollapsible div {
+	display: inline-block;
+}
+
+.jobLabel {		/* currently same styles as buttonLabel, may be able to reuse styles */
+	width: 125px;
+/*	border: 1px solid black; */
+	margin: 0px;
+	padding: 5px 0px 5px 5px;
+	display: inline-block;
+}
+
+.jobCount {
+	margin: 0px;
+	padding: 0px 0px 0px 0px;
+	width: 100px;
+	color: #ddff00;
+/*	border: 1px solid red; */
+}
+
+.countBlock {
+	margin: 0px;
+	padding: 0px 0px 0px 0px;
+	width: 100px;
+	color: #00ff00;
+}
+
+.assignButton {
+	margin: 0px;
+	padding: 0px 0px 0px 0px;
+	width: 25px;
+	border: 1px solid #33aa33;
+	background-color: #105010;
+	text-align: center;
+/*	vertical-align: middle; */
+}
+
+.frozenButton {
+	margin: 0px;
+	padding: 0px 0px 0px 0px;
+	width: 25px;
+	border: 1px solid #333333;
+	background-color: #050505;
+	text-align: center;
+	color: #333333;
+}
+
+.jobContent {
+	padding: 0px;
+	display: none;
+	overflow: hidden;
+	background-color: #003300;
+	color: #00ff00;
+	margin-left: 5px;
+	max-height: 0;
+	font-size: 80%;
+	user-select: none;
+	-webkit-user-select: none;
+	-ms-user-select: none;
+}
+
+.highlightText {
+	color: #ddff00;
+}
+
+
 
 
 /* -- right-side styles go here -- */
